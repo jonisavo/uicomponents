@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -14,31 +15,39 @@ namespace UIComponents.Core
 
         private readonly StylesheetAttribute[] _stylesheetAttributes;
 
+        private static readonly Dictionary<Type, DependencyInjector> InjectorDictionary =
+            new Dictionary<Type, DependencyInjector>();
+
+        public static void SetDependencyProvider<TComponent, TDependency>(TDependency provider)
+        {
+            var componentType = typeof(TComponent);
+            
+            if (!InjectorDictionary.ContainsKey(componentType))
+                InjectorDictionary.Add(componentType, new DependencyInjector());
+            
+            InjectorDictionary[componentType].SetProvider(provider);
+        }
+
         protected UIComponent()
         {
             _componentType = GetType();
             _layoutAttribute = GetLayoutAttribute();
-            _stylesheetAttributes = GetStylesheetAttributes();
+            _stylesheetAttributes = GetAttributes<StylesheetAttribute>();
+
+            var type = GetType();
+            
+            if (!InjectorDictionary.ContainsKey(type))
+                InjectorDictionary.Add(type, new DependencyInjector());
+            
+            InjectorDictionary[type].AddProvidersFromDependencies(GetAttributes<InjectDependencyAttribute>());
+            
             LoadLayout();
             LoadStyles();
         }
 
-        [CanBeNull]
-        private LayoutAttribute GetLayoutAttribute()
+        protected T Provide<T>()
         {
-            var layoutAttributes =
-                (LayoutAttribute[]) _componentType.GetCustomAttributes(typeof(LayoutAttribute), true);
-
-            if (layoutAttributes.Length == 0)
-                return null;
-
-            return layoutAttributes[0];
-        }
-
-        private StylesheetAttribute[] GetStylesheetAttributes()
-        {
-            return (StylesheetAttribute[])
-                _componentType.GetCustomAttributes(typeof(StylesheetAttribute), true);
+            return InjectorDictionary[_componentType].Provide<T>();
         }
 
         [CanBeNull]
@@ -61,6 +70,22 @@ namespace UIComponents.Core
             }
 
             return loadedStyleSheets;
+        }
+        
+        [CanBeNull]
+        private LayoutAttribute GetLayoutAttribute()
+        {
+            var layoutAttributes = GetAttributes<LayoutAttribute>();
+
+            if (layoutAttributes.Length == 0)
+                return null;
+
+            return layoutAttributes[0];
+        }
+
+        private T[] GetAttributes<T>() where T : Attribute
+        {
+            return (T[]) _componentType.GetCustomAttributes(typeof(T), true);
         }
 
         private void LoadLayout()
