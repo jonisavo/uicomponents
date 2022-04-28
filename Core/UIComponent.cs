@@ -15,6 +15,8 @@ namespace UIComponents.Core
 
         private readonly StylesheetAttribute[] _stylesheetAttributes;
 
+        internal readonly AssetPathAttribute[] AssetPathAttributes;
+
         private static readonly Dictionary<Type, DependencyInjector> InjectorDictionary =
             new Dictionary<Type, DependencyInjector>();
 
@@ -31,7 +33,8 @@ namespace UIComponents.Core
         protected UIComponent()
         {
             _componentType = GetType();
-            _layoutAttribute = GetLayoutAttribute();
+            _layoutAttribute = GetSingleAttribute<LayoutAttribute>();
+            AssetPathAttributes = GetAttributes<AssetPathAttribute>();
             _stylesheetAttributes = GetAttributes<StylesheetAttribute>();
 
             var type = GetType();
@@ -55,8 +58,10 @@ namespace UIComponents.Core
         {
             if (_layoutAttribute == null)
                 return null;
+
+            var assetPath = _layoutAttribute.GetAssetPathForComponent(this);
             
-            return AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(_layoutAttribute.GetAssetPath());
+            return AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(assetPath);
         }
 
         protected virtual StyleSheet[] GetStyleSheets()
@@ -65,17 +70,25 @@ namespace UIComponents.Core
 
             for (var i = 0; i < _stylesheetAttributes.Length; i++)
             {
-                var assetPath = _stylesheetAttributes[i].GetAssetPath();
-                loadedStyleSheets[i] = AssetDatabase.LoadAssetAtPath<StyleSheet>(assetPath);
+                var assetPath = _stylesheetAttributes[i].GetAssetPathForComponent(this);
+                var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(assetPath);
+
+                if (styleSheet == null)
+                {
+                    Debug.LogError($"Could not find stylesheet {assetPath} for {GetType().Name}");
+                    continue;
+                }
+                
+                loadedStyleSheets[i] = styleSheet;
             }
 
             return loadedStyleSheets;
         }
-        
+
         [CanBeNull]
-        private LayoutAttribute GetLayoutAttribute()
+        private T GetSingleAttribute<T>() where T : Attribute
         {
-            var layoutAttributes = GetAttributes<LayoutAttribute>();
+            var layoutAttributes = GetAttributes<T>();
 
             if (layoutAttributes.Length == 0)
                 return null;
