@@ -1,5 +1,8 @@
 ﻿# UIComponents
-#### A microframework for creating reusable components for Unity's UIElements.
+#### A microframework for creating reusable components for Unity Editor's UIElements.
+
+**NOTE:** UIComponents is designed for the Unity Editor and uses `AssetDatabase`.
+Support for Addressables may come in the future.
 
 ```c#
 [Layout("Assets/Editor/Components/MyComponent/MyComponent.uxml")]
