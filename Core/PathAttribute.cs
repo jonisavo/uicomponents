@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 
 namespace UIComponents.Core
@@ -14,13 +12,8 @@ namespace UIComponents.Core
             if (Path == null)
                 Path = string.Empty;
 
-            if (!ConfiguredPathIsComplete())
-            {
-                if (TryGetPathFromComponent(component, out var pathFromComponent))
-                    Path = pathFromComponent;
-                else if (TryGetPathFromAssembly(component, out var pathFromAssembly))
-                    Path = pathFromAssembly;
-            }
+            if (!ConfiguredPathIsComplete() && TryGetPathFromComponent(component, out var path))
+                Path = path;
 
             return Path;
         }
@@ -35,33 +28,11 @@ namespace UIComponents.Core
         {
             path = "";
 
-            return TryGetValidAssetPath(component.GetAssetPaths(), out path);
-        }
-
-        private bool TryGetPathFromAssembly(UIComponent component, out string path)
-        {
-            path = "";
-            
-            var assembly = component.GetType().Assembly;
-
-            var paths =
-                assembly.GetCustomAttributes(typeof(AssetPathAttribute), false)
-                    .Select(attribute => ((AssetPathAttribute)attribute).Path );
-
-            return TryGetValidAssetPath(paths, out path);
-        }
-
-        private bool TryGetValidAssetPath(
-            IEnumerable<string> paths,
-            out string path)
-        {
-            path = "";
-
-            foreach (var pathPart in paths)
+            foreach (var pathPart in component.GetAssetPaths())
             {
                 var filePath = string.Join("/", pathPart, Path);
 
-                if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(filePath)))
+                if (!component.AssetResolver.AssetExists(filePath))
                     continue;
 
                 path = filePath;

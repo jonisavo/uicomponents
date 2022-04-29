@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Core
 {
-    [Dependency(typeof(IAssetLoader), provide: typeof(AssetDatabaseAssetLoader))]
+    [Dependency(typeof(IAssetResolver), provide: typeof(ResourcesAssetResolver))]
     public abstract class UIComponent : VisualElement
     {
         private static readonly Dictionary<Type, LayoutAttribute> LayoutAttributeDictionary =
@@ -18,7 +19,7 @@ namespace UIComponents.Core
         
         internal readonly DependencyInjector DependencyInjector;
 
-        private readonly IAssetLoader _assetLoader;
+        internal readonly IAssetResolver AssetResolver;
         
         private readonly Type _componentType;
 
@@ -27,13 +28,13 @@ namespace UIComponents.Core
             _componentType = GetType();
             DependencyInjector = DependencyInjector.GetInjector(_componentType);
 
-            _assetLoader = DependencyInjector.Provide<IAssetLoader>();
+            AssetResolver = DependencyInjector.Provide<IAssetResolver>();
             
             if (!LayoutAttributeDictionary.ContainsKey(_componentType))
                 LayoutAttributeDictionary[_componentType] = GetSingleAttribute<LayoutAttribute>();
             
             if (!AssetPathAttributesDictionary.ContainsKey(_componentType))
-                AssetPathAttributesDictionary[_componentType] = GetAttributes<AssetPathAttribute>();
+                AssetPathAttributesDictionary[_componentType] = GetAssetPathAttributes();
             
             if (!StylesheetAttributesDictionary.ContainsKey(_componentType))
                 StylesheetAttributesDictionary[_componentType] = GetAttributes<StylesheetAttribute>();
@@ -65,7 +66,7 @@ namespace UIComponents.Core
 
             var assetPath = layoutAttribute.GetAssetPathForComponent(this);
             
-            return _assetLoader.LoadAsset<VisualTreeAsset>(assetPath);
+            return AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
 
         protected virtual StyleSheet[] GetStyleSheets()
@@ -77,7 +78,7 @@ namespace UIComponents.Core
             for (var i = 0; i < stylesheetAttributes.Length; i++)
             {
                 var assetPath = stylesheetAttributes[i].GetAssetPathForComponent(this);
-                var styleSheet = _assetLoader.LoadAsset<StyleSheet>(assetPath);
+                var styleSheet = AssetResolver.LoadAsset<StyleSheet>(assetPath);
 
                 if (styleSheet == null)
                 {
@@ -107,6 +108,19 @@ namespace UIComponents.Core
             return (T[]) _componentType.GetCustomAttributes(typeof(T), true);
         }
 
+        private AssetPathAttribute[] GetAssetPathAttributes()
+        {
+            var assembly = _componentType.Assembly;
+
+            var assetPathAttributes =
+                GetAttributes<AssetPathAttribute>()
+                    .Concat(
+                        (AssetPathAttribute[]) assembly.GetCustomAttributes(typeof(AssetPathAttribute), false)
+                    ).ToArray();
+
+            return assetPathAttributes;
+        }
+
         private void LoadLayout()
         {
             var layoutAsset = GetLayout();
@@ -127,7 +141,8 @@ namespace UIComponents.Core
             }
             
             foreach (var sheet in loadedStyleSheets)
-                styleSheets.Add(sheet);
+                if (sheet != null)
+                    styleSheets.Add(sheet);
         }
     }
 }
