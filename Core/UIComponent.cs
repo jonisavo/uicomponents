@@ -1,77 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Core
 {
+    [Dependency(typeof(IAssetLoader), provide: typeof(AssetDatabaseAssetLoader))]
     public abstract class UIComponent : VisualElement
     {
+        private static readonly Dictionary<Type, LayoutAttribute> LayoutAttributeDictionary =
+            new Dictionary<Type, LayoutAttribute>();
+        private static readonly Dictionary<Type, StylesheetAttribute[]> StylesheetAttributesDictionary =
+            new Dictionary<Type, StylesheetAttribute[]>();
+        private static readonly Dictionary<Type, AssetPathAttribute[]> AssetPathAttributesDictionary =
+            new Dictionary<Type, AssetPathAttribute[]>();
+        
+        internal readonly DependencyInjector DependencyInjector;
+
+        private readonly IAssetLoader _assetLoader;
+        
         private readonly Type _componentType;
-
-        private readonly LayoutAttribute _layoutAttribute;
-
-        private readonly StylesheetAttribute[] _stylesheetAttributes;
-
-        internal readonly AssetPathAttribute[] AssetPathAttributes;
-
-        private static readonly Dictionary<Type, DependencyInjector> InjectorDictionary =
-            new Dictionary<Type, DependencyInjector>();
-
-        public static void SetDependencyProvider<TComponent, TDependency>(TDependency provider)
-        {
-            var componentType = typeof(TComponent);
-            
-            if (!InjectorDictionary.ContainsKey(componentType))
-                InjectorDictionary.Add(componentType, new DependencyInjector());
-            
-            InjectorDictionary[componentType].SetProvider(provider);
-        }
 
         protected UIComponent()
         {
             _componentType = GetType();
-            _layoutAttribute = GetSingleAttribute<LayoutAttribute>();
-            AssetPathAttributes = GetAttributes<AssetPathAttribute>();
-            _stylesheetAttributes = GetAttributes<StylesheetAttribute>();
+            DependencyInjector = DependencyInjector.GetInjector(_componentType);
 
-            var type = GetType();
+            _assetLoader = DependencyInjector.Provide<IAssetLoader>();
             
-            if (!InjectorDictionary.ContainsKey(type))
-                InjectorDictionary.Add(type, new DependencyInjector());
+            if (!LayoutAttributeDictionary.ContainsKey(_componentType))
+                LayoutAttributeDictionary[_componentType] = GetSingleAttribute<LayoutAttribute>();
             
-            InjectorDictionary[type].AddProvidersFromDependencies(GetAttributes<InjectDependencyAttribute>());
+            if (!AssetPathAttributesDictionary.ContainsKey(_componentType))
+                AssetPathAttributesDictionary[_componentType] = GetAttributes<AssetPathAttribute>();
             
+            if (!StylesheetAttributesDictionary.ContainsKey(_componentType))
+                StylesheetAttributesDictionary[_componentType] = GetAttributes<StylesheetAttribute>();
+
             LoadLayout();
             LoadStyles();
         }
 
-        protected T Provide<T>()
+        public IEnumerable<string> GetAssetPaths()
         {
-            return InjectorDictionary[_componentType].Provide<T>();
+            var assetPathAttributes = AssetPathAttributesDictionary[_componentType];
+
+            foreach (var assetPathAttribute in assetPathAttributes)
+                yield return assetPathAttribute.Path;
+        }
+
+        protected T Provide<T>() where T : class
+        {
+            return DependencyInjector.Provide<T>();
         }
 
         [CanBeNull]
         protected virtual VisualTreeAsset GetLayout()
         {
-            if (_layoutAttribute == null)
+            var layoutAttribute = LayoutAttributeDictionary[_componentType];
+            
+            if (layoutAttribute == null)
                 return null;
 
-            var assetPath = _layoutAttribute.GetAssetPathForComponent(this);
+            var assetPath = layoutAttribute.GetAssetPathForComponent(this);
             
-            return AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(assetPath);
+            return _assetLoader.LoadAsset<VisualTreeAsset>(assetPath);
         }
 
         protected virtual StyleSheet[] GetStyleSheets()
         {
-            var loadedStyleSheets = new StyleSheet[_stylesheetAttributes.Length];
+            var stylesheetAttributes = StylesheetAttributesDictionary[_componentType];
+            
+            var loadedStyleSheets = new StyleSheet[stylesheetAttributes.Length];
 
-            for (var i = 0; i < _stylesheetAttributes.Length; i++)
+            for (var i = 0; i < stylesheetAttributes.Length; i++)
             {
-                var assetPath = _stylesheetAttributes[i].GetAssetPathForComponent(this);
-                var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(assetPath);
+                var assetPath = stylesheetAttributes[i].GetAssetPathForComponent(this);
+                var styleSheet = _assetLoader.LoadAsset<StyleSheet>(assetPath);
 
                 if (styleSheet == null)
                 {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 
 namespace UIComponents.Core
@@ -33,7 +35,7 @@ namespace UIComponents.Core
         {
             path = "";
 
-            return TryGetValidAssetPathFromAttributes(component.AssetPathAttributes, out path);
+            return TryGetValidAssetPath(component.GetAssetPaths(), out path);
         }
 
         private bool TryGetPathFromAssembly(UIComponent component, out string path)
@@ -42,24 +44,22 @@ namespace UIComponents.Core
             
             var assembly = component.GetType().Assembly;
 
-            var assetPathAttributes =
-                assembly.GetCustomAttributes(typeof(AssetPathAttribute), false);
+            var paths =
+                assembly.GetCustomAttributes(typeof(AssetPathAttribute), false)
+                    .Select(attribute => ((AssetPathAttribute)attribute).Path );
 
-            return TryGetValidAssetPathFromAttributes((AssetPathAttribute[]) assetPathAttributes, out path);
+            return TryGetValidAssetPath(paths, out path);
         }
 
-        private bool TryGetValidAssetPathFromAttributes(
-            AssetPathAttribute[] attributes,
+        private bool TryGetValidAssetPath(
+            IEnumerable<string> paths,
             out string path)
         {
             path = "";
-            
-            if (attributes.Length == 0)
-                return false;
 
-            foreach (var attribute in attributes)
+            foreach (var pathPart in paths)
             {
-                var filePath = string.Join("/", attribute.Path, Path);
+                var filePath = string.Join("/", pathPart, Path);
 
                 if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(filePath)))
                     continue;
