@@ -24,15 +24,6 @@ namespace UIComponents.Core
             injector.SetDependency(provider);
         }
 
-        public static TDependency GetDependency<TConsumer, TDependency>()
-            where TConsumer : class
-            where TDependency : class
-        {
-            var injector = GetInjector(typeof(TConsumer));
-
-            return injector.Provide<TDependency>();
-        }
-
         public static DependencyInjector GetInjector(Type consumerType)
         {
             if (InjectorDictionary.ContainsKey(consumerType))
