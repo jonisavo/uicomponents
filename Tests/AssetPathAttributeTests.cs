@@ -3,17 +3,18 @@ using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Core;
 
-[assembly: AssetPath("AssemblyPath1")]
-[assembly: AssetPath("AssemblyPath2")]
-
 namespace UIComponents.Tests
 {
     [TestFixture]
     public class AssetPathAttributeTests
     {
-        [AssetPath("ComponentPath1")]
-        [AssetPath("ComponentPath2")]
+        [AssetPath("Path1")]
+        [AssetPath("Path2")]
         private class UIComponentWithAssetPaths : UIComponent {}
+        
+        [AssetPath("Path3")]
+        [AssetPath("Path4")]
+        private class UIComponentSubclassWithAssetPaths : UIComponentWithAssetPaths {}
         
         private IAssetResolver _resolver;
         
@@ -37,12 +38,25 @@ namespace UIComponents.Tests
 
             var assetPaths = component.GetAssetPaths().ToList();
 
+            Assert.That(assetPaths.Count, Is.EqualTo(2));
+            
+            Assert.That(assetPaths[0], Is.EqualTo("Path1"));
+            Assert.That(assetPaths[1], Is.EqualTo("Path2"));
+        }
+
+        [Test]
+        public void Asset_Path_Are_Inherited_From_Parent_Classes()
+        {
+            var component = new UIComponentSubclassWithAssetPaths();
+
+            var assetPaths = component.GetAssetPaths().ToList();
+            
             Assert.That(assetPaths.Count, Is.EqualTo(4));
             
-            Assert.That(assetPaths[0], Is.EqualTo("ComponentPath1"));
-            Assert.That(assetPaths[1], Is.EqualTo("ComponentPath2"));
-            Assert.That(assetPaths[2], Is.EqualTo("AssemblyPath1"));
-            Assert.That(assetPaths[3], Is.EqualTo("AssemblyPath2"));
+            Assert.That(assetPaths[0], Is.EqualTo("Path3"));
+            Assert.That(assetPaths[1], Is.EqualTo("Path4"));
+            Assert.That(assetPaths[2], Is.EqualTo("Path1"));
+            Assert.That(assetPaths[3], Is.EqualTo("Path2"));
         }
     }
 }

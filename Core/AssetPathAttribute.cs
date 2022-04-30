@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace UIComponents.Core
 {
-    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [BaseTypeRequired(typeof(UIComponent))]
     public class AssetPathAttribute : Attribute
     {

@@ -43,10 +43,10 @@ namespace UIComponents.Tests
         }
 
         [Test]
-        public void Only_Assembly_Asset_Paths_Exist()
+        public void No_Asset_Paths_Exist()
         {
             var component = new UIComponentNoAttributes();
-            Assert.That(component.GetAssetPaths().Count(), Is.EqualTo(2));
+            Assert.That(component.GetAssetPaths().Count(), Is.EqualTo(0));
         }
     }
 }

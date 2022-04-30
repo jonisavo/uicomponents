@@ -34,7 +34,7 @@ namespace UIComponents.Core
                 LayoutAttributeDictionary[_componentType] = GetSingleAttribute<LayoutAttribute>();
             
             if (!AssetPathAttributesDictionary.ContainsKey(_componentType))
-                AssetPathAttributesDictionary[_componentType] = GetAssetPathAttributes();
+                AssetPathAttributesDictionary[_componentType] = GetAttributes<AssetPathAttribute>();
             
             if (!StylesheetAttributesDictionary.ContainsKey(_componentType))
                 StylesheetAttributesDictionary[_componentType] = GetAttributes<StylesheetAttribute>();
@@ -106,19 +106,6 @@ namespace UIComponents.Core
         private T[] GetAttributes<T>() where T : Attribute
         {
             return (T[]) _componentType.GetCustomAttributes(typeof(T), true);
-        }
-
-        private AssetPathAttribute[] GetAssetPathAttributes()
-        {
-            var assembly = _componentType.Assembly;
-
-            var assetPathAttributes =
-                GetAttributes<AssetPathAttribute>()
-                    .Concat(
-                        (AssetPathAttribute[]) assembly.GetCustomAttributes(typeof(AssetPathAttribute), false)
-                    ).ToArray();
-
-            return assetPathAttributes;
         }
 
         private void LoadLayout()
