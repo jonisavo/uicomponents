@@ -3,6 +3,11 @@ using UnityEditor;
 
 namespace UIComponents.Editor
 {
+    /// <summary>
+    /// An IAssetResolver which loads assets from AssetDatabase.
+    /// <seealso cref="DependencyAttribute"/>
+    /// <seealso cref="UIComponent"/>
+    /// </summary>
     public class AssetDatabaseAssetResolver : IAssetResolver
     {
         public T LoadAsset<T>(string assetPath) where T : UnityEngine.Object

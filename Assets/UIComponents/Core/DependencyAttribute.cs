@@ -2,6 +2,9 @@
 
 namespace UIComponents.Core
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class DependencyAttribute : Attribute
     {

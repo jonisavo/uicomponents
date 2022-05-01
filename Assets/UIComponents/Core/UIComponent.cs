@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using UIComponents.Core.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Core
 {
+    /// <summary>
+    /// A VisualElement which is configurable with various attributes like
+    /// <see cref="LayoutAttribute"/> and <see cref="StylesheetAttribute"/>.
+    /// <para/>
+    /// Enables dependency injection with <see cref="DependencyAttribute"/>.
+    /// </summary>
+    /// <seealso cref="LayoutAttribute"/>
+    /// <seealso cref="StylesheetAttribute"/>
+    /// <seealso cref="DependencyAttribute"/>
+    /// <seealso cref="ResourcesAssetResolver"/>
     [Dependency(typeof(IAssetResolver), provide: typeof(ResourcesAssetResolver))]
     public abstract class UIComponent : VisualElement
     {
@@ -23,6 +33,9 @@ namespace UIComponents.Core
         
         private readonly Type _componentType;
 
+        /// <summary>
+        /// UIComponent's constructor loads the configured layout and stylesheets.
+        /// </summary>
         protected UIComponent()
         {
             _componentType = GetType();
@@ -42,7 +55,12 @@ namespace UIComponents.Core
             LoadLayout();
             LoadStyles();
         }
-
+        
+        /// <summary>
+        /// Returns an IEnumerable of all of the asset paths configured
+        /// for the component.
+        /// </summary>
+        /// <returns>Asset paths of the component</returns>
         public IEnumerable<string> GetAssetPaths()
         {
             var assetPathAttributes = AssetPathAttributesDictionary[_componentType];
@@ -51,11 +69,24 @@ namespace UIComponents.Core
                 yield return assetPathAttribute.Path;
         }
 
+        /// <summary>
+        /// Returns a dependency. Throws a <see cref="MissingProviderException"/>
+        /// if the dependency can not be provided.
+        /// </summary>
+        /// <typeparam name="T">Dependency type</typeparam>
+        /// <exception cref="MissingProviderException">
+        /// Thrown if the dependency can not be provided
+        /// </exception>
+        /// <returns>Dependency instance</returns>
         protected T Provide<T>() where T : class
         {
             return DependencyInjector.Provide<T>();
         }
 
+        /// <summary>
+        /// Returns the layout loaded in UIComponent's constructor.
+        /// </summary>
+        /// <returns>Component layout</returns>
         [CanBeNull]
         protected virtual VisualTreeAsset GetLayout()
         {
@@ -69,6 +100,10 @@ namespace UIComponents.Core
             return AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
 
+        /// <summary>
+        /// Returns the stylesheets loaded in UIComponent's constructor.
+        /// </summary>
+        /// <returns>Component stylesheets</returns>
         protected virtual StyleSheet[] GetStyleSheets()
         {
             var stylesheetAttributes = StylesheetAttributesDictionary[_componentType];
