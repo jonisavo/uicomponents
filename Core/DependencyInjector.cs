@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UIComponents.Core.Exceptions;
-using UnityEngine;
 
 namespace UIComponents.Core
 {
@@ -36,13 +35,11 @@ namespace UIComponents.Core
 
         private static DependencyInjector CreateInjector(Type consumerType)
         {
-            var injector = new DependencyInjector();
-
             var injectAttributes = (DependencyAttribute[])
                 consumerType.GetCustomAttributes(typeof(DependencyAttribute), true);
             
-            injector.PopulateFromDependencyAttributes(injectAttributes);
-            
+            var injector = new DependencyInjector(injectAttributes);
+
             InjectorDictionary.Add(consumerType, injector);
 
             return injector;
@@ -63,6 +60,20 @@ namespace UIComponents.Core
             }
 
             return instance;
+        }
+        
+        public DependencyInjector() {}
+
+        public DependencyInjector(IEnumerable<DependencyAttribute> dependencyAttributes)
+        {
+            foreach (var dependencyAttribute in dependencyAttributes)
+            {
+                var type = dependencyAttribute.DependencyType;
+                var providerType = dependencyAttribute.ProvideType;
+                
+                if (!DependencyDictionary.ContainsKey(type))
+                    DependencyDictionary[type] = CreateInstance(providerType);
+            }
         }
 
         public void SetDependency<T>([NotNull] T instance) where T : class
@@ -95,18 +106,6 @@ namespace UIComponents.Core
             instance = (T) DependencyDictionary[type];
 
             return true;
-        }
-
-        private void PopulateFromDependencyAttributes(IEnumerable<DependencyAttribute> dependencyAttributes)
-        {
-            foreach (var dependencyAttribute in dependencyAttributes)
-            {
-                var type = dependencyAttribute.DependencyType;
-                var providerType = dependencyAttribute.ProvideType;
-                
-                if (!DependencyDictionary.ContainsKey(type))
-                    DependencyDictionary[type] = CreateInstance(providerType);
-            }
         }
     }
 }
