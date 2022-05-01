@@ -27,10 +27,14 @@ namespace UIComponents.Core
         private static readonly Dictionary<Type, AssetPathAttribute[]> AssetPathAttributesDictionary =
             new Dictionary<Type, AssetPathAttribute[]>();
         
+        /// <summary>
+        /// The IAssetResolver used by this UIComponent.
+        /// Defaults to <see cref="ResourcesAssetResolver"/>.
+        /// </summary>
+        public readonly IAssetResolver AssetResolver;
+        
         internal readonly DependencyInjector DependencyInjector;
 
-        internal readonly IAssetResolver AssetResolver;
-        
         private readonly Type _componentType;
 
         /// <summary>
