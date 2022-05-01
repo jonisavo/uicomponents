@@ -14,6 +14,19 @@ namespace UIComponents.Tests
 
         public class DependencyTwo : IDependency {}
 
+        [Test]
+        public void Can_Be_Created_Using_DependencyAttributes()
+        {
+            var dependencyAttributes = new[]
+            {
+                new DependencyAttribute(typeof(IDependency), typeof(DependencyOne))
+            };
+
+            var injector = new DependencyInjector(dependencyAttributes);
+            
+            Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
+        }
+
         [TestFixture]
         public class Provide
         {
