@@ -36,7 +36,7 @@ jobs:
       - name: Push subtree
         run: git push origin "$BRANCH_NAME"
       - name: Create UPM tag
-        if: startsWith(github.ref_name, "v")
+        if: startsWith(github.ref_name, 'v')
         env:
           TAG_NAME: ${{ format('upm/{0}', github.ref_name) }}
         run: |
