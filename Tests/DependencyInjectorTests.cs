@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using UIComponents.Core;
+using UIComponents.Core.Exceptions;
 
 namespace UIComponents.Tests
 {
@@ -12,6 +13,28 @@ namespace UIComponents.Tests
         public class DependencyOne : IDependency {}
 
         public class DependencyTwo : IDependency {}
+
+        [TestFixture]
+        public class Provide
+        {
+            [Test]
+            public void Returns_Desired_Dependency()
+            {
+                var injector = new DependencyInjector();
+                injector.SetDependency<IDependency>(new DependencyOne());
+                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
+            }
+
+            [Test]
+            public void Throws_If_No_Provider_Exists()
+            {
+                var injector = new DependencyInjector();
+
+                Assert.Throws<MissingProviderException>(
+                    () => injector.Provide<IDependency>()
+                );
+            }
+        }
         
         [TestFixture]
         public class SetDependency
@@ -22,9 +45,6 @@ namespace UIComponents.Tests
                 var injector = new DependencyInjector();
                 
                 injector.SetDependency<IDependency>(new DependencyOne());
-                
-                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
-                
                 injector.SetDependency<IDependency>(new DependencyTwo());
                 
                 Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyTwo>());

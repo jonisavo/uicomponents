@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using UIComponents.Core.Exceptions;
 using UnityEngine;
 
 namespace UIComponents.Core
@@ -72,18 +73,17 @@ namespace UIComponents.Core
             DependencyDictionary[typeof(T)] = instance;
         }
 
+        [NotNull]
         public T Provide<T>() where T : class
         {
             var type = typeof(T);
+
+            if (!DependencyDictionary.ContainsKey(type))
+                throw new MissingProviderException(type);
             
-            if (DependencyDictionary.ContainsKey(type))
-                return (T) DependencyDictionary[type];
-            
-            Debug.LogWarningFormat("Could not get dependency {0}", type.Name);
-            
-            return null;
+            return (T) DependencyDictionary[type];
         }
-        
+
         private void PopulateFromDependencyAttributes(IEnumerable<DependencyAttribute> dependencyAttributes)
         {
             foreach (var dependencyAttribute in dependencyAttributes)
