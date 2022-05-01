@@ -5,17 +5,45 @@ using UIComponents.Core.Exceptions;
 
 namespace UIComponents.Core
 {
+    /// <summary>
+    /// The class responsible for providing UIComponents with their
+    /// dependencies.
+    /// </summary>
+    /// <seealso cref="UIComponent"/>
+    /// <seealso cref="DependencyAttribute"/>
     public class DependencyInjector
     {
+        /// <summary>
+        /// Contains all injectors created for consumers.
+        /// </summary>
         internal static readonly Dictionary<Type, DependencyInjector> InjectorDictionary =
             new Dictionary<Type, DependencyInjector>();
         
+        /// <summary>
+        /// Contains the instantiated dependencies which are consumed
+        /// by the interested parties.
+        /// </summary>
         internal static readonly Dictionary<Type, object> InstantiatedInstanceDictionary
             = new Dictionary<Type, object>();
         
+        /// <summary>
+        /// Contains the dependencies the injector provides to its consumer.
+        /// </summary>
         internal readonly Dictionary<Type, object> DependencyDictionary
             = new Dictionary<Type, object>();
 
+        /// <summary>
+        /// Switches the dependency of a consumer.
+        /// </summary>
+        /// <remarks>
+        /// Can be used in unit tests to switch to
+        /// a mocked dependency.
+        /// </remarks>
+        /// <param name="provider">
+        /// The new instance used for the dependency
+        /// </param>
+        /// <typeparam name="TConsumer">Type of the consumer</typeparam>
+        /// <typeparam name="TDependency">Type of the dependency</typeparam>
         public static void SetDependency<TConsumer, TDependency>(TDependency provider)
             where TConsumer : class
             where TDependency : class
@@ -25,6 +53,11 @@ namespace UIComponents.Core
             injector.SetDependency(provider);
         }
 
+        /// <summary>
+        /// Returns the injector of the given consumer type.
+        /// </summary>
+        /// <param name="consumerType">Consumer type</param>
+        /// <returns>Injector of the consumer type</returns>
         public static DependencyInjector GetInjector(Type consumerType)
         {
             if (InjectorDictionary.ContainsKey(consumerType))
@@ -32,7 +65,7 @@ namespace UIComponents.Core
 
             return CreateInjector(consumerType);
         }
-
+        
         private static DependencyInjector CreateInjector(Type consumerType)
         {
             var injectAttributes = (DependencyAttribute[])
@@ -62,8 +95,16 @@ namespace UIComponents.Core
             return instance;
         }
         
+        /// <summary>
+        /// Constructs a new injector with no dependencies configured.
+        /// </summary>
         public DependencyInjector() {}
 
+        /// <summary>
+        /// Constructs a new injector with dependencies configured
+        /// according to the given DependencyAttributes.
+        /// </summary>
+        /// <param name="dependencyAttributes">Dependency attributes</param>
         public DependencyInjector(IEnumerable<DependencyAttribute> dependencyAttributes)
         {
             foreach (var dependencyAttribute in dependencyAttributes)
@@ -76,6 +117,14 @@ namespace UIComponents.Core
             }
         }
 
+        /// <summary>
+        /// Sets the instance used for a dependency.
+        /// </summary>
+        /// <param name="instance">New instance</param>
+        /// <typeparam name="T">Dependency type</typeparam>
+        /// <exception cref="ArgumentNullException">
+        /// Raised if the argument is null
+        /// </exception>
         public void SetDependency<T>([NotNull] T instance) where T : class
         {
             if (instance == null)
@@ -84,6 +133,15 @@ namespace UIComponents.Core
             DependencyDictionary[typeof(T)] = instance;
         }
 
+        /// <summary>
+        /// Returns a dependency. Throws a <see cref="MissingProviderException"/>
+        /// if the dependency can not be provided.
+        /// </summary>
+        /// <typeparam name="T">Dependency type</typeparam>
+        /// <exception cref="MissingProviderException">
+        /// Thrown if the dependency can not be provided
+        /// </exception>
+        /// <returns>Dependency instance</returns>
         [NotNull]
         public T Provide<T>() where T : class
         {
@@ -95,6 +153,13 @@ namespace UIComponents.Core
             return (T) DependencyDictionary[type];
         }
         
+        /// <summary>
+        /// Attempts to fetch a dependency. Returns whether
+        /// the dependency could be fetched.
+        /// </summary>
+        /// <param name="instance">Dependency instance</param>
+        /// <typeparam name="T">Dependency type</typeparam>
+        /// <returns>Whether the dependency could be fetched</returns>
         public bool TryProvide<T>(out T instance) where T : class
         {
             instance = null;
