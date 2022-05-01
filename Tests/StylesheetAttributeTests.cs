@@ -41,6 +41,7 @@ namespace UIComponents.Tests
             var component = new UIComponentWithTwoStylesheets();
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
+            Assert.That(component.styleSheets.count, Is.EqualTo(2));
         }
 
         [Test]
@@ -54,6 +55,8 @@ namespace UIComponents.Tests
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             
             LogAssert.Expect(LogType.Error, new Regex("Could not find stylesheet"));
+            
+            Assert.That(component.styleSheets.count, Is.EqualTo(1));
         }
     }
 }
