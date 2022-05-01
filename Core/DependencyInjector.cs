@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace UIComponents.Core
@@ -63,11 +64,14 @@ namespace UIComponents.Core
             return instance;
         }
 
-        public void SetDependency<T>(T instance) where T : class
+        public void SetDependency<T>([NotNull] T instance) where T : class
         {
+            if (instance == null)
+                throw new ArgumentNullException("Dependency can not be set as null.");
+            
             DependencyDictionary[typeof(T)] = instance;
         }
-        
+
         public T Provide<T>() where T : class
         {
             var type = typeof(T);
