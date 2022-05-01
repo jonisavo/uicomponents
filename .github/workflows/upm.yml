@@ -31,6 +31,8 @@ jobs:
         run: |
           git add -A
           git commit -m "chore(ci): prepare upm branch"
+      - name: Remove existing upm branch
+        run: git branch -d upm &> /dev/null || echo upm branch not found
       - name: Split subtree
         run: git subtree split -P "$UICOMPONENTS_PATH" -b "$BRANCH_NAME"
       - name: Push subtree
