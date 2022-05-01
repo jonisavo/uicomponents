@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEditor;
+using UnityEngine;
 
 namespace UIComponents.Core
 {
@@ -10,10 +11,10 @@ namespace UIComponents.Core
         public string GetAssetPathForComponent(UIComponent component)
         {
             if (Path == null)
-                Path = string.Empty;
+                return string.Empty;
 
             if (!ConfiguredPathIsComplete() && TryGetPathFromComponent(component, out var path))
-                Path = path;
+                return path;
 
             return Path;
         }
