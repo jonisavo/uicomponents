@@ -32,11 +32,11 @@ jobs:
           git add -A
           git commit -m "chore(ci): prepare upm branch"
       - name: Remove existing upm branch
-        run: git branch -D upm &> /dev/null || echo upm branch not found
+        run: git branch -D upm || echo skipping upm branch deletion
       - name: Split subtree
         run: git subtree split -P "$UICOMPONENTS_PATH" -b "$BRANCH_NAME"
       - name: Push subtree
-        run: git push origin "$BRANCH_NAME"
+        run: git push -u origin --force "$BRANCH_NAME"
       - name: Create UPM tag
         if: startsWith(github.ref_name, 'v')
         env:
