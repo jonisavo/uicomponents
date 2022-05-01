@@ -117,7 +117,7 @@ namespace UIComponents.Core
 
                 if (styleSheet == null)
                 {
-                    Debug.LogError($"Could not find stylesheet {assetPath} for {GetType().Name}");
+                    Debug.LogError($"Could not find stylesheet {assetPath} for {_componentType.Name}");
                     continue;
                 }
                 
@@ -146,10 +146,9 @@ namespace UIComponents.Core
         private void LoadLayout()
         {
             var layoutAsset = GetLayout();
+            
             if (layoutAsset)
                 layoutAsset.CloneTree(this);
-            else
-                Debug.LogWarningFormat("Could not find layout for {0}", _componentType.Name);
         }
 
         private void LoadStyles()
@@ -157,11 +156,8 @@ namespace UIComponents.Core
             var loadedStyleSheets = GetStyleSheets();
 
             if (loadedStyleSheets.Length == 0)
-            {
-                Debug.LogWarningFormat("Could not find styles for {0}", _componentType.Name);
                 return;
-            }
-            
+
             foreach (var sheet in loadedStyleSheets)
                 if (sheet != null)
                     styleSheets.Add(sheet);
