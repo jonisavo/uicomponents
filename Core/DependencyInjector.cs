@@ -83,6 +83,19 @@ namespace UIComponents.Core
             
             return (T) DependencyDictionary[type];
         }
+        
+        public bool TryProvide<T>(out T instance) where T : class
+        {
+            instance = null;
+            var type = typeof(T);
+
+            if (!DependencyDictionary.ContainsKey(type))
+                return false;
+
+            instance = (T) DependencyDictionary[type];
+
+            return true;
+        }
 
         private void PopulateFromDependencyAttributes(IEnumerable<DependencyAttribute> dependencyAttributes)
         {

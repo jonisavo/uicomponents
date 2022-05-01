@@ -49,16 +49,6 @@ namespace UIComponents.Tests
             }
         }
 
-        private class UIComponentWithNoProvider : UIComponent
-        {
-            public readonly IStringDependency StringDependency;
-
-            public UIComponentWithNoProvider()
-            {
-                StringDependency = Provide<IStringDependency>();
-            }
-        }
-
         [Test]
         public void The_Correct_Class_Is_Provided_To_Component()
         {
@@ -71,13 +61,6 @@ namespace UIComponents.Tests
         {
             var component = new UIComponentSubclassWithDependencyOverride();
             Assert.That(component.StringDependency, Is.InstanceOf<EmptyStringProvider>());
-        }
-
-        [Test]
-        public void Null_Is_Provided_When_No_Provider_Exists()
-        {
-            var component = new UIComponentWithNoProvider();
-            Assert.That(component.StringDependency, Is.Null);
         }
     }
 }

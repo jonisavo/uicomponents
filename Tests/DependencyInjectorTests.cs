@@ -30,9 +30,40 @@ namespace UIComponents.Tests
             {
                 var injector = new DependencyInjector();
 
-                Assert.Throws<MissingProviderException>(
+                var exception = Assert.Throws<MissingProviderException>(
                     () => injector.Provide<IDependency>()
                 );
+                
+                Assert.That(exception.Message, Is.EqualTo("No provider found for IDependency"));
+            }
+        }
+
+        [TestFixture]
+        public class TryProvide
+        {
+            [Test]
+            public void Returns_If_Dependency_Could_Be_Provided()
+            {
+                var injector = new DependencyInjector();
+                
+                Assert.That(injector.TryProvide<IDependency>(out _), Is.False);
+                
+                injector.SetDependency<IDependency>(new DependencyOne());
+
+                var wasProvided = injector.TryProvide<IDependency>(out var instance);
+                
+                Assert.That(wasProvided, Is.True);
+                Assert.That(instance, Is.InstanceOf<DependencyOne>());
+            }
+
+            [Test]
+            public void Yields_Null_If_Dependency_Can_Not_Be_Provided()
+            {
+                var injector = new DependencyInjector();
+
+                injector.TryProvide<IDependency>(out var instance);
+                
+                Assert.That(instance, Is.Null);
             }
         }
         
