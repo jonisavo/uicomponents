@@ -26,6 +26,7 @@ jobs:
         run: |
           git config --global user.name 'github-bot'
           git config --global user.email 'github-bot@users.noreply.github.com'
+          git add -A
           git commit -am "Prepare upm branch"
       - name: Split subtree
         run: git subtree split -P "$UICOMPONENTS_PATH" -b "$BRANCH_NAME"
