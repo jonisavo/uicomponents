@@ -1,17 +1,23 @@
 ﻿# UIComponents
-#### A microframework for creating reusable components for Unity Editor's UIElements.
-
-**NOTE:** UIComponents is designed for the Unity Editor and uses `AssetDatabase`.
-Support for Addressables may come in the future.
+#### A microframework for creating reusable components for Unity Editor's UIElements with dependency injection.
 
 ```c#
-[Layout("Assets/Editor/Components/MyComponent/MyComponent.uxml")]
-[Stylesheet("Assets/Editor/Components/MyComponent/MyComponent.style.uss")]
-[Stylesheet("Assets/Editor/Common.uss")]
+[Layout("MyComponent/MyComponent")]
+[Stylesheet("MyComponent/MyComponent.style")]
+[Stylesheet("Common")]
+[Dependency(typeof(ICounterService), provide: typeof(CounterService))]
 class MyComponent : UIComponent
 {
     // The layout and stylesheets are loaded in the inherited
-    // constructor.
+    // constructor. They are retrieved from Resources by default.
+    
+    private readonly ICounterService _counterService;
+    
+    public MyComponent()
+    {
+        // Will yield a CounterService.
+        _counterService = Provide<ICounterService>();
+    }
 }
 ```
 
@@ -20,77 +26,164 @@ var container = new VisualElement();
 container.Add(new MyComponent());
 ```
 
-If you have a common asset path to your files, you can use `RelativeTo`:
+## Layouts and stylesheets
+
+`[Layout]` allows specifying the path to a UXML file. The file will be
+loaded automatically.
+
+`[Stylesheet]` allows specifying paths to USS files. The files will be
+loaded automatically. Unlike `[Layout]`, multiple `[Stylesheet]`
+attributes can be used on a single UIComponent.
+
+## Dependency injection
+
+### Summary
+
+Dependency injection requires an interface. Below is a simple example:
 
 ```c#
-[Layout("MyComponent/MyComponent.uxml", RelativeTo = AssetPaths.Components)]
-[Stylesheet("MyComponent/MyComponent.style.uss", RelativeTo = AssetPaths.Components)]
-[Stylesheet("Assets/Editor/Common.uss")]
-class MyComponent : UIComponent {}
-```
-
-```c#
-public static class AssetPaths
+public interface ICounterService
 {
-    public const string Components = "Assets/Editor/Components";
+    public void IncrementCount();
+    public int GetCount();
+}
+
+public class CounterService : ICounterService
+{
+    private int _count;
+    
+    public void IncrementCount() => _count++;
+    public int GetCount() => _count;
 }
 ```
 
-## API
-
-### `UIComponent`
-
-Automatically loads the specified layout and stylesheets in the constructor.
-
-Offers two protected, virtual methods which can be overridden:
-
-#### `VisualTreeAsset GetLayout()`
-
-Returns the VisualTreeAsset used for the component. Called in `UIComponent`'s constructor.
-
-#### `StyleSheet[] GetStyleSheets()`
-
-Returns the StyleSheets used in the component. Called in `UIComponent`'s constructor.
-
-### `LayoutAttribute`
-
-Used to define the asset path for the `UIComponent`'s `VisualTreeAsset`.
-The `RelativeTo` property can be used to prepend to the file path.
-
-Only a single `LayoutAttribute` can be used.
+`CounterService` can be injected into components using the `[Dependency]` attribute:
 
 ```c#
-[Layout("Assets/UIComponents/ComponentA.uxml")]
-class ComponentA : UIComponent {}
-
-[Layout("ComponentB.uxml", RelativeTo = AssetPaths.Components)]
-class ComponentB : UIComponent {}
-
-public static class AssetPaths
+[Dependency(typeof(ICounterService), provide: typeof(CounterService))]
+public class CounterComponent : UIComponent
 {
-    public const string Components = "Assets/UIComponents";
+    private readonly ICounterService _counterService;   
+    private readonly Label _countLabel;
+
+    public CounterComponent()
+    {
+        _counterService = Provide<ICounterService>();
+    
+        _countLabel = new Label(_counterService.GetCount().ToString());
+        Add(_countLabel);
+    
+        var incrementButton = new Button(IncrementCount);
+        incrementButton.text = "Increment";
+        Add(incrementButton);
+    }
+
+    private void IncrementCount()
+    {
+        _counterService.IncrementCount();
+        _countLabel.text = _counterService.GetCount().ToString();
+    }
 }
 ```
 
-### `StylesheetAttribute`
+This creates a component which can be used to increment a number.
+**Each instance of CounterComponent receives the same instance of
+CounterService.**
 
-Used to define the asset path for a `StyleSheet` used by the `UIComponent`.
-The `RelativeTo` property can be used to prepend to the file path.
+![CounterComponent in action](./Assets/Examples/Counter/counter.gif)
 
-Multiple `StylesheetAttribute`s can be used.
+### Inheritance
+
+UIComponents inherit dependencies. Such dependencies can be overridden
+by specifying a different provider for them.
 
 ```c#
-[Stylesheet("Assets/UIComponents/ComponentA.style.uss")]
-[Stylesheet("Assets/Styles/MyStyle.uss")]
-class ComponentA : UIComponent {}
+[Dependency(typeof(IStringDependency), provide: typeof(StringDependency)]
+[Dependency(typeof(IScriptableObjectDependency), provide: typeof(HeroProvider)]
+public class MyComponent : UIComponent {}
 
-[Stylesheet("ComponentB.style.uss", RelativeTo = AssetPaths.Components)]
-[Stylesheet("MyStyle.uss", RelativeTo = AssetPaths.Styles)]
-class ComponentB : UIComponent {}
+[Dependency(typeof(IScriptableObjectDependency), provide: typeof(VillainProvider)]
+public class OtherComponent : MyComponent {}
+```
 
-public static class AssetPaths
+### Testing
+
+`DependencyInjector`, the class responsible for handling dependencies,
+comes with the `SetDependency` static method.
+
+```c#
+private ICounterService _counterService;
+
+[OneTimeSetUp]
+public void OneTimeSetUp()
 {
-    public const string Components = "Assets/UIComponents";
-    public const string Styles = "Assets/Styles";
+    _counterService = new MockCounterService();
+    DependencyInjector.SetDependency<CounterComponent, ICounterService>(_counterService);
 }
 ```
+
+A mock version of a dependency can be switched in during a test. When `CounterComponent`
+asks for `ICounterService`, it will receive the instance of `MockCounterService` created
+in the `OneTimeSetUp` function.
+
+## Loading assets
+
+### Resources
+
+UIComponents load assets from Resources by default. To use a different
+method, declare a different provider for the `IAssetResolver` dependency.
+
+### AssetDatabase
+
+UIComponents comes with `AssetDatabaseAssetResolver`, accessible via the
+`UIComponents.Editor` namespace.
+
+```c#
+using UIComponents.Editor;
+
+[Layout("Assets/Components/MyComponent.uxml")]
+[Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
+public class MyComponent : UIComponent {}
+```
+
+You can create an abstract class with the overridden `IAssetResolver` dependency
+and then inherit from that to apply the override to all of your components.
+
+### Common asset paths
+
+You will likely have your layout and stylesheet assets in one place. The
+`[AssetPath]` attribute can be used instruct UIComponent to automatically
+search for assets in those locations.
+
+Here is an example of its usage alongside asset loading from `AssetDatabase`:
+
+```c#
+using UIComponents.Editor;
+
+[AssetPath("Assets/UI/Components/MyComponent")]
+[Layout("MyComponent.uxml")]
+[Stylesheet("MyComponent.style.uss")]
+[Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
+public class MyComponent : UIComponent {}
+```
+
+`[AssetPath]` doesn't have much of an impact when applied to a single component.
+However, much like with the `IAssetResolver` dependency, it can be applied to
+a parent class an inherited.
+
+```c#
+using UIComponents.Editor;
+
+[AssetPath("Assets/UI/Components")]
+[Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
+public class BaseComponent : UIComponent {}
+
+[Layout("MyComponent/MyComponent.uxml")]
+[Stylesheet("MyComponent/MyComponent.style.uss")]
+public class FirstComponent : UIComponent {}
+
+[Layout("SecondComponent/SecondComponent.uxml")]
+[Stylesheet("SecondComponent/SecondComponent.style.uss")]
+public class SecondComponent : UIComponent {}
+```
+
