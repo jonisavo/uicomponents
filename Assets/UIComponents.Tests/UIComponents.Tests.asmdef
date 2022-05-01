@@ -1,6 +1,6 @@
 {
     "name": "UIComponents.Tests",
-    "rootNamespace": "UIComponents",
+    "rootNamespace": "UIComponents.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
