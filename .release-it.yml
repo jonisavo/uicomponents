@@ -10,4 +10,4 @@ github:
 npm: false
 
 hooks:
-  after:bump: ["npx auto-changelog -p", "cd Assets/UIComponents ; npm version ${version}"]
+  after:bump: ["npx auto-changelog -p", "cd Assets/UIComponents ; npm version ${version} --no-git-tag-version"]
