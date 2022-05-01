@@ -169,7 +169,7 @@ public class MyComponent : UIComponent {}
 
 `[AssetPath]` doesn't have much of an impact when applied to a single component.
 However, much like with the `IAssetResolver` dependency, it can be applied to
-a parent class an inherited.
+a parent class and inherited.
 
 ```c#
 using UIComponents.Editor;
