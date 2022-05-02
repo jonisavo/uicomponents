@@ -2,7 +2,7 @@
 {
     public interface ICounterService
     {
-        public void IncrementCount();
-        public int GetCount();   
+        void IncrementCount();
+        int GetCount();   
     }   
 }
