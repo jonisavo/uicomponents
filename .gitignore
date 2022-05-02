@@ -69,3 +69,4 @@ crashlytics-build.properties
 
 /CodeCoverage/
 .idea/
+/artifacts/
