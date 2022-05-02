@@ -13,18 +13,12 @@ namespace UIComponents.Tests
 
         public class StringProvider : IStringDependency
         {
-            public string GetValue()
-            {
-                return "Hello world";
-            }
+            public string GetValue() => "Hello world";
         }
 
         public class EmptyStringProvider : IStringDependency
         {
-            public string GetValue()
-            {
-                return "";
-            }
+            public string GetValue() => "";
         }
 
         [Dependency(typeof(IStringDependency), provide: typeof(StringProvider))]
@@ -61,6 +55,31 @@ namespace UIComponents.Tests
         {
             var component = new UIComponentSubclassWithDependencyOverride();
             Assert.That(component.StringDependency, Is.InstanceOf<EmptyStringProvider>());
+        }
+
+        private class UIComponentSubclassWithTryProvide : UIComponent
+        {
+            public readonly bool DependencyWasProvided;
+            public readonly IStringDependency StringDependency;
+            
+            public UIComponentSubclassWithTryProvide()
+            {
+                DependencyWasProvided = TryProvide(out StringDependency);
+            }
+        }
+        
+        [Test]
+        public void A_Missing_Dependency_Can_Be_Handled_With_TryProvide()
+        {
+            UIComponentSubclassWithTryProvide component = null;
+            
+            Assert.DoesNotThrow(() =>
+            {
+                component = new UIComponentSubclassWithTryProvide();
+            });
+            
+            Assert.That(component.DependencyWasProvided, Is.False);
+            Assert.That(component.StringDependency, Is.Null);
         }
     }
 }

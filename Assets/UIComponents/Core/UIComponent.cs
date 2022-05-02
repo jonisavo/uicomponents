@@ -88,6 +88,18 @@ namespace UIComponents.Core
         }
 
         /// <summary>
+        /// Attempts to provide a dependency. Returns whether
+        /// the dependency could be provided.
+        /// </summary>
+        /// <param name="instance">Dependency instance</param>
+        /// <typeparam name="T">Dependency type</typeparam>
+        /// <returns>Whether the dependency could be fetched</returns>
+        protected bool TryProvide<T>(out T instance) where T : class
+        {
+            return DependencyInjector.TryProvide(out instance);
+        }
+
+        /// <summary>
         /// Returns the layout loaded in UIComponent's constructor.
         /// </summary>
         /// <returns>Component layout</returns>
