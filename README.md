@@ -1,5 +1,19 @@
-﻿# UIComponents
-#### A microframework for creating reusable components for Unity Editor's UIElements with dependency injection.
+﻿<h1 align="center">UIComponents</h1>
+
+<p align="center">
+    <i>A small front-end framework for Unity's UIElements.</i>
+</p>
+
+## About
+
+The goal of UIComponents is to ease the creation of reusable components when
+working with Unity's new UIToolkit system. It offers ways to load UXML and USS
+files automatically, and decouple your UI code from other systems via
+dependency injection.
+
+See an example of simple usage below.
+
+## Simple usage
 
 ```c#
 [Layout("MyComponent/MyComponent")]
@@ -9,7 +23,8 @@
 class MyComponent : UIComponent
 {
     // The layout and stylesheets are loaded in the inherited
-    // constructor. They are retrieved from Resources by default.
+    // constructor. They are retrieved from Resources by default,
+    // hence the lack of file extensions.
     
     private readonly ICounterService _counterService;
     
@@ -25,6 +40,48 @@ class MyComponent : UIComponent
 var container = new VisualElement();
 container.Add(new MyComponent());
 ```
+
+UIComponents are just VisualElements with some additional code in their
+constructor for loading assets automatically.
+
+## Installation
+
+### With [OpenUPM](https://openupm.com/packages/io.savolainen.uicomponents/) (recommended)
+
+```shell
+openupm add io.savolainen.uicomponents
+```
+
+Alternatively, merge this snippet to your `Packages/manifest.json` file:
+
+```json
+{
+    "scopedRegistries": [
+        {
+            "name": "package.openupm.com",
+            "url": "https://package.openupm.com",
+            "scopes": [
+                "io.savolainen.uicomponents"
+            ]
+        }
+    ],
+    "dependencies": {
+        "io.savolainen.uicomponents": "0.2.1"
+    }
+}
+```
+
+### With Git
+
+Add this under `dependencies` in your `Packages/manifest.json` file:
+
+```
+"io.savolainen.uicomponents": "https://github.com/jonisavo/uicomponents.git#upm/v0.2.1"
+```
+
+This will install version 0.2.1.
+
+To update, change `upm/v0.2.1` to point to the latest version.
 
 ## Layouts and stylesheets
 
