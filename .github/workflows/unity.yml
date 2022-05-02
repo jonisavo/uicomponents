@@ -1,4 +1,4 @@
-﻿name: Unity
+﻿name: CI (Unity)
 
 on:
   push:
