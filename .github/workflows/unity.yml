@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   buildAndTestForLinuxBasedPlatforms:
-    name: Build & Test for ${{ matrix.targetPlatform }}
+    name: Build & Test for ${{ matrix.targetPlatform }} on ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -54,8 +54,8 @@ jobs:
           path: build
 
   buildForWindowsBasedPlatforms:
-    name: Build for ${{ matrix.targetPlatform }}
-    runs-on: windows-latest
+    name: Build for ${{ matrix.targetPlatform }} on ${{ matrix.unityVersion }}
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:
@@ -93,7 +93,7 @@ jobs:
           path: build
 
   buildForMacOSBasedPlatforms:
-    name: Build for ${{ matrix.targetPlatform }}
+    name: Build for ${{ matrix.targetPlatform }} on ${{ matrix.unityVersion }}
     runs-on: macos-latest
     strategy:
       fail-fast: false
