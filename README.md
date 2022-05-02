@@ -1,6 +1,8 @@
 ﻿<h1 align="center">UIComponents</h1>
 
 <p align="center">
+    <img src="https://raw.githubusercontent.com/jonisavo/uicomponents/main/logo.png" alt="Logo" width="200px" height="200px">
+    <br>
     <i>A small front-end framework for Unity's UIElements.</i>
 </p>
 
