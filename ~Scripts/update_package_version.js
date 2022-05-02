@@ -1,3 +1,10 @@
+//
+// update_package_version.js
+//
+// This script updates the version in the package's package.json file,
+// as well as all occurrences of it in the README.md file.
+//
+
 const path = require('path');
 const fs = require('fs');
 
@@ -8,6 +15,8 @@ if (args.length === 0) {
     process.exit(1);
 }
 
+// Update package.json
+
 const packageJsonPath = path.resolve(__dirname, '..', 'Assets', 'UIComponents', 'package.json');
 
 if (!fs.existsSync(packageJsonPath)) {
@@ -17,8 +26,26 @@ if (!fs.existsSync(packageJsonPath)) {
 
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
 
+const currentVersion = packageJson.version;
+
 packageJson.version = args[0];
 
 const packageJsonString = JSON.stringify(packageJson, null, 4);
 
 fs.writeFileSync(packageJsonPath, packageJsonString);
+
+// Update README.md
+
+const readmePath = path.resolve(__dirname, '..', 'README.md');
+
+if (!fs.existsSync(readmePath)) {
+    console.error('README.md not found. Skipping.');
+    process.exit(0);
+}
+
+const readmeContents = String(fs.readFileSync(readmePath));
+
+const modifiedReadmeContents = readmeContents
+    .replaceAll(currentVersion, args[0]);
+
+fs.writeFileSync(readmePath, modifiedReadmeContents);
