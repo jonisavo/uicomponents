@@ -47,7 +47,7 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          customParameters: -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions generateAdditionalMetrics
+          customParameters: -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions "useProjectSettings;generateAdditionalMetrics"
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -59,7 +59,7 @@ jobs:
           name: Tests
           flags: automated
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./CodeCoverage/**/*.xml
+          files: CodeCoverage/**/*.xml
       - name: Commit upgrade changes
         if: ${{ matrix.unityVersion != env.PROJECT_UNITY_VERSION }}
         run: |
