@@ -1,6 +1,13 @@
 ﻿name: Unity
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches-ignore:
+      - upm
+  pull_request:
+    branches-ignore:
+      - upm
+  workflow_dispatch: {}
 
 env:
   PROJECT_UNITY_VERSION: 2020.3.33f1
