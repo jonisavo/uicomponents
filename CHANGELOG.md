@@ -1,5 +1,12 @@
 
 
+## [0.2.1](https://github.com/jonisavo/uicomponents/compare/v0.2.0...v0.2.1) (2022-05-02)
+
+
+### Bug Fixes
+
+* remove visibility modifier from interface members ([a51e751](https://github.com/jonisavo/uicomponents/commit/a51e7519e00846f7b31e6de9ef8d72c5985e4732))
+
 # [0.2.0](https://github.com/jonisavo/uicomponents/compare/v0.1.0...v0.2.0) (2022-05-01)
 
 
