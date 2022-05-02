@@ -132,6 +132,7 @@ in the `OneTimeSetUp` function.
 
 UIComponents load assets from Resources by default. To use a different
 method, declare a different provider for the `IAssetResolver` dependency.
+See an example below.
 
 ### AssetDatabase
 
@@ -168,7 +169,7 @@ public class MyComponent : UIComponent {}
 ```
 
 `[AssetPath]` doesn't have much of an impact when applied to a single component.
-However, much like with the `IAssetResolver` dependency, it can be applied to
+However, like the `[Dependency]` attribute, it can be applied to
 a parent class and inherited.
 
 ```c#
@@ -180,10 +181,10 @@ public class BaseComponent : UIComponent {}
 
 [Layout("MyComponent/MyComponent.uxml")]
 [Stylesheet("MyComponent/MyComponent.style.uss")]
-public class FirstComponent : UIComponent {}
+public class FirstComponent : BaseComponent {}
 
 [Layout("SecondComponent/SecondComponent.uxml")]
 [Stylesheet("SecondComponent/SecondComponent.style.uss")]
-public class SecondComponent : UIComponent {}
+public class SecondComponent : BaseComponent {}
 ```
 
