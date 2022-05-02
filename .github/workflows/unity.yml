@@ -47,11 +47,19 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          customParameters: -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions generateAdditionalMetrics
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Test results (all modes)
           path: ${{ steps.testRunner.outputs.artifactsPath }}
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          name: Tests
+          flags: automated
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./CodeCoverage/**/*.xml
       - name: Commit upgrade changes
         if: ${{ matrix.unityVersion != env.PROJECT_UNITY_VERSION }}
         run: |
