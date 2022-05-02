@@ -1,5 +1,12 @@
 
 
+# [0.3.0](https://github.com/jonisavo/uicomponents/compare/v0.2.1...v0.3.0) (2022-05-02)
+
+
+### Features
+
+* **UIComponent:** add TryProvide method ([c367311](https://github.com/jonisavo/uicomponents/commit/c3673114e6246010846ffa57619e171ad85279c9))
+
 ## [0.2.1](https://github.com/jonisavo/uicomponents/compare/v0.2.0...v0.2.1) (2022-05-02)
 
 
