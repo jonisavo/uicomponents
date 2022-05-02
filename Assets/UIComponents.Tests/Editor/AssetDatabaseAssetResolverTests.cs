@@ -1,16 +1,16 @@
 ﻿using NUnit.Framework;
-using UIComponents.Core;
+using UIComponents.Editor;
 
-namespace UIComponents.Tests
+namespace UIComponents.Tests.Editor
 {
     [TestFixture]
-    public class ResourcesAssetResolverTests : AssetResolverTestSuite<ResourcesAssetResolver>
+    public class AssetDatabaseAssetResolverTests : AssetResolverTestSuite<AssetDatabaseAssetResolver>
     {
         [Test]
         public void Should_Be_Able_To_Load_Existing_Asset()
         {
             Assert_Should_Be_Able_To_Load_Existing_Asset(
-                "UIComponentTests/LayoutAttributeTests"
+                "Assets/UIComponents.Tests/Resources/UIComponentTests/LayoutAttributeTests.uxml"
             );
         }
 
@@ -18,7 +18,7 @@ namespace UIComponents.Tests
         public void Should_Be_Able_To_Tell_If_Asset_Exists()
         {
             Assert_Should_Be_Able_To_Tell_If_Asset_Exists(
-                "UIComponentTests/LayoutAttributeTests"
+                "Assets/UIComponents.Tests/Resources/UIComponentTests/LayoutAttributeTests.uxml"
             );
         }
     }
