@@ -4,6 +4,15 @@
     <i>A small front-end framework for Unity's UIElements.</i>
 </p>
 
+<p align="center">
+    <a href="https://github.com/jonisavo/uicomponents/actions/workflows/unity.yml">
+        <img src="https://github.com/jonisavo/uicomponents/actions/workflows/unity.yml/badge.svg" alt="CI Status">
+    </a>
+    <a href="https://codecov.io/gh/jonisavo/uicomponents">
+      <img src="https://codecov.io/gh/jonisavo/uicomponents/branch/main/graph/badge.svg?token=A7DF04CF06" alt="Coverage Status"/>
+    </a>
+</p>
+
 ## About
 
 The goal of UIComponents is to ease the creation of reusable components when
@@ -147,7 +156,7 @@ This creates a component which can be used to increment a number.
 **Each instance of CounterComponent receives the same instance of
 CounterService.**
 
-![CounterComponent in action](./Assets/Examples/Counter/counter.gif)
+![CounterComponent in action](https://github.com/jonisavo/uicomponents/blob/main/Assets/Examples/Counter/counter.gif?raw=true)
 
 ### Inheritance
 
