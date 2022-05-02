@@ -160,6 +160,16 @@ CounterService.**
 
 ![CounterComponent in action](https://github.com/jonisavo/uicomponents/blob/main/Assets/Examples/Counter/counter.gif?raw=true)
 
+### Get dependency safely
+
+`Provide<T>` will throw a `MissingProviderException` if no providers exist for the dependency.
+If you're unsure whether a provider exists, use `TryProvide<T>`:
+
+```c#
+if (TryProvide<ICounterService>(out var counterService))
+    counterService.IncrementCount();
+```
+
 ### Inheritance
 
 UIComponents inherit dependencies. Such dependencies can be overridden
@@ -193,6 +203,18 @@ public void OneTimeSetUp()
 A mock version of a dependency can be switched in during a test. When `CounterComponent`
 asks for `ICounterService`, it will receive the instance of `MockCounterService` created
 in the `OneTimeSetUp` function.
+
+`DependencyInjector` also comes with the `ClearDependency` static method which can be used to remove
+the instance of a dependency between tests.
+
+```c#
+[TearDown]
+public void TearDown()
+{
+    DependencyInjector.ClearDependency<CounterComponent, ICounterService>();
+    // Provide<ICounterService> inside CounterComponent will now throw a MissingProviderException
+}
+```
 
 ## Loading assets
 
