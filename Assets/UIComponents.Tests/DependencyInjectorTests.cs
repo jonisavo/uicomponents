@@ -104,5 +104,29 @@ namespace UIComponents.Tests
                 );
             }
         }
+
+        [TestFixture]
+        public class ClearDependency
+        {
+            [Test]
+            public void Removes_Dependency_Instance()
+            {
+                var injector = new DependencyInjector();
+                
+                injector.SetDependency<IDependency>(new DependencyOne());
+                
+                injector.ClearDependency<IDependency>();
+
+                Assert.Throws<MissingProviderException>(() => injector.Provide<IDependency>());
+            }
+
+            [Test]
+            public void Does_Not_Throw_If_Dependency_Does_Not_Exist()
+            {
+                var injector = new DependencyInjector();
+                
+                Assert.DoesNotThrow(() => injector.ClearDependency<IDependency>());
+            }
+        }
     }
 }

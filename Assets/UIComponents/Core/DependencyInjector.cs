@@ -54,6 +54,24 @@ namespace UIComponents.Core
         }
 
         /// <summary>
+        /// Clears the dependency of a consumer.
+        /// </summary>
+        /// <remarks>
+        /// Can be used in unit tests to clear
+        /// a dependency between tests.
+        /// </remarks>
+        /// <typeparam name="TConsumer">Type of the consumer</typeparam>
+        /// <typeparam name="TDependency">Type of the dependency</typeparam>
+        public static void ClearDependency<TConsumer, TDependency>()
+            where TConsumer : class
+            where TDependency : class
+        {
+            var injector = GetInjector(typeof(TConsumer));
+            
+            injector.ClearDependency<TDependency>();
+        }
+
+        /// <summary>
         /// Returns the injector of the given consumer type.
         /// </summary>
         /// <param name="consumerType">Consumer type</param>
@@ -131,6 +149,15 @@ namespace UIComponents.Core
                 throw new ArgumentNullException("Dependency can not be set as null.");
             
             DependencyDictionary[typeof(T)] = instance;
+        }
+
+        /// <summary>
+        /// Removes the instance used for a dependency, if one is set.
+        /// </summary>
+        /// <typeparam name="T">Dependency type</typeparam>
+        public void ClearDependency<T>() where T : class
+        {
+            DependencyDictionary.Remove(typeof(T));
         }
 
         /// <summary>
