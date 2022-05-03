@@ -42,5 +42,5 @@ jobs:
         env:
           TAG_NAME: ${{ format('upm/{0}', github.ref_name) }}
         run: |
-          git tag "$TAG_NAME" --annotate --message 'Release $TAG_NAME for upm'
+          git tag "$TAG_NAME" --annotate --message 'Release $TAG_NAME for upm' "$BRANCH_NAME"
           git push origin "$TAG_NAME"
