@@ -1,0 +1,20 @@
+{
+    "name": "UIComponentsExamples.Editor",
+    "rootNamespace": "UIComponentsExamples.Editor",
+    "references": [
+        "GUID:d593635333b4cae48bac5b5f0b596e90",
+        "GUID:7282a494dd2226f45a32fcf2256d7c89",
+        "GUID:12a73a47a9014699b2fba61bc5f9a0dc"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

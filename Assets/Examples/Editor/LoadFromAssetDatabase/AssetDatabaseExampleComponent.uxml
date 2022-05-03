@@ -1,0 +1,6 @@
+﻿<UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label name="assetdatabase-example-header" text="AssetDatabaseExampleComponent" />
+    <ui:Label text="This is an example of a component loaded from AssetDatabase." />
+    <ui:Label text="Assets can be loaded from AssetDatabase in the editor only." />
+    <ui:Label text="You can use AssetDatabase if you're working on an editor extension." />
+</UXML>
