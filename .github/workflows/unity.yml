@@ -34,9 +34,10 @@ jobs:
           fetch-depth: 0
       - uses: actions/cache@v3
         with:
-          path: /Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
+            Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-
             Library-${{ matrix.targetPlatform }}-
             Library-
       - uses: game-ci/unity-test-runner@v2
@@ -95,9 +96,10 @@ jobs:
           fetch-depth: 0
       - uses: actions/cache@v3
         with:
-          path: /Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
+            Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-
             Library-${{ matrix.targetPlatform }}-
             Library-
       - uses: game-ci/unity-builder@v2
@@ -129,9 +131,10 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: /Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
+            Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-
             Library-${{ matrix.targetPlatform }}-
             Library-
 
