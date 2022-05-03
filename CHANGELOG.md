@@ -1,5 +1,12 @@
 
 
+# [0.4.0](https://github.com/jonisavo/uicomponents/compare/v0.3.0...v0.4.0) (2022-05-03)
+
+
+### Features
+
+* **DependencyInjector:** add ClearDependency method ([f621469](https://github.com/jonisavo/uicomponents/commit/f6214697441d3c05ab6b21b919f48f42a7847d9f))
+
 # [0.3.0](https://github.com/jonisavo/uicomponents/compare/v0.2.1...v0.3.0) (2022-05-02)
 
 
