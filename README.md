@@ -1,17 +1,20 @@
 ﻿<h1 align="center">UIComponents</h1>
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jonisavo/uicomponents/main/logo.png" alt="Logo" width="200px" height="200px">
-    <br>
+    <img src="https://raw.githubusercontent.com/jonisavo/uicomponents/main/logo.png" alt="Logo" width="200px" height="200px" />
+    <br />
     <i>A small front-end framework for Unity's UIElements.</i>
 </p>
 
 <p align="center">
+	<a href="https://openupm.com/packages/io.savolainen.uicomponents/">
+		<img src="https://img.shields.io/npm/v/io.savolainen.uicomponents?label=openupm&amp;registry_uri=https://package.openupm.com" alt="OpenUPM" />
+	</a>
     <a href="https://github.com/jonisavo/uicomponents/actions/workflows/unity.yml">
-        <img src="https://github.com/jonisavo/uicomponents/actions/workflows/unity.yml/badge.svg" alt="CI Status">
+        <img src="https://github.com/jonisavo/uicomponents/actions/workflows/unity.yml/badge.svg" alt="CI Status" />
     </a>
     <a href="https://codecov.io/gh/jonisavo/uicomponents">
-      <img src="https://codecov.io/gh/jonisavo/uicomponents/branch/main/graph/badge.svg?token=A7DF04CF06" alt="Coverage Status"/>
+      <img src="https://codecov.io/gh/jonisavo/uicomponents/branch/main/graph/badge.svg?token=A7DF04CF06" alt="Coverage Status" />
     </a>
 </p>
 
