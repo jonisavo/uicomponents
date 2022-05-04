@@ -18,6 +18,10 @@
     </a>
 </p>
 
+<p align="center">
+	<b>Note: UIComponents' API has not yet been fully stabilized. Expect breaking changes.</b>
+</p>
+
 ## About
 
 The goal of UIComponents is to ease the creation of reusable components when
