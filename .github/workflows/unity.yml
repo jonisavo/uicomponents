@@ -84,6 +84,8 @@ jobs:
           sonarOrganisation: jonisavo
         env:
           FrameworkPathOverride: /opt/Unity/Editor/Data/MonoBleedingEdge/
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   buildForWindowsBasedPlatforms:
     name: Build for ${{ matrix.targetPlatform }} on ${{ matrix.unityVersion }}
