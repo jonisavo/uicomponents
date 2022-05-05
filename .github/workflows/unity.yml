@@ -31,6 +31,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          
       - uses: actions/cache@v3
         with:
           path: Library
@@ -39,6 +40,7 @@ jobs:
             Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-
             Library-${{ matrix.targetPlatform }}-
             Library-
+            
       - uses: game-ci/unity-test-runner@v2
         id: testRunner
         env:
@@ -47,11 +49,13 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           customParameters: -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions "useProjectSettings;generateAdditionalMetrics"
+          
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Test results (all modes)
           path: ${{ steps.testRunner.outputs.artifactsPath }}
+          
       - name: Upload code coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
@@ -59,6 +63,7 @@ jobs:
           flags: automated
           token: ${{ secrets.CODECOV_TOKEN }}
           files: CodeCoverage/**/*.xml
+          
       - name: Commit upgrade changes
         if: ${{ matrix.unityVersion != env.PROJECT_UNITY_VERSION }}
         run: |
@@ -66,6 +71,7 @@ jobs:
           git config --global user.email 'github-bot@users.noreply.github.com'
           git add -A
           git commit -m "chore(ci): switch to different unity version"
+          
       - uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -74,7 +80,13 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-      - name: Run SonarCloud Scan
+          
+      - name: Generate solution
+        uses: MirageNet/unity-runner@3.2.0
+        with:
+          args: -buildTarget ${{ matrix.targetPlatform }} -customBuildName UIComponents -customBuildPath ./Build -projectPath . -executeMethod UnityEditor.SyncVS.SyncSolution -quit
+          
+      - name: Run SonarCloud scan
         if: always()
         uses: MirageNet/unity-runner@3.2.0
         with:
@@ -105,6 +117,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          
       - uses: actions/cache@v3
         with:
           path: Library
@@ -113,6 +126,7 @@ jobs:
             Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-
             Library-${{ matrix.targetPlatform }}-
             Library-
+            
       - uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
