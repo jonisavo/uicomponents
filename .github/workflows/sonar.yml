@@ -1,4 +1,4 @@
-﻿name: Build
+﻿name: Sonarqube Scan
 
 on:
   push:
@@ -11,8 +11,8 @@ env:
   PROJECT_UNITY_VERSION: 2020.3.33f1
 
 jobs:
-  build:
-    name: Build
+  analyze:
+    name: Build and analyze
     runs-on: windows-2019
     steps:
       - name: Set up JDK 11
