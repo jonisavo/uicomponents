@@ -2,11 +2,10 @@
 
 on:
   push:
-    branches-ignore:
-      - upm
+    branches:
+      - main
   pull_request:
-    branches-ignore:
-      - upm
+    types: [opened, synchronize, reopened]
   workflow_dispatch: {}
 
 env:
@@ -75,6 +74,16 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
+      - name: Run SonarCloud Scan
+        if: always()
+        uses: MirageNet/unity-runner@3.2.0
+        with:
+          entrypoint: /sonar-scanner.sh
+          projectKey: jonisavo_uicomponents
+          projectName: uicomponents
+          sonarOrganisation: jonisavo
+        env:
+          FrameworkPathOverride: /opt/Unity/Editor/Data/MonoBleedingEdge/
 
   buildForWindowsBasedPlatforms:
     name: Build for ${{ matrix.targetPlatform }} on ${{ matrix.unityVersion }}
