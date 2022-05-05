@@ -1,5 +1,20 @@
 
 
+# [0.5.0](https://github.com/jonisavo/uicomponents/compare/v0.4.0...v0.5.0) (2022-05-05)
+
+
+* feat(UIComponent)!: make GetLayout and GetStyleSheets private ([4251611](https://github.com/jonisavo/uicomponents/commit/42516118aa3ff9d530cb8bad13f0ccf96c8a2bb3))
+
+
+### Features
+
+* add Addressables support ([#7](https://github.com/jonisavo/uicomponents/issues/7)) ([6abab8c](https://github.com/jonisavo/uicomponents/commit/6abab8cdb46b73f4c944098a7fd9aad94900668b))
+
+
+### BREAKING CHANGES
+
+* UIComponent's GetLayout and GetStyleSheets functions are no longer protected and virtual. Since they are called in UIComponent's constructor, derived classes would not have been fully initialized when the overridden functions are called.
+
 # [0.4.0](https://github.com/jonisavo/uicomponents/compare/v0.3.0...v0.4.0) (2022-05-03)
 
 
