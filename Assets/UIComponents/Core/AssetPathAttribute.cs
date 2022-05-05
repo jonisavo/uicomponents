@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace UIComponents.Core
+namespace UIComponents
 {
     /// <summary>
     /// If present, specifies a base path of assets configured for a UIComponent.

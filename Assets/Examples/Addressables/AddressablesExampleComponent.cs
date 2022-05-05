@@ -1,4 +1,4 @@
-﻿using UIComponents.Core;
+﻿using UIComponents;
 using UIComponents.Addressables;
 
 namespace UIComponentsExamples.Addressables

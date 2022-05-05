@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace UIComponents.Core
+namespace UIComponents
 {
     /// <summary>
     /// Specifies the path to a .uss stylesheet file used by a UIComponent.

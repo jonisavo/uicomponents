@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UIComponents.Core;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace UIComponents.Addressables

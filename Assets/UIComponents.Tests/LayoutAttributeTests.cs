@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
-using UIComponents.Core;
 using UnityEngine;
 using UnityEngine.UIElements;
 

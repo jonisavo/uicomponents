@@ -34,6 +34,8 @@ See an example of simple usage below.
 ## Simple usage
 
 ```c#
+using UIComponents;
+
 [Layout("MyComponent/MyComponent")]
 [Stylesheet("MyComponent/MyComponent.style")]
 [Stylesheet("Common")]
@@ -135,6 +137,8 @@ public class CounterService : ICounterService
 `CounterService` can be injected into components using the `[Dependency]` attribute:
 
 ```c#
+using UIComponents;
+
 [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
 public class CounterComponent : UIComponent
 {
@@ -183,6 +187,8 @@ UIComponents inherit dependencies. Such dependencies can be overridden
 by specifying a different provider for them.
 
 ```c#
+using UIComponents;
+
 [Dependency(typeof(IStringDependency), provide: typeof(StringDependency)]
 [Dependency(typeof(IScriptableObjectDependency), provide: typeof(HeroProvider)]
 public class MyComponent : UIComponent {}

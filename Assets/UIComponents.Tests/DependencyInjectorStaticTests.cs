@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using UIComponents.Core;
-using UIComponents.Core.Exceptions;
 
 namespace UIComponents.Tests
 {
