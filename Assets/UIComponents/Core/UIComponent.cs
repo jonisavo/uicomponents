@@ -32,8 +32,8 @@ namespace UIComponents.Core
         /// Defaults to <see cref="ResourcesAssetResolver"/>.
         /// </summary>
         public readonly IAssetResolver AssetResolver;
-        
-        internal readonly DependencyInjector DependencyInjector;
+
+        private readonly DependencyInjector _dependencyInjector;
 
         private readonly Type _componentType;
 
@@ -43,9 +43,9 @@ namespace UIComponents.Core
         protected UIComponent()
         {
             _componentType = GetType();
-            DependencyInjector = DependencyInjector.GetInjector(_componentType);
+            _dependencyInjector = DependencyInjector.GetInjector(_componentType);
 
-            AssetResolver = DependencyInjector.Provide<IAssetResolver>();
+            AssetResolver = _dependencyInjector.Provide<IAssetResolver>();
             
             if (!LayoutAttributeDictionary.ContainsKey(_componentType))
                 LayoutAttributeDictionary[_componentType] = GetSingleAttribute<LayoutAttribute>();
@@ -84,7 +84,7 @@ namespace UIComponents.Core
         /// <returns>Dependency instance</returns>
         protected T Provide<T>() where T : class
         {
-            return DependencyInjector.Provide<T>();
+            return _dependencyInjector.Provide<T>();
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace UIComponents.Core
         /// <returns>Whether the dependency could be fetched</returns>
         protected bool TryProvide<T>(out T instance) where T : class
         {
-            return DependencyInjector.TryProvide(out instance);
+            return _dependencyInjector.TryProvide(out instance);
         }
 
         /// <summary>
