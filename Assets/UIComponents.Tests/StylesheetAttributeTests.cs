@@ -2,7 +2,6 @@
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
-using UIComponents.Core;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;

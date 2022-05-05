@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UIComponents.Core
+namespace UIComponents
 {
     /// <summary>
     /// A base class for attributes which store a path to an asset.

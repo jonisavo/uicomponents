@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
-using UIComponents.Core;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests

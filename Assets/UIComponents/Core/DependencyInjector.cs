@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using UIComponents.Core.Exceptions;
 
-namespace UIComponents.Core
+namespace UIComponents
 {
     /// <summary>
     /// The class responsible for providing UIComponents with their

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UIComponents.Core
+namespace UIComponents
 {
     /// <summary>
     /// An IAssetResolver which loads assets from Resources. Used

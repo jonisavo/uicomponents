@@ -2,7 +2,7 @@
 using UIComponents.Addressables;
 using UnityEngine.UIElements;
 
-namespace UIComponents.Tests.Editor
+namespace UIComponents.Tests.Addressables
 {
     [TestFixture]
     public class AddressableAssetResolverTests : AssetResolverTestSuite<AddressableAssetResolver>

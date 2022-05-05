@@ -1,5 +1,4 @@
-﻿using UIComponents.Core;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace UIComponents.Editor
 {

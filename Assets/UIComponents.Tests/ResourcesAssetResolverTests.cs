@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using UIComponents.Core;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests

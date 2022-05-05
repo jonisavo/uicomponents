@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UIComponents.Core.Exceptions
+namespace UIComponents
 {
     /// <summary>
     /// Thrown when a dependency does not have a provider.
