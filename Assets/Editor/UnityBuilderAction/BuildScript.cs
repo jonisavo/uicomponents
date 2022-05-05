@@ -146,24 +146,8 @@ namespace UnityBuilderAction
 
             BuildSummary buildSummary = BuildPipeline.BuildPlayer(buildPlayerOptions).summary;
             ReportSummary(buildSummary);
-            RegenerateSolution();
+            SyncSolutionUtilities.Sync();
             ExitWithResult(buildSummary.result);
-        }
-        
-        // https://forum.unity.com/threads/solved-unity-not-generating-sln-file-from-assets-open-c-project.538487/#post-6039626
-        private static void RegenerateSolution()
-        {
-            var sync_vs_type = Type.GetType("UnityEditor.SyncVS,UnityEditor");
- 
-            var synchronizer_field = sync_vs_type.GetField("Synchronizer", BindingFlags.NonPublic | BindingFlags.Static);
-            var sync_solution_mi = sync_vs_type.GetMethod("SyncSolution", BindingFlags.Public | BindingFlags.Static);
-   
-            var synchronizer_object = synchronizer_field.GetValue(sync_vs_type);
-            var synchronizer_type = synchronizer_object.GetType();
-            var synchronizer_sync_mi = synchronizer_type.GetMethod("Sync", BindingFlags.Public | BindingFlags.Instance);
- 
-            sync_solution_mi.Invoke(null, null);
-            synchronizer_sync_mi.Invoke(synchronizer_object, null);
         }
 
         private static void ReportSummary(BuildSummary summary)
