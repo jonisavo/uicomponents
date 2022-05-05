@@ -1,4 +1,4 @@
-﻿namespace UIComponents.Core
+﻿namespace UIComponents
 {
     /// <summary>
     /// An interface for classes whose purpose is to load assets

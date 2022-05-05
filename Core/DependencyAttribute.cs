@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UIComponents.Core
+namespace UIComponents
 {
     /// <summary>
     /// Used to define a dependency for a UIComponent.

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using UIComponents.Core.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace UIComponents.Core
+namespace UIComponents
 {
     /// <summary>
     /// A VisualElement which is configurable with various attributes like
