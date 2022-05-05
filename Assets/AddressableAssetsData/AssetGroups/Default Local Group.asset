@@ -25,6 +25,14 @@ MonoBehaviour:
     m_Address: Assets/UIComponents.Tests/Addressables/Assets/Component.uxml
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 3f5abc4da50c49b8b1d34cf4fa50850a
+    m_Address: Assets/Examples/Addressables/Data/AddressablesExampleComponent.uss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e9bbd2fb164840019750b795061e4bf2
+    m_Address: Assets/Examples/Addressables/Data/AddressablesExampleComponent.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f579b44f316abdd43a0ccf85ca7cdda4, type: 2}
   m_SchemaSet:
