@@ -13,6 +13,7 @@ plugins:
   "@release-it/conventional-changelog":
     preset: angular
     infile: CHANGELOG.md
+    ignoreRecommendedBump: true
     
 hooks:
   after:bump: "node ./~Scripts/update_package_version.js ${version}"
