@@ -80,7 +80,7 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          customParameters: -executeMethod UnityEditor.SyncVS.SyncSolution
+          buildMethod: UnityBuilderAction.BuildScript.Build
           
       - name: Run SonarCloud scan
         uses: MirageNet/unity-runner@3.2.0
