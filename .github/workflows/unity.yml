@@ -80,14 +80,9 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          
-      - name: Generate solution
-        uses: MirageNet/unity-runner@3.2.0
-        with:
-          args: -buildTarget ${{ matrix.targetPlatform }} -customBuildName UIComponents -customBuildPath ./Build -projectPath . -executeMethod UnityEditor.SyncVS.SyncSolution -quit
+          customParameters: -executeMethod UnityEditor.SyncVS.SyncSolution
           
       - name: Run SonarCloud scan
-        if: always()
         uses: MirageNet/unity-runner@3.2.0
         with:
           entrypoint: /sonar-scanner.sh
