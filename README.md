@@ -240,6 +240,19 @@ using UIComponents.Editor;
 public class MyComponent : UIComponent {}
 ```
 
+### Addressables
+
+`AddressableAssetResolver` is accessible via the
+`UIComponents.Addressables` namespace.
+
+```c#
+using UIComponents.Addressables;
+
+[Layout("Assets/Components/MyComponent.uxml")]
+[Dependency(typeof(IAssetResolver), provide: typeof(AddressableAssetResolver))]
+public class MyComponent : UIComponent {}
+```
+
 You can create an abstract class with the overridden `IAssetResolver` dependency
 and then inherit from that to apply the override to all of your components.
 
