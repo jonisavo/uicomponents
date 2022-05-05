@@ -1,5 +1,17 @@
 
 
+# [0.6.0](https://github.com/jonisavo/uicomponents/compare/v0.5.0...v0.6.0) (2022-05-05)
+
+
+### Features
+
+* move to UIComponents namespace from UIComponents.Core ([7efa0db](https://github.com/jonisavo/uicomponents/commit/7efa0db51f6936ad991f09dabe62759bcdd82cb9))
+
+
+### BREAKING CHANGES
+
+* All core code is now located in the UIComponents namespace, as opposed to UIComponents.Core.
+
 # [0.5.0](https://github.com/jonisavo/uicomponents/compare/v0.4.0...v0.5.0) (2022-05-05)
 
 
