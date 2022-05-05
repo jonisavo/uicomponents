@@ -98,13 +98,9 @@ namespace UIComponents.Core
         {
             return _dependencyInjector.TryProvide(out instance);
         }
-
-        /// <summary>
-        /// Returns the layout loaded in UIComponent's constructor.
-        /// </summary>
-        /// <returns>Component layout</returns>
+        
         [CanBeNull]
-        protected virtual VisualTreeAsset GetLayout()
+        private VisualTreeAsset GetLayout()
         {
             var layoutAttribute = LayoutAttributeDictionary[_componentType];
             
@@ -115,12 +111,8 @@ namespace UIComponents.Core
             
             return AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
-
-        /// <summary>
-        /// Returns the stylesheets loaded in UIComponent's constructor.
-        /// </summary>
-        /// <returns>Component stylesheets</returns>
-        protected virtual StyleSheet[] GetStyleSheets()
+        
+        private StyleSheet[] GetStyleSheets()
         {
             var stylesheetAttributes = StylesheetAttributesDictionary[_componentType];
             
