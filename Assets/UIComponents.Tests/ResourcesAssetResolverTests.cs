@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using UIComponents.Core;
+using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
 {
@@ -7,9 +8,9 @@ namespace UIComponents.Tests
     public class ResourcesAssetResolverTests : AssetResolverTestSuite<ResourcesAssetResolver>
     {
         [Test]
-        public void Should_Be_Able_To_Load_Existing_Asset()
+        public void Should_Be_Able_To_Load_Existing_Asset_Synchronously()
         {
-            Assert_Should_Be_Able_To_Load_Existing_Asset(
+            Assert_Loads_Existing_Asset<VisualTreeAsset>(
                 "UIComponentTests/LayoutAttributeTests"
             );
         }
@@ -17,7 +18,7 @@ namespace UIComponents.Tests
         [Test]
         public void Should_Be_Able_To_Tell_If_Asset_Exists()
         {
-            Assert_Should_Be_Able_To_Tell_If_Asset_Exists(
+            Assert_Tells_If_Asset_Exists(
                 "UIComponentTests/LayoutAttributeTests"
             );
         }
