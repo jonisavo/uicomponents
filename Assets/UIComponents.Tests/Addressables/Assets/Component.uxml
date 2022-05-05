@@ -1,0 +1,3 @@
+﻿<UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label text="Hello world!" />
+</UXML>

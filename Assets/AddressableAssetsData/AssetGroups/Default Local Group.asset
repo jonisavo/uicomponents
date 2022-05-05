@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 8a40d2409df617248b82ccb55c0ba05e
+  m_SerializeEntries:
+  - m_GUID: aa43b772d7a0498c8ead318bf776c944
+    m_Address: Assets/UIComponents.Tests/Addressables/Assets/Component.uss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6453740713d34b278d06763029e31833
+    m_Address: Assets/UIComponents.Tests/Addressables/Assets/Component.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3f5abc4da50c49b8b1d34cf4fa50850a
+    m_Address: Assets/Examples/Addressables/Data/AddressablesExampleComponent.uss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e9bbd2fb164840019750b795061e4bf2
+    m_Address: Assets/Examples/Addressables/Data/AddressablesExampleComponent.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: f579b44f316abdd43a0ccf85ca7cdda4, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 245e15aea4842084ebd0459c54edbc44, type: 2}
+    - {fileID: 11400000, guid: 8c8396d722f5daf4c92ea1f979f3cff8, type: 2}
