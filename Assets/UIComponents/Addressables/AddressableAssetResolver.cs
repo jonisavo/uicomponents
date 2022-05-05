@@ -4,6 +4,13 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace UIComponents.Addressables
 {
+    /// <summary>
+    /// An IAssetResolver which loads assets with Addressables.
+    /// Note that <see cref="AsyncOperationHandle{TObject}.WaitForCompletion"/>
+    /// is called on asset handles, loading them synchronously.
+    /// <seealso cref="DependencyAttribute"/>
+    /// <seealso cref="UIComponent"/>
+    /// </summary>
     public class AddressableAssetResolver : IAssetResolver
     {
         private readonly List<AsyncOperationHandle> _handles
