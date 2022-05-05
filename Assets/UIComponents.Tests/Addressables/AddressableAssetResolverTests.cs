@@ -8,7 +8,7 @@ namespace UIComponents.Tests.Editor
     public class AddressableAssetResolverTests : AssetResolverTestSuite<AddressableAssetResolver>
     {
         [Test]
-        public void Should_Be_Able_To_Load_Existing_Asset_Synchronously()
+        public void Should_Be_Able_To_Load_Existing_Asset()
         {
             Assert_Loads_Existing_Asset<StyleSheet>(
                 "Assets/UIComponents.Tests/Addressables/Assets/Component.uss"
