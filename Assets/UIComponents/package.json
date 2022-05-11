@@ -15,5 +15,8 @@
         "uielements",
         "library"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "changelogUrl": "https://github.com/jonisavo/uicomponents/blob/main/CHANGELOG.md",
+    "documentationUrl": "https://github.com/jonisavo/uicomponents/blob/main/README.md",
+    "licensesUrl": "https://github.com/jonisavo/uicomponents/blob/main/LICENSE"
 }
