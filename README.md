@@ -229,6 +229,28 @@ public void TearDown()
 }
 ```
 
+A `DependencyScope` helper class is available under the `UIComponents.Utilities` namespace.
+
+```c#
+[Dependency(typeof(ICounterService), provide: typeof(CounterService))]
+public class CounterComponent : UIComponent {}
+```
+```c#
+using UIComponents.Utilities;
+
+[Test]
+public void It_Works()
+{
+    var service = new MockCounterService();
+    using (new DependencyScope<CounterComponent, ICounterService>(service))
+    {
+        // MockCounterService will be provided for CounterComponent
+    }
+    
+    // CounterService will be provided
+}
+```
+
 ## Loading assets
 
 ### Resources
