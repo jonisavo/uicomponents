@@ -1,5 +1,13 @@
 
 
+# [0.7.0](https://github.com/jonisavo/uicomponents/compare/v0.6.0...v0.7.0) (2022-05-11)
+
+
+### Features
+
+* add DependencyScope utility class ([dd8233a](https://github.com/jonisavo/uicomponents/commit/dd8233adfea60e1b9081abe72bbe7d643edc2033))
+* **package.json:** add changelog, documentation and license URLs ([09e5555](https://github.com/jonisavo/uicomponents/commit/09e55554a88b4a199db03f063a776de26c2af7f7))
+
 # [0.6.0](https://github.com/jonisavo/uicomponents/compare/v0.5.0...v0.6.0) (2022-05-05)
 
 
