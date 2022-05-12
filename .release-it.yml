@@ -16,4 +16,4 @@ plugins:
     ignoreRecommendedBump: true
     
 hooks:
-  after:bump: "node ./~Scripts/update_package_version.js ${version}"
+  after:bump: "node ./Scripts/update_package_version.js ${version}"
