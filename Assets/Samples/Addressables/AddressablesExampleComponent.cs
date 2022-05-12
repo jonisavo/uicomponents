@@ -1,9 +1,8 @@
-﻿using UIComponents;
-using UIComponents.Addressables;
+﻿using UIComponents.Addressables;
 
-namespace UIComponentsExamples.Addressables
+namespace UIComponents.Samples.Addressables
 {
-    [AssetPath("Assets/Examples/Addressables/Data")]
+    [AssetPath("Assets/Samples/Addressables/Data")]
     [Layout("AddressablesExampleComponent.uxml")]
     [Stylesheet("AddressablesExampleComponent.uss")]
     [Dependency(typeof(IAssetResolver), provide: typeof(AddressableAssetResolver))]

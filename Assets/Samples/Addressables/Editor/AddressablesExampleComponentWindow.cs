@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace UIComponentsExamples.Addressables.Editor
+namespace UIComponents.Samples.Addressables.Editor
 {
     public class AddressablesExampleComponentWindow : EditorWindow
     {

@@ -27,6 +27,10 @@ jobs:
           git config --global user.email 'github-bot@users.noreply.github.com'
       - name: Copy meta files to package folder
         run: cp CHANGELOG.md CHANGELOG.md.meta LICENSE.md LICENSE.md.meta README.md README.md.meta "$UICOMPONENTS_PATH"
+      - name: Copy samples to package folder
+        run: |
+          cp -r Assets/Samples/ "$UICOMPONENTS_PATH"/Samples~
+          rm "$UICOMPONENTS_PATH"/Samples~/*.meta
       - name: Create commit for the meta files
         run: |
           git add -A
