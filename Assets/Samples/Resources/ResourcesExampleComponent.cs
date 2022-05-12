@@ -1,6 +1,4 @@
-﻿using UIComponents;
-
-namespace UIComponentsExamples
+﻿namespace UIComponents.Samples.Resources
 {
     /// <summary>
     /// Assets are loaded from Resources by default.

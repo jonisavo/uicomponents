@@ -169,7 +169,7 @@ This creates a component which can be used to increment a number.
 **Each instance of CounterComponent receives the same instance of
 CounterService.**
 
-![CounterComponent in action](https://github.com/jonisavo/uicomponents/blob/main/Assets/Examples/Counter/counter.gif?raw=true)
+![CounterComponent in action](https://github.com/jonisavo/uicomponents/blob/main/Assets/Samples/Counter/counter.gif?raw=true)
 
 ### Get dependency safely
 

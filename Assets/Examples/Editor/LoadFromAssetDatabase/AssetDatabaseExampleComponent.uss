@@ -1,8 +1,0 @@
-﻿#assetdatabase-example-header {
-    font-size: 20px;
-    -unity-font-style: bold-and-italic;
-}
-
-Label {
-    white-space: normal;
-}

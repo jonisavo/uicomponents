@@ -1,7 +1,6 @@
-﻿using UIComponents;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
-namespace UIComponentsExamples
+namespace UIComponents.Samples.Counter
 {
     [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
     public class CounterComponent : UIComponent

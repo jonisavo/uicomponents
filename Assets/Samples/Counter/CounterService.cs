@@ -1,4 +1,4 @@
-﻿namespace UIComponentsExamples
+﻿namespace UIComponents.Samples.Counter
 {
     public class CounterService : ICounterService
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace UIComponentsExamples.Editor
+namespace UIComponents.Samples.Counter.Editor
 {
     public class CounterComponentWindow : EditorWindow
     {

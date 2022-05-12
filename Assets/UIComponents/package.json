@@ -15,6 +15,23 @@
         "uielements",
         "library"
     ],
+    "samples": [
+        {
+            "displayName": "CounterComponent (Dependency injection)",
+            "description": "Contains an example of simple dependency injection.",
+            "path": "Samples~/Counter"
+        },
+        {
+            "displayName": "Asset Loading from Resources",
+            "description": "Contains an example of asset loading from Resources.",
+            "path": "Samples~/Resources"
+        },
+        {
+            "displayName": "Asset Loading from Addressables",
+            "description": "Contains an example of asset loading from Addressables.",
+            "path": "Samples~/Addressables"
+        }
+    ],
     "license": "MIT",
     "changelogUrl": "https://github.com/jonisavo/uicomponents/blob/main/CHANGELOG.md",
     "documentationUrl": "https://github.com/jonisavo/uicomponents/blob/main/README.md",
