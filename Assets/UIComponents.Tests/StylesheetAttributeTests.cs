@@ -15,6 +15,9 @@ namespace UIComponents.Tests
         [Stylesheet("Assets/StylesheetTwo.uss")]
         private class UIComponentWithTwoStylesheets : UIComponent {}
         
+        [Stylesheet("Assets/StylesheetThree.uss")]
+        private class InheritedComponent : UIComponentWithTwoStylesheets {}
+        
         private IAssetResolver _resolver;
 
         [OneTimeSetUp]
@@ -25,7 +28,10 @@ namespace UIComponents.Tests
                 .Returns(ScriptableObject.CreateInstance<StyleSheet>());
             _resolver.LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss")
                 .Returns(ScriptableObject.CreateInstance<StyleSheet>());
+            _resolver.LoadAsset<StyleSheet>("Assets/StylesheetThree.uss")
+                .Returns(ScriptableObject.CreateInstance<StyleSheet>());
             DependencyInjector.SetDependency<UIComponentWithTwoStylesheets, IAssetResolver>(_resolver);
+            DependencyInjector.SetDependency<InheritedComponent, IAssetResolver>(_resolver);
         }
         
         [TearDown]
@@ -41,6 +47,16 @@ namespace UIComponents.Tests
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
             Assert.That(component.styleSheets.count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void Inherited_Stylesheets_Are_Loaded()
+        {
+            var component = new InheritedComponent();
+            _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetThree.uss");
+            _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
+            _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
+            Assert.That(component.styleSheets.count, Is.EqualTo(3));
         }
 
         [Test]

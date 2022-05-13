@@ -137,12 +137,14 @@ namespace UIComponents
         [CanBeNull]
         private T GetSingleAttribute<T>() where T : Attribute
         {
-            var layoutAttributes = GetAttributes<T>();
+            var attributes = GetAttributes<T>();
 
-            if (layoutAttributes.Length == 0)
+            var attributeCount = attributes.Length;
+
+            if (attributeCount == 0)
                 return null;
 
-            return layoutAttributes[0];
+            return attributes[0];
         }
 
         private T[] GetAttributes<T>() where T : Attribute
