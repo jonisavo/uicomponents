@@ -1,5 +1,17 @@
 
 
+# [0.8.0](https://github.com/jonisavo/uicomponents/compare/v0.7.0...v0.8.0) (2022-05-13)
+
+
+### Bug Fixes
+
+* **UIComponent:** add null check to layout loading function ([6359299](https://github.com/jonisavo/uicomponents/commit/6359299d4022fd9c898dc55e0452d610f0ce5441))
+
+
+### Features
+
+* add samples ([f4c0ccf](https://github.com/jonisavo/uicomponents/commit/f4c0ccf541e2d1327599853424f76ddb240c9147))
+
 # [0.7.0](https://github.com/jonisavo/uicomponents/compare/v0.6.0...v0.7.0) (2022-05-11)
 
 
