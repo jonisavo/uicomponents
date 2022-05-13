@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,6 +16,9 @@ namespace UIComponents.Tests
         
         [Layout("Assets/MyOtherAsset.uxml")]
         private class InheritedComponentWithAttribute : UIComponentWithLayout {}
+        
+        [Layout("Assets/MissingAsset.uxml")]
+        private class UIComponentWithNullLayout : UIComponent {}
 
         private IAssetResolver _assetResolver;
 
@@ -27,6 +31,8 @@ namespace UIComponents.Tests
                 .Returns(ScriptableObject.CreateInstance<VisualTreeAsset>());
             _assetResolver.LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml")
                 .Returns(ScriptableObject.CreateInstance<VisualTreeAsset>());
+            _assetResolver.LoadAsset<VisualTreeAsset>("Assets/MissingAsset.uxml")
+                .ReturnsNull();
             
             DependencyInjector.SetDependency<UIComponentWithLayout, IAssetResolver>(
                 _assetResolver
@@ -35,6 +41,9 @@ namespace UIComponents.Tests
                 _assetResolver
             );
             DependencyInjector.SetDependency<InheritedComponentWithAttribute, IAssetResolver>(
+                _assetResolver
+            );
+            DependencyInjector.SetDependency<UIComponentWithNullLayout, IAssetResolver>(
                 _assetResolver
             );
         }
@@ -65,6 +74,12 @@ namespace UIComponents.Tests
             var component = new InheritedComponentWithAttribute();
             _assetResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml");
             _assetResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
+        }
+
+        [Test]
+        public void Null_Layout_Is_Handled()
+        {
+            Assert.DoesNotThrow(() => new UIComponentWithNullLayout());
         }
     }
 }
