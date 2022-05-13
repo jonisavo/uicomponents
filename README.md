@@ -189,11 +189,11 @@ by specifying a different provider for them.
 ```c#
 using UIComponents;
 
-[Dependency(typeof(IStringDependency), provide: typeof(StringDependency)]
-[Dependency(typeof(IScriptableObjectDependency), provide: typeof(HeroProvider)]
+[Dependency(typeof(IStringDependency), provide: typeof(StringDependency))]
+[Dependency(typeof(IScriptableObjectDependency), provide: typeof(HeroProvider))]
 public class MyComponent : UIComponent {}
 
-[Dependency(typeof(IScriptableObjectDependency), provide: typeof(VillainProvider)]
+[Dependency(typeof(IScriptableObjectDependency), provide: typeof(VillainProvider))]
 public class OtherComponent : MyComponent {}
 ```
 
