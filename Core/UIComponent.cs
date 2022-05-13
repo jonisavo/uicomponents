@@ -156,7 +156,7 @@ namespace UIComponents
         {
             var layoutAsset = GetLayout();
             
-            if (layoutAsset)
+            if (layoutAsset != null)
                 layoutAsset.CloneTree(this);
         }
 
