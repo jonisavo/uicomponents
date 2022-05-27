@@ -54,6 +54,9 @@ namespace UIComponents
             new ProfilerMarker("UIComponent.CacheSetup");
         private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
             new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
+        private static readonly ProfilerMarker QueryFieldsSetupProfilerMarker =
+            new ProfilerMarker("UIComponent.QueryFieldsSetup");
+
 
         /// <summary>
         /// UIComponent's constructor loads the configured layout and stylesheets.
@@ -76,6 +79,9 @@ namespace UIComponents
             LoadLayout();
             LoadStyles();
             LayoutAndStylesSetupProfilerMarker.End();
+            QueryFieldsSetupProfilerMarker.Begin();
+            PopulateQueryFields();
+            QueryFieldsSetupProfilerMarker.End();
         }
         
         /// <summary>
@@ -173,5 +179,20 @@ namespace UIComponents
                 if (loadedStyleSheets[i] != null)
                     styleSheets.Add(loadedStyleSheets[i]);
         }
+        
+        private void PopulateQueryFields()
+        {
+            var fieldCache = CacheDictionary[_componentType].FieldCache;
+            var queryAttributes = fieldCache.QueryAttributes;
+
+            foreach (var queryAttributeKeyPair in queryAttributes)
+            {
+                var fieldInfo = queryAttributeKeyPair.Key;
+                var queryAttribute = queryAttributeKeyPair.Value;
+
+                fieldInfo.SetValue(this, this.Q(queryAttribute.Name));
+            }
+        }
+
     }
 }
