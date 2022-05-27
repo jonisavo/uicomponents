@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Tests.Utilities;
 
 namespace UIComponents.Tests
 {
@@ -30,7 +31,7 @@ namespace UIComponents.Tests
             [OneTimeSetUp]
             public void OneTimeSetUp()
             {
-                _assetResolver = Substitute.For<IAssetResolver>();
+                _assetResolver = MockUtilities.CreateMockResolver();
                 DependencyInjector.SetDependency<UIComponentWithValidAssetPath, IAssetResolver>(_assetResolver);
                 DependencyInjector.SetDependency<UIComponentWithInvalidAssetPath, IAssetResolver>(_assetResolver);
             }

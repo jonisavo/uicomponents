@@ -1,7 +1,7 @@
 ﻿using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
-using UnityEngine;
+using UIComponents.Tests.Utilities;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -25,12 +25,8 @@ namespace UIComponents.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _assetResolver = Substitute.For<IAssetResolver>();
+            _assetResolver = MockUtilities.CreateMockResolver();
             
-            _assetResolver.LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml")
-                .Returns(ScriptableObject.CreateInstance<VisualTreeAsset>());
-            _assetResolver.LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml")
-                .Returns(ScriptableObject.CreateInstance<VisualTreeAsset>());
             _assetResolver.LoadAsset<VisualTreeAsset>("Assets/MissingAsset.uxml")
                 .ReturnsNull();
             
