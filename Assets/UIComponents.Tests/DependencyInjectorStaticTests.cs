@@ -36,5 +36,19 @@ namespace UIComponents.Tests
                 );
             }
         }
+
+        [TestFixture]
+        public class RemoveInjector
+        {
+            [Test]
+            public void Removes_The_Injector_From_The_Dependency_Injector()
+            {
+                var componentType = typeof(UIComponentWithDependency);
+                var injector = new DependencyInjector();
+                DependencyInjector.InjectorDictionary[componentType] = injector;
+                DependencyInjector.RemoveInjector(componentType);
+                Assert.That(DependencyInjector.InjectorDictionary.ContainsKey(componentType), Is.False);
+            }
+        }
     }
 }
