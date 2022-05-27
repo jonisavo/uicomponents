@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UIComponents.Cache;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -46,22 +47,35 @@ namespace UIComponents
         private readonly DependencyInjector _dependencyInjector;
 
         private readonly Type _componentType;
+        
+        private static readonly ProfilerMarker DependencySetupProfilerMarker =
+            new ProfilerMarker("UIComponent.DependencySetup");
+        private static readonly ProfilerMarker CacheSetupProfilerMarker =
+            new ProfilerMarker("UIComponent.CacheSetup");
+        private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
+            new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
 
         /// <summary>
         /// UIComponent's constructor loads the configured layout and stylesheets.
         /// </summary>
         protected UIComponent()
         {
+            DependencySetupProfilerMarker.Begin();
             _componentType = GetType();
             _dependencyInjector = DependencyInjector.GetInjector(_componentType);
+            DependencySetupProfilerMarker.End();
 
             AssetResolver = _dependencyInjector.Provide<IAssetResolver>();
             
+            CacheSetupProfilerMarker.Begin();
             if (!CacheDictionary.ContainsKey(_componentType))
                 CacheDictionary.Add(_componentType, new UIComponentCache(_componentType));
+            CacheSetupProfilerMarker.End();
 
+            LayoutAndStylesSetupProfilerMarker.Begin();
             LoadLayout();
             LoadStyles();
+            LayoutAndStylesSetupProfilerMarker.End();
         }
         
         /// <summary>
