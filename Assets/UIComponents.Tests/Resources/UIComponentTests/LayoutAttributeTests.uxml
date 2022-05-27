@@ -1,3 +1,6 @@
 ﻿<UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label text="Hello world!" />
+    <ui:Label name="hello-world-label" text="Hello world!" />
+    <ui:Foldout name="test-foldout">
+        <ui:Label text="Foldout content" />
+    </ui:Foldout>
 </UXML>

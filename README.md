@@ -112,6 +112,41 @@ loaded automatically.
 loaded automatically. Unlike `[Layout]`, multiple `[Stylesheet]`
 attributes can be used on a single UIComponent.
 
+## Experimental features
+
+`[Query]` is an experimental feature that allows for populating fields automatically.
+It is accessible via the `UIComponents.Experimental` namespace.
+
+```xml
+<!-- Resources/MyLayout.uxml -->
+<UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label name="my-label" text="Hello world!" />
+    <ui:Foldout name="my-foldout">
+        <ui:Label text="Foldout content" />
+    </ui:Foldout>
+</UXML>
+```
+```c#
+using UIComponents;
+using UIComponents.Experimental;
+
+[Layout("MyLayout")]
+public class MyComponent : UIComponent
+{
+    [Query("my-label")]
+    public readonly Label MyLabel;
+    
+    [Query("my-foldout")]
+    public readonly Foldout MyFoldout;
+    
+    public MyComponent()
+    {
+        MyLabel.text = "Goodbye world!";
+        MyFoldout.Add(new Label("More content!"));
+    }
+}
+```
+
 ## Dependency injection
 
 ### Summary
