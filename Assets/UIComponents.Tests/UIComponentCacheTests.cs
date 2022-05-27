@@ -14,26 +14,28 @@ namespace UIComponents.Tests
         [Test]
         public void CacheIsCreatedForComponent()
         {
-            using var scope = new DependencyScope<TestComponent, IAssetResolver>(
-                MockUtilities.CreateMockResolver()
-            );
-            Assert.That(UIComponent.TryGetCache<TestComponent>(out _), Is.False);
-            var component = new TestComponent();
-            Assert.That(UIComponent.TryGetCache<TestComponent>(out var cache), Is.True);
-            Assert.That(cache.LayoutAttribute, Is.Not.Null);
-            Assert.That(cache.StylesheetAttributes.Count, Is.EqualTo(1));
+            var resolver = MockUtilities.CreateMockResolver();
+            using (new DependencyScope<TestComponent, IAssetResolver>(resolver))
+            {
+                Assert.That(UIComponent.TryGetCache<TestComponent>(out _), Is.False);
+                var component = new TestComponent();
+                Assert.That(UIComponent.TryGetCache<TestComponent>(out var cache), Is.True);
+                Assert.That(cache.LayoutAttribute, Is.Not.Null);
+                Assert.That(cache.StylesheetAttributes.Count, Is.EqualTo(1));
+            }
         }
 
         [Test]
         public void CacheCanBeCleared()
         {
-            using var scope = new DependencyScope<TestComponent, IAssetResolver>(
-                MockUtilities.CreateMockResolver()
-            );
-            var component = new TestComponent();
-            Assert.That(UIComponent.TryGetCache<TestComponent>(out _), Is.True);
-            UIComponent.ClearCache<TestComponent>();
-            Assert.That(UIComponent.TryGetCache<TestComponent>(out _), Is.False);
+            var resolver = MockUtilities.CreateMockResolver();
+            using (new DependencyScope<TestComponent, IAssetResolver>(resolver))
+            {
+                var component = new TestComponent();
+                Assert.That(UIComponent.TryGetCache<TestComponent>(out _), Is.True);
+                UIComponent.ClearCache<TestComponent>();
+                Assert.That(UIComponent.TryGetCache<TestComponent>(out _), Is.False);
+            }
         }
     }
 }
