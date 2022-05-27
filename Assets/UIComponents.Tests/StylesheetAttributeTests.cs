@@ -2,6 +2,7 @@
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
+using UIComponents.Tests.Utilities;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -23,7 +24,7 @@ namespace UIComponents.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _resolver = Substitute.For<IAssetResolver>();
+            _resolver = MockUtilities.CreateMockResolver();
             _resolver.LoadAsset<StyleSheet>("Assets/StylesheetOne.uss")
                 .Returns(ScriptableObject.CreateInstance<StyleSheet>());
             _resolver.LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss")

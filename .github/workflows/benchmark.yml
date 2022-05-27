@@ -1,0 +1,51 @@
+﻿name: Benchmarks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+      types: [opened, synchronize, reopened]
+  workflow_dispatch: {}
+    
+jobs:
+  benchmark:
+    name: Run benchmarks on Linux in ${{ matrix.unityVersion }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2020.3.33f1
+          - 2021.3.1f1
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-StandaloneLinux64-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-StandaloneLinux64-${{ matrix.unityVersion }}-
+            Library-StandaloneLinux64-
+            Library-
+
+      - uses: game-ci/unity-test-runner@v2
+        id: benchmarkRunner
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          testMode: EditMode
+          customParameters: -releaseCodeOptimization -assemblyNames "UIComponents.Benchmarks"
+          coverageOptions: ""
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Benchmark results
+          path: ${{ steps.benchmarkRunner.outputs.artifactsPath }}/editmode-results.xml

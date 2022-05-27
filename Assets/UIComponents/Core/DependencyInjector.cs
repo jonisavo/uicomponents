@@ -83,6 +83,16 @@ namespace UIComponents
             return CreateInjector(consumerType);
         }
         
+        /// <summary>
+        /// Removes the injector of the given consumer type.
+        /// Used primarily for testing.
+        /// </summary>
+        /// <param name="consumerType">Consumer type</param>
+        public static void RemoveInjector(Type consumerType)
+        {
+            InjectorDictionary.Remove(consumerType);
+        }
+        
         private static DependencyInjector CreateInjector(Type consumerType)
         {
             var injectAttributes = (DependencyAttribute[])
