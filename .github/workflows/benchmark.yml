@@ -8,13 +8,16 @@ on:
       types: [opened, synchronize, reopened]
   workflow_dispatch: {}
     
-env:
-  PROJECT_UNITY_VERSION: 2020.3.33f1
-    
 jobs:
-  benchmarkOnWindows:
-    name: Run benchmarks on Windows
-    runs-on: windows-2019
+  benchmark:
+    name: Run benchmarks on Linux in ${{ matrix.unityVersion }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2020.3.33f1
+          - 2021.3.1f1
 
     steps:
       - uses: actions/checkout@v3
@@ -24,9 +27,10 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-StandaloneWindows64-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-StandaloneLinux64-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-StandaloneWindows64-
+            Library-StandaloneLinux64-${{ matrix.unityVersion }}-
+            Library-StandaloneLinux64-
             Library-
 
       - uses: game-ci/unity-test-runner@v2
@@ -34,42 +38,10 @@ jobs:
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          unityVersion: ${{ env.PROJECT_UNITY_VERSION }}
+          unityVersion: ${{ matrix.unityVersion }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           customParameters: -assemblyNames "UIComponents.Benchmarks"
 
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: Benchmark results
-          path: ${{ steps.testRunner.outputs.artifactsPath }}
-          
-  benchmarkOnMacOS:
-    name: Run benchmarks on macOS
-    runs-on: macos-latest
-    
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          
-      - uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-StandaloneOSX-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-StandaloneOSX-
-            Library-
-            
-      - uses: game-ci/unity-test-runner@v2
-        id: testRunner
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          unityVersion: ${{ env.PROJECT_UNITY_VERSION }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          customParameters: -assemblyNames "UIComponents.Benchmarks"
-          
       - uses: actions/upload-artifact@v3
         if: always()
         with:
