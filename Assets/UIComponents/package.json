@@ -30,6 +30,11 @@
             "displayName": "Asset Loading from Addressables",
             "description": "Contains an example of asset loading from Addressables.",
             "path": "Samples~/Addressables"
+        },
+        {
+            "displayName": "QueryAttribute (experimental)",
+            "description": "Contains an example of using QueryAttribute to populate fields.",
+            "path": "Samples~/Query"
         }
     ],
     "license": "MIT",

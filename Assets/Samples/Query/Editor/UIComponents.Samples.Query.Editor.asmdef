@@ -1,0 +1,19 @@
+{
+    "name": "UIComponents.Samples.Query.Editor",
+    "rootNamespace": "UIComponents.Samples",
+    "references": [
+        "GUID:d593635333b4cae48bac5b5f0b596e90",
+        "GUID:d180e9959e2b4d2580f328c2e6aa239d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

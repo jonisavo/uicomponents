@@ -10,10 +10,12 @@ namespace UIComponents.Cache
         public readonly LayoutAttribute LayoutAttribute;
         public readonly List<StylesheetAttribute> StylesheetAttributes;
         public readonly List<AssetPathAttribute> AssetPathAttributes;
+        public readonly FieldCache FieldCache;
 
         public UIComponentCache(Type componentType)
         {
             Attributes = componentType.GetCustomAttributes(true);
+            FieldCache = new FieldCache(componentType);
 
             LayoutAttribute = null;
             StylesheetAttributes = new List<StylesheetAttribute>();
