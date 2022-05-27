@@ -1,5 +1,18 @@
 
 
+# [0.9.0](https://github.com/jonisavo/uicomponents/compare/v0.8.0...v0.9.0) (2022-05-27)
+
+
+### Features
+
+* add experimental QueryAttribute ([1b7e0d5](https://github.com/jonisavo/uicomponents/commit/1b7e0d52146ad57b8aa573e4eef0fcf7c57c0641))
+* **DependencyInjector:** add RemoveInjector static method for testing ([e514533](https://github.com/jonisavo/uicomponents/commit/e51453394a99d7dc3372a7d3b2fa12ff43fddb3b))
+
+
+### Performance Improvements
+
+* implement new cache for UIComponents ([6b90eb2](https://github.com/jonisavo/uicomponents/commit/6b90eb224b755aae703da6b4795871986cecb560))
+
 # [0.8.0](https://github.com/jonisavo/uicomponents/compare/v0.7.0...v0.8.0) (2022-05-13)
 
 
