@@ -46,4 +46,4 @@ jobs:
         if: always()
         with:
           name: Benchmark results
-          path: ${{ steps.benchmarkRunner.outputs.artifactsPath }}
+          path: ${{ steps.benchmarkRunner.outputs.artifactsPath }}/editmode-results.xml
