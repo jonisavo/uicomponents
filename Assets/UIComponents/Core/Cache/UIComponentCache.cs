@@ -22,7 +22,7 @@ namespace UIComponents.Cache
             AssetPathAttributes = new List<AssetPathAttribute>();
 
             LayoutAttribute = GetSingleAttribute<LayoutAttribute>();
-            PopulateAttributeList(StylesheetAttributes);
+            PopulateAttributeListParentsFirst(componentType, StylesheetAttributes);
             PopulateAttributeList(AssetPathAttributes);
         }
         
@@ -41,6 +41,26 @@ namespace UIComponents.Cache
             for (var i = 0; i < Attributes.Length; i++)
                 if (Attributes[i] is T castAttribute)
                     list.Add(castAttribute);
+        }
+
+        private static void PopulateAttributeListParentsFirst<T>(
+            Type componentType, ICollection<T> list) where T : Attribute
+        {
+            var uiComponentType = typeof(UIComponent);
+            var baseTypeList = new List<Type>();
+            
+            while (componentType != null && componentType != uiComponentType)
+            {
+                baseTypeList.Insert(0, componentType);
+                componentType = componentType.BaseType;
+            }
+            
+            foreach (var baseType in baseTypeList)
+            {
+                var attributes = (T[]) baseType.GetCustomAttributes(typeof(T), false);
+                for (var i = 0; i < attributes.Length; i++)
+                    list.Add(attributes[i]);
+            }
         }
     }
 }

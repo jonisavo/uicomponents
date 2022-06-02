@@ -54,9 +54,9 @@ namespace UIComponents.Tests
         public void Inherited_Stylesheets_Are_Loaded()
         {
             var component = new InheritedComponent();
-            _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetThree.uss");
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
+            _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetThree.uss");
             Assert.That(component.styleSheets.count, Is.EqualTo(3));
         }
 
