@@ -112,6 +112,24 @@ loaded automatically.
 loaded automatically. Unlike `[Layout]`, multiple `[Stylesheet]`
 attributes can be used on a single UIComponent.
 
+```c#
+using UIComponents;
+
+[Stylesheet("Assets/StylesheetOne.uss")]
+[Stylesheet("Assets/StylesheetTwo.uss")]
+public class UIComponentWithTwoStylesheets : UIComponent {}
+        
+[Stylesheet("Assets/StylesheetThree.uss")]
+public class ChildComponent : UIComponentWithTwoStylesheets {}
+```
+
+Stylesheets will be applied to `ChildComponent` in the following order:
+- `Assets/StylesheetOne.uss`
+- `Assets/StylesheetTwo.uss`
+- `Assets/StylesheetThree.uss`
+
+This means that child components can override styles from their parents.
+
 ## Experimental features
 
 `[Query]` is an experimental feature that allows for populating fields automatically.
@@ -156,8 +174,8 @@ Dependency injection requires an interface. Below is a simple example:
 ```c#
 public interface ICounterService
 {
-    public void IncrementCount();
-    public int GetCount();
+    void IncrementCount();
+    int GetCount();
 }
 
 public class CounterService : ICounterService
