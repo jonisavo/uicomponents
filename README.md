@@ -188,6 +188,9 @@ public class MyComponent : UIComponent
 
 ### Summary
 
+Dependencies injected into UIComponents acts as singletons, meaning that every UIComponent
+will have the same instance of the dependency.
+
 Dependency injection requires an interface. Below is a simple example:
 
 ```c#
@@ -238,7 +241,7 @@ public class CounterComponent : UIComponent
 ```
 
 This creates a component which can be used to increment a number.
-**Each instance of CounterComponent receives the same instance of
+**Since dependencies are singletons, every UIComponent, and in turn all CounterComponents receive the same instance of
 CounterService.**
 
 ![CounterComponent in action](https://github.com/jonisavo/uicomponents/blob/main/Assets/Samples/Counter/counter.gif?raw=true)
