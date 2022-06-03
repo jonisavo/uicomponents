@@ -2,7 +2,7 @@
     "name": "io.savolainen.uicomponents",
     "displayName": "UIComponents",
     "version": "0.9.0",
-    "description": "A small front-end framework for Unity's UIElements.",
+    "description": "A small front-end framework for Unity's UIToolkit.",
     "unity": "2019.3",
     "author": {
         "name": "Joni Savolainen",
