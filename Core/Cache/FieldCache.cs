@@ -5,6 +5,9 @@ using UIComponents.Experimental;
 
 namespace UIComponents.Cache
 {
+    /// <summary>
+    /// A cache for storing UIComponent field information.
+    /// </summary>
     public readonly struct FieldCache
     {
         public readonly Dictionary<FieldInfo, QueryAttribute> QueryAttributes;

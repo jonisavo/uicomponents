@@ -4,6 +4,9 @@ using JetBrains.Annotations;
 
 namespace UIComponents.Cache
 {
+    /// <summary>
+    /// A cache for the attributes and fields of a UIComponent.
+    /// </summary>
     public readonly struct UIComponentCache
     {
         public readonly object[] Attributes;
@@ -43,6 +46,10 @@ namespace UIComponents.Cache
                     list.Add(castAttribute);
         }
 
+        /// <summary>
+        /// GetCustomAttributes for the given type, but get the
+        /// attributes from the base types first.
+        /// </summary>
         private static void PopulateAttributeListParentsFirst<T>(
             Type componentType, ICollection<T> list) where T : Attribute
         {
