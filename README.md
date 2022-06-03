@@ -106,7 +106,26 @@ To update, change `upm/v0.9.0` to point to the latest version.
 ## Layouts and stylesheets
 
 `[Layout]` allows specifying the path to a UXML file. The file will be
-loaded automatically.
+loaded automatically. A component can have a single `[Layout]` attribute. It can be
+inherited from a parent class.
+
+```c#
+using UIComponents;
+
+[Layout("Assets/LayoutOne.uxml")]
+public class UIComponentWithLayout : UIComponent {}
+
+public class UIComponentWithSameLayout : UIComponentWithLayout
+{
+    // Uses Assets/LayoutOne.uxml
+}
+
+[Layout("Assets/LayoutTwo.uxml")
+public class UIComponentWithOverriddenLayout : UIComponentWithLayout
+{
+    // Uses Assets/LayoutTwo.uxml
+}
+```
 
 `[Stylesheet]` allows specifying paths to USS files. The files will be
 loaded automatically. Unlike `[Layout]`, multiple `[Stylesheet]`
