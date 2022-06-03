@@ -3,7 +3,7 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/jonisavo/uicomponents/main/logo.png" alt="Logo" width="200px" height="200px" />
     <br />
-    <i>A small front-end framework for Unity's UIElements.</i>
+    <i>A small front-end framework for Unity's UIToolkit.</i>
 </p>
 
 <p align="center">
