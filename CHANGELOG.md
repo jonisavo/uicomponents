@@ -1,5 +1,17 @@
 
 
+# [0.10.0](https://github.com/jonisavo/uicomponents/compare/v0.9.0...v0.10.0) (2022-06-03)
+
+
+### Features
+
+* **StylesheetAttribute:** apply stylesheets from parents upward ([a27f75e](https://github.com/jonisavo/uicomponents/commit/a27f75e9db84e11d3107e597b2e4abd65a7d0a52))
+
+
+### BREAKING CHANGES
+
+* **StylesheetAttribute:** Stylesheets defined in parent classes are now loaded first. This means that child classes can override styles from their parents.
+
 # [0.9.0](https://github.com/jonisavo/uicomponents/compare/v0.8.0...v0.9.0) (2022-05-27)
 
 
