@@ -188,7 +188,7 @@ public class MyComponent : UIComponent
 
 ### Summary
 
-Dependencies injected into UIComponents acts as singletons, meaning that every UIComponent
+Dependencies injected into UIComponents act as singletons, meaning that every UIComponent
 will have the same instance of the dependency.
 
 Dependency injection requires an interface. Below is a simple example:
