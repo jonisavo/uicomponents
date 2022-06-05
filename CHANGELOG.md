@@ -1,5 +1,17 @@
 
 
+# [0.11.0](https://github.com/jonisavo/uicomponents/compare/v0.10.0...v0.11.0) (2022-06-05)
+
+
+### Bug Fixes
+
+* **DependencyInjector:** fix SetDependency exception message ([9090c74](https://github.com/jonisavo/uicomponents/commit/9090c7493e996d655d2c64b06507d6b936e6248b))
+
+
+### Features
+
+* **DependencyInjector:** add RestoreDefaultDependency method ([ef1952f](https://github.com/jonisavo/uicomponents/commit/ef1952ff93cb2b953ea4e86f7997b7ca4f79e443))
+
 # [0.10.0](https://github.com/jonisavo/uicomponents/compare/v0.9.0...v0.10.0) (2022-06-03)
 
 
