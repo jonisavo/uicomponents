@@ -81,6 +81,10 @@ namespace UIComponents
         /// Restores the default dependency, which is the one
         /// set by <see cref="DependencyAttribute"/>.
         /// </summary>
+        /// <remarks>
+        /// Can be used in unit tests to clear
+        /// restore dependency between or after tests.
+        /// </remarks>
         /// <typeparam name="TConsumer">Consumer type</typeparam>
         /// <typeparam name="TDependency">Dependency type</typeparam>
         /// <exception cref="InvalidOperationException">
