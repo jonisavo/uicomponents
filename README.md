@@ -110,8 +110,6 @@ loaded automatically. A component can have a single `[Layout]` attribute. It can
 inherited from a parent class.
 
 ```c#
-using UIComponents;
-
 [Layout("Assets/LayoutOne.uxml")]
 public class UIComponentWithLayout : UIComponent {}
 
@@ -132,8 +130,6 @@ loaded automatically. Unlike `[Layout]`, multiple `[Stylesheet]`
 attributes can be used on a single UIComponent.
 
 ```c#
-using UIComponents;
-
 [Stylesheet("Assets/StylesheetOne.uss")]
 [Stylesheet("Assets/StylesheetTwo.uss")]
 public class UIComponentWithTwoStylesheets : UIComponent {}
@@ -262,8 +258,6 @@ UIComponents inherit dependencies. Such dependencies can be overridden
 by specifying a different provider for them.
 
 ```c#
-using UIComponents;
-
 [Dependency(typeof(IStringDependency), provide: typeof(StringDependency))]
 [Dependency(typeof(IScriptableObjectDependency), provide: typeof(HeroProvider))]
 public class MyComponent : UIComponent {}
@@ -302,8 +296,6 @@ It is useful for switching dependencies temporarily.
 public class CounterComponent : UIComponent {}
 ```
 ```c#
-using UIComponents.Utilities;
-
 [Test]
 public void It_Works()
 {
@@ -363,6 +355,7 @@ UIComponents comes with `AssetDatabaseAssetResolver`, accessible via the
 `UIComponents.Editor` namespace.
 
 ```c#
+using UIComponents;
 using UIComponents.Editor;
 
 [Layout("Assets/Components/MyComponent.uxml")]
@@ -376,6 +369,7 @@ public class MyComponent : UIComponent {}
 `UIComponents.Addressables` namespace.
 
 ```c#
+using UIComponents;
 using UIComponents.Addressables;
 
 [Layout("Assets/Components/MyComponent.uxml")]
@@ -395,8 +389,6 @@ search for assets in those locations.
 Here is an example of its usage alongside asset loading from `AssetDatabase`:
 
 ```c#
-using UIComponents.Editor;
-
 [AssetPath("Assets/UI/Components/MyComponent")]
 [Layout("MyComponent.uxml")]
 [Stylesheet("MyComponent.style.uss")]
@@ -409,8 +401,6 @@ However, like the `[Dependency]` attribute, it can be applied to
 a parent class and inherited.
 
 ```c#
-using UIComponents.Editor;
-
 [AssetPath("Assets/UI/Components")]
 [Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
 public class BaseComponent : UIComponent {}
