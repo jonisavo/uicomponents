@@ -126,5 +126,42 @@ namespace UIComponents.Tests
                 Assert.DoesNotThrow(() => injector.ClearDependency<IDependency>());
             }
         }
+
+        [TestFixture]
+        public class RestoreDefaultDependency
+        {
+            [Test]
+            public void Restores_Default_Dependency()
+            {
+                var dependencyAttribute =
+                    new DependencyAttribute(typeof(IDependency), typeof(DependencyOne));
+
+                var injector = new DependencyInjector(new[] {dependencyAttribute});
+                
+                injector.SetDependency<IDependency>(new DependencyTwo());
+
+                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyTwo>());
+                
+                injector.RestoreDefaultDependency<IDependency>();
+                
+                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
+            }
+            
+            [Test]
+            public void Throws_If_No_Default_Dependency_Exists()
+            {
+                var injector = new DependencyInjector();
+                
+                Assert.Throws<InvalidOperationException>(
+                    () => injector.RestoreDefaultDependency<IDependency>()
+                );
+                
+                injector.SetDependency<IDependency>(new DependencyOne());
+                
+                Assert.Throws<InvalidOperationException>(
+                    () => injector.RestoreDefaultDependency<IDependency>()
+                );
+            }
+        }
     }
 }
