@@ -50,5 +50,20 @@ namespace UIComponents.Tests
                 Assert.That(DependencyInjector.InjectorDictionary.ContainsKey(componentType), Is.False);
             }
         }
+
+        [TestFixture]
+        public class RestoreDefaultDependency
+        {
+            [Test]
+            public void Restores_The_Default_Dependency_Instance()
+            {
+                var component = new UIComponentWithDependency();
+
+                DependencyInjector.ClearDependency<UIComponentWithDependency, IDependency>();
+                DependencyInjector.RestoreDefaultDependency<UIComponentWithDependency, IDependency>();
+                
+                Assert.That(component.GetDependency(), Is.InstanceOf<DependencyProvider>());
+            }
+        }
     }
 }

@@ -274,6 +274,8 @@ public class OtherComponent : MyComponent {}
 
 ### Testing
 
+#### Switching dependencies
+
 `DependencyInjector`, the class responsible for handling dependencies,
 comes with the `SetDependency` static method.
 
@@ -292,19 +294,8 @@ A mock version of a dependency can be switched in during a test. When `CounterCo
 asks for `ICounterService`, it will receive the instance of `MockCounterService` created
 in the `OneTimeSetUp` function.
 
-`DependencyInjector` also comes with the `ClearDependency` static method which can be used to remove
-the instance of a dependency between tests.
-
-```c#
-[TearDown]
-public void TearDown()
-{
-    DependencyInjector.ClearDependency<CounterComponent, ICounterService>();
-    // Provide<ICounterService> inside CounterComponent will now throw a MissingProviderException
-}
-```
-
-A `DependencyScope` helper class is available under the `UIComponents.Utilities` namespace.
+The `DependencyScope` helper class is available under the `UIComponents.Utilities` namespace.
+It is useful for switching dependencies temporarily.
 
 ```c#
 [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
@@ -325,6 +316,38 @@ public void It_Works()
     // CounterService will be provided
 }
 ```
+
+#### Clearing dependencies
+
+`DependencyInjector` also comes with the `ClearDependency` static method which can be used to remove
+the instance of a dependency between tests.
+
+```c#
+[TearDown]
+public void TearDown()
+{
+    DependencyInjector.ClearDependency<CounterComponent, ICounterService>();
+    // Provide<ICounterService> inside CounterComponent will now throw a MissingProviderException
+}
+```
+
+#### Restoring dependencies
+
+Use `RestoreDefaultDependency` to restore the dependency to its original value as
+specified in the `[Dependency]` attribute.
+
+```c#
+[TearDown]
+public void TearDown()
+{
+    DependencyInjector.RestoreDefaultDependency<CounterComponent, ICounterService>();
+    // Provide<ICounterService> inside CounterComponent will now yield
+    // an instance of the type specified in the component's Dependency attribute.
+}
+```
+
+If no `[Dependency]` attribute exists on the component, `RestoreDefaultDependency` will throw
+an exception.
 
 ## Loading assets
 

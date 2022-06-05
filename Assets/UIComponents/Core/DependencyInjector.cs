@@ -24,12 +24,19 @@ namespace UIComponents
         /// </summary>
         internal static readonly Dictionary<Type, object> InstantiatedInstanceDictionary
             = new Dictionary<Type, object>();
-        
+
         /// <summary>
         /// Contains the dependencies the injector provides to its consumer.
         /// </summary>
         internal readonly Dictionary<Type, object> DependencyDictionary
             = new Dictionary<Type, object>();
+        
+        /// <summary>
+        /// Contains the default provider types for each dependency of the consumer.
+        /// Populated by <see cref="DependencyAttribute"/>.
+        /// </summary>
+        internal readonly Dictionary<Type, Type> DefaultDependencyTypeDictionary
+            = new Dictionary<Type, Type>();
 
         /// <summary>
         /// Switches the dependency of a consumer.
@@ -41,8 +48,8 @@ namespace UIComponents
         /// <param name="provider">
         /// The new instance used for the dependency
         /// </param>
-        /// <typeparam name="TConsumer">Type of the consumer</typeparam>
-        /// <typeparam name="TDependency">Type of the dependency</typeparam>
+        /// <typeparam name="TConsumer">Consumer type</typeparam>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
         public static void SetDependency<TConsumer, TDependency>(TDependency provider)
             where TConsumer : class
             where TDependency : class
@@ -59,8 +66,8 @@ namespace UIComponents
         /// Can be used in unit tests to clear
         /// a dependency between tests.
         /// </remarks>
-        /// <typeparam name="TConsumer">Type of the consumer</typeparam>
-        /// <typeparam name="TDependency">Type of the dependency</typeparam>
+        /// <typeparam name="TConsumer">Consumer type</typeparam>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
         public static void ClearDependency<TConsumer, TDependency>()
             where TConsumer : class
             where TDependency : class
@@ -68,6 +75,28 @@ namespace UIComponents
             var injector = GetInjector(typeof(TConsumer));
             
             injector.ClearDependency<TDependency>();
+        }
+        
+        /// <summary>
+        /// Restores the default dependency, which is the one
+        /// set by <see cref="DependencyAttribute"/>.
+        /// </summary>
+        /// <remarks>
+        /// Can be used in unit tests to clear
+        /// restore dependency between or after tests.
+        /// </remarks>
+        /// <typeparam name="TConsumer">Consumer type</typeparam>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if no default dependency type exists
+        /// </exception>
+        public static void RestoreDefaultDependency<TConsumer, TDependency>()
+            where TConsumer : class
+            where TDependency : class
+        {
+            var injector = GetInjector(typeof(TConsumer));
+            
+            injector.RestoreDefaultDependency<TDependency>();
         }
 
         /// <summary>
@@ -104,7 +133,7 @@ namespace UIComponents
 
             return injector;
         }
-
+        
         private static object CreateInstance(Type dependencyType)
         {
             object instance;
@@ -136,11 +165,14 @@ namespace UIComponents
         {
             foreach (var dependencyAttribute in dependencyAttributes)
             {
-                var type = dependencyAttribute.DependencyType;
+                var dependencyType = dependencyAttribute.DependencyType;
                 var providerType = dependencyAttribute.ProvideType;
+
+                if (DependencyDictionary.ContainsKey(dependencyType))
+                    return;
                 
-                if (!DependencyDictionary.ContainsKey(type))
-                    DependencyDictionary[type] = CreateInstance(providerType);
+                DependencyDictionary[dependencyType] = CreateInstance(providerType);
+                DefaultDependencyTypeDictionary[dependencyType] = providerType;
             }
         }
 
@@ -167,6 +199,24 @@ namespace UIComponents
         public void ClearDependency<T>() where T : class
         {
             DependencyDictionary.Remove(typeof(T));
+        }
+
+        /// <summary>
+        /// Restores the default dependency, which is the one
+        /// set by <see cref="DependencyAttribute"/>.
+        /// </summary>
+        /// <typeparam name="T">Dependency type</typeparam>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if no default dependency type exists
+        /// </exception>
+        public void RestoreDefaultDependency<T>() where T : class
+        {
+            var dependencyType = typeof(T);
+            
+            if (!DefaultDependencyTypeDictionary.TryGetValue(dependencyType, out var providerType))
+                throw new InvalidOperationException($"No default dependency type for {dependencyType}");
+
+            DependencyDictionary[typeof(T)] = CreateInstance(providerType);
         }
 
         /// <summary>
