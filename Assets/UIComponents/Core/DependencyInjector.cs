@@ -187,7 +187,7 @@ namespace UIComponents
         public void SetDependency<T>([NotNull] T instance) where T : class
         {
             if (instance == null)
-                throw new ArgumentNullException("Dependency can not be set as null.");
+                throw new ArgumentNullException(nameof(instance));
             
             DependencyDictionary[typeof(T)] = instance;
         }
