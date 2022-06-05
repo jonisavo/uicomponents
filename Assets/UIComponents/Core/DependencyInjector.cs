@@ -24,7 +24,7 @@ namespace UIComponents
         /// </summary>
         internal static readonly Dictionary<Type, object> InstantiatedInstanceDictionary
             = new Dictionary<Type, object>();
-        
+
         /// <summary>
         /// Contains the dependencies the injector provides to its consumer.
         /// </summary>
@@ -48,8 +48,8 @@ namespace UIComponents
         /// <param name="provider">
         /// The new instance used for the dependency
         /// </param>
-        /// <typeparam name="TConsumer">Type of the consumer</typeparam>
-        /// <typeparam name="TDependency">Type of the dependency</typeparam>
+        /// <typeparam name="TConsumer">Consumer type</typeparam>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
         public static void SetDependency<TConsumer, TDependency>(TDependency provider)
             where TConsumer : class
             where TDependency : class
@@ -66,8 +66,8 @@ namespace UIComponents
         /// Can be used in unit tests to clear
         /// a dependency between tests.
         /// </remarks>
-        /// <typeparam name="TConsumer">Type of the consumer</typeparam>
-        /// <typeparam name="TDependency">Type of the dependency</typeparam>
+        /// <typeparam name="TConsumer">Consumer type</typeparam>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
         public static void ClearDependency<TConsumer, TDependency>()
             where TConsumer : class
             where TDependency : class
@@ -129,7 +129,7 @@ namespace UIComponents
 
             return injector;
         }
-
+        
         private static object CreateInstance(Type dependencyType)
         {
             object instance;
