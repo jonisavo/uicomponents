@@ -5,11 +5,11 @@ namespace UIComponents.Samples.Query.Editor
 {
     public class QueryExampleComponentWindow : EditorWindow
     {
-        [MenuItem("UIComponents Examples/Experimental/QueryAttribute")]
+        [MenuItem("UIComponents Examples/Experimental/Query")]
         private static void ShowWindow()
         {
             var window = GetWindow<QueryExampleComponentWindow>();
-            window.titleContent = new GUIContent("QueryAttribute");
+            window.titleContent = new GUIContent("Query");
             window.Show();
         }
 

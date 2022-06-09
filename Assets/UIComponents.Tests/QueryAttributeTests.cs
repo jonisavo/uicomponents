@@ -27,5 +27,22 @@ namespace UIComponents.Tests
             
             Assert.That(component.TestFoldout, Is.InstanceOf<Foldout>());
         }
+
+        private class ChildComponentWithQueryAttribute : ComponentWithQueryAttribute
+        {
+            [Query("foldout-content")]
+            public readonly Label FoldoutContent;
+        }
+        
+        [Test]
+        public void Should_Populate_Inherited_Fields()
+        {
+            var component = new ChildComponentWithQueryAttribute();
+            
+            Assert.That(component.HelloWorldLabel, Is.InstanceOf<Label>());
+            Assert.That(component.TestFoldout, Is.InstanceOf<Foldout>());
+            Assert.That(component.FoldoutContent, Is.InstanceOf<Label>());
+            Assert.That(component.FoldoutContent.text, Is.EqualTo("Foldout content"));
+        }
     }
 }

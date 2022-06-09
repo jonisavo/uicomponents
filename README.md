@@ -153,9 +153,9 @@ It is accessible via the `UIComponents.Experimental` namespace.
 ```xml
 <!-- Resources/MyLayout.uxml -->
 <UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label name="my-label" text="Hello world!" />
+    <ui:Label class="label" name="my-label" text="Hello world!" />
     <ui:Foldout name="my-foldout">
-        <ui:Label text="Foldout content" />
+        <ui:Label class="label" text="Foldout content" />
     </ui:Foldout>
 </UXML>
 ```
@@ -176,6 +176,29 @@ public class MyComponent : UIComponent
     {
         MyLabel.text = "Goodbye world!";
         MyFoldout.Add(new Label("More content!"));
+    }
+}
+```
+
+`[QueryClass]` can be used to query by class instead of by name. Multiple `[QueryClass]` attributes
+can be used on a single field. Each attribute will be queried in the order they are specified.
+
+```c#
+using UIComponents;
+using UIComponents.Experimental;
+
+[Layout("MyLayout")]
+public class MyComponent : UIComponent
+{
+    [QueryClass("label")]
+    public readonly Label[] Labels;
+    
+    public MyComponent()
+    {
+        foreach (var label in Labels)
+        {
+            label.text = "Hello world!";
+        }
     }
 }
 ```

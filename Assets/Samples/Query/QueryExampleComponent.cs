@@ -1,4 +1,5 @@
 ﻿using UIComponents.Experimental;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Samples.Query
@@ -8,15 +9,21 @@ namespace UIComponents.Samples.Query
     public class QueryExampleComponent : UIComponent
     {
         [Query("my-label")]
-        public readonly Label MyLabel;
+        private readonly Label MyLabel;
     
         [Query("my-foldout")]
-        public readonly Foldout MyFoldout;
+        private readonly Foldout MyFoldout;
+
+        [QueryClass("description")]
+        private readonly Label[] DescriptionLabels;
     
         public QueryExampleComponent()
         {
             MyLabel.text = "This text was set in the component constructor.";
             MyFoldout.Add(new Label("This label was added in the component constructor."));
+
+            foreach (var label in DescriptionLabels)
+                label.style.color = Color.green;
         }
     }
 }
