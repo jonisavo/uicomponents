@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UIComponents.Cache;
+using UIComponents.Internal;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -183,16 +184,37 @@ namespace UIComponents
         private void PopulateQueryFields()
         {
             var fieldCache = CacheDictionary[_componentType].FieldCache;
-            var queryAttributes = fieldCache.QueryAttributes;
+            var queryAttributeDictionary = fieldCache.QueryAttributes;
 
-            foreach (var queryAttributeKeyPair in queryAttributes)
+            foreach (var queryAttributeKeyPair in queryAttributeDictionary)
             {
                 var fieldInfo = queryAttributeKeyPair.Key;
-                var queryAttribute = queryAttributeKeyPair.Value;
+                var queryAttributes = queryAttributeKeyPair.Value;
 
-                fieldInfo.SetValue(this, this.Q(queryAttribute.Name));
+                var fieldType = fieldInfo.FieldType;
+
+                var results = new List<VisualElement>();
+                
+                for (var i = 0; i < queryAttributes.Length; i++)
+                    queryAttributes[i].Query(this, results);
+
+                if (fieldType.IsArray)
+                {
+                    var elementType = fieldType.GetElementType()!;
+                    var array = CollectionUtils.CreateArrayOfType(elementType, results);
+                    fieldInfo.SetValue(this, array);
+                }
+                else if (CollectionUtils.TypeQualifiesAsList(fieldType))
+                {
+                    var elementType = fieldType.GenericTypeArguments[0];
+                    var list = CollectionUtils.CreateListOfType(elementType, results);
+                    fieldInfo.SetValue(this, list);
+                }
+                else if (results.Count > 0)
+                {
+                    fieldInfo.SetValue(this, results[0]);
+                }
             }
         }
-
     }
 }

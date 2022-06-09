@@ -10,20 +10,21 @@ namespace UIComponents.Cache
     /// </summary>
     public readonly struct FieldCache
     {
-        public readonly Dictionary<FieldInfo, QueryAttribute> QueryAttributes;
+        public readonly Dictionary<FieldInfo, QueryAttributeBase[]> QueryAttributes;
 
         public FieldCache(Type type)
         {
             var fieldInfos = type.GetFields(
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             
-            QueryAttributes = new Dictionary<FieldInfo, QueryAttribute>();
+            QueryAttributes = new Dictionary<FieldInfo, QueryAttributeBase[]>();
 
             for (var i = 0; i < fieldInfos.Length; i++)
             {
-                var queryAttribute = fieldInfos[i].GetCustomAttribute<QueryAttribute>();
-                if (queryAttribute != null)
-                    QueryAttributes[fieldInfos[i]] = queryAttribute;
+                var queryAttributes = (QueryAttributeBase[]) fieldInfos[i].GetCustomAttributes<QueryAttributeBase>();
+
+                if (queryAttributes.Length > 0)
+                    QueryAttributes[fieldInfos[i]] = queryAttributes;
             }
         }
     }

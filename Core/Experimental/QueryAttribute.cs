@@ -1,22 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 namespace UIComponents.Experimental
 {
     /// <summary>
     /// An attribute for specifying the name of a VisualElement, which is then
-    /// automatically queried in the UIComponent constructor.
+    /// automatically queried and populated in the UIComponent constructor.
+    /// If the field type is an array or List, the queried element will be
+    /// placed into it.
     /// </summary>
+    /// <seealso cref="QueryClassAttribute"/>
     [AttributeUsage(AttributeTargets.Field)]
-    public class QueryAttribute : Attribute
+    public class QueryAttribute : QueryAttributeBase
     {
-        /// <summary>
-        /// The name used to query for a VisualElement.
-        /// </summary>
-        public readonly string Name;
-
+        private readonly string _name;
+        
         public QueryAttribute(string name)
         {
-            Name = name;
+            _name = name;
+        }
+
+        public override void Query(VisualElement root, List<VisualElement> results)
+        {
+            root.Query(_name).ToList(results);
         }
     }
 }
