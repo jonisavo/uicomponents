@@ -19,10 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         unityVersion:
-          - 2019.4.38f1
+          - 2019.4.39f1
           - 2020.3.33f1
-          - 2021.3.1f1
-          - 2022.1.0f1
+          - 2021.3.4f1
+          - 2022.1.4f1
         targetPlatform:
           - StandaloneLinux64
           - WebGL
