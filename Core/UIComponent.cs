@@ -212,6 +212,7 @@ namespace UIComponents
                 }
                 else if (results.Count > 0)
                 {
+                    results.RemoveAll(result => !fieldType.IsInstanceOfType(result));
                     fieldInfo.SetValue(this, results[0]);
                 }
             }
