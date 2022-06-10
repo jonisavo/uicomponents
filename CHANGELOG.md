@@ -3,16 +3,9 @@
 # [0.12.0](https://github.com/jonisavo/uicomponents/compare/v0.11.0...v0.12.0) (2022-06-10)
 
 
-### Bug Fixes
-
-* compile on Unity 2019 ([7a8101e](https://github.com/jonisavo/uicomponents/commit/7a8101e4b6309bce71c8c10a5b3a33b6ec1094f5))
-* **QueryAttribute:** fix query by type on Unity 2019 ([e4ad724](https://github.com/jonisavo/uicomponents/commit/e4ad7242e7be66f246f49566a4c989b65777a664))
-
-
 ### Features
 
-* add QueryClassAttribute ([3fde333](https://github.com/jonisavo/uicomponents/commit/3fde3332f852593d9f66831bfdacff91e3410069))
-* **QueryAttribute:** combine QueryAttribute and QueryClassAttribute ([52375d7](https://github.com/jonisavo/uicomponents/commit/52375d7518a4c23e6c05e39e8b316e3aa3f21e97))
+* **QueryAttribute:**query by type and class, support array and List<> fields ([52375d7](https://github.com/jonisavo/uicomponents/commit/52375d7518a4c23e6c05e39e8b316e3aa3f21e97))
 * **QueryAttribute:** use MeansImplicitUseAttribute ([a123143](https://github.com/jonisavo/uicomponents/commit/a1231431b81844dbf3d1c4054569eeb7fa12b6c7))
 
 # [0.11.0](https://github.com/jonisavo/uicomponents/compare/v0.10.0...v0.11.0) (2022-06-05)
