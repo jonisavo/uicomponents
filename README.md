@@ -153,9 +153,9 @@ It is accessible via the `UIComponents.Experimental` namespace.
 ```xml
 <!-- Resources/MyLayout.uxml -->
 <UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label name="my-label" text="Hello world!" />
-    <ui:Foldout name="my-foldout">
-        <ui:Label text="Foldout content" />
+    <ui:Label name="hello-world-label" text="Hello world!" class="text" />
+    <ui:Foldout name="test-foldout">
+        <ui:Label name="foldout-content" text="Foldout content" class="text" />
     </ui:Foldout>
 </UXML>
 ```
@@ -166,16 +166,32 @@ using UIComponents.Experimental;
 [Layout("MyLayout")]
 public class MyComponent : UIComponent
 {
-    [Query("my-label")]
-    public readonly Label MyLabel;
+    [Query("hello-world-label")]
+    public readonly Label HelloWorldLabel;
+            
+    [Query(Name = "test-foldout")]
+    public readonly Foldout TestFoldout;
     
-    [Query("my-foldout")]
-    public readonly Foldout MyFoldout;
+    [Query]
+    public readonly Label FirstLabel;
+    
+    [Query(Class = "text")]
+    public readonly Label[] LabelsWithTextClass;
+    
+    [Query(Name = "hello-world-label", Class = "text")]
+    public readonly Label HelloWorldLabelWithTextClass;
+    
+    [Query]
+    public readonly List<Label> AllLabelsImplicit;
+    
+    [Query(Name = "hello-world-label")]
+    [Query(Name = "foldout-content")]
+    public readonly List<Label> AllLabelsExplicit;
     
     public MyComponent()
     {
-        MyLabel.text = "Goodbye world!";
-        MyFoldout.Add(new Label("More content!"));
+        HelloWorldLabel.text = "Goodbye world!";
+        TestFoldout.Add(new Label("More content!"));
     }
 }
 ```

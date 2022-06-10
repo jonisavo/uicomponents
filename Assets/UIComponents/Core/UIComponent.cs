@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UIComponents.Cache;
+using UIComponents.Internal;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -183,16 +184,44 @@ namespace UIComponents
         private void PopulateQueryFields()
         {
             var fieldCache = CacheDictionary[_componentType].FieldCache;
-            var queryAttributes = fieldCache.QueryAttributes;
+            var queryAttributeDictionary = fieldCache.QueryAttributes;
 
-            foreach (var queryAttributeKeyPair in queryAttributes)
+            foreach (var queryAttributeKeyPair in queryAttributeDictionary)
             {
                 var fieldInfo = queryAttributeKeyPair.Key;
-                var queryAttribute = queryAttributeKeyPair.Value;
+                var queryAttributes = queryAttributeKeyPair.Value;
 
-                fieldInfo.SetValue(this, this.Q(queryAttribute.Name));
+                var fieldType = fieldInfo.FieldType;
+                var concreteType = TypeUtils.GetConcreteType(fieldType);
+
+                var results = new List<VisualElement>();
+                
+                for (var i = 0; i < queryAttributes.Length; i++)
+                {
+#if !UNITY_2020_3_OR_NEWER
+                    if (queryAttributes[i].Name == null && queryAttributes[i].Class == null)
+                    {
+                        Unity2019CompatibilityUtils.QueryByDesiredType(queryAttributes[i], this, concreteType, results);
+                        continue;
+                    }
+#endif
+                    queryAttributes[i].Query(this, results);
+                }
+                
+                results.RemoveAll(result => !concreteType.IsInstanceOfType(result));
+
+                object value = null;
+
+                if (fieldType.IsArray)
+                    value = CollectionUtils.CreateArrayOfType(concreteType, results);
+                else if (CollectionUtils.TypeQualifiesAsList(fieldType))
+                    value = CollectionUtils.CreateListOfType(concreteType, results);
+                else if (results.Count > 0)
+                    value = results[0];
+
+                if (value != null)
+                    fieldInfo.SetValue(this, value);
             }
         }
-
     }
 }
