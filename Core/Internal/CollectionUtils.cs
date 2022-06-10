@@ -9,8 +9,6 @@ namespace UIComponents.Internal
     {
         public static Array CreateArrayOfType(Type elementType, List<VisualElement> elements)
         {
-            elements.RemoveAll(element => !elementType.IsInstanceOfType(element));
-            
             var array = Array.CreateInstance(elementType, elements.Count);
             
             for (var i = 0; i < elements.Count; i++)
@@ -21,8 +19,6 @@ namespace UIComponents.Internal
 
         public static IList CreateListOfType(Type elementType, List<VisualElement> elements)
         {
-            elements.RemoveAll(element => !elementType.IsInstanceOfType(element));
-            
             var list = (IList) Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType));
             
             for (var i = 0; i < elements.Count; i++)

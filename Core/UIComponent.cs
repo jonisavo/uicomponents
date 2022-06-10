@@ -192,29 +192,35 @@ namespace UIComponents
                 var queryAttributes = queryAttributeKeyPair.Value;
 
                 var fieldType = fieldInfo.FieldType;
+                var concreteType = TypeUtils.GetConcreteType(fieldType);
 
                 var results = new List<VisualElement>();
                 
                 for (var i = 0; i < queryAttributes.Length; i++)
+                {
+#if !UNITY_2020_3_OR_NEWER
+                    if (queryAttributes[i].Name == null && queryAttributes[i].Class == null)
+                    {
+                        Unity2019CompatibilityUtils.QueryByDesiredType(queryAttributes[i], this, concreteType, results);
+                        continue;
+                    }
+#endif
                     queryAttributes[i].Query(this, results);
+                }
+                
+                results.RemoveAll(result => !concreteType.IsInstanceOfType(result));
+
+                object value = null;
 
                 if (fieldType.IsArray)
-                {
-                    var elementType = fieldType.GetElementType();
-                    var array = CollectionUtils.CreateArrayOfType(elementType, results);
-                    fieldInfo.SetValue(this, array);
-                }
+                    value = CollectionUtils.CreateArrayOfType(concreteType, results);
                 else if (CollectionUtils.TypeQualifiesAsList(fieldType))
-                {
-                    var elementType = fieldType.GenericTypeArguments[0];
-                    var list = CollectionUtils.CreateListOfType(elementType, results);
-                    fieldInfo.SetValue(this, list);
-                }
+                    value = CollectionUtils.CreateListOfType(concreteType, results);
                 else if (results.Count > 0)
-                {
-                    results.RemoveAll(result => !fieldType.IsInstanceOfType(result));
-                    fieldInfo.SetValue(this, results[0]);
-                }
+                    value = results[0];
+
+                if (value != null)
+                    fieldInfo.SetValue(this, value);
             }
         }
     }
