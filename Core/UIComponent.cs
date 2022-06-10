@@ -200,7 +200,7 @@ namespace UIComponents
 
                 if (fieldType.IsArray)
                 {
-                    var elementType = fieldType.GetElementType()!;
+                    var elementType = fieldType.GetElementType();
                     var array = CollectionUtils.CreateArrayOfType(elementType, results);
                     fieldInfo.SetValue(this, array);
                 }
