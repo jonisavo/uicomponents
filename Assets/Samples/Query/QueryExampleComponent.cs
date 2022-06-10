@@ -11,11 +11,14 @@ namespace UIComponents.Samples.Query
         [Query("my-label")]
         private readonly Label MyLabel;
     
-        [Query("my-foldout")]
+        [Query(Name = "my-foldout")]
         private readonly Foldout MyFoldout;
 
-        [QueryClass("description")]
+        [Query(Class = "description")]
         private readonly Label[] DescriptionLabels;
+
+        [Query]
+        private readonly VisualElement[] Everything;
     
         public QueryExampleComponent()
         {
@@ -24,6 +27,9 @@ namespace UIComponents.Samples.Query
 
             foreach (var label in DescriptionLabels)
                 label.style.color = Color.green;
+
+            foreach (var element in Everything)
+                element.tooltip = "Everything has this tooltip.";
         }
     }
 }

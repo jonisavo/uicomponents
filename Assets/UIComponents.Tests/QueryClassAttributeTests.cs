@@ -11,38 +11,38 @@ namespace UIComponents.Tests
         [Layout("UIComponentTests/QueryClassAttributeTest")]
         private class QueryClassTestComponent : UIComponent
         {
-            [QueryClass("class1")]
+            [Query(Class = "class1")]
             public VisualElement[] AllClassOneElementsArray;
 
-            [QueryClass("class1")]
+            [Query(Class = "class1")]
             public List<VisualElement> AllClassOneElementsList;
 
-            [QueryClass("class1")]
+            [Query(Class = "class1")]
             public VisualElement ClassOneElement;
 
-            [QueryClass("class1")]
+            [Query(Class = "class1")]
             public Label[] ClassOneLabelArray;
 
-            [QueryClass("class1")]
+            [Query(Class = "class1")]
             public List<Label> ClassOneLabelList;
 
-            [QueryClass("class1")]
-            [QueryClass("class2")]
-            [QueryClass("class3")]
+            [Query(Class = "class1")]
+            [Query(Class = "class2")]
+            [Query(Class = "class3")]
             public VisualElement[] AllElements;
 
-            [QueryClass("class1")]
-            [QueryClass("class2")]
-            [QueryClass("class3")]
+            [Query(Class = "class1")]
+            [Query(Class = "class2")]
+            [Query(Class = "class3")]
             public Label[] AllLabels;
 
-            [QueryClass("no-such-class")]
+            [Query(Class = "no-such-class")]
             public Label[] EmptyLabelArray;
 
-            [QueryClass("no-such-class")]
+            [Query(Class = "no-such-class")]
             public List<Label> EmptyLabelList;
             
-            [QueryClass("no-such-class")]
+            [Query(Class = "no-such-class")]
             public Label EmptyLabel;
         }
 
@@ -133,18 +133,18 @@ namespace UIComponents.Tests
         }
 
         [Layout("UIComponentTests/QueryClassAttributeTest")]
-        private class UIComponentWithBothQueryAttributes : UIComponent
+        private class UIComponentWithNameAndClassQuery : UIComponent
         {
             [Query("class1-first")]
-            [QueryClass("class2")]
-            [QueryClass("class3")]
+            [Query(Class = "class2")]
+            [Query(Class = "class3")]
             public readonly Label[] Labels;
         }
         
         [Test]
-        public void Works_With_The_Query_Attribute()
+        public void Works_With_Both_Name_And_Class_Query()
         {
-            var component = new UIComponentWithBothQueryAttributes();
+            var component = new UIComponentWithNameAndClassQuery();
             
             Assert.That(component.Labels, Is.Not.Null);
             Assert.That(component.Labels.Length, Is.EqualTo(3));
