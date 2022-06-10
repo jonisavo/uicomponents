@@ -116,37 +116,3 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: StandaloneWindows64
 
-  buildForMacOS:
-    name: Build for MacOS on ${{ matrix.unityVersion }}
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        unityVersion:
-          - 2019.4.39f1
-          - 2020.3.33f1
-          - 2021.3.4f1
-          - 2022.1.4f1
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-StandaloneOSX-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-StandaloneOSX-${{ matrix.unityVersion }}-
-            Library-StandaloneOSX-
-            Library-
-
-      - uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: StandaloneOSX
