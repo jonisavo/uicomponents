@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Experimental
@@ -27,6 +28,7 @@ namespace UIComponents.Experimental
     /// }
     /// </example>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+    [MeansImplicitUse]
     public class QueryAttribute : Attribute
     {
         public string Name { get; set; }
