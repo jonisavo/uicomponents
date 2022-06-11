@@ -97,6 +97,12 @@ namespace UIComponents
 
             if (this is IOnGeometryChanged onGeometryChanged)
                 RegisterCallback<GeometryChangedEvent>(onGeometryChanged.OnGeometryChanged);
+            
+            if (this is IOnMouseEnter onMouseEnter)
+                RegisterCallback<MouseEnterEvent>(onMouseEnter.OnMouseEnter);
+            
+            if (this is IOnMouseLeave onMouseLeave)
+                RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
         }
         
         /// <summary>
