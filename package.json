@@ -35,6 +35,11 @@
             "displayName": "QueryAttribute (experimental)",
             "description": "Contains an example of using QueryAttribute to populate fields.",
             "path": "Samples~/Query"
+        },
+        {
+            "displayName": "Event interfaces",
+            "description": "Contains an example of using event interfaces.",
+            "path": "Samples~/EventInterfaces"
         }
     ],
     "license": "MIT",
