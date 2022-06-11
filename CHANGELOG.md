@@ -5,7 +5,7 @@
 
 ### Features
 
-* **QueryAttribute:**query by type and class, support array and List<> fields ([52375d7](https://github.com/jonisavo/uicomponents/commit/52375d7518a4c23e6c05e39e8b316e3aa3f21e97))
+* **QueryAttribute:** query by type and class, support array and List<> fields ([52375d7](https://github.com/jonisavo/uicomponents/commit/52375d7518a4c23e6c05e39e8b316e3aa3f21e97))
 * **QueryAttribute:** use MeansImplicitUseAttribute ([a123143](https://github.com/jonisavo/uicomponents/commit/a1231431b81844dbf3d1c4054569eeb7fa12b6c7))
 
 # [0.11.0](https://github.com/jonisavo/uicomponents/compare/v0.10.0...v0.11.0) (2022-06-05)
