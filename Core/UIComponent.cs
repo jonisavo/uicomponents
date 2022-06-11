@@ -104,8 +104,10 @@ namespace UIComponents
             if (this is IOnMouseLeave onMouseLeave)
                 RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
             
+#if UNITY_2020_3_OR_NEWER
             if (this is IOnClick onClick)
                 RegisterCallback<ClickEvent>(onClick.OnClick);
+#endif
         }
         
         /// <summary>
