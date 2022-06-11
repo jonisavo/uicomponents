@@ -10,12 +10,15 @@ namespace UIComponents.Samples.EventInterfaces
         public new class UxmlFactory : UxmlFactory<EventInterfaceLog> {}
 
         private readonly ScrollView _scrollView;
-        private readonly IEventLogService _eventLogService;
+        private readonly EventLogService _eventLogService;
 
         public EventInterfaceLog()
         {
             _scrollView = this.Q<ScrollView>("event-scroll-view");
-            _eventLogService = Provide<IEventLogService>();
+            
+            // Unity 2019 does not support interfaces with delegates and events,
+            // so we need to get the class itself
+            _eventLogService = Provide<IEventLogService>() as EventLogService;
             
             foreach (var message in _eventLogService.GetMessages())
                 _scrollView.Add(new Label(message));

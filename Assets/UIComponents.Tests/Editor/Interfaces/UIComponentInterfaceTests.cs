@@ -84,6 +84,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             Assert_Registers_Event_Callback<UIComponentWithOnMouseLeave, MouseLeaveEvent>();
         }
         
+#if UNITY_2020_3_OR_NEWER
         private class UIComponentWithOnClick : BaseTestComponent, IOnClick
         {
             public void OnClick(ClickEvent evt) => Fired = true;
@@ -94,5 +95,6 @@ namespace UIComponents.Tests.Editor.Interfaces
         {
             Assert_Registers_Event_Callback<UIComponentWithOnClick, ClickEvent>();
         }
+#endif
     }
 }

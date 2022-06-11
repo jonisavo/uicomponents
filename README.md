@@ -156,7 +156,7 @@ The interfaces are:
 - `IOnGeometryChanged` for `GeometryChangedEvent`
 - `IOnMouseEnter` for `MouseEnterEvent`
 - `IOnMouseLeave` for `MouseLeaveEvent`
-- `IOnClick` for `ClickEvent`
+- `IOnClick` for `ClickEvent` (requires Unity 2020+)
 
 ```c#
 public class ComponentWithCallbacks : UIComponent,

@@ -8,9 +8,17 @@ namespace UIComponents.Samples.EventInterfaces
 {
     public class EventLogService : IEventLogService
     {
-        public event IEventLogService.OnMessageAddDelegate OnMessageAdd;
+        public delegate void OnMessageAddDelegate(string message);
 
-        public event IEventLogService.OnMessageChangeDelegate OnMessageChange;
+        public delegate void OnMessageChangeDelegate(int index, string newMessage);
+        
+        public event OnMessageAddDelegate OnMessageAdd;
+
+        public event OnMessageChangeDelegate OnMessageChange;
+        
+        public delegate void OnClearDelegate();
+
+        public event OnClearDelegate OnClear;
         
         private readonly List<string> _messages = new List<string>(20);
         private long _previousEventTypeId;
@@ -62,8 +70,6 @@ namespace UIComponents.Samples.EventInterfaces
             return StringBuilder.ToString();
         }
 
-        public event IEventLogService.OnClearDelegate OnClear;
-        
         public void Clear()
         {
             _messages.Clear();
