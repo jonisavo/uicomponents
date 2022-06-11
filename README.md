@@ -145,6 +145,37 @@ Stylesheets will be applied to `ChildComponent` in the following order:
 
 This means that child components can override styles from their parents.
 
+## Event interfaces
+
+UIComponents supports a number of event interfaces. When implemented, the callbacks
+are automatically registered in the UIComponent constructor.
+
+The interfaces are:
+- `IOnAttachToPanel` for `AttachToPanelEvent`
+- `IOnDetachFromPanel` for `DetachFromPanelEvent`
+- `IOnGeometryChanged` for `GeometryChangedEvent`
+
+```c#
+public class ComponentWithCallbacks : UIComponent, IOnAttachToPanel, IOnGeometryChanged, IOnDetachFromPanel
+{
+    public void OnAttachToPanel(AttachToPanelEvent evt)
+    {
+        Debug.Log("Hello world");
+    }
+    
+    public void OnGeometryChanged(GeometryChangedEvent evt)
+    {
+        Debug.Log("Geometry changed");
+        UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+    }
+    
+    public void OnDetachFromPanel(DetachFromPanelEvent evt)
+    {
+        Debug.Log("Goodbye world");
+    }
+}
+```
+
 ## Experimental features
 
 `[Query]` is an experimental feature that allows for populating fields automatically.

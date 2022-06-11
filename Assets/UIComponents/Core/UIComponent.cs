@@ -83,6 +83,20 @@ namespace UIComponents
             QueryFieldsSetupProfilerMarker.Begin();
             PopulateQueryFields();
             QueryFieldsSetupProfilerMarker.End();
+            
+            RegisterEventInterfaceCallbacks();
+        }
+
+        private void RegisterEventInterfaceCallbacks()
+        {
+            if (this is IOnAttachToPanel onAttachToPanel)
+                RegisterCallback<AttachToPanelEvent>(onAttachToPanel.OnAttachToPanel);
+            
+            if (this is IOnDetachFromPanel onDetachFromPanel)
+                RegisterCallback<DetachFromPanelEvent>(onDetachFromPanel.OnDetachFromPanel);
+
+            if (this is IOnGeometryChanged onGeometryChanged)
+                RegisterCallback<GeometryChangedEvent>(onGeometryChanged.OnGeometryChanged);
         }
         
         /// <summary>
