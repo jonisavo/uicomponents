@@ -3,8 +3,6 @@
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:import schemaLocation="UnityEditor.UIElements.xsd" namespace="UnityEditor.UIElements" />
   <xs:import schemaLocation="UnityEditor.UIElements.Debugger.xsd" namespace="UnityEditor.UIElements.Debugger" />
-  <xs:import schemaLocation="Unity.Cloud.Collaborate.Views.xsd" namespace="Unity.Cloud.Collaborate.Views" />
-  <xs:import schemaLocation="Unity.Cloud.Collaborate.Components.xsd" namespace="Unity.Cloud.Collaborate.Components" />
-  <xs:import schemaLocation="Unity.Cloud.Collaborate.Components.ChangeListEntries.xsd" namespace="Unity.Cloud.Collaborate.Components.ChangeListEntries" />
+  <xs:import schemaLocation="UIComponents.Samples.EventInterfaces.xsd" namespace="UIComponents.Samples.EventInterfaces" />
   <xs:import schemaLocation="UnityEditor.PackageManager.UI.xsd" namespace="UnityEditor.PackageManager.UI" />
 </xs:schema>
