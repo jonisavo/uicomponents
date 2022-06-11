@@ -156,6 +156,7 @@ The interfaces are:
 - `IOnGeometryChanged` for `GeometryChangedEvent`
 - `IOnMouseEnter` for `MouseEnterEvent`
 - `IOnMouseLeave` for `MouseLeaveEvent`
+- `IOnClick` for `ClickEvent`
 
 ```c#
 public class ComponentWithCallbacks : UIComponent,
@@ -163,7 +164,8 @@ public class ComponentWithCallbacks : UIComponent,
     IOnGeometryChanged,
     IOnDetachFromPanel,
     IOnMouseEnter,
-    IOnMouseLeave
+    IOnMouseLeave,
+    IOnClick
 {
     public void OnAttachToPanel(AttachToPanelEvent evt)
     {
@@ -189,6 +191,11 @@ public class ComponentWithCallbacks : UIComponent,
     public void OnMouseLeave(MouseLeaveEvent evt)
     {
         Debug.Log("Bye mouse");
+    }
+    
+    public void OnClick(ClickEvent evt)
+    {
+        Debug.Log("Clicked!");
     }
 }
 ```

@@ -103,6 +103,9 @@ namespace UIComponents
             
             if (this is IOnMouseLeave onMouseLeave)
                 RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
+            
+            if (this is IOnClick onClick)
+                RegisterCallback<ClickEvent>(onClick.OnClick);
         }
         
         /// <summary>

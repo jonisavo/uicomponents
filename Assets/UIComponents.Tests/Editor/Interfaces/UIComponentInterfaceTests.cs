@@ -83,5 +83,16 @@ namespace UIComponents.Tests.Editor.Interfaces
         {
             Assert_Registers_Event_Callback<UIComponentWithOnMouseLeave, MouseLeaveEvent>();
         }
+        
+        private class UIComponentWithOnClick : BaseTestComponent, IOnClick
+        {
+            public void OnClick(ClickEvent evt) => Fired = true;
+        }
+
+        [Test]
+        public void IOnClick_Registers_ClickEvent_Callback()
+        {
+            Assert_Registers_Event_Callback<UIComponentWithOnClick, ClickEvent>();
+        }
     }
 }
