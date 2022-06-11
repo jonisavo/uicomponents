@@ -4,7 +4,9 @@ namespace UIComponents.Samples.EventInterfaces
 {
     [Layout("EventInterfacesView")]
     [Dependency(typeof(IEventLogService), provide: typeof(EventLogService))]
-    public class EventInterfacesView : UIComponent, IOnAttachToPanel, IOnGeometryChanged, IOnDetachFromPanel
+    public class EventInterfacesView : UIComponent,
+        IOnAttachToPanel, IOnGeometryChanged, IOnDetachFromPanel,
+        IOnMouseLeave, IOnMouseEnter
     {
         private readonly IEventLogService _eventLogService;
 
@@ -33,6 +35,16 @@ namespace UIComponents.Samples.EventInterfaces
         }
 
         public void OnGeometryChanged(GeometryChangedEvent evt)
+        {
+            _eventLogService.Log(evt);
+        }
+
+        public void OnMouseEnter(MouseEnterEvent evt)
+        {
+            _eventLogService.Log(evt);
+        }
+
+        public void OnMouseLeave(MouseLeaveEvent evt)
         {
             _eventLogService.Log(evt);
         }

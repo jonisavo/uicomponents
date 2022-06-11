@@ -61,5 +61,27 @@ namespace UIComponents.Tests.Editor.Interfaces
         {
             Assert_Registers_Event_Callback<UIComponentWithOnDetachFromPanel, DetachFromPanelEvent>();
         }
+        
+        private class UIComponentWithOnMouseEnter : BaseTestComponent, IOnMouseEnter
+        {
+            public void OnMouseEnter(MouseEnterEvent evt) => Fired = true;
+        }
+
+        [Test]
+        public void IOnMouseEnter_Registers_MouseEnterEvent_Callback()
+        {
+            Assert_Registers_Event_Callback<UIComponentWithOnMouseEnter, MouseEnterEvent>();
+        }
+        
+        private class UIComponentWithOnMouseLeave : BaseTestComponent, IOnMouseLeave
+        {
+            public void OnMouseLeave(MouseLeaveEvent evt) => Fired = true;
+        }
+
+        [Test]
+        public void IOnMouseLeave_Registers_MouseLeaveEvent_Callback()
+        {
+            Assert_Registers_Event_Callback<UIComponentWithOnMouseLeave, MouseLeaveEvent>();
+        }
     }
 }
