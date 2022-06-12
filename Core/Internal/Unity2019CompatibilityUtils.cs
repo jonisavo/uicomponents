@@ -13,6 +13,9 @@ namespace UIComponents.Internal
     internal static class Unity2019CompatibilityUtils
     {
         private static readonly Type[] OfTypeParameterTypes = { typeof(string), typeof(string) };
+        private static readonly object[] OfTypeInvokeParameters = { null, null };
+        private static readonly Type[] ToListParameterTypes = new Type[1];
+        private static readonly object[] ToListInvokeParameters = new object[1];
         private const BindingFlags PublicInstanceBindingFlags = BindingFlags.Public | BindingFlags.Instance;
         
         /// <summary>
@@ -31,11 +34,16 @@ namespace UIComponents.Internal
             var ofTypeMethod = typeof(UQueryBuilder<VisualElement>).GetMethod(
                     "OfType",
                     PublicInstanceBindingFlags,
-                    null, CallingConventions.Any, OfTypeParameterTypes, null)
+                    null,
+                    CallingConventions.Any,
+                    OfTypeParameterTypes,
+                    null)
                 .MakeGenericMethod(desiredType);
 
             var query = root.Query(queryAttribute.Name, queryAttribute.Class);
-            var newQuery = ofTypeMethod.Invoke(query, new object[]{ null, null });
+            var newQuery = ofTypeMethod.Invoke(query, OfTypeInvokeParameters);
+
+            ToListParameterTypes[0] = typeof(List<>).MakeGenericType(desiredType);
 
             var toListMethod = typeof(UQueryBuilder<>).MakeGenericType(desiredType)
                 .GetMethod(
@@ -43,12 +51,14 @@ namespace UIComponents.Internal
                     PublicInstanceBindingFlags,
                     null,
                     CallingConventions.Any,
-                    new []{ typeof(List<>).MakeGenericType(desiredType) },
+                    ToListParameterTypes,
                     null);
 
             var list = CollectionUtils.CreateListOfType(desiredType, results);
 
-            toListMethod.Invoke(newQuery, new []{ list });
+            ToListInvokeParameters[0] = list;
+
+            toListMethod.Invoke(newQuery, ToListInvokeParameters);
             
             foreach (var element in list)
                 results.Add(element as VisualElement);
