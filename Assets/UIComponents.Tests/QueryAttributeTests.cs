@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UIComponents.Experimental;
+using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -75,6 +78,33 @@ namespace UIComponents.Tests
             Assert.That(component.TestFoldout, Is.InstanceOf<Foldout>());
             Assert.That(component.FoldoutContent, Is.InstanceOf<Label>());
             Assert.That(component.FoldoutContent.text, Is.EqualTo("Foldout content"));
+        }
+
+        [Layout("UIComponentTests/LayoutAttributeTests")]
+        private class ComponentWithInvalidQueryAttribute : UIComponent
+        {
+            [Query]
+            public object InvalidField;
+
+            [Query]
+            public object[] InvalidArray;
+
+            [Query]
+            public List<List<VisualElement>> InvalidList;
+        }
+
+        [Test]
+        public void Should_Log_Error_On_Invalid_Fields()
+        {
+            var component = new ComponentWithInvalidQueryAttribute();
+            
+            Assert.That(component.InvalidField, Is.Null);
+            Assert.That(component.InvalidArray, Is.Null);
+            Assert.That(component.InvalidList, Is.Null);
+            
+            LogAssert.Expect(LogType.Error, "QueryAttribute must be used on a VisualElement field. InvalidField is System.Object");
+            LogAssert.Expect(LogType.Error, "QueryAttribute must be used on a VisualElement field. InvalidArray is System.Object");
+            LogAssert.Expect(LogType.Error, new Regex(Regex.Escape("QueryAttribute must be used on a VisualElement field. InvalidList is System.Collections.Generic.List`1[[UnityEngine.UIElements.VisualElement")));
         }
     }
 }

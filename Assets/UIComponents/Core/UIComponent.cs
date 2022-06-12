@@ -205,6 +205,8 @@ namespace UIComponents
                 if (loadedStyleSheets[i] != null)
                     styleSheets.Add(loadedStyleSheets[i]);
         }
+
+        private static readonly Type VisualElementType = typeof(VisualElement);
         
         private void PopulateQueryFields()
         {
@@ -218,6 +220,12 @@ namespace UIComponents
 
                 var fieldType = fieldInfo.FieldType;
                 var concreteType = TypeUtils.GetConcreteType(fieldType);
+
+                if (!VisualElementType.IsAssignableFrom(concreteType))
+                {
+                    Debug.LogError($"QueryAttribute must be used on a VisualElement field. {fieldInfo.Name} is {concreteType.FullName}");
+                    continue;
+                }
 
                 var results = new List<VisualElement>();
                 
