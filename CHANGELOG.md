@@ -1,5 +1,20 @@
 
 
+# [0.13.0](https://github.com/jonisavo/uicomponents/compare/v0.12.0...v0.13.0) (2022-06-12)
+
+
+### Bug Fixes
+
+* **samples:** remove mention of QueryClassAttribute ([aa95716](https://github.com/jonisavo/uicomponents/commit/aa957166a92834ad531d014ff38d3bc1311baa09))
+
+
+### Features
+
+* add event interfaces IOnAttachToPanel, IOnDetachFromPanel & IOnGeometryChanged ([ee16a5e](https://github.com/jonisavo/uicomponents/commit/ee16a5ef72eb2aae1d16a10fbee9d49e8f5d54e2))
+* add IOnClick event interface ([0172a64](https://github.com/jonisavo/uicomponents/commit/0172a64684a23cfe56cb5fc37d38a3ec68fb4448))
+* add IOnMouseEnter and IOnMouseLeave event interfaces ([34b370b](https://github.com/jonisavo/uicomponents/commit/34b370b905be9a4d4936e0e609afb89bff053b8b))
+* **samples:** add event interfaces sample ([74780a2](https://github.com/jonisavo/uicomponents/commit/74780a2579e36f36ef28268269de17d2b97fdc79))
+
 # [0.12.0](https://github.com/jonisavo/uicomponents/compare/v0.11.0...v0.12.0) (2022-06-10)
 
 
