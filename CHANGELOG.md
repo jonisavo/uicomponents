@@ -1,5 +1,17 @@
 
 
+# [0.14.0](https://github.com/jonisavo/uicomponents/compare/v0.13.0...v0.14.0) (2022-06-14)
+
+
+### Features
+
+* **QueryAttribute:** log error on non-VisualElement fields ([0855628](https://github.com/jonisavo/uicomponents/commit/0855628348002571bdf6439a365a8b689447b374))
+
+
+### Performance Improvements
+
+* **QueryAttribute:** reduce allocations on Unity 2019 ([9294cf6](https://github.com/jonisavo/uicomponents/commit/9294cf61a2c95b89d4486c776b512b39452b1786))
+
 # [0.13.0](https://github.com/jonisavo/uicomponents/compare/v0.12.0...v0.13.0) (2022-06-12)
 
 
