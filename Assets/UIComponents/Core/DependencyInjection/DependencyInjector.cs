@@ -169,7 +169,7 @@ namespace UIComponents
                 var providerType = dependencyAttribute.ProvideType;
 
                 if (DependencyDictionary.ContainsKey(dependencyType))
-                    return;
+                    continue;
                 
                 DependencyDictionary[dependencyType] = CreateInstance(providerType);
                 DefaultDependencyTypeDictionary[dependencyType] = providerType;
