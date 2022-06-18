@@ -485,3 +485,31 @@ public class FirstComponent : BaseComponent {}
 public class SecondComponent : BaseComponent {}
 ```
 
+## Logging
+
+By default, UIComponents use `Debug.Log` to log messages. This can be changed by overriding the
+`IUIComponentLogger` dependency.
+
+```c#
+public class MyLogger : IUIComponentLogger
+{
+    public void Log(string message, UIComponent component)
+    {
+        // Do something with the message
+    }
+    
+    public void LogWarning(string message, UIComponent component)
+    {
+        // Do something with the message
+    }
+    
+    public void LogError(string message, UIComponent component)
+    {
+        // Do something with the message
+    }
+}
+
+[Dependency(typeof(IUIComponentLogger), provide: typeof(MyLogger))]
+public class MyComponent : UIComponent {}
+```
+

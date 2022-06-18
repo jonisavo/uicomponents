@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Experimental;
-using UnityEngine;
-using UnityEngine.TestTools;
+using UIComponents.Utilities;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -96,15 +95,20 @@ namespace UIComponents.Tests
         [Test]
         public void Should_Log_Error_On_Invalid_Fields()
         {
-            var component = new ComponentWithInvalidQueryAttribute();
-            
+            var mockLogger = Substitute.For<IUIComponentLogger>();
+
+            ComponentWithInvalidQueryAttribute component;
+
+            using (new DependencyScope<ComponentWithInvalidQueryAttribute, IUIComponentLogger>(mockLogger))
+                component = new ComponentWithInvalidQueryAttribute();
+
             Assert.That(component.InvalidField, Is.Null);
             Assert.That(component.InvalidArray, Is.Null);
             Assert.That(component.InvalidList, Is.Null);
             
-            LogAssert.Expect(LogType.Error, "QueryAttribute must be used on a VisualElement field. InvalidField is System.Object");
-            LogAssert.Expect(LogType.Error, "QueryAttribute must be used on a VisualElement field. InvalidArray is System.Object");
-            LogAssert.Expect(LogType.Error, new Regex(Regex.Escape("QueryAttribute must be used on a VisualElement field. InvalidList is System.Collections.Generic.List`1[[UnityEngine.UIElements.VisualElement")));
+            mockLogger.Received().LogError("QueryAttribute must be used on a VisualElement field. InvalidField is System.Object", component);
+            mockLogger.Received().LogError("QueryAttribute must be used on a VisualElement field. InvalidArray is System.Object", component);
+            mockLogger.Received().LogError(Arg.Is<string>(s => s.Contains("QueryAttribute must be used on a VisualElement field. InvalidList is System.Collections.Generic.List`1[[UnityEngine.UIElements.VisualElement")), component);
         }
     }
 }
