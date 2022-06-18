@@ -1,5 +1,18 @@
 
 
+# [0.15.0](https://github.com/jonisavo/uicomponents/compare/v0.14.0...v0.15.0) (2022-06-18)
+
+
+### Bug Fixes
+
+* **DependencyInjector:** fix construction when class has overridden dependency ([25412e5](https://github.com/jonisavo/uicomponents/commit/25412e5093c9b32494c010e1e6c72d30d523e6f1))
+
+
+### Features
+
+* add IUIComponentLogger dependency to UIComponent ([8e89652](https://github.com/jonisavo/uicomponents/commit/8e89652ed4ffa1b029512169b60b9445a1ee3498))
+* **UIComponent:** add GetTypeName method ([b8a089c](https://github.com/jonisavo/uicomponents/commit/b8a089c8690da5d23381496a66d4fcbcac3f20ce))
+
 # [0.14.0](https://github.com/jonisavo/uicomponents/compare/v0.13.0...v0.14.0) (2022-06-14)
 
 
