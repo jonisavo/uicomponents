@@ -123,6 +123,15 @@ namespace UIComponents
             for (var i = 0; i < assetPathCount; i++)
                 yield return assetPathAttributes[i].Path;
         }
+        
+        /// <summary>
+        /// Returns the component's type's name.
+        /// </summary>
+        /// <returns>Type name</returns>
+        public string GetTypeName()
+        {
+            return _componentType.Name;
+        }
 
         /// <summary>
         /// Returns a dependency. Throws a <see cref="MissingProviderException"/>
