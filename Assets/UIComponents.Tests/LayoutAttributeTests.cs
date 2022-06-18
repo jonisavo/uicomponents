@@ -43,6 +43,15 @@ namespace UIComponents.Tests
                 _assetResolver
             );
         }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            DependencyInjector.RestoreDefaultDependency<UIComponentWithLayout, IAssetResolver>();
+            DependencyInjector.RestoreDefaultDependency<InheritedComponentWithoutAttribute, IAssetResolver>();
+            DependencyInjector.RestoreDefaultDependency<InheritedComponentWithAttribute, IAssetResolver>();
+            DependencyInjector.RestoreDefaultDependency<UIComponentWithNullLayout, IAssetResolver>();
+        }
         
         [TearDown]
         public void TearDown()

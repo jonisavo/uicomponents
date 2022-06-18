@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using UIComponents.Cache;
 using UIComponents.Internal;
 using Unity.Profiling;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -19,7 +18,9 @@ namespace UIComponents
     /// <seealso cref="StylesheetAttribute"/>
     /// <seealso cref="DependencyAttribute"/>
     /// <seealso cref="ResourcesAssetResolver"/>
+    /// <seealso cref="UIComponentDebugLogger"/>
     [Dependency(typeof(IAssetResolver), provide: typeof(ResourcesAssetResolver))]
+    [Dependency(typeof(IUIComponentLogger), provide: typeof(UIComponentDebugLogger))]
     public abstract class UIComponent : VisualElement
     {
         private static readonly Dictionary<Type, UIComponentCache> CacheDictionary =
@@ -44,6 +45,12 @@ namespace UIComponents
         /// Defaults to <see cref="ResourcesAssetResolver"/>.
         /// </summary>
         public readonly IAssetResolver AssetResolver;
+
+        /// <summary>
+        /// The IUIComponentLogger used by this UIComponent.
+        /// Defaults to <see cref="UIComponentDebugLogger"/>.
+        /// </summary>
+        protected readonly IUIComponentLogger Logger;
 
         private readonly DependencyInjector _dependencyInjector;
 
@@ -70,6 +77,7 @@ namespace UIComponents
             DependencySetupProfilerMarker.End();
 
             AssetResolver = _dependencyInjector.Provide<IAssetResolver>();
+            Logger = _dependencyInjector.Provide<IUIComponentLogger>();
             
             CacheSetupProfilerMarker.Begin();
             if (!CacheDictionary.ContainsKey(_componentType))
@@ -123,6 +131,15 @@ namespace UIComponents
             for (var i = 0; i < assetPathCount; i++)
                 yield return assetPathAttributes[i].Path;
         }
+        
+        /// <summary>
+        /// Returns the component's type's name.
+        /// </summary>
+        /// <returns>Type name</returns>
+        public string GetTypeName()
+        {
+            return _componentType.Name;
+        }
 
         /// <summary>
         /// Returns a dependency. Throws a <see cref="MissingProviderException"/>
@@ -175,7 +192,7 @@ namespace UIComponents
 
                 if (styleSheet == null)
                 {
-                    Debug.LogError($"Could not find stylesheet {assetPath} for {_componentType.Name}");
+                    Logger.LogError($"Could not find stylesheet {assetPath}", this);
                     continue;
                 }
                 
@@ -223,7 +240,7 @@ namespace UIComponents
 
                 if (!VisualElementType.IsAssignableFrom(concreteType))
                 {
-                    Debug.LogError($"QueryAttribute must be used on a VisualElement field. {fieldInfo.Name} is {concreteType.FullName}");
+                    Logger.LogError($"QueryAttribute must be used on a VisualElement field. {fieldInfo.Name} is {concreteType.FullName}", this);
                     continue;
                 }
 

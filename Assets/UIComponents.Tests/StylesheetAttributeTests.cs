@@ -1,10 +1,9 @@
-﻿using System.Text.RegularExpressions;
-using NSubstitute;
+﻿using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using UIComponents.Tests.Utilities;
+using UIComponents.Utilities;
 using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -33,6 +32,13 @@ namespace UIComponents.Tests
                 .Returns(ScriptableObject.CreateInstance<StyleSheet>());
             DependencyInjector.SetDependency<UIComponentWithTwoStylesheets, IAssetResolver>(_resolver);
             DependencyInjector.SetDependency<InheritedComponent, IAssetResolver>(_resolver);
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            DependencyInjector.RestoreDefaultDependency<UIComponentWithTwoStylesheets, IAssetResolver>();
+            DependencyInjector.RestoreDefaultDependency<InheritedComponent, IAssetResolver>();
         }
         
         [TearDown]
@@ -65,13 +71,17 @@ namespace UIComponents.Tests
         {
             _resolver.LoadAsset<StyleSheet>("Assets/StylesheetOne.uss")
                 .ReturnsNull();
+
+            var mockLogger = Substitute.For<IUIComponentLogger>();
             
-            var component = new UIComponentWithTwoStylesheets();
-            
+            UIComponentWithTwoStylesheets component;
+
+            using (new DependencyScope<UIComponentWithTwoStylesheets, IUIComponentLogger>(mockLogger))
+                component = new UIComponentWithTwoStylesheets();
+
             _resolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
-            
-            LogAssert.Expect(LogType.Error, new Regex("Could not find stylesheet"));
-            
+            mockLogger.Received().LogError("Could not find stylesheet Assets/StylesheetOne.uss", component);
+
             Assert.That(component.styleSheets.count, Is.EqualTo(1));
         }
     }

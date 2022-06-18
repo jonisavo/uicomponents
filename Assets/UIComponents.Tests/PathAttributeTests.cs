@@ -35,6 +35,13 @@ namespace UIComponents.Tests
                 DependencyInjector.SetDependency<UIComponentWithValidAssetPath, IAssetResolver>(_assetResolver);
                 DependencyInjector.SetDependency<UIComponentWithInvalidAssetPath, IAssetResolver>(_assetResolver);
             }
+            
+            [OneTimeTearDown]
+            public void OneTimeTearDown()
+            {
+                DependencyInjector.RestoreDefaultDependency<UIComponentWithValidAssetPath, IAssetResolver>();
+                DependencyInjector.RestoreDefaultDependency<UIComponentWithInvalidAssetPath, IAssetResolver>();
+            }
 
             [Test]
             public void Should_Return_Empty_String_If_No_Path_Is_Configured()
