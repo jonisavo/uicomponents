@@ -19,6 +19,12 @@ namespace UIComponents.Tests
             DependencyInjector.SetDependency<UIComponentNoAttributes, IAssetResolver>(_resolver);
         }
         
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            DependencyInjector.RestoreDefaultDependency<UIComponentNoAttributes, IAssetResolver>();
+        }
+        
         [TearDown]
         public void TearDown()
         {

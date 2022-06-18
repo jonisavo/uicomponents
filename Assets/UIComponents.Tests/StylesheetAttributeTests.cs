@@ -34,6 +34,13 @@ namespace UIComponents.Tests
             DependencyInjector.SetDependency<UIComponentWithTwoStylesheets, IAssetResolver>(_resolver);
             DependencyInjector.SetDependency<InheritedComponent, IAssetResolver>(_resolver);
         }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            DependencyInjector.RestoreDefaultDependency<UIComponentWithTwoStylesheets, IAssetResolver>();
+            DependencyInjector.RestoreDefaultDependency<InheritedComponent, IAssetResolver>();
+        }
         
         [TearDown]
         public void TearDown()
