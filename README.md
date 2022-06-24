@@ -258,6 +258,8 @@ public class MyComponent : UIComponent
 `[Provide]` will provide dependencies for you. It is accessible via the
 `UIComponents.Experimental` namespace.
 
+See the dependency injection section below for more information on dependencies.
+
 ```c#
 using UIComponents;
 using UIComponents.Experimental;
