@@ -240,6 +240,24 @@ namespace UIComponents
         }
         
         /// <summary>
+        /// Returns a dependency. Throws a <see cref="MissingProviderException"/>
+        /// if the dependency can not be provided.
+        /// </summary>
+        /// <param name="type">Dependency type</param>
+        /// <returns>Dependency instance</returns>
+        /// <exception cref="MissingProviderException">
+        /// Thrown if the dependency can not be provided
+        /// </exception>
+        [NotNull]
+        public object Provide(Type type)
+        {
+            if (!DependencyDictionary.ContainsKey(type))
+                throw new MissingProviderException(type);
+            
+            return DependencyDictionary[type];
+        }
+        
+        /// <summary>
         /// Attempts to fetch a dependency. Returns whether
         /// the dependency could be fetched.
         /// </summary>
