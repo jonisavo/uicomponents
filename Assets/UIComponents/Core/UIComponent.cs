@@ -62,8 +62,8 @@ namespace UIComponents
             new ProfilerMarker("UIComponent.CacheSetup");
         private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
             new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
-        private static readonly ProfilerMarker QueryFieldsSetupProfilerMarker =
-            new ProfilerMarker("UIComponent.QueryFieldsSetup");
+        private static readonly ProfilerMarker PopulateFieldsProfilerMarker =
+            new ProfilerMarker("UIComponent.PopulateFields");
 
 
         /// <summary>
@@ -88,9 +88,10 @@ namespace UIComponents
             LoadLayout();
             LoadStyles();
             LayoutAndStylesSetupProfilerMarker.End();
-            QueryFieldsSetupProfilerMarker.Begin();
+            PopulateFieldsProfilerMarker.Begin();
             PopulateQueryFields();
-            QueryFieldsSetupProfilerMarker.End();
+            PopulateProvideFields();
+            PopulateFieldsProfilerMarker.End();
             
             RegisterEventInterfaceCallbacks();
         }
@@ -271,6 +272,29 @@ namespace UIComponents
 
                 if (value != null)
                     fieldInfo.SetValue(this, value);
+            }
+        }
+
+        private void PopulateProvideFields()
+        {
+            var fieldCache = CacheDictionary[_componentType].FieldCache;
+            var provideAttributeDictionary = fieldCache.ProvideAttributes;
+
+            foreach (var fieldInfo in provideAttributeDictionary.Keys)
+            {
+                object value;
+
+                try
+                {
+                    value = _dependencyInjector.Provide(fieldInfo.FieldType);
+                }
+                catch (MissingProviderException)
+                {
+                    Logger.LogError($"Could not provide {fieldInfo.FieldType.Name} to {fieldInfo.Name}", this);
+                    continue;
+                }
+                
+                fieldInfo.SetValue(this, value);
             }
         }
     }

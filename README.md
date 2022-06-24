@@ -202,6 +202,8 @@ public class ComponentWithCallbacks : UIComponent,
 
 ## Experimental features
 
+### QueryAttribute
+
 `[Query]` is an experimental feature that allows for populating fields automatically.
 It is accessible via the `UIComponents.Experimental` namespace.
 
@@ -247,6 +249,33 @@ public class MyComponent : UIComponent
     {
         HelloWorldLabel.text = "Goodbye world!";
         TestFoldout.Add(new Label("More content!"));
+    }
+}
+```
+
+### ProvideAttribute
+
+`[Provide]` will provide dependencies for you. It is accessible via the
+`UIComponents.Experimental` namespace.
+
+See the dependency injection section below for more information on dependencies.
+
+```c#
+using UIComponents;
+using UIComponents.Experimental;
+
+[Dependency(typeof(ISettingsService), provide: typeof(SettingsService))]
+[Dependency(typeof(IDataService), provide: typeof(DataService))]
+public class ComponentWithDependencies : UIComponent, IOnAttachToPanel
+{
+    [Provide]
+    private readonly ISettingsService SettingsService;
+    [Provide]
+    private readonly IDataService DataService;
+    
+    public void OnAttachToPanel(AttachToPanelEvent evt)
+    {
+        DataService.LoadData();
     }
 }
 ```
