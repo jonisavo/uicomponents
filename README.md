@@ -105,6 +105,8 @@ To update, change `upm/v0.15.0` to point to the latest version.
 
 ## Layouts and stylesheets
 
+### LayoutAttribute
+
 `[Layout]` allows specifying the path to a UXML file. The file will be
 loaded automatically. A component can have a single `[Layout]` attribute. It can be
 inherited from a parent class.
@@ -125,6 +127,8 @@ public class UIComponentWithOverriddenLayout : UIComponentWithLayout
 }
 ```
 
+### StylesheetAttribute
+
 `[Stylesheet]` allows specifying paths to USS files. The files will be
 loaded automatically. Unlike `[Layout]`, multiple `[Stylesheet]`
 attributes can be used on a single UIComponent.
@@ -144,6 +148,24 @@ Stylesheets will be applied to `ChildComponent` in the following order:
 - `Assets/StylesheetThree.uss`
 
 This means that child components can override styles from their parents.
+
+### RootClassAttribute
+
+`[RootClass]` allows specifying the name of a class that will be added
+to the root element of the UIComponent.
+
+```css
+/* Common.uss */
+
+.root {
+    background-color: #ff0000;
+}
+```
+```c#
+[Stylesheet("Common")]
+[RootClass("root")]
+public class UIComponentWithRootClass : UIComponent {}
+```
 
 ## Event interfaces
 
