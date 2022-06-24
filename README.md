@@ -264,8 +264,8 @@ See the dependency injection section below for more information on dependencies.
 using UIComponents;
 using UIComponents.Experimental;
 
-[Dependency(typeof(ISettingsService), provide: typeof(SettingsService)]
-[Dependency(typeof(IDataService), provide: typeof(DataService)]
+[Dependency(typeof(ISettingsService), provide: typeof(SettingsService))]
+[Dependency(typeof(IDataService), provide: typeof(DataService))]
 public class ComponentWithDependencies : UIComponent, IOnAttachToPanel
 {
     [Provide]
