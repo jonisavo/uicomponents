@@ -1,5 +1,14 @@
 
 
+# [0.16.0](https://github.com/jonisavo/uicomponents/compare/v0.15.0...v0.16.0) (2022-06-24)
+
+
+### Features
+
+* add experimental ProvideAttribute ([0c54ea0](https://github.com/jonisavo/uicomponents/commit/0c54ea0d74d962462adcadfbbafc1357a0e9d67b))
+* add RootClassAttribute ([983a425](https://github.com/jonisavo/uicomponents/commit/983a42507a2ff47709bee04ea25a8182ce8b1e9c))
+* **DependencyInjector:** add non-generic Provide method ([891b4cd](https://github.com/jonisavo/uicomponents/commit/891b4cd798019dfa2f1bb3dd22c64c2c9e66f3f1))
+
 # [0.15.0](https://github.com/jonisavo/uicomponents/compare/v0.14.0...v0.15.0) (2022-06-18)
 
 
