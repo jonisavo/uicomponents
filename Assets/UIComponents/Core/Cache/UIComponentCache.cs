@@ -13,6 +13,7 @@ namespace UIComponents.Cache
         public readonly LayoutAttribute LayoutAttribute;
         public readonly List<StylesheetAttribute> StylesheetAttributes;
         public readonly List<AssetPathAttribute> AssetPathAttributes;
+        public readonly List<UIComponentEffectAttribute> EffectAttributes;
         public readonly FieldCache FieldCache;
 
         public UIComponentCache(Type componentType)
@@ -23,10 +24,14 @@ namespace UIComponents.Cache
             LayoutAttribute = null;
             StylesheetAttributes = new List<StylesheetAttribute>();
             AssetPathAttributes = new List<AssetPathAttribute>();
+            EffectAttributes = new List<UIComponentEffectAttribute>();
 
             LayoutAttribute = GetSingleAttribute<LayoutAttribute>();
             PopulateAttributeListParentsFirst(componentType, StylesheetAttributes);
             PopulateAttributeList(AssetPathAttributes);
+            PopulateAttributeList(EffectAttributes);
+            
+            EffectAttributes.Sort((first, second) => second.CompareTo(first));
         }
         
         [CanBeNull]

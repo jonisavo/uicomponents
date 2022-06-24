@@ -87,6 +87,7 @@ namespace UIComponents
             LayoutAndStylesSetupProfilerMarker.Begin();
             LoadLayout();
             LoadStyles();
+            ApplyEffects();
             LayoutAndStylesSetupProfilerMarker.End();
             PopulateFieldsProfilerMarker.Begin();
             PopulateQueryFields();
@@ -222,6 +223,15 @@ namespace UIComponents
             for (var i = 0; i < styleSheetCount; i++)
                 if (loadedStyleSheets[i] != null)
                     styleSheets.Add(loadedStyleSheets[i]);
+        }
+
+        private void ApplyEffects()
+        {
+            var effectAttributes = CacheDictionary[_componentType].EffectAttributes;
+            var effectAttributeCount = effectAttributes.Count;
+            
+            for (var i = 0; i < effectAttributeCount; i++)
+                effectAttributes[i].Apply(this);
         }
 
         private static readonly Type VisualElementType = typeof(VisualElement);
