@@ -29,9 +29,9 @@ working with Unity's new UIToolkit system. It offers ways to load UXML and USS
 files automatically, and decouple your UI code from other systems via
 dependency injection.
 
-See an example of simple usage below.
+See an example of usage below.
 
-## Simple usage
+## Example usage
 
 ```c#
 using UIComponents;
@@ -40,14 +40,14 @@ using UIComponents;
 [Stylesheet("MyComponent/MyComponent.style")]
 [Stylesheet("Common")]
 [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
-class MyComponent : UIComponent
+class MyComponent : UIComponent, IOnAttachToPanel
 {
     // The layout and stylesheets are loaded in the inherited
     // constructor. They are retrieved from Resources by default,
     // hence the lack of file extensions.
     
     // Queries are made in the inherited constructor.
-    [Query("hello-world-label")]
+    [Query("count-label")]
     private readonly Label _countLabel;
     
     private readonly ICounterService _counterService;
@@ -56,7 +56,12 @@ class MyComponent : UIComponent
     {
         // Will yield a CounterService.
         _counterService = Provide<ICounterService>();
-        
+    }
+    
+    // Event handlers are made in the inherited constructor.
+    // All you need to do is implement a supported interface.
+    public void OnAttachToPanel(AttachToPanelEvent evt)
+    {
         _countLabel.text = _counterService.Count.ToString();
     }
 }
@@ -68,7 +73,7 @@ container.Add(new MyComponent());
 ```
 
 UIComponents are just VisualElements with some additional code in their
-constructor for loading assets automatically.
+constructor for loading assets automatically, among other things.
 
 ## Installation
 
@@ -109,465 +114,19 @@ This will install version 0.16.0.
 
 To update, change `upm/v0.16.0` to point to the latest version.
 
-## Layouts and stylesheets
-
-### LayoutAttribute
-
-`[Layout]` allows specifying the path to a UXML file. The file will be
-loaded automatically. A component can have a single `[Layout]` attribute. It can be
-inherited from a parent class.
-
-```c#
-[Layout("Assets/LayoutOne.uxml")]
-public class UIComponentWithLayout : UIComponent {}
-
-public class UIComponentWithSameLayout : UIComponentWithLayout
-{
-    // Uses Assets/LayoutOne.uxml
-}
-
-[Layout("Assets/LayoutTwo.uxml")
-public class UIComponentWithOverriddenLayout : UIComponentWithLayout
-{
-    // Uses Assets/LayoutTwo.uxml
-}
-```
-
-### StylesheetAttribute
-
-`[Stylesheet]` allows specifying paths to USS files. The files will be
-loaded automatically. Unlike `[Layout]`, multiple `[Stylesheet]`
-attributes can be used on a single UIComponent.
-
-```c#
-[Stylesheet("Assets/StylesheetOne.uss")]
-[Stylesheet("Assets/StylesheetTwo.uss")]
-public class UIComponentWithTwoStylesheets : UIComponent {}
-        
-[Stylesheet("Assets/StylesheetThree.uss")]
-public class ChildComponent : UIComponentWithTwoStylesheets {}
-```
-
-Stylesheets will be applied to `ChildComponent` in the following order:
-- `Assets/StylesheetOne.uss`
-- `Assets/StylesheetTwo.uss`
-- `Assets/StylesheetThree.uss`
-
-This means that child components can override styles from their parents.
-
-### RootClassAttribute
-
-`[RootClass]` allows specifying the name of a class that will be added
-to the root element of the UIComponent.
-
-```css
-/* Common.uss */
-
-.root {
-    background-color: #ff0000;
-}
-```
-```c#
-[Stylesheet("Common")]
-[RootClass("root")]
-public class UIComponentWithRootClass : UIComponent {}
-```
-
-### QueryAttribute
-
-`[Query]` is allows for populating fields automatically. You can query for a single
-element or many at once.
-
-```xml
-<!-- Resources/MyLayout.uxml -->
-<UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label name="hello-world-label" text="Hello world!" class="text" />
-    <ui:Foldout name="test-foldout">
-        <ui:Label name="foldout-content" text="Foldout content" class="text" />
-    </ui:Foldout>
-</UXML>
-```
-```c#
-using UIComponents;
-
-[Layout("MyLayout")]
-public class MyComponent : UIComponent
-{
-    [Query("hello-world-label")]
-    public readonly Label HelloWorldLabel;
-            
-    [Query(Name = "test-foldout")]
-    public readonly Foldout TestFoldout;
-    
-    [Query]
-    public readonly Label FirstLabel;
-    
-    [Query(Class = "text")]
-    public readonly Label[] LabelsWithTextClass;
-    
-    [Query(Name = "hello-world-label", Class = "text")]
-    public readonly Label HelloWorldLabelWithTextClass;
-    
-    [Query]
-    public readonly List<Label> AllLabelsImplicit;
-    
-    [Query(Name = "hello-world-label")]
-    [Query(Name = "foldout-content")]
-    public readonly List<Label> AllLabelsExplicit;
-    
-    public MyComponent()
-    {
-        HelloWorldLabel.text = "Goodbye world!";
-        TestFoldout.Add(new Label("More content!"));
-    }
-}
-```
-
-`[Query]` only works on fields that are assignable to `VisualElement`. Others are ignored.
-
-## Event interfaces
-
-UIComponents supports a number of event interfaces. When implemented, the callbacks
-are automatically registered in the UIComponent constructor.
-
-The interfaces are:
-- `IOnAttachToPanel` for `AttachToPanelEvent`
-- `IOnDetachFromPanel` for `DetachFromPanelEvent`
-- `IOnGeometryChanged` for `GeometryChangedEvent`
-- `IOnMouseEnter` for `MouseEnterEvent`
-- `IOnMouseLeave` for `MouseLeaveEvent`
-- `IOnClick` for `ClickEvent` (requires Unity 2020+)
-
-```c#
-public class ComponentWithCallbacks : UIComponent,
-    IOnAttachToPanel,
-    IOnGeometryChanged,
-    IOnDetachFromPanel,
-    IOnMouseEnter,
-    IOnMouseLeave,
-    IOnClick
-{
-    public void OnAttachToPanel(AttachToPanelEvent evt)
-    {
-        Debug.Log("Hello world");
-    }
-    
-    public void OnGeometryChanged(GeometryChangedEvent evt)
-    {
-        Debug.Log("Geometry changed");
-        UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-    }
-    
-    public void OnDetachFromPanel(DetachFromPanelEvent evt)
-    {
-        Debug.Log("Goodbye world");
-    }
-    
-    public void OnMouseEnter(MouseEnterEvent evt)
-    {
-        Debug.Log("Hi mouse");
-    }
-
-    public void OnMouseLeave(MouseLeaveEvent evt)
-    {
-        Debug.Log("Bye mouse");
-    }
-    
-    public void OnClick(ClickEvent evt)
-    {
-        Debug.Log("Clicked!");
-    }
-}
-```
-
-## Experimental features
-
-### ProvideAttribute
-
-`[Provide]` will provide dependencies for you. It is accessible via the
-`UIComponents.Experimental` namespace.
-
-See the dependency injection section below for more information on dependencies.
-
-```c#
-using UIComponents;
-using UIComponents.Experimental;
-
-[Dependency(typeof(ISettingsService), provide: typeof(SettingsService))]
-[Dependency(typeof(IDataService), provide: typeof(DataService))]
-public class ComponentWithDependencies : UIComponent, IOnAttachToPanel
-{
-    [Provide]
-    private readonly ISettingsService SettingsService;
-    [Provide]
-    private readonly IDataService DataService;
-    
-    public void OnAttachToPanel(AttachToPanelEvent evt)
-    {
-        DataService.LoadData();
-    }
-}
-```
-
-## Dependency injection
-
-### Summary
-
-Dependencies injected into UIComponents act as singletons, meaning that every UIComponent
-will have the same instance of the dependency.
-
-Dependency injection requires an interface. Below is a simple example:
-
-```c#
-public interface ICounterService
-{
-    void IncrementCount();
-    int GetCount();
-}
-
-public class CounterService : ICounterService
-{
-    private int _count;
-    
-    public void IncrementCount() => _count++;
-    public int GetCount() => _count;
-}
-```
-
-`CounterService` can be injected into components using the `[Dependency]` attribute:
-
-```c#
-using UIComponents;
-
-[Dependency(typeof(ICounterService), provide: typeof(CounterService))]
-public class CounterComponent : UIComponent
-{
-    private readonly ICounterService _counterService;   
-    private readonly Label _countLabel;
-
-    public CounterComponent()
-    {
-        _counterService = Provide<ICounterService>();
-    
-        _countLabel = new Label(_counterService.GetCount().ToString());
-        Add(_countLabel);
-    
-        var incrementButton = new Button(IncrementCount);
-        incrementButton.text = "Increment";
-        Add(incrementButton);
-    }
-
-    private void IncrementCount()
-    {
-        _counterService.IncrementCount();
-        _countLabel.text = _counterService.GetCount().ToString();
-    }
-}
-```
-
-This creates a component which can be used to increment a number.
-**Since dependencies are singletons, every UIComponent, and in turn all CounterComponents receive the same instance of
-CounterService.**
-
-![CounterComponent in action](https://github.com/jonisavo/uicomponents/blob/main/Assets/Samples/Counter/counter.gif?raw=true)
-
-### Get dependency safely
-
-`Provide<T>` will throw a `MissingProviderException` if no providers exist for the dependency.
-If you're unsure whether a provider exists, use `TryProvide<T>`:
-
-```c#
-if (TryProvide<ICounterService>(out var counterService))
-    counterService.IncrementCount();
-```
-
-### Inheritance
-
-UIComponents inherit dependencies. Such dependencies can be overridden
-by specifying a different provider for them.
-
-```c#
-[Dependency(typeof(IStringDependency), provide: typeof(StringDependency))]
-[Dependency(typeof(IScriptableObjectDependency), provide: typeof(HeroProvider))]
-public class MyComponent : UIComponent {}
-
-[Dependency(typeof(IScriptableObjectDependency), provide: typeof(VillainProvider))]
-public class OtherComponent : MyComponent {}
-```
-
-### Testing
-
-#### Switching dependencies
-
-`DependencyInjector`, the class responsible for handling dependencies,
-comes with the `SetDependency` static method.
-
-```c#
-private ICounterService _counterService;
-
-[OneTimeSetUp]
-public void OneTimeSetUp()
-{
-    _counterService = new MockCounterService();
-    DependencyInjector.SetDependency<CounterComponent, ICounterService>(_counterService);
-}
-```
-
-A mock version of a dependency can be switched in during a test. When `CounterComponent`
-asks for `ICounterService`, it will receive the instance of `MockCounterService` created
-in the `OneTimeSetUp` function.
-
-The `DependencyScope` helper class is available under the `UIComponents.Utilities` namespace.
-It is useful for switching dependencies temporarily.
-
-```c#
-[Dependency(typeof(ICounterService), provide: typeof(CounterService))]
-public class CounterComponent : UIComponent {}
-```
-```c#
-[Test]
-public void It_Works()
-{
-    var service = new MockCounterService();
-    using (new DependencyScope<CounterComponent, ICounterService>(service))
-    {
-        // MockCounterService will be provided for CounterComponent
-    }
-    
-    // CounterService will be provided
-}
-```
-
-#### Clearing dependencies
-
-`DependencyInjector` also comes with the `ClearDependency` static method which can be used to remove
-the instance of a dependency between tests.
-
-```c#
-[TearDown]
-public void TearDown()
-{
-    DependencyInjector.ClearDependency<CounterComponent, ICounterService>();
-    // Provide<ICounterService> inside CounterComponent will now throw a MissingProviderException
-}
-```
-
-#### Restoring dependencies
-
-Use `RestoreDefaultDependency` to restore the dependency to its original value as
-specified in the `[Dependency]` attribute.
-
-```c#
-[TearDown]
-public void TearDown()
-{
-    DependencyInjector.RestoreDefaultDependency<CounterComponent, ICounterService>();
-    // Provide<ICounterService> inside CounterComponent will now yield
-    // an instance of the type specified in the component's Dependency attribute.
-}
-```
-
-If no `[Dependency]` attribute exists on the component, `RestoreDefaultDependency` will throw
-an exception.
-
-## Loading assets
-
-### Resources
-
-UIComponents load assets from Resources by default. To use a different
-method, declare a different provider for the `IAssetResolver` dependency.
-See an example below.
-
-### AssetDatabase
-
-UIComponents comes with `AssetDatabaseAssetResolver`, accessible via the
-`UIComponents.Editor` namespace.
-
-```c#
-using UIComponents;
-using UIComponents.Editor;
-
-[Layout("Assets/Components/MyComponent.uxml")]
-[Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
-public class MyComponent : UIComponent {}
-```
-
-### Addressables
-
-`AddressableAssetResolver` is accessible via the
-`UIComponents.Addressables` namespace.
-
-```c#
-using UIComponents;
-using UIComponents.Addressables;
-
-[Layout("Assets/Components/MyComponent.uxml")]
-[Dependency(typeof(IAssetResolver), provide: typeof(AddressableAssetResolver))]
-public class MyComponent : UIComponent {}
-```
-
-You can create an abstract class with the overridden `IAssetResolver` dependency
-and then inherit from that to apply the override to all of your components.
-
-### Common asset paths
-
-You will likely have your layout and stylesheet assets in one place. The
-`[AssetPath]` attribute can be used instruct UIComponent to automatically
-search for assets in those locations.
-
-Here is an example of its usage alongside asset loading from `AssetDatabase`:
-
-```c#
-[AssetPath("Assets/UI/Components/MyComponent")]
-[Layout("MyComponent.uxml")]
-[Stylesheet("MyComponent.style.uss")]
-[Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
-public class MyComponent : UIComponent {}
-```
-
-`[AssetPath]` doesn't have much of an impact when applied to a single component.
-However, like the `[Dependency]` attribute, it can be applied to
-a parent class and inherited.
-
-```c#
-[AssetPath("Assets/UI/Components")]
-[Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
-public class BaseComponent : UIComponent {}
-
-[Layout("MyComponent/MyComponent.uxml")]
-[Stylesheet("MyComponent/MyComponent.style.uss")]
-public class FirstComponent : BaseComponent {}
-
-[Layout("SecondComponent/SecondComponent.uxml")]
-[Stylesheet("SecondComponent/SecondComponent.style.uss")]
-public class SecondComponent : BaseComponent {}
-```
-
-## Logging
-
-By default, UIComponents use `Debug.Log` to log messages. This can be changed by overriding the
-`IUIComponentLogger` dependency.
-
-```c#
-public class MyLogger : IUIComponentLogger
-{
-    public void Log(string message, UIComponent component)
-    {
-        // Do something with the message
-    }
-    
-    public void LogWarning(string message, UIComponent component)
-    {
-        // Do something with the message
-    }
-    
-    public void LogError(string message, UIComponent component)
-    {
-        // Do something with the message
-    }
-}
-
-[Dependency(typeof(IUIComponentLogger), provide: typeof(MyLogger))]
-public class MyComponent : UIComponent {}
-```
-
+## Documentation
+
+Refer to the [wiki](https://github.com/jonisavo/uicomponents/wiki) for documentation.
+
+- [Layouts and stylesheets](https://github.com/jonisavo/uicomponents/wiki/2.-Layouts-and-stylesheets): see how UIComponents 
+loads layouts and stylesheets automatically, and how you can use `[Query]` to query for elements.
+- [Asset loading](https://github.com/jonisavo/uicomponents/wiki/3.-Asset-loading): UIComponents loads assets from Resources
+by default. See how you can use different methods.
+- [Dependency injection](https://github.com/jonisavo/uicomponents/wiki/4.-Dependency-injection): UIComponents comes
+with a simple dependency injection system. See how you can use it to decouple your UI code from other logic.
+- [Event interfaces](https://github.com/jonisavo/uicomponents/wiki/5.-Event-interfaces): a list of interfaces
+whose methods will be automatically registered as event callbacks.
+- [Logging](https://github.com/jonisavo/uicomponents/wiki/6.-Logging): for when you want to use something other
+than `Debug.Log`.
+- [Experimental features](https://github.com/jonisavo/uicomponents/wiki/7.-Experimental-features): new features that
+are subject to change.
