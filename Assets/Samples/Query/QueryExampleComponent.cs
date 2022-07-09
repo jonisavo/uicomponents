@@ -1,5 +1,4 @@
-﻿using UIComponents.Experimental;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Samples.Query

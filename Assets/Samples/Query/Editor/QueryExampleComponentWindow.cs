@@ -5,7 +5,7 @@ namespace UIComponents.Samples.Query.Editor
 {
     public class QueryExampleComponentWindow : EditorWindow
     {
-        [MenuItem("UIComponents Examples/Experimental/Query")]
+        [MenuItem("UIComponents Examples/Query")]
         private static void ShowWindow()
         {
             var window = GetWindow<QueryExampleComponentWindow>();

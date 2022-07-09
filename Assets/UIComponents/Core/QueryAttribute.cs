@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine.UIElements;
 
-namespace UIComponents.Experimental
+namespace UIComponents
 {
     /// <summary>
     /// An attribute for specifying a single query for a field.

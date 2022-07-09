@@ -32,7 +32,7 @@
             "path": "Samples~/Addressables"
         },
         {
-            "displayName": "QueryAttribute (experimental)",
+            "displayName": "QueryAttribute",
             "description": "Contains an example of using QueryAttribute to populate fields.",
             "path": "Samples~/Query"
         },
