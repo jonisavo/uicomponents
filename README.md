@@ -46,12 +46,18 @@ class MyComponent : UIComponent
     // constructor. They are retrieved from Resources by default,
     // hence the lack of file extensions.
     
+    // Queries are made in the inherited constructor.
+    [Query("hello-world-label")]
+    private readonly Label _countLabel;
+    
     private readonly ICounterService _counterService;
     
     public MyComponent()
     {
         // Will yield a CounterService.
         _counterService = Provide<ICounterService>();
+        
+        _countLabel.text = _counterService.Count.ToString();
     }
 }
 ```
@@ -167,6 +173,58 @@ to the root element of the UIComponent.
 public class UIComponentWithRootClass : UIComponent {}
 ```
 
+### QueryAttribute
+
+`[Query]` is allows for populating fields automatically. You can query for a single
+element or many at once.
+
+```xml
+<!-- Resources/MyLayout.uxml -->
+<UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label name="hello-world-label" text="Hello world!" class="text" />
+    <ui:Foldout name="test-foldout">
+        <ui:Label name="foldout-content" text="Foldout content" class="text" />
+    </ui:Foldout>
+</UXML>
+```
+```c#
+using UIComponents;
+
+[Layout("MyLayout")]
+public class MyComponent : UIComponent
+{
+    [Query("hello-world-label")]
+    public readonly Label HelloWorldLabel;
+            
+    [Query(Name = "test-foldout")]
+    public readonly Foldout TestFoldout;
+    
+    [Query]
+    public readonly Label FirstLabel;
+    
+    [Query(Class = "text")]
+    public readonly Label[] LabelsWithTextClass;
+    
+    [Query(Name = "hello-world-label", Class = "text")]
+    public readonly Label HelloWorldLabelWithTextClass;
+    
+    [Query]
+    public readonly List<Label> AllLabelsImplicit;
+    
+    [Query(Name = "hello-world-label")]
+    [Query(Name = "foldout-content")]
+    public readonly List<Label> AllLabelsExplicit;
+    
+    public MyComponent()
+    {
+        HelloWorldLabel.text = "Goodbye world!";
+        TestFoldout.Add(new Label("More content!"));
+    }
+}
+```
+
+`[Query]` only works on fields that are assignable to `VisualElement`. Others are ignored.
+
 ## Event interfaces
 
 UIComponents supports a number of event interfaces. When implemented, the callbacks
@@ -223,57 +281,6 @@ public class ComponentWithCallbacks : UIComponent,
 ```
 
 ## Experimental features
-
-### QueryAttribute
-
-`[Query]` is an experimental feature that allows for populating fields automatically.
-It is accessible via the `UIComponents.Experimental` namespace.
-
-```xml
-<!-- Resources/MyLayout.uxml -->
-<UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label name="hello-world-label" text="Hello world!" class="text" />
-    <ui:Foldout name="test-foldout">
-        <ui:Label name="foldout-content" text="Foldout content" class="text" />
-    </ui:Foldout>
-</UXML>
-```
-```c#
-using UIComponents;
-using UIComponents.Experimental;
-
-[Layout("MyLayout")]
-public class MyComponent : UIComponent
-{
-    [Query("hello-world-label")]
-    public readonly Label HelloWorldLabel;
-            
-    [Query(Name = "test-foldout")]
-    public readonly Foldout TestFoldout;
-    
-    [Query]
-    public readonly Label FirstLabel;
-    
-    [Query(Class = "text")]
-    public readonly Label[] LabelsWithTextClass;
-    
-    [Query(Name = "hello-world-label", Class = "text")]
-    public readonly Label HelloWorldLabelWithTextClass;
-    
-    [Query]
-    public readonly List<Label> AllLabelsImplicit;
-    
-    [Query(Name = "hello-world-label")]
-    [Query(Name = "foldout-content")]
-    public readonly List<Label> AllLabelsExplicit;
-    
-    public MyComponent()
-    {
-        HelloWorldLabel.text = "Goodbye world!";
-        TestFoldout.Add(new Label("More content!"));
-    }
-}
-```
 
 ### ProvideAttribute
 

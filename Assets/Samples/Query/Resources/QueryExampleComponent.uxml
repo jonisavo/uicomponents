@@ -1,5 +1,5 @@
 ﻿<UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label class="description" text="This is a component for demonstrating QueryAttribute, an experimental feature in UIComponents." />
+    <ui:Label class="description" text="This is a component for demonstrating QueryAttribute." />
     <ui:Label class="description" text="QueryAttribute allows for populating UIComponent fields automatically." />
     <ui:Label name="my-label" />
     <ui:Foldout name="my-foldout" text="Foldout...">
