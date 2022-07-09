@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UIComponents.Experimental;
+using UIComponents.Internal;
+using UnityEngine.UIElements;
 
 namespace UIComponents.Cache
 {
@@ -12,6 +14,8 @@ namespace UIComponents.Cache
     {
         public readonly Dictionary<FieldInfo, QueryAttribute[]> QueryAttributes;
         public readonly Dictionary<FieldInfo, ProvideAttribute> ProvideAttributes;
+        
+        private static readonly Type VisualElementType = typeof(VisualElement);
 
         public FieldCache(Type type)
         {
@@ -23,15 +27,32 @@ namespace UIComponents.Cache
 
             for (var i = 0; i < fieldInfos.Length; i++)
             {
-                var queryAttributes = (QueryAttribute[]) fieldInfos[i].GetCustomAttributes<QueryAttribute>();
-                var provideAttribute = fieldInfos[i].GetCustomAttribute<ProvideAttribute>();
-
-                if (queryAttributes.Length > 0)
-                    QueryAttributes[fieldInfos[i]] = queryAttributes;
-
-                if (provideAttribute != null)
-                    ProvideAttributes[fieldInfos[i]] = provideAttribute;
+                var fieldInfo = fieldInfos[i];
+                var concreteFieldType = TypeUtils.GetConcreteType(fieldInfo.FieldType);
+                
+                var fieldIsVisualElement = VisualElementType.IsAssignableFrom(concreteFieldType);
+                
+                if (fieldIsVisualElement)
+                    CheckForQueryAttributes(fieldInfo);
+                else
+                    CheckForProvideAttribute(fieldInfo);
             }
+        }
+
+        private void CheckForQueryAttributes(FieldInfo fieldInfo)
+        {
+            var queryAttributes = (QueryAttribute[]) fieldInfo.GetCustomAttributes<QueryAttribute>();
+            
+            if (queryAttributes.Length > 0)
+                QueryAttributes[fieldInfo] = queryAttributes;
+        }
+
+        private void CheckForProvideAttribute(FieldInfo fieldInfo)
+        {
+            var provideAttribute = fieldInfo.GetCustomAttribute<ProvideAttribute>();
+            
+            if (provideAttribute != null)
+                ProvideAttributes[fieldInfo] = provideAttribute;
         }
     }
 }
