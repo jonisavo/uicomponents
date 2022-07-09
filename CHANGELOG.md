@@ -1,5 +1,23 @@
 
 
+# [0.17.0](https://github.com/jonisavo/uicomponents/compare/v0.16.0...v0.17.0) (2022-07-09)
+
+
+### Features
+
+* **docs:** add documentation link to new wiki ([a999223](https://github.com/jonisavo/uicomponents/commit/a999223f370abc4751e9e283c1e6f1d9fcebcf96))
+* **QueryAttribute:** move out of the experimental namespace ([dc40380](https://github.com/jonisavo/uicomponents/commit/dc403802f34f9537c93f2e75630275663880048c))
+
+
+### Performance Improvements
+
+* **FieldCache:** reduce initialization time and GC allocations ([35a9ab8](https://github.com/jonisavo/uicomponents/commit/35a9ab8f828aef71b46cdb9895a2ca0ced8319a0))
+
+
+### BREAKING CHANGES
+
+* **QueryAttribute:** QueryAttribute has been moved from the UIComponents.Experimental namespace to UIComponents.
+
 # [0.16.0](https://github.com/jonisavo/uicomponents/compare/v0.15.0...v0.16.0) (2022-06-24)
 
 
