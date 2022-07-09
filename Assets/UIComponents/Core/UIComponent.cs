@@ -234,8 +234,6 @@ namespace UIComponents
                 effectAttributes[i].Apply(this);
         }
 
-        private static readonly Type VisualElementType = typeof(VisualElement);
-        
         private void PopulateQueryFields()
         {
             var fieldCache = CacheDictionary[_componentType].FieldCache;
@@ -248,12 +246,6 @@ namespace UIComponents
 
                 var fieldType = fieldInfo.FieldType;
                 var concreteType = TypeUtils.GetConcreteType(fieldType);
-
-                if (!VisualElementType.IsAssignableFrom(concreteType))
-                {
-                    Logger.LogError($"QueryAttribute must be used on a VisualElement field. {fieldInfo.Name} is {concreteType.FullName}", this);
-                    continue;
-                }
 
                 var results = new List<VisualElement>();
                 

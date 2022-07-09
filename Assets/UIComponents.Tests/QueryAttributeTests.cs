@@ -93,22 +93,13 @@ namespace UIComponents.Tests
         }
 
         [Test]
-        public void Should_Log_Error_On_Invalid_Fields()
+        public void Should_Not_Populate_Invalid_Fields()
         {
-            var mockLogger = Substitute.For<IUIComponentLogger>();
-
-            ComponentWithInvalidQueryAttribute component;
-
-            using (new DependencyScope<ComponentWithInvalidQueryAttribute, IUIComponentLogger>(mockLogger))
-                component = new ComponentWithInvalidQueryAttribute();
+            var component = new ComponentWithInvalidQueryAttribute();
 
             Assert.That(component.InvalidField, Is.Null);
             Assert.That(component.InvalidArray, Is.Null);
             Assert.That(component.InvalidList, Is.Null);
-            
-            mockLogger.Received().LogError("QueryAttribute must be used on a VisualElement field. InvalidField is System.Object", component);
-            mockLogger.Received().LogError("QueryAttribute must be used on a VisualElement field. InvalidArray is System.Object", component);
-            mockLogger.Received().LogError(Arg.Is<string>(s => s.Contains("QueryAttribute must be used on a VisualElement field. InvalidList is System.Collections.Generic.List`1[[UnityEngine.UIElements.VisualElement")), component);
         }
     }
 }
