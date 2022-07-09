@@ -1,4 +1,4 @@
-﻿name: CI (Unity)
+﻿name: CI
 
 on:
   push:
@@ -82,7 +82,7 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
 
   buildForWindows:
-    name: Build for 64-bit Windows on ${{ matrix.unityVersion }}
+    name: Build & Test for 64-bit Windows on ${{ matrix.unityVersion }}
     runs-on: windows-2019
     strategy:
       fail-fast: false
@@ -106,6 +106,37 @@ jobs:
             Library-StandaloneWindows64-${{ matrix.unityVersion }}-
             Library-StandaloneWindows64-
             Library-
+            
+      - uses: game-ci/unity-test-runner@v2
+        id: testRunner
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          customParameters: -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions "useProjectSettings;generateAdditionalMetrics"
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Test results (all modes)
+          path: ${{ steps.testRunner.outputs.artifactsPath }}
+
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          name: Tests
+          flags: automated
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: CodeCoverage/**/*.xml
+
+      - name: Commit upgrade changes
+        if: ${{ matrix.unityVersion != env.PROJECT_UNITY_VERSION }}
+        run: |
+          git config --global user.name 'github-bot'
+          git config --global user.email 'github-bot@users.noreply.github.com'
+          git add -A
+          git commit -m "chore(ci): switch to different unity version"
             
       - uses: game-ci/unity-builder@v2
         env:
