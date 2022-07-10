@@ -13,10 +13,13 @@ namespace UIComponents
 
         public readonly Type ProvideType;
 
-        public DependencyAttribute(Type dependency, Type provide)
+        public readonly Scope Scope;
+
+        public DependencyAttribute(Type dependency, Type provide, Scope scope = Scope.Singleton)
         {
             DependencyType = dependency;
             ProvideType = provide;
+            Scope = scope;
         }
     }
 }
