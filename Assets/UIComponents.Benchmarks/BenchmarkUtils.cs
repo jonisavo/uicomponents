@@ -4,7 +4,7 @@ namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.17.0.0";
+        public const string Version = "0.18.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
@@ -23,7 +23,7 @@ namespace UIComponents.Benchmarks
                 .SetUp(() =>
                 {
                     UIComponent.ClearCache<TComponent>();
-                    DependencyInjector.RemoveInjector(typeof(TComponent));
+                    DependencyInjector.Container.Clear();
                 })
                 .SampleGroup(new SampleGroup("Cold Cache Time", SampleUnit.Microsecond))
                 .ProfilerMarkers(GetProfilerMarkers())

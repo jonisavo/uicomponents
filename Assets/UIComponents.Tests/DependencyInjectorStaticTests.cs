@@ -45,9 +45,9 @@ namespace UIComponents.Tests
             {
                 var componentType = typeof(UIComponentWithDependency);
                 var injector = new DependencyInjector();
-                DependencyInjector.InjectorDictionary[componentType] = injector;
+                DependencyInjector.Container.InjectorDictionary[componentType] = injector;
                 DependencyInjector.RemoveInjector(componentType);
-                Assert.That(DependencyInjector.InjectorDictionary.ContainsKey(componentType), Is.False);
+                Assert.That(DependencyInjector.Container.InjectorDictionary.ContainsKey(componentType), Is.False);
             }
         }
 

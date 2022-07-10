@@ -10,7 +10,7 @@ namespace UIComponents.Benchmarks.AssetLoading
         [Stylesheet("AssetDatabaseStylesFile.uss")]
         [Stylesheet("CommonMargins.uss")]
         [AssetPath("Assets/UIComponents.Benchmarks/AssetLoading")]
-        [Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver))]
+        [Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver), Scope.Transient)]
         private class ComponentWithAssets : UIComponent {}
 
         [Test, Performance, Version(BenchmarkUtils.Version)]
