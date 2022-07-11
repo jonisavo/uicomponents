@@ -5,7 +5,6 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "UIComponents",
-        "UIComponents.Editor",
         "UIComponents.Tests"
     ],
     "includePlatforms": [

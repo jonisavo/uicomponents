@@ -1,7 +1,0 @@
-﻿<UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Label name="assetdatabase-example-header" text="AssetDatabaseExampleComponent" />
-    <ui:VisualElement class="italic-label-container">
-        <ui:Label text="This is an example of a component loaded from AssetDatabase." />
-        <ui:Label text="AssetDatabase is used in the editor." />
-    </ui:VisualElement>
-</UXML>
