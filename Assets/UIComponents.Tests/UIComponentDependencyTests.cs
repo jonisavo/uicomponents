@@ -80,5 +80,36 @@ namespace UIComponents.Tests
             Assert.That(component.DependencyWasProvided, Is.False);
             Assert.That(component.StringDependency, Is.Null);
         }
+        
+        [Dependency(typeof(IStringDependency), provide: typeof(StringProvider), Scope.Transient)]
+        private class UIComponentWithTransientDependencyA : UIComponent
+        {
+            public readonly IStringDependency StringDependency;
+            
+            public UIComponentWithTransientDependencyA()
+            {
+                StringDependency = Provide<IStringDependency>();
+            }
+        }
+        
+        [Dependency(typeof(IStringDependency), provide: typeof(StringProvider), Scope.Transient)]
+        private class UIComponentWithTransientDependencyB : UIComponent
+        {
+            public readonly IStringDependency StringDependency;
+            
+            public UIComponentWithTransientDependencyB()
+            {
+                StringDependency = Provide<IStringDependency>();
+            }
+        }
+        
+        [Test]
+        public void Transient_Dependencies_Are_Not_Cached()
+        {
+            var componentA = new UIComponentWithTransientDependencyA();
+            var componentB = new UIComponentWithTransientDependencyB();
+            
+            Assert.That(componentA.StringDependency, Is.Not.SameAs(componentB.StringDependency));
+        }
     }
 }

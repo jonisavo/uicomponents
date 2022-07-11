@@ -45,22 +45,22 @@ namespace UIComponents.Tests
             {
                 var componentType = typeof(UIComponentWithDependency);
                 var injector = new DependencyInjector();
-                DependencyInjector.InjectorDictionary[componentType] = injector;
+                DependencyInjector.Container.InjectorDictionary[componentType] = injector;
                 DependencyInjector.RemoveInjector(componentType);
-                Assert.That(DependencyInjector.InjectorDictionary.ContainsKey(componentType), Is.False);
+                Assert.That(DependencyInjector.Container.InjectorDictionary.ContainsKey(componentType), Is.False);
             }
         }
 
         [TestFixture]
-        public class RestoreDefaultDependency
+        public class ResetProvidedInstance
         {
             [Test]
-            public void Restores_The_Default_Dependency_Instance()
+            public void Resets_The_Dependency_Instance()
             {
                 var component = new UIComponentWithDependency();
 
                 DependencyInjector.ClearDependency<UIComponentWithDependency, IDependency>();
-                DependencyInjector.RestoreDefaultDependency<UIComponentWithDependency, IDependency>();
+                DependencyInjector.ResetProvidedInstance<UIComponentWithDependency, IDependency>();
                 
                 Assert.That(component.GetDependency(), Is.InstanceOf<DependencyProvider>());
             }

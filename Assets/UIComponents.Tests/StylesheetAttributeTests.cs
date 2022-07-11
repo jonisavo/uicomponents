@@ -37,8 +37,8 @@ namespace UIComponents.Tests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            DependencyInjector.RestoreDefaultDependency<UIComponentWithTwoStylesheets, IAssetResolver>();
-            DependencyInjector.RestoreDefaultDependency<InheritedComponent, IAssetResolver>();
+            DependencyInjector.ResetProvidedInstance<UIComponentWithTwoStylesheets, IAssetResolver>();
+            DependencyInjector.ResetProvidedInstance<InheritedComponent, IAssetResolver>();
         }
         
         [TearDown]

@@ -39,8 +39,8 @@ namespace UIComponents.Tests
             [OneTimeTearDown]
             public void OneTimeTearDown()
             {
-                DependencyInjector.RestoreDefaultDependency<UIComponentWithValidAssetPath, IAssetResolver>();
-                DependencyInjector.RestoreDefaultDependency<UIComponentWithInvalidAssetPath, IAssetResolver>();
+                DependencyInjector.ResetProvidedInstance<UIComponentWithValidAssetPath, IAssetResolver>();
+                DependencyInjector.ResetProvidedInstance<UIComponentWithInvalidAssetPath, IAssetResolver>();
             }
 
             [Test]
