@@ -52,15 +52,15 @@ namespace UIComponents.Tests
         }
 
         [TestFixture]
-        public class RestoreDefaultDependency
+        public class ResetProvidedInstance
         {
             [Test]
-            public void Restores_The_Default_Dependency_Instance()
+            public void Resets_The_Dependency_Instance()
             {
                 var component = new UIComponentWithDependency();
 
                 DependencyInjector.ClearDependency<UIComponentWithDependency, IDependency>();
-                DependencyInjector.RestoreDefaultDependency<UIComponentWithDependency, IDependency>();
+                DependencyInjector.ResetProvidedInstance<UIComponentWithDependency, IDependency>();
                 
                 Assert.That(component.GetDependency(), Is.InstanceOf<DependencyProvider>());
             }

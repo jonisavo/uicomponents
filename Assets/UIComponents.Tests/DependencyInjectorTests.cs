@@ -128,38 +128,21 @@ namespace UIComponents.Tests
         }
 
         [TestFixture]
-        public class RestoreDefaultDependency
+        public class ResetProvidedInstance
         {
             [SetUp]
             public void SetUp()
             {
                 DependencyInjector.Container.Clear();
             }
-            
-            [Test]
-            public void Restores_Default_Dependency()
-            {
-                var dependencyAttribute =
-                    new DependencyAttribute(typeof(IDependency), typeof(DependencyOne));
 
-                var injector = new DependencyInjector(new[] {dependencyAttribute});
-                
-                injector.SetDependency<IDependency>(new DependencyTwo());
-
-                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyTwo>());
-                
-                injector.RestoreDefaultDependency<IDependency>();
-                
-                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
-            }
-            
             [Test]
             public void Throws_If_No_Default_Dependency_Exists()
             {
                 var injector = new DependencyInjector();
                 
                 Assert.Throws<InvalidOperationException>(
-                    () => injector.RestoreDefaultDependency<IDependency>()
+                    () => injector.ResetProvidedInstance<IDependency>()
                 );
                 
                 var initialDependency = new DependencyOne();
@@ -167,7 +150,7 @@ namespace UIComponents.Tests
                 injector.SetDependency<IDependency>(initialDependency);
                 
                 Assert.DoesNotThrow(
-                    () => injector.RestoreDefaultDependency<IDependency>()
+                    () => injector.ResetProvidedInstance<IDependency>()
                 );
             }
 
@@ -180,7 +163,7 @@ namespace UIComponents.Tests
                 
                 injector.SetDependency<IDependency>(singletonInstance);
                 injector.SetDependency<IDependency>(new DependencyTwo());
-                injector.RestoreDefaultDependency<IDependency>();
+                injector.ResetProvidedInstance<IDependency>();
 
                 Assert.That(injector.Provide<IDependency>(), Is.SameAs(singletonInstance));
             }
@@ -193,7 +176,7 @@ namespace UIComponents.Tests
                 
                 injector.SetDependency<IDependency>(transientInstance, Scope.Transient);
                 injector.SetDependency<IDependency>(new DependencyTwo());
-                injector.RestoreDefaultDependency<IDependency>();
+                injector.ResetProvidedInstance<IDependency>();
                 
                 Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
                 Assert.That(injector.Provide<IDependency>(), Is.Not.SameAs(transientInstance));

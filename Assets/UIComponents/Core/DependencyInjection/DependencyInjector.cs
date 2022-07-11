@@ -63,8 +63,9 @@ namespace UIComponents
         }
         
         /// <summary>
-        /// Restores the default dependency, which is the one
-        /// set by <see cref="DependencyAttribute"/>.
+        /// Resets the provided instance of a dependency.
+        /// If a singleton instance exists, it is restored.
+        /// Otherwise, a new instance of the dependency is created.
         /// </summary>
         /// <remarks>
         /// Can be used in unit tests to clear
@@ -73,15 +74,15 @@ namespace UIComponents
         /// <typeparam name="TConsumer">Consumer type</typeparam>
         /// <typeparam name="TDependency">Dependency type</typeparam>
         /// <exception cref="InvalidOperationException">
-        /// Thrown if no default dependency type exists
+        /// Thrown if no configured dependency exists
         /// </exception>
-        public static void RestoreDefaultDependency<TConsumer, TDependency>()
+        public static void ResetProvidedInstance<TConsumer, TDependency>()
             where TConsumer : class
             where TDependency : class
         {
             var injector = GetInjector(typeof(TConsumer));
             
-            injector.RestoreDefaultDependency<TDependency>();
+            injector.ResetProvidedInstance<TDependency>();
         }
 
         /// <summary>
@@ -173,15 +174,15 @@ namespace UIComponents
         }
 
         /// <summary>
-        /// Restores the default dependency. If a singleton instance
-        /// exists, it is restored. Otherwise, a new instance
-        /// of the dependency is created.
+        /// Resets the provided instance of a dependency.
+        /// If a singleton instance exists, it is restored.
+        /// Otherwise, a new instance of the dependency is created.
         /// </summary>
         /// <typeparam name="T">Dependency type</typeparam>
         /// <exception cref="InvalidOperationException">
         /// Thrown if no configured dependency exists
         /// </exception>
-        public void RestoreDefaultDependency<T>() where T : class
+        public void ResetProvidedInstance<T>() where T : class
         {
             var dependencyType = typeof(T);
             

@@ -29,7 +29,7 @@ namespace UIComponents.Tests
         public void TearDown()
         {
             _resolver.ClearReceivedCalls();
-            DependencyInjector.RestoreDefaultDependency<UIComponentWithAssetPaths, IAssetResolver>();
+            DependencyInjector.ResetProvidedInstance<UIComponentWithAssetPaths, IAssetResolver>();
         }
 
         [Test]

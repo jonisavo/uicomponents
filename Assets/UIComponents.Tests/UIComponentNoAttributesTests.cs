@@ -22,7 +22,7 @@ namespace UIComponents.Tests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            DependencyInjector.RestoreDefaultDependency<UIComponentNoAttributes, IAssetResolver>();
+            DependencyInjector.ResetProvidedInstance<UIComponentNoAttributes, IAssetResolver>();
         }
         
         [TearDown]
