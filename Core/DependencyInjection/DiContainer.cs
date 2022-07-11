@@ -18,7 +18,7 @@ namespace UIComponents
         /// by interested parties.
         /// </summary>
         internal readonly Dictionary<Type, object> SingletonInstanceDictionary;
-
+        
         public DiContainer()
         {
             InjectorDictionary =
