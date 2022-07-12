@@ -1,5 +1,20 @@
 
 
+# [0.18.0](https://github.com/jonisavo/uicomponents/compare/v0.17.0...v0.18.0) (2022-07-12)
+
+
+### Features
+
+* add support for transient dependencies ([e20ee2b](https://github.com/jonisavo/uicomponents/commit/e20ee2b04ba0ff836e328e12f1f58a24ba304952))
+* **DependencyInjector:** rename RestoreDefaultDependency to ResetProvidedInstance ([4be20c7](https://github.com/jonisavo/uicomponents/commit/4be20c7f1e217589f1b5bb19babc664c66fe6ae2))
+* remove built-in AssetDatabase support ([ddc14b8](https://github.com/jonisavo/uicomponents/commit/ddc14b834bd6517bfa60e4a902feb8483a7bd783))
+
+
+### BREAKING CHANGES
+
+* AssetDatabaseAssetResolver has been removed, since working with hardcoded asset paths is difficult. If you want to use AssetDatabase, you can create your own IAssetResolver class.
+* **DependencyInjector:** DependencyInjector's RestoreDefaultDependency method has been renamed to ResetProvidedInstance
+
 # [0.17.0](https://github.com/jonisavo/uicomponents/compare/v0.16.0...v0.17.0) (2022-07-09)
 
 
