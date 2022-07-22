@@ -20,7 +20,7 @@ jobs:
       matrix:
         unityVersion:
           - 2019.4.40f1
-          - ${{ env.PROJECT_UNITY_VERSION }}
+          - 2020.3.37f1
           - 2021.3.6f1
           - 2022.1.10f1
         targetPlatform:
@@ -89,7 +89,7 @@ jobs:
       matrix:
         unityVersion:
           - 2019.4.40f1
-          - ${{ env.PROJECT_UNITY_VERSION }}
+          - 2020.3.37f1
           - 2021.3.6f1
           - 2022.1.10f1
 
