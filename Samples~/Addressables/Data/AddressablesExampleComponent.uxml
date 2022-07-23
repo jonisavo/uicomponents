@@ -1,0 +1,6 @@
+﻿<UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="white-box">
+        <ui:Label name="addressables-example-header" text="AddressablesExampleComponent" />
+        <ui:Label text="This is an example of a component loaded with Addressables." />
+    </ui:VisualElement>
+</UXML>
