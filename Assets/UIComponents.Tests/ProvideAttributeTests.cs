@@ -1,7 +1,7 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Experimental;
-using UIComponents.Utilities;
+using UIComponents.Testing;
 
 namespace UIComponents.Tests
 {
@@ -56,12 +56,12 @@ namespace UIComponents.Tests
         public void Does_Not_Throw_When_Provider_Is_Missing()
         {
             var logger = Substitute.For<IUIComponentLogger>();
+            var testBed = TestBed.Create()
+                .WithSingleton(logger)
+                .Build();
+            
+            var component = testBed.CreateComponent<ComponentWithInvalidDependency>();
 
-            ComponentWithInvalidDependency component;
-            
-            using (new DependencyScope<ComponentWithInvalidDependency, IUIComponentLogger>(logger))
-                component = new ComponentWithInvalidDependency();
-            
             Assert.That(component.StringProperty, Is.Null);
             logger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
         }

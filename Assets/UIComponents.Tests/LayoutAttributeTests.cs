@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
+using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 using UnityEngine.UIElements;
 
@@ -20,71 +21,53 @@ namespace UIComponents.Tests
         [Layout("Assets/MissingAsset.uxml")]
         private class UIComponentWithNullLayout : UIComponent {}
 
-        private IAssetResolver _assetResolver;
+        private TestBed _testBed;
+        private IAssetResolver _mockResolver;
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        [SetUp]
+        public void SetUp()
         {
-            _assetResolver = MockUtilities.CreateMockResolver();
-            
-            _assetResolver.LoadAsset<VisualTreeAsset>("Assets/MissingAsset.uxml")
+            _mockResolver = MockUtilities.CreateMockResolver();
+            _mockResolver.LoadAsset<VisualTreeAsset>("Assets/MissingAsset.uxml")
                 .ReturnsNull();
-            
-            DependencyInjector.SetDependency<UIComponentWithLayout, IAssetResolver>(
-                _assetResolver
-            );
-            DependencyInjector.SetDependency<InheritedComponentWithoutAttribute, IAssetResolver>(
-                _assetResolver
-            );
-            DependencyInjector.SetDependency<InheritedComponentWithAttribute, IAssetResolver>(
-                _assetResolver
-            );
-            DependencyInjector.SetDependency<UIComponentWithNullLayout, IAssetResolver>(
-                _assetResolver
-            );
+
+            _testBed = TestBed.Create()
+                .WithSingleton(_mockResolver)
+                .Build();
         }
 
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            DependencyInjector.ResetProvidedInstance<UIComponentWithLayout, IAssetResolver>();
-            DependencyInjector.ResetProvidedInstance<InheritedComponentWithoutAttribute, IAssetResolver>();
-            DependencyInjector.ResetProvidedInstance<InheritedComponentWithAttribute, IAssetResolver>();
-            DependencyInjector.ResetProvidedInstance<UIComponentWithNullLayout, IAssetResolver>();
-        }
-        
         [TearDown]
         public void TearDown()
         {
-            _assetResolver.ClearReceivedCalls();
+            _mockResolver.ClearReceivedCalls();
         }
 
         [Test]
         public void Given_Layout_Is_Loaded()
         {
-            var component = new UIComponentWithLayout();
-            _assetResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
+            var component = _testBed.CreateComponent<UIComponentWithLayout>();
+            _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
         [Test]
         public void Superclass_Layout_Is_Loaded_If_It_Is_Not_Overridden()
         {
-            var component = new InheritedComponentWithoutAttribute();
-            _assetResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
+            var component = _testBed.CreateComponent<InheritedComponentWithoutAttribute>();
+            _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
         [Test]
         public void Superclass_Layout_Is_Not_Loaded_If_Overridden()
         {
-            var component = new InheritedComponentWithAttribute();
-            _assetResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml");
-            _assetResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
+            var component = _testBed.CreateComponent<InheritedComponentWithAttribute>();
+            _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml");
+            _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
         [Test]
         public void Null_Layout_Is_Handled()
         {
-            Assert.DoesNotThrow(() => new UIComponentWithNullLayout());
+            Assert.DoesNotThrow(() => _testBed.CreateComponent<UIComponentWithNullLayout>());
         }
     }
 }

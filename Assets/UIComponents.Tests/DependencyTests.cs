@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using UIComponents.DependencyInjection;
 
 namespace UIComponents.Tests
 {

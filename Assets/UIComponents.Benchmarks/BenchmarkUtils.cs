@@ -1,10 +1,11 @@
-﻿using Unity.PerformanceTesting;
+﻿using UIComponents.DependencyInjection;
+using Unity.PerformanceTesting;
 
 namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.18.0.0";
+        public const string Version = "0.19.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
@@ -23,7 +24,7 @@ namespace UIComponents.Benchmarks
                 .SetUp(() =>
                 {
                     UIComponent.ClearCache<TComponent>();
-                    DependencyInjector.Container.Clear();
+                    DiContext.Current.Container.Clear();
                 })
                 .SampleGroup(new SampleGroup("Cold Cache Time"))
                 .ProfilerMarkers(GetProfilerMarkers())
