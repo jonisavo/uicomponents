@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace UIComponents
+namespace UIComponents.DependencyInjection
 {
     /// <summary>
     /// An internal class for provided dependencies.

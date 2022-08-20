@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
-namespace UIComponents
+namespace UIComponents.DependencyInjection
 {
     /// <summary>
-    /// An internal class for storing injectors and singleton instances.
+    /// A class for storing injectors and singleton instances.
     /// </summary>
-    internal class DiContainer
+    public class DiContainer
     {
         /// <summary>
         /// Contains all injectors created for consumers.
@@ -16,24 +17,31 @@ namespace UIComponents
         /// <summary>
         /// Contains the instantiated singleton dependencies which are consumed
         /// by interested parties.
+        /// The key is the type of the instantiated value.
         /// </summary>
-        internal readonly Dictionary<Type, object> SingletonInstanceDictionary;
-        
+        private readonly Dictionary<Type, object> _singletonInstanceDictionary;
+
+        /// <summary>
+        /// Contains singletons which are overridden for testing purposes.
+        /// The key is the type of dependency and the value is the singleton instance.
+        /// </summary>
+        private readonly Dictionary<Type, object> _singletonOverrideDictionary;
+
         public DiContainer()
         {
-            InjectorDictionary =
-                new Dictionary<Type, DependencyInjector>();
+            InjectorDictionary = new Dictionary<Type, DependencyInjector>();
             
-            SingletonInstanceDictionary
-                = new Dictionary<Type, object>();
+            _singletonInstanceDictionary = new Dictionary<Type, object>();
+
+            _singletonOverrideDictionary = new Dictionary<Type, object>();
         }
         
         private DependencyInjector CreateInjector(Type consumerType)
         {
             var injectAttributes = (DependencyAttribute[])
                 consumerType.GetCustomAttributes(typeof(DependencyAttribute), true);
-            
-            var injector = new DependencyInjector(injectAttributes);
+
+            var injector = new DependencyInjector(injectAttributes, this);
 
             InjectorDictionary.Add(consumerType, injector);
 
@@ -69,7 +77,7 @@ namespace UIComponents
         public void Clear()
         {
             InjectorDictionary.Clear();
-            SingletonInstanceDictionary.Clear();
+            _singletonInstanceDictionary.Clear();
         }
         
         /// <summary>
@@ -80,56 +88,59 @@ namespace UIComponents
         /// <returns>Whether the instance could be fetched</returns>
         public bool TryGetSingletonInstance(Type type, out object instance)
         {
-            return SingletonInstanceDictionary.TryGetValue(type, out instance);
-        }
-
-        private Dependency CreateSingletonDependency(Type dependencyType, Type providerType)
-        {
-            if (SingletonInstanceDictionary.TryGetValue(providerType, out var instance))
-                return new Dependency(dependencyType, instance, Scope.Singleton);
-
-            var dependency = new Dependency(dependencyType, providerType, Scope.Singleton);
-            
-            SingletonInstanceDictionary.Add(providerType, dependency.Instance);
-            
-            return dependency;
+            return _singletonInstanceDictionary.TryGetValue(type, out instance);
         }
         
-        private Dependency CreateTransientDependency(Type dependencyType, Type providerType)
+        /// <param name="instanceType">Type of the singleton instance</param>
+        /// <param name="instance">Singleton instance to add</param>
+        /// <exception cref="ArgumentNullException">Thrown if instance is null</exception>
+        public void RegisterSingletonInstance(Type instanceType, [NotNull] object instance)
         {
-            return new Dependency(dependencyType, providerType, Scope.Transient);
+            if (instance == null)
+                throw new ArgumentNullException(nameof(instance));
+            
+            _singletonInstanceDictionary[instanceType] = instance;
+        }
+        
+        /// <param name="type">Singleton type</param>
+        /// <returns>Whether an instance is contained in the container</returns>
+        public bool ContainsSingletonInstanceOfType(Type type)
+        {
+            return _singletonInstanceDictionary.ContainsKey(type);
         }
 
         /// <summary>
-        /// Creates a new Dependency object with the given dependency and provider types.
+        /// Overrides a singleton dependency.
         /// </summary>
-        /// <param name="dependencyType">Dependency type</param>
-        /// <param name="providerType">Provider type</param>
-        /// <param name="scope">Dependency scope</param>
-        /// <returns>Dependency object</returns>
-        public Dependency CreateDependency(Type dependencyType, Type providerType, Scope scope)
+        /// <param name="value">New singleton value</param>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
+        /// <exception cref="ArgumentNullException">Thrown if value is null</exception>
+        public void SetSingletonOverride<TDependency>([NotNull] TDependency value) where TDependency : class
         {
-            if (scope == Scope.Singleton)
-                return CreateSingletonDependency(dependencyType, providerType);
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
             
-            return CreateTransientDependency(dependencyType, providerType);
+            _singletonOverrideDictionary[typeof(TDependency)] = value;
         }
-
+        
         /// <summary>
-        /// Creates a new Dependency object with the a dependency type and provided instance.
+        /// Removes any set singleton override.
+        /// </summary>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
+        public void RemoveSingletonOverride<TDependency>() where TDependency : class
+        {
+            _singletonOverrideDictionary.Remove(typeof(TDependency));
+        }
+        
+        /// <summary>
+        /// Tries to get a set singleton override.
         /// </summary>
         /// <param name="dependencyType">Dependency type</param>
-        /// <param name="instance">Provided instance</param>
-        /// <param name="scope">Dependency scope</param>
-        /// <returns>Dependency object</returns>
-        public Dependency CreateDependency(Type dependencyType, object instance, Scope scope)
+        /// <param name="value">Singleton value</param>
+        /// <returns>Whether the singleton override could be fetched</returns>
+        public bool TryGetSingletonOverride(Type dependencyType, out object value)
         {
-            var instanceType = instance.GetType();
-            
-            if (scope == Scope.Singleton && !SingletonInstanceDictionary.ContainsKey(instanceType))
-                SingletonInstanceDictionary.Add(instanceType, instance);
-            
-            return new Dependency(dependencyType, instance, scope);
+            return _singletonOverrideDictionary.TryGetValue(dependencyType, out value);
         }
     }
 }
