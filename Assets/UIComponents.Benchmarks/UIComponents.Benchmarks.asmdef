@@ -6,9 +6,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "UIComponents",
-        "UIComponents.Addressables",
-        "Unity.Addressables",
-        "Unity.ResourceManager"
+        "UIComponents.Addressables"
     ],
     "includePlatforms": [
         "Editor"
