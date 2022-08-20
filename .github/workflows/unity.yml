@@ -9,7 +9,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  PROJECT_UNITY_VERSION: 2020.3.37f1
+  PROJECT_UNITY_VERSION: 2020.3.38f1
 
 jobs:
   buildAndTestForLinuxBasedPlatforms:
@@ -20,9 +20,9 @@ jobs:
       matrix:
         unityVersion:
           - 2019.4.40f1
-          - 2020.3.37f1
-          - 2021.3.6f1
-          - 2022.1.10f1
+          - 2020.3.38f1
+          - 2021.3.8f1
+          - 2022.1.13f1
         targetPlatform:
           - StandaloneLinux64
           - WebGL
@@ -89,9 +89,9 @@ jobs:
       matrix:
         unityVersion:
           - 2019.4.40f1
-          - 2020.3.37f1
-          - 2021.3.6f1
-          - 2022.1.10f1
+          - 2020.3.38f1
+          - 2021.3.8f1
+          - 2022.1.13f1
 
     steps:
       - uses: actions/checkout@v3
