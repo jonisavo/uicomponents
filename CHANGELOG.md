@@ -1,5 +1,24 @@
 
 
+# [0.19.0](https://github.com/jonisavo/uicomponents/compare/v0.18.0...v0.19.0) (2022-08-20)
+
+
+### Features
+
+* add TestBed ([b25a6ad](https://github.com/jonisavo/uicomponents/commit/b25a6adea6d2322e351efce64b5302f608adf1dc))
+* **addressables:** set minimum Addressables version to 1.17.13 ([018923d](https://github.com/jonisavo/uicomponents/commit/018923dbd779bcc4863b05c60f7919d93ea323d0))
+
+
+### Reverts
+
+* Revert "test(benchmarks): ensure Addressables are initialized before running benchmarks" ([7f055a0](https://github.com/jonisavo/uicomponents/commit/7f055a07d7af2220506d698bdef67da76342411a))
+
+
+### BREAKING CHANGES
+
+* The new TestBed system replaces DependencyScope and DependencyInjector's static methods. They have been removed.
+* **addressables:** Preview versions of Addressables 1.17 are no longer supported.
+
 # [0.18.0](https://github.com/jonisavo/uicomponents/compare/v0.17.0...v0.18.0) (2022-07-12)
 
 
