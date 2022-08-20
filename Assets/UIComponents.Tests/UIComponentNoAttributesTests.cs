@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Testing;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -9,48 +10,45 @@ namespace UIComponents.Tests
     public class UIComponentNoAttributesTests
     {
         private class UIComponentNoAttributes : UIComponent {}
-        
-        private IAssetResolver _resolver;
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        private TestBed _testBed;
+        private IAssetResolver _mockResolver;
+
+        [SetUp]
+        public void SetUp()
         {
-            _resolver = Substitute.For<IAssetResolver>();
-            DependencyInjector.SetDependency<UIComponentNoAttributes, IAssetResolver>(_resolver);
+            _mockResolver = Substitute.For<IAssetResolver>();
+            _testBed = TestBed.Create()
+                .WithSingleton(_mockResolver)
+                .Build();
         }
-        
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            DependencyInjector.ResetProvidedInstance<UIComponentNoAttributes, IAssetResolver>();
-        }
-        
+
         [TearDown]
         public void TearDown()
         {
-            _resolver.ClearReceivedCalls();
+            _mockResolver.ClearReceivedCalls();
         }
 
         [Test]
         public void No_Layout_Is_Loaded()
         {
-            var component = new UIComponentNoAttributes();
+            var component = _testBed.CreateComponent<UIComponentNoAttributes>();
             Assert.That(component.childCount, Is.Zero);
-            _resolver.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
+            _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
         }
 
         [Test]
         public void No_Styles_Are_Loaded()
         {
-            var component = new UIComponentNoAttributes();
+            var component = _testBed.CreateComponent<UIComponentNoAttributes>();
             Assert.That(component.styleSheets.count, Is.Zero);
-            _resolver.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
+            _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
         }
 
         [Test]
         public void No_Asset_Paths_Exist()
         {
-            var component = new UIComponentNoAttributes();
+            var component = _testBed.CreateComponent<UIComponentNoAttributes>();
             Assert.That(component.GetAssetPaths().Count(), Is.EqualTo(0));
         }
     }

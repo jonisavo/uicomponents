@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UIComponents.Cache;
+using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
 using UnityEngine.UIElements;
@@ -73,11 +74,11 @@ namespace UIComponents
         {
             DependencySetupProfilerMarker.Begin();
             _componentType = GetType();
-            _dependencyInjector = DependencyInjector.GetInjector(_componentType);
+            _dependencyInjector = DiContext.Current.GetInjector(_componentType);
             DependencySetupProfilerMarker.End();
 
-            AssetResolver = _dependencyInjector.Provide<IAssetResolver>();
-            Logger = _dependencyInjector.Provide<IUIComponentLogger>();
+            AssetResolver = Provide<IAssetResolver>();
+            Logger = Provide<IUIComponentLogger>();
             
             CacheSetupProfilerMarker.Begin();
             if (!CacheDictionary.ContainsKey(_componentType))

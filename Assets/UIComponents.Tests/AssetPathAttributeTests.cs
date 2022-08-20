@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 
 namespace UIComponents.Tests
@@ -15,27 +16,29 @@ namespace UIComponents.Tests
         [AssetPath("Path3")]
         [AssetPath("Path4")]
         private class UIComponentSubclassWithAssetPaths : UIComponentWithAssetPaths {}
+
+        private TestBed _testBed;
+        private IAssetResolver _mockResolver;
         
-        private IAssetResolver _resolver;
-        
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        [SetUp]
+        public void SetUp()
         {
-            _resolver = MockUtilities.CreateMockResolver();
-            DependencyInjector.SetDependency<UIComponentWithAssetPaths, IAssetResolver>(_resolver);
+            _mockResolver = MockUtilities.CreateMockResolver();
+            _testBed = TestBed.Create()
+                .WithSingleton(_mockResolver)
+                .Build();
         }
         
         [TearDown]
         public void TearDown()
         {
-            _resolver.ClearReceivedCalls();
-            DependencyInjector.ResetProvidedInstance<UIComponentWithAssetPaths, IAssetResolver>();
+            _mockResolver.ClearReceivedCalls();
         }
 
         [Test]
         public void Specified_Asset_Paths_Are_Stored()
         {
-            var component = new UIComponentWithAssetPaths();
+            var component = _testBed.CreateComponent<UIComponentWithAssetPaths>();
 
             var assetPaths = component.GetAssetPaths().ToList();
 
@@ -48,7 +51,7 @@ namespace UIComponents.Tests
         [Test]
         public void Asset_Path_Are_Inherited_From_Parent_Classes()
         {
-            var component = new UIComponentSubclassWithAssetPaths();
+            var component = _testBed.CreateComponent<UIComponentSubclassWithAssetPaths>();
 
             var assetPaths = component.GetAssetPaths().ToList();
             
