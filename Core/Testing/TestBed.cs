@@ -29,6 +29,11 @@ namespace UIComponents.Testing
         {
             return new TestBedBuilder();
         }
+        
+        public static implicit operator TestBed(TestBedBuilder testBedBuilder)
+        {
+            return testBedBuilder.Build();
+        }
 
         /// <summary>
         /// Returns a dependency instance as requested by consumer type <typeparamref name="TConsumer"/>.
