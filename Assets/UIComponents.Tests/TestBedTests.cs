@@ -128,5 +128,13 @@ namespace UIComponents.Tests
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.EqualTo("Creation of component ComponentWithLayout timed out after 0ms."));
         }
+        
+        [Test]
+        public void Has_Implicit_Conversion_From_TestBedBuilder()
+        {
+            TestBed testBed = TestBed.Create().WithAsyncTimeout(TimeSpan.MaxValue);
+            
+            Assert.That(testBed.AsyncTimeout, Is.EqualTo(TimeSpan.MaxValue));
+        }
     }
 }
