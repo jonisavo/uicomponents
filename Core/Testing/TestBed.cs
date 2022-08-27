@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UIComponents.DependencyInjection;
 
 namespace UIComponents.Testing
@@ -12,6 +13,11 @@ namespace UIComponents.Testing
     /// </summary>
     public class TestBed
     {
+        /// <summary>
+        /// Timeout for async operations. Defaults to eight seconds.
+        /// </summary>
+        public TimeSpan AsyncTimeout { get; set; } = TimeSpan.FromSeconds(8);
+        
         internal readonly DiContainer DiContainer = new DiContainer();
         
         internal TestBed() {}
@@ -68,15 +74,54 @@ namespace UIComponents.Testing
             return component;
         }
 
-        
+        /// <summary>
+        /// Creates a component of type <typeparamref name="TComponent"/> using the given
+        /// predicate and waits for it to be initialized.
+        /// </summary>
+        /// <param name="factoryPredicate">Predicate for creating the component</param>
+        /// <typeparam name="TComponent">Component type</typeparam>
+        /// <returns>Task that resolves to component instance when initialized</returns>
+        /// <exception cref="TestBedTimeoutException">Thrown if component creation takes too long</exception>
+        public async Task<TComponent> CreateComponentAsync<TComponent>(Func<TComponent> factoryPredicate)
+            where TComponent : UIComponent
+        {
+            var component = CreateComponent(factoryPredicate);
+            
+            var initTask = component.WaitForInitialization();
+            var timeoutTask = Task.Delay(AsyncTimeout);
+
+            var task = await Task.WhenAny(initTask, timeoutTask);
+
+            if (task == timeoutTask)
+                throw new TestBedTimeoutException(component.GetTypeName(), (int) AsyncTimeout.TotalMilliseconds);
+            
+            var initializedComponent = await initTask;
+
+            return initializedComponent as TComponent;
+        }
+
+
         /// <summary>
         /// Creates a component of type <typeparamref name="TComponent"/> with a default constructor.
         /// </summary>
         /// <typeparam name="TComponent">Component type</typeparam>
         /// <returns>Component instance</returns>
+        /// <exception cref="TestBedTimeoutException">Thrown if component creation takes too long</exception>
         public TComponent CreateComponent<TComponent>() where TComponent : UIComponent, new()
         {
             return CreateComponent(() => new TComponent());
+        }
+        
+        /// <summary>
+        /// Creates a component of type <typeparamref name="TComponent"/> with a default constructor.
+        /// and waits until for it to be initialized.
+        /// </summary>
+        /// <typeparam name="TComponent">Component type</typeparam>
+        /// <returns>Task that resolves to component instance when initialized</returns>
+        /// <exception cref="TestBedTimeoutException">Thrown if component creation takes too long</exception>
+        public async Task<TComponent> CreateComponentAsync<TComponent>() where TComponent : UIComponent, new()
+        {
+            return await CreateComponentAsync(() => new TComponent());
         }
     }
 }
