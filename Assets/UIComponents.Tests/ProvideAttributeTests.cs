@@ -1,7 +1,10 @@
-﻿using NSubstitute;
+﻿using System.Collections;
+using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Experimental;
 using UIComponents.Testing;
+using UIComponents.Tests.Utilities;
+using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
 {
@@ -37,11 +40,26 @@ namespace UIComponents.Tests
             [Provide]
             public readonly IFloatProperty FloatProperty;
         }
-        
-        [Test]
-        public void Provides_Dependencies_Automatically()
+
+        private TestBed _testBed;
+        private IUIComponentLogger _mockLogger;
+
+        [SetUp]
+        public void SetUp()
         {
-            var component = new ComponentWithDependencies();
+            _mockLogger = Substitute.For<IUIComponentLogger>();
+            _testBed = TestBed.Create()
+                .WithSingleton(_mockLogger)
+                .Build();
+        }
+        
+        [UnityTest]
+        public IEnumerator Provides_Dependencies_Automatically()
+        {
+            var component = _testBed.CreateComponent<ComponentWithDependencies>();
+
+            yield return component.WaitForInitialization().AsEnumerator();
+            
             Assert.That(component.StringProperty, Is.InstanceOf<StringClass>());
             Assert.That(component.FloatProperty, Is.InstanceOf<FloatClass>());
         }
@@ -52,18 +70,15 @@ namespace UIComponents.Tests
             public readonly IStringProperty StringProperty;
         }
         
-        [Test]
-        public void Does_Not_Throw_When_Provider_Is_Missing()
+        [UnityTest]
+        public IEnumerator Does_Not_Throw_When_Provider_Is_Missing()
         {
-            var logger = Substitute.For<IUIComponentLogger>();
-            var testBed = TestBed.Create()
-                .WithSingleton(logger)
-                .Build();
+            var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
             
-            var component = testBed.CreateComponent<ComponentWithInvalidDependency>();
+            yield return component.WaitForInitialization().AsEnumerator();
 
             Assert.That(component.StringProperty, Is.Null);
-            logger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
+            _mockLogger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
         }
     }
 }

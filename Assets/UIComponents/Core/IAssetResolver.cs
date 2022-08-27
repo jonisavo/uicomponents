@@ -1,4 +1,6 @@
-﻿namespace UIComponents
+﻿using System.Threading.Tasks;
+
+namespace UIComponents
 {
     /// <summary>
     /// An interface for classes whose purpose is to load assets
@@ -11,8 +13,8 @@
         /// </summary>
         /// <param name="assetPath">Asset path</param>
         /// <typeparam name="T">Asset type</typeparam>
-        /// <returns>Asset object</returns>
-        T LoadAsset<T>(string assetPath) where T : UnityEngine.Object;
+        /// <returns>A task which resolves to the asset object</returns>
+        Task<T> LoadAsset<T>(string assetPath) where T : UnityEngine.Object;
 
         /// <summary>
         /// Returns whether the asset exists.

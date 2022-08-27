@@ -1,5 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
 using UIComponents.Addressables;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests.Addressables
@@ -7,13 +9,13 @@ namespace UIComponents.Tests.Addressables
     [TestFixture]
     public class AddressableAssetResolverTests : AssetResolverTestSuite<AddressableAssetResolver>
     {
-        [Test]
-        public void Should_Be_Able_To_Load_Existing_Asset()
+        [UnityTest]
+        public IEnumerator Should_Be_Able_To_Load_Existing_Asset()
         {
-            Assert_Loads_Existing_Asset<StyleSheet>(
+            yield return Assert_Loads_Existing_Asset<StyleSheet>(
                 "Assets/UIComponents.Tests/Addressables/Assets/Component.uss"
             );
-            Assert_Loads_Existing_Asset<VisualTreeAsset>(
+            yield return Assert_Loads_Existing_Asset<VisualTreeAsset>(
                 "Assets/UIComponents.Tests/Addressables/Assets/Component.uxml"
             );
         }

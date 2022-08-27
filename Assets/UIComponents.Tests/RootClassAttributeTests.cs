@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
+using UIComponents.Testing;
+using UIComponents.Tests.Utilities;
+using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
 {
@@ -8,10 +12,20 @@ namespace UIComponents.Tests
         [RootClass("test-class")]
         private class ComponentWithRootClass : UIComponent {}
 
-        [Test]
-        public void Adds_Class_To_Component()
+        private TestBed _testBed;
+        
+        [SetUp]
+        public void SetUp()
         {
-            var component = new ComponentWithRootClass();
+            _testBed = TestBed.Create().Build();
+        }
+        
+        [UnityTest]
+        public IEnumerator Adds_Class_To_Component()
+        {
+            var component = _testBed.CreateComponent<ComponentWithRootClass>();
+            yield return component.WaitForInitialization().AsEnumerator();
+            
             Assert.That(component.ClassListContains("test-class"), Is.True);
         }
         
@@ -19,10 +33,12 @@ namespace UIComponents.Tests
         [RootClass("final-test-class")]
         private class ChildComponentWithRootClass : ComponentWithRootClass {}
         
-        [Test]
-        public void Adds_Class_To_Component_And_Child_Component()
+        [UnityTest]
+        public IEnumerator Adds_Class_To_Component_And_Child_Component()
         {
-            var component = new ChildComponentWithRootClass();
+            var component = _testBed.CreateComponent<ChildComponentWithRootClass>();
+            yield return component.WaitForInitialization().AsEnumerator();
+            
             Assert.That(component.ClassListContains("test-class"), Is.True);
             Assert.That(component.ClassListContains("other-test-class"), Is.True);
             Assert.That(component.ClassListContains("final-test-class"), Is.True);
