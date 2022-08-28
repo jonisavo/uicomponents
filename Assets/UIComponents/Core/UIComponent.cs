@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -181,6 +182,12 @@ namespace UIComponents
         public Task<UIComponent> WaitForInitialization()
         {
             return _initCompletionSource.Task;
+        }
+        
+        /// <returns>An enumerator which yields when the component has initialized</returns>
+        public IEnumerator WaitForInitializationEnumerator()
+        {
+            yield return WaitForInitialization().AsEnumerator();
         }
         
         /// <summary>

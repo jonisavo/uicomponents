@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using UIComponents.Testing;
-using UIComponents.Tests.Utilities;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
@@ -63,7 +62,7 @@ namespace UIComponents.Tests
         {
             _testBed = TestBed.Create().Build();
             _queryClassTestComponent = _testBed.CreateComponent<QueryClassTestComponent>();
-            yield return _queryClassTestComponent.WaitForInitialization().AsEnumerator();
+            yield return _queryClassTestComponent.WaitForInitializationEnumerator();
         }
 
         [Test]
@@ -143,7 +142,7 @@ namespace UIComponents.Tests
         public IEnumerator Works_With_Both_Name_And_Class_Query()
         {
             var component = _testBed.CreateComponent<UIComponentWithNameAndClassQuery>();
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.Labels, Is.Not.Null);
             Assert.That(component.Labels.Length, Is.EqualTo(3));

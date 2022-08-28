@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using UIComponents.Testing;
-using UIComponents.Tests.Utilities;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
@@ -50,7 +49,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<ComponentWithQueryAttribute>();
 
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.HelloWorldLabel, Is.InstanceOf<Label>());
             Assert.That(component.HelloWorldLabel.text, Is.EqualTo("Hello world!"));
@@ -84,7 +83,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<ChildComponentWithQueryAttribute>();
 
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.HelloWorldLabel, Is.InstanceOf<Label>());
             Assert.That(component.TestFoldout, Is.InstanceOf<Foldout>());
@@ -110,7 +109,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<ComponentWithInvalidQueryAttribute>();
             
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
 
             Assert.That(component.InvalidField, Is.Null);
             Assert.That(component.InvalidArray, Is.Null);

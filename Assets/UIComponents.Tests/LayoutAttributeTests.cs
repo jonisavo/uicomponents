@@ -1,8 +1,10 @@
-﻿using NSubstitute;
+﻿using System.Collections;
+using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -42,24 +44,27 @@ namespace UIComponents.Tests
             _mockResolver.ClearReceivedCalls();
         }
 
-        [Test]
-        public void Given_Layout_Is_Loaded()
+        [UnityTest]
+        public IEnumerator Given_Layout_Is_Loaded()
         {
             var component = _testBed.CreateComponent<UIComponentWithLayout>();
+            yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
-        [Test]
-        public void Superclass_Layout_Is_Loaded_If_It_Is_Not_Overridden()
+        [UnityTest]
+        public IEnumerator Superclass_Layout_Is_Loaded_If_It_Is_Not_Overridden()
         {
             var component = _testBed.CreateComponent<InheritedComponentWithoutAttribute>();
+            yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
-        [Test]
-        public void Superclass_Layout_Is_Not_Loaded_If_Overridden()
+        [UnityTest]
+        public IEnumerator Superclass_Layout_Is_Not_Loaded_If_Overridden()
         {
             var component = _testBed.CreateComponent<InheritedComponentWithAttribute>();
+            yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml");
             _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }

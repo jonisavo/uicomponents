@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using NUnit.Framework;
 using UIComponents.Testing;
-using UIComponents.Tests.Utilities;
 using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
@@ -24,7 +23,7 @@ namespace UIComponents.Tests
         public IEnumerator Adds_Class_To_Component()
         {
             var component = _testBed.CreateComponent<ComponentWithRootClass>();
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.ClassListContains("test-class"), Is.True);
         }
@@ -37,7 +36,7 @@ namespace UIComponents.Tests
         public IEnumerator Adds_Class_To_Component_And_Child_Component()
         {
             var component = _testBed.CreateComponent<ChildComponentWithRootClass>();
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.ClassListContains("test-class"), Is.True);
             Assert.That(component.ClassListContains("other-test-class"), Is.True);

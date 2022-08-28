@@ -3,7 +3,6 @@ using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Experimental;
 using UIComponents.Testing;
-using UIComponents.Tests.Utilities;
 using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
@@ -58,7 +57,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<ComponentWithDependencies>();
 
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.StringProperty, Is.InstanceOf<StringClass>());
             Assert.That(component.FloatProperty, Is.InstanceOf<FloatClass>());
@@ -75,7 +74,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
             
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
 
             Assert.That(component.StringProperty, Is.Null);
             _mockLogger.Received().LogError("Could not provide IStringProperty to StringProperty", component);

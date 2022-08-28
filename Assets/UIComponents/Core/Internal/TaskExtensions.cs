@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
+using UnityEngine.TestTools;
 
-namespace UIComponents.Tests.Utilities
+namespace UIComponents.Internal
 {
-    public static class TaskExtensions
+    [ExcludeFromCoverage]
+    internal static class TaskExtensions
     {
         public static IEnumerator AsEnumerator(this Task task)
         {
