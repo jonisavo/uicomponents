@@ -50,7 +50,8 @@ class MyComponent : UIComponent, IOnAttachToPanel
     [Query("count-label")]
     public readonly Label CountLabel;
     
-    // An instance of CounterService is injected into this field.
+    // An instance of CounterService is injected into this field
+    // in the inherited constructor.
     [Provide]
     private readonly ICounterService _counterService;
     
