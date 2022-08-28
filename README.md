@@ -50,13 +50,9 @@ class MyComponent : UIComponent, IOnAttachToPanel
     [Query("count-label")]
     private readonly Label _countLabel;
     
+    // An instance of CounterService is injected into this field.
+    [Provide]
     private readonly ICounterService _counterService;
-    
-    public MyComponent()
-    {
-        // Will yield a CounterService.
-        _counterService = Provide<ICounterService>();
-    }
     
     // The OnInit method is called after all assets have loaded.
     // Any operations related to the DOM and stylesheets should

@@ -344,18 +344,31 @@ namespace UIComponents
 
             foreach (var fieldInfo in provideAttributeDictionary.Keys)
             {
+                var fieldType = fieldInfo.FieldType;
+                
+                if (provideAttributeDictionary[fieldInfo].CastFrom != null)
+                    fieldType = provideAttributeDictionary[fieldInfo].CastFrom;
+                
                 object value;
 
                 try
                 {
-                    value = _dependencyInjector.Provide(fieldInfo.FieldType);
+                    value = _dependencyInjector.Provide(fieldType);
+
+                    if (provideAttributeDictionary[fieldInfo].CastFrom != null)
+                        value = Convert.ChangeType(value, fieldInfo.FieldType);
                 }
                 catch (MissingProviderException)
                 {
                     Logger.LogError($"Could not provide {fieldInfo.FieldType.Name} to {fieldInfo.Name}", this);
                     continue;
                 }
-                
+                catch (InvalidCastException)
+                {
+                    Logger.LogError($"Could not cast {fieldType.Name} to {fieldInfo.FieldType.Name}", this);
+                    continue;
+                }
+
                 fieldInfo.SetValue(this, value);
             }
         }
