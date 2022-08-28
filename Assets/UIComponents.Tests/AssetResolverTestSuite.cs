@@ -1,10 +1,13 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using System.Threading.Tasks;
+using NUnit.Framework;
+using UIComponents.Tests.Utilities;
 
 namespace UIComponents.Tests
 {
     public abstract class AssetResolverTestSuite<T> where T : IAssetResolver, new()
     {
-        protected void Assert_Loads_Existing_Asset<TAsset>(string assetPath)
+        protected IEnumerator Assert_Loads_Existing_Asset<TAsset>(string assetPath)
             where TAsset : UnityEngine.Object
         {
             var assetResolver = new T();
@@ -13,7 +16,13 @@ namespace UIComponents.Tests
             
             Assert.That(obj, Is.Not.Null);
             
-            Assert.That(obj, Is.InstanceOf<TAsset>());
+            Assert.That(obj, Is.InstanceOf<Task<TAsset>>());
+
+            yield return obj.AsEnumerator();
+            
+            Assert.That(obj.Result, Is.Not.Null);
+            
+            Assert.That(obj.Result, Is.InstanceOf<TAsset>());
         }
         
         protected void Assert_Tells_If_Asset_Exists(string assetPath)

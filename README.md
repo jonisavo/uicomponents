@@ -46,7 +46,7 @@ class MyComponent : UIComponent, IOnAttachToPanel
     // constructor. They are retrieved from Resources by default,
     // hence the lack of file extensions.
     
-    // Queries are made in the inherited constructor.
+    // Queries are made after all assets have loaded.
     [Query("count-label")]
     private readonly Label _countLabel;
     
@@ -58,8 +58,18 @@ class MyComponent : UIComponent, IOnAttachToPanel
         _counterService = Provide<ICounterService>();
     }
     
-    // Event handlers are made in the inherited constructor.
-    // All you need to do is implement a supported interface.
+    // The OnInit method is called after all assets have loaded.
+    // Any operations related to the DOM and stylesheets should
+    // be done here.
+    public override void OnInit()
+    {
+        _countLabel.AddToClassList("new-class");
+        Add(new Label("Hello world"));
+    }
+    
+    // Event handlers are registered after all assets have loaded.
+    // To listen for events, all you need to do is implement
+    // a supported interface.
     public void OnAttachToPanel(AttachToPanelEvent evt)
     {
         _countLabel.text = _counterService.Count.ToString();

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Threading.Tasks;
+using UnityEngine;
 
 namespace UIComponents
 {
@@ -11,9 +12,15 @@ namespace UIComponents
     /// </summary>
     public class ResourcesAssetResolver : IAssetResolver
     {
-        public T LoadAsset<T>(string assetPath) where T : UnityEngine.Object
+        public Task<T> LoadAsset<T>(string assetPath) where T : UnityEngine.Object
         {
-            return Resources.Load<T>(assetPath);
+            var request = Resources.LoadAsync<T>(assetPath);
+
+            var taskCompletionSource = new TaskCompletionSource<T>();
+
+            request.completed += operation => taskCompletionSource.SetResult(request.asset as T);
+            
+            return taskCompletionSource.Task;
         }
 
         public bool AssetExists(string assetPath)

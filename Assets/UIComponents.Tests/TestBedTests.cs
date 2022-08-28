@@ -1,5 +1,13 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
+using NSubstitute;
+using NUnit.Framework;
 using UIComponents.Testing;
+using UIComponents.Tests.Utilities;
+using UnityEngine;
+using UnityEngine.TestTools;
+using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
 {
@@ -78,6 +86,64 @@ namespace UIComponents.Tests
         {
             var dependency = _testBed.Provide<Component, IDependency>();
             Assert.That(dependency, Is.SameAs(_dependencyInstance));
+        }
+
+        [UnityTest]
+        public IEnumerator Allows_Fetching_Component_With_Task()
+        {
+            var componentTask = _testBed.CreateComponentAsync(() => new Component(true));
+            
+            yield return componentTask.AsEnumerator();
+            
+            var component = componentTask.Result;
+            
+            Assert.That(component.Value, Is.True);
+            Assert.That(component.GetDependency(), Is.SameAs(_dependencyInstance));
+
+            var anotherComponentTask = _testBed.CreateComponentAsync<Component>();
+
+            yield return componentTask.AsEnumerator();
+            
+            var anotherComponent = anotherComponentTask.Result;
+            
+            Assert.That(anotherComponent.Value, Is.False);
+            Assert.That(anotherComponent.GetDependency(), Is.SameAs(_dependencyInstance));
+        }
+        
+        [Layout("Foo")]
+        private class ComponentWithLayout : Component {}
+
+        [Test]
+        public void Allows_Setting_Timeout_For_Async_Operations()
+        {
+            var mockResolver = MockUtilities.CreateMockResolver();
+            mockResolver.LoadAsset<VisualTreeAsset>("Foo")
+                .Returns(Task.Delay(1000).ContinueWith(_ => ScriptableObject.CreateInstance<VisualTreeAsset>()));
+            _testBed.DiContainer.SetSingletonOverride(mockResolver);
+            _testBed.AsyncTimeout = TimeSpan.Zero;
+
+            TestBedTimeoutException exception = null;
+
+            try
+            {
+                var task = _testBed.CreateComponentAsync<ComponentWithLayout>();
+                task.GetAwaiter().GetResult();
+            }
+            catch (TestBedTimeoutException ex)
+            {
+                exception = ex;
+            }
+            
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.EqualTo("Creation of component ComponentWithLayout timed out after 0ms."));
+        }
+        
+        [Test]
+        public void Has_Implicit_Conversion_From_TestBedBuilder()
+        {
+            TestBed testBed = TestBed.Create().WithAsyncTimeout(TimeSpan.MaxValue);
+            
+            Assert.That(testBed.AsyncTimeout, Is.EqualTo(TimeSpan.MaxValue));
         }
     }
 }

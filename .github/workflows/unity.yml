@@ -12,8 +12,8 @@ env:
   PROJECT_UNITY_VERSION: 2020.3.38f1
 
 jobs:
-  buildAndTestForLinuxBasedPlatforms:
-    name: Build & Test for ${{ matrix.targetPlatform }} on ${{ matrix.unityVersion }}
+  buildAndTestForLinux:
+    name: Build & Test for StandaloneLinux64 on ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -23,9 +23,6 @@ jobs:
           - 2020.3.38f1
           - 2021.3.8f1
           - 2022.1.13f1
-        targetPlatform:
-          - StandaloneLinux64
-          - WebGL
             
     steps:
       - uses: actions/checkout@v3
@@ -35,10 +32,10 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-StandaloneLinux64-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-
-            Library-${{ matrix.targetPlatform }}-
+            Library-StandaloneLinux64-${{ matrix.unityVersion }}-
+            Library-StandaloneLinux64-
             Library-
             
       - uses: game-ci/unity-test-runner@v2
@@ -79,7 +76,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: ${{ matrix.targetPlatform }}
+          targetPlatform: StandaloneLinux64
 
   buildForWindows:
     name: Build for 64-bit Windows on ${{ matrix.unityVersion }}

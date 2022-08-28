@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
-using UIComponents.Experimental;
+using UIComponents.Testing;
+using UIComponents.Tests.Utilities;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -52,84 +55,79 @@ namespace UIComponents.Tests
                 Assert.That(element, Is.InstanceOf<T>());
         }
 
+        private TestBed _testBed;
+        private QueryClassTestComponent _queryClassTestComponent;
+        
+        [UnitySetUp]
+        public IEnumerator UnitySetUp()
+        {
+            _testBed = TestBed.Create().Build();
+            _queryClassTestComponent = _testBed.CreateComponent<QueryClassTestComponent>();
+            yield return _queryClassTestComponent.WaitForInitialization().AsEnumerator();
+        }
+
         [Test]
         public void Populates_Array_With_All_Elements_With_Class()
         {
-            var component = new QueryClassTestComponent();
-            
-            Assert.That(component.AllClassOneElementsArray, Is.Not.Null);
-            Assert.That(component.AllClassOneElementsArray.Length, Is.EqualTo(4));
+            Assert.That(_queryClassTestComponent.AllClassOneElementsArray, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.AllClassOneElementsArray.Length, Is.EqualTo(4));
         }
 
         [Test]
         public void Populates_List_With_All_Elements_With_Class()
         {
-            var component = new QueryClassTestComponent();
-            
-            Assert.That(component.AllClassOneElementsList, Is.Not.Null);
-            Assert.That(component.AllClassOneElementsList.Count, Is.EqualTo(4));
+            Assert.That(_queryClassTestComponent.AllClassOneElementsList, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.AllClassOneElementsList.Count, Is.EqualTo(4));
         }
         
         [Test]
         public void Populates_Single_Element_With_First_Element_With_Class()
         {
-            var component = new QueryClassTestComponent();
-            
-            Assert.That(component.ClassOneElement, Is.Not.Null);
-            Assert.That(component.ClassOneElement.name, Is.EqualTo("class1-first"));
+            Assert.That(_queryClassTestComponent.ClassOneElement, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.ClassOneElement.name, Is.EqualTo("class1-first"));
         }
 
         [Test]
         public void Populates_Typed_Array_And_List_With_Elements_Of_Type_And_Class()
         {
-            var component = new QueryClassTestComponent();
+            Assert.That(_queryClassTestComponent.ClassOneLabelArray, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.ClassOneLabelArray.Length, Is.EqualTo(3));
+            AssertAllElementsAreOfType(_queryClassTestComponent.ClassOneLabelArray);
             
-            Assert.That(component.ClassOneLabelArray, Is.Not.Null);
-            Assert.That(component.ClassOneLabelArray.Length, Is.EqualTo(3));
-            AssertAllElementsAreOfType(component.ClassOneLabelArray);
-            
-            Assert.That(component.ClassOneLabelList, Is.Not.Null);
-            Assert.That(component.ClassOneLabelList.Count, Is.EqualTo(3));
-            AssertAllElementsAreOfType(component.ClassOneLabelList);
+            Assert.That(_queryClassTestComponent.ClassOneLabelList, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.ClassOneLabelList.Count, Is.EqualTo(3));
+            AssertAllElementsAreOfType(_queryClassTestComponent.ClassOneLabelList);
         }
         
         
         [Test]
         public void Populates_Array_With_All_Elements_With_Multiple_Classes()
         {
-            var component = new QueryClassTestComponent();
-            
-            Assert.That(component.AllElements, Is.Not.Null);
-            Assert.That(component.AllElements.Length, Is.EqualTo(7));
+            Assert.That(_queryClassTestComponent.AllElements, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.AllElements.Length, Is.EqualTo(7));
         }
         
         [Test]
         public void Populates_Typed_Array_With_Multiple_Classes()
         {
-            var component = new QueryClassTestComponent();
-            
-            Assert.That(component.AllLabels, Is.Not.Null);
-            Assert.That(component.AllLabels.Length, Is.EqualTo(5));
-            AssertAllElementsAreOfType(component.AllLabels);
+            Assert.That(_queryClassTestComponent.AllLabels, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.AllLabels.Length, Is.EqualTo(5));
+            AssertAllElementsAreOfType(_queryClassTestComponent.AllLabels);
         }
 
         [Test]
         public void Creates_Empty_List_And_Array_If_No_Elements_Are_Found()
         {
-            var component = new QueryClassTestComponent();
-            
-            Assert.That(component.EmptyLabelArray, Is.Not.Null);
-            Assert.That(component.EmptyLabelArray.Length, Is.EqualTo(0));
-            Assert.That(component.EmptyLabelList, Is.Not.Null);
-            Assert.That(component.EmptyLabelList.Count, Is.EqualTo(0));
+            Assert.That(_queryClassTestComponent.EmptyLabelArray, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.EmptyLabelArray.Length, Is.EqualTo(0));
+            Assert.That(_queryClassTestComponent.EmptyLabelList, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.EmptyLabelList.Count, Is.EqualTo(0));
         }
 
         [Test]
         public void Leaves_Field_Null_If_No_Element_Is_Found()
         {
-            var component = new QueryClassTestComponent();
-            
-            Assert.That(component.EmptyLabel, Is.Null);
+            Assert.That(_queryClassTestComponent.EmptyLabel, Is.Null);
         }
 
         [Layout("UIComponentTests/QueryClassAttributeTest")]
@@ -141,10 +139,11 @@ namespace UIComponents.Tests
             public readonly Label[] Labels;
         }
         
-        [Test]
-        public void Works_With_Both_Name_And_Class_Query()
+        [UnityTest]
+        public IEnumerator Works_With_Both_Name_And_Class_Query()
         {
-            var component = new UIComponentWithNameAndClassQuery();
+            var component = _testBed.CreateComponent<UIComponentWithNameAndClassQuery>();
+            yield return component.WaitForInitialization().AsEnumerator();
             
             Assert.That(component.Labels, Is.Not.Null);
             Assert.That(component.Labels.Length, Is.EqualTo(3));

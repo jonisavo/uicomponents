@@ -1,4 +1,6 @@
-﻿namespace UIComponents.Testing
+﻿using System;
+
+namespace UIComponents.Testing
 {
     /// <summary>
     /// A class for configuring a <see cref="TestBed"/> instance with dependencies.
@@ -38,6 +40,17 @@
             var injector = _testBed.DiContainer.GetInjector(typeof(TConsumer));
             
             injector.SetDependency(value, Scope.Transient);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set a timeout for async operations.
+        /// </summary>
+        /// <param name="timeout">Timeout for async operations</param>
+        public TestBedBuilder WithAsyncTimeout(TimeSpan timeout)
+        {
+            _testBed.AsyncTimeout = timeout;
 
             return this;
         }

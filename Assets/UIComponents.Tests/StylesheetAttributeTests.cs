@@ -1,9 +1,11 @@
-﻿using NSubstitute;
-using NSubstitute.ReturnsExtensions;
+﻿using System.Collections;
+using System.Threading.Tasks;
+using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -28,43 +30,51 @@ namespace UIComponents.Tests
             _mockLogger = Substitute.For<IUIComponentLogger>();
             _mockResolver = MockUtilities.CreateMockResolver();
             _mockResolver.LoadAsset<StyleSheet>("Assets/StylesheetOne.uss")
-                .Returns(ScriptableObject.CreateInstance<StyleSheet>());
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
             _mockResolver.LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss")
-                .Returns(ScriptableObject.CreateInstance<StyleSheet>());
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
             _mockResolver.LoadAsset<StyleSheet>("Assets/StylesheetThree.uss")
-                .Returns(ScriptableObject.CreateInstance<StyleSheet>());
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
             _testBed = TestBed.Create()
                 .WithSingleton(_mockLogger)
                 .WithSingleton(_mockResolver)
                 .Build();
         }
 
-        [Test]
-        public void Given_Stylesheets_Are_Loaded()
+        [UnityTest]
+        public IEnumerator Given_Stylesheets_Are_Loaded()
         {
             var component = _testBed.CreateComponent<UIComponentWithTwoStylesheets>();
+            
+            yield return component.WaitForInitialization().AsEnumerator();
+            
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
             Assert.That(component.styleSheets.count, Is.EqualTo(2));
         }
 
-        [Test]
-        public void Inherited_Stylesheets_Are_Loaded()
+        [UnityTest]
+        public IEnumerator Inherited_Stylesheets_Are_Loaded()
         {
             var component = _testBed.CreateComponent<InheritedComponent>();
+            
+            yield return component.WaitForInitialization().AsEnumerator();
+
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetThree.uss");
             Assert.That(component.styleSheets.count, Is.EqualTo(3));
         }
 
-        [Test]
-        public void Invalid_Stylesheets_Output_Error_Message()
+        [UnityTest]
+        public IEnumerator Invalid_Stylesheets_Output_Error_Message()
         {
             _mockResolver.LoadAsset<StyleSheet>("Assets/StylesheetOne.uss")
-                .ReturnsNull();
+                .Returns(Task.FromResult<StyleSheet>(null));
 
             var component = _testBed.CreateComponent<UIComponentWithTwoStylesheets>();
+
+            yield return component.WaitForInitialization().AsEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockLogger.Received().LogError("Could not find stylesheet Assets/StylesheetOne.uss", component);

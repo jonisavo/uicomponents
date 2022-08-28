@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Testing;
@@ -18,6 +19,10 @@ namespace UIComponents.Tests
         public void SetUp()
         {
             _mockResolver = Substitute.For<IAssetResolver>();
+            _mockResolver.LoadAsset<VisualTreeAsset>(Arg.Any<string>())
+                .Returns(Task.FromResult<VisualTreeAsset>(null));
+            _mockResolver.LoadAsset<StyleSheet>(Arg.Any<string>())
+                .Returns(Task.FromResult<StyleSheet>(null));
             _testBed = TestBed.Create()
                 .WithSingleton(_mockResolver)
                 .Build();
@@ -42,7 +47,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<UIComponentNoAttributes>();
             Assert.That(component.styleSheets.count, Is.Zero);
-            _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
+            _mockResolver.DidNotReceive().LoadAsset<StyleSheet>(Arg.Any<string>());
         }
 
         [Test]

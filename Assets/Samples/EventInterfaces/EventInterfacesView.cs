@@ -13,15 +13,19 @@ namespace UIComponents.Samples.EventInterfaces
     {
         private readonly IEventLogService _eventLogService;
 
-        private readonly Button _clearButton;
+        private Button _clearButton;
         
         public EventInterfacesView()
         {
             _eventLogService = Provide<IEventLogService>();
+        }
+
+        public override void OnInit()
+        {
             _clearButton = this.Q<Button>("log-clear-button");
             _clearButton.clicked += OnClearButtonClicked;
         }
-
+        
         ~EventInterfacesView()
         {
             _clearButton.clicked -= OnClearButtonClicked;
