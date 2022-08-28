@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UIComponents.Cache;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
@@ -104,10 +105,15 @@ namespace UIComponents
             
             LayoutAndStylesSetupProfilerMarker.Begin();
 
-            Task.WhenAll(new[] {LoadLayout(), LoadStyles()}).ContinueWith(task =>
+            var layoutTask = GetLayout();
+            var stylesTask = GetStyleSheets();
+
+            Task.WhenAll(layoutTask, stylesTask).ContinueWith(task =>
             {
+                var layoutAsset = layoutTask.Result;
+                var styles = stylesTask.Result;
                 LayoutAndStylesSetupProfilerMarker.End();
-                UnitySynchronizationContext.Post(_ => Initialize(), null);
+                UnitySynchronizationContext.Post(_ => Initialize(layoutAsset, styles), null);
             });
         }
 
@@ -133,9 +139,25 @@ namespace UIComponents
                 RegisterCallback<ClickEvent>(onClick.OnClick);
 #endif
         }
-
-        private void Initialize()
+        
+        private void LoadLayout([CanBeNull] VisualTreeAsset layoutAsset)
         {
+            if (layoutAsset != null)
+                layoutAsset.CloneTree(this);
+        }
+
+        private void LoadStyles(IList<StyleSheet> styles)
+        {
+            var styleSheetCount = styles.Count;
+
+            for (var i = 0; i < styleSheetCount; i++)
+                styleSheets.Add(styles[i]);
+        }
+
+        private void Initialize([CanBeNull] VisualTreeAsset layoutAsset, IList<StyleSheet> styles)
+        {
+            LoadLayout(layoutAsset);
+            LoadStyles(styles);
             ApplyEffects();
             PopulateFieldsProfilerMarker.Begin();
             PopulateQueryFields();
@@ -222,7 +244,7 @@ namespace UIComponents
             return AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
 
-        private async ValueTask<List<StyleSheet>> GetStyleSheets()
+        private async Task<List<StyleSheet>> GetStyleSheets()
         {
             var stylesheetAttributes = CacheDictionary[_componentType].StylesheetAttributes;
             var stylesheetAttributeCount = stylesheetAttributes.Count;
@@ -244,33 +266,16 @@ namespace UIComponents
             for (var i = 0; i < stylesheetAttributeCount; i++)
             {
                 var styleSheet = styleSheetLoadTasks[i].Result;
-                
+
                 if (styleSheet == null)
                 {
                     Logger.LogError($"Could not find stylesheet {styleSheetAssetPaths[i]}", this);
                     continue;
                 }
-                loadedStyleSheets.Add(styleSheetLoadTasks[i].Result);
+                loadedStyleSheets.Add(styleSheet);
             }
 
             return loadedStyleSheets;
-        }
-
-        private async Task LoadLayout()
-        {
-            var layoutAsset = await GetLayout();
-
-            if (layoutAsset != null)
-                layoutAsset.CloneTree(this);
-        }
-
-        private async Task LoadStyles()
-        {
-            var loadedStyleSheets = await GetStyleSheets();
-            var styleSheetCount = loadedStyleSheets.Count;
-
-            for (var i = 0; i < styleSheetCount; i++)
-                styleSheets.Add(loadedStyleSheets[i]);
         }
 
         private void ApplyEffects()
