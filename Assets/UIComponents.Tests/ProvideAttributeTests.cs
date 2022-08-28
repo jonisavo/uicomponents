@@ -38,6 +38,8 @@ namespace UIComponents.Tests
             public readonly IStringProperty StringProperty;
             [Provide]
             public readonly IFloatProperty FloatProperty;
+            [Provide(CastFrom = typeof(IFloatProperty))]
+            public readonly FloatClass FloatClassInstance;
         }
 
         private TestBed _testBed;
@@ -62,15 +64,29 @@ namespace UIComponents.Tests
             Assert.That(component.StringProperty, Is.InstanceOf<StringClass>());
             Assert.That(component.FloatProperty, Is.InstanceOf<FloatClass>());
         }
+
+        [UnityTest]
+        public IEnumerator Allows_Providing_Dependencies_With_A_Cast()
+        {
+            var component = _testBed.CreateComponent<ComponentWithDependencies>();
+
+            yield return component.WaitForInitializationEnumerator();
+            
+            Assert.That(component.FloatClassInstance, Is.InstanceOf<FloatClass>());
+        }
         
+        [Dependency(typeof(IFloatProperty), provide: typeof(FloatClass))]
         private class ComponentWithInvalidDependency : UIComponent
         {
             [Provide]
             public readonly IStringProperty StringProperty;
+
+            [Provide(CastFrom = typeof(IFloatProperty))]
+            public readonly StringClass StringClassInstance;
         }
         
         [UnityTest]
-        public IEnumerator Does_Not_Throw_When_Provider_Is_Missing()
+        public IEnumerator Logs_Error_When_Provider_Is_Missing()
         {
             var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
             
@@ -78,6 +94,18 @@ namespace UIComponents.Tests
 
             Assert.That(component.StringProperty, Is.Null);
             _mockLogger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
+        }
+
+        [UnityTest]
+        public IEnumerator Logs_Error_On_Invalid_Cast()
+        {
+            var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
+            
+            yield return component.WaitForInitializationEnumerator();
+            
+            Assert.That(component.StringClassInstance, Is.Null);
+            
+            _mockLogger.Received().LogError("Could not cast IFloatProperty to StringClass", component);
         }
     }
 }
