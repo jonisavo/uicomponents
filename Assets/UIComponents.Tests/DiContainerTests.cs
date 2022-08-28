@@ -8,15 +8,24 @@ namespace UIComponents.Tests
     public class DiContainerTests
     {
         private static readonly Type StringType = typeof(string);
+        private DiContainer _container;
+        private DependencyInjector _dependencyInjector;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _container = new DiContainer();
+            _dependencyInjector = new DependencyInjector(_container);
+            _dependencyInjector.SetDependency<string>("Initial value");
+            _container.InjectorDictionary.Add(StringType, _dependencyInjector);
+        }
         
         [Test]
         public void Singleton_Instance_Can_Be_Set()
         {
-            var container = new DiContainer();
-            
-            container.RegisterSingletonInstance(StringType, "Hello world");
+            _container.RegisterSingletonInstance(StringType, "Hello world");
 
-            var couldFetchValue = container.TryGetSingletonInstance(StringType, out var text);
+            var couldFetchValue = _container.TryGetSingletonInstance(StringType, out var text);
             
             Assert.That(couldFetchValue, Is.True);
             Assert.That(text, Is.EqualTo("Hello world"));
@@ -25,48 +34,40 @@ namespace UIComponents.Tests
         [Test]
         public void Singleton_Instance_Existence_Can_Be_Queried()
         {
-            var container = new DiContainer();
-            
-            Assert.That(container.ContainsSingletonInstanceOfType(StringType), Is.False);
-            container.RegisterSingletonInstance(StringType, "Hello world");
-            Assert.That(container.ContainsSingletonInstanceOfType(StringType), Is.True);
+            Assert.That(_container.ContainsSingletonInstanceOfType(typeof(int)), Is.False);
+            _container.RegisterSingletonInstance(typeof(int), 1);
+            Assert.That(_container.ContainsSingletonInstanceOfType(typeof(int)), Is.True);
         }
 
         [Test]
         public void Null_Can_Not_Be_Set_As_Singleton_Instance()
         {
-            var container = new DiContainer();
-            
-            Assert.That(() => container.RegisterSingletonInstance(StringType, null), Throws.ArgumentNullException);
+            Assert.That(() => _container.RegisterSingletonInstance(StringType, null), Throws.ArgumentNullException);
         }
 
         [Test]
         public void Singleton_Override_Can_Be_Set()
         {
-            var container = new DiContainer();
-            
-            Assert.That(container.TryGetSingletonOverride(StringType, out _), Is.False);
-            container.SetSingletonOverride("Hello world");
-            Assert.That(container.TryGetSingletonOverride(StringType, out var text), Is.True);
+            Assert.That(_container.TryGetSingletonOverride(StringType, out _), Is.False);
+            _container.SetSingletonOverride("Hello world");
+            Assert.That(_container.TryGetSingletonOverride(StringType, out var text), Is.True);
             Assert.That(text, Is.EqualTo("Hello world"));
+            Assert.That(_dependencyInjector.Provide<string>(), Is.EqualTo("Hello world"));
         }
         
         [Test]
         public void Singleton_Override_Can_Not_Be_Null()
         {
-            var container = new DiContainer();
-            
-            Assert.That(() => container.SetSingletonOverride((string) null), Throws.ArgumentNullException);
+            Assert.That(() => _container.SetSingletonOverride((string) null), Throws.ArgumentNullException);
         }
 
         [Test]
         public void Singleton_Override_Can_Be_Removed()
         {
-            var container = new DiContainer();
-            
-            container.SetSingletonOverride("Hello world");
-            container.RemoveSingletonOverride<string>();
-            Assert.That(container.TryGetSingletonOverride(StringType, out _), Is.False);
+            _container.SetSingletonOverride("Hello world");
+            _container.RemoveSingletonOverride<string>();
+            Assert.That(_container.TryGetSingletonOverride(StringType, out _), Is.False);
+            Assert.That(_dependencyInjector.Provide<string>(), Is.EqualTo("Initial value"));
         }
     }
 }
