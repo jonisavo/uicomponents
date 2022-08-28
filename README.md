@@ -48,7 +48,7 @@ class MyComponent : UIComponent, IOnAttachToPanel
     
     // Queries are made after all assets have loaded.
     [Query("count-label")]
-    private readonly Label _countLabel;
+    public readonly Label CountLabel;
     
     // An instance of CounterService is injected into this field.
     [Provide]
@@ -59,7 +59,8 @@ class MyComponent : UIComponent, IOnAttachToPanel
     // be done here.
     public override void OnInit()
     {
-        _countLabel.AddToClassList("new-class");
+        CountLabel.text = _counterService.Count.ToString();
+        CountLabel.AddToClassList("new-class");
         Add(new Label("Hello world"));
     }
     
@@ -68,7 +69,7 @@ class MyComponent : UIComponent, IOnAttachToPanel
     // a supported interface.
     public void OnAttachToPanel(AttachToPanelEvent evt)
     {
-        _countLabel.text = _counterService.Count.ToString();
+        CountLabel.text = _counterService.Count.ToString();
     }
 }
 ```
@@ -80,6 +81,46 @@ container.Add(new MyComponent());
 
 UIComponents are just VisualElements with some additional code in their
 constructor for loading assets automatically, among other things.
+
+## Testing
+
+The UIComponents package has been designed with testability in mind. The `UIComponents.Testing`
+assembly contains the `TestBed` helper class.
+
+```c#
+using UIComponents;
+using UIComponents.Testing;
+using NUnit.Framework;
+
+[TestFixture]
+public class MyComponentTests
+{
+    private TestBed _testBed;
+    private ICounterService _counterService;
+    
+    [SetUp]
+    public void SetUp()
+    {
+        // A mocking framework like NSubstitute is recommended.
+        // Here we don't use a mock at all.
+        _counterService = new CounterService();
+        _testBed = TestBed.Create()
+            .WithSingleton<ICounterService>(_counterService)
+            .Build();
+    }
+    
+    [UnityTest]
+    public IEnumerator It_Initializes_Count_Label_On_Init()
+    {
+        _counterService.Count = 42;
+
+        var component = _testBed.CreateComponent<MyComponent>();
+        // Wait until the component has loaded.
+        yield return _component.WaitForInitializationEnumerator();
+        Assert.That(_component.CountLabel.text, Is.EqualTo("42"));
+    }
+}
+```
 
 ## Installation
 
