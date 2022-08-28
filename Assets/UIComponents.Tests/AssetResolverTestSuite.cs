@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using UIComponents.Tests.Utilities;
+using UIComponents.Internal;
 
 namespace UIComponents.Tests
 {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 using UnityEngine;

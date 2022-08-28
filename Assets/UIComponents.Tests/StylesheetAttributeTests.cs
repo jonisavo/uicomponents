@@ -46,7 +46,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<UIComponentWithTwoStylesheets>();
             
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
             
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
@@ -58,7 +58,7 @@ namespace UIComponents.Tests
         {
             var component = _testBed.CreateComponent<InheritedComponent>();
             
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
@@ -74,7 +74,7 @@ namespace UIComponents.Tests
 
             var component = _testBed.CreateComponent<UIComponentWithTwoStylesheets>();
 
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockLogger.Received().LogError("Could not find stylesheet Assets/StylesheetOne.uss", component);

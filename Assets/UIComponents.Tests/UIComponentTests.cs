@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using NUnit.Framework;
-using UIComponents.Tests.Utilities;
 using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
@@ -18,7 +17,7 @@ namespace UIComponents.Tests
             {
                 var component = new TestComponent();
                 Assert.That(component.Initialized, Is.False);
-                yield return component.WaitForInitialization().AsEnumerator();
+                yield return component.WaitForInitializationEnumerator();
                 Assert.That(component.Initialized, Is.True);
             }
             

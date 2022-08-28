@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using NUnit.Framework;
-using UIComponents.Tests.Utilities;
 using UnityEditor;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -24,7 +23,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             Assert.That(component.Fired, Is.False);
             window.AddTestComponent(component);
 
-            yield return component.WaitForInitialization().AsEnumerator();
+            yield return component.WaitForInitializationEnumerator();
 
             using (var evt = new TEvent() { target = component })
                 component.SendEvent(evt);

@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Testing;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -14,9 +16,10 @@ namespace UIComponents.Tests
 
         private TestBed _testBed;
         private IAssetResolver _mockResolver;
+        private UIComponentNoAttributes _component;
 
-        [SetUp]
-        public void SetUp()
+        [UnitySetUp]
+        public IEnumerator UnitySetUp()
         {
             _mockResolver = Substitute.For<IAssetResolver>();
             _mockResolver.LoadAsset<VisualTreeAsset>(Arg.Any<string>())
@@ -26,6 +29,8 @@ namespace UIComponents.Tests
             _testBed = TestBed.Create()
                 .WithSingleton(_mockResolver)
                 .Build();
+            _component = _testBed.CreateComponent<UIComponentNoAttributes>();
+            yield return _component.WaitForInitializationEnumerator();
         }
 
         [TearDown]
@@ -37,24 +42,21 @@ namespace UIComponents.Tests
         [Test]
         public void No_Layout_Is_Loaded()
         {
-            var component = _testBed.CreateComponent<UIComponentNoAttributes>();
-            Assert.That(component.childCount, Is.Zero);
+            Assert.That(_component.childCount, Is.Zero);
             _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
         }
 
         [Test]
         public void No_Styles_Are_Loaded()
         {
-            var component = _testBed.CreateComponent<UIComponentNoAttributes>();
-            Assert.That(component.styleSheets.count, Is.Zero);
+            Assert.That(_component.styleSheets.count, Is.Zero);
             _mockResolver.DidNotReceive().LoadAsset<StyleSheet>(Arg.Any<string>());
         }
 
         [Test]
         public void No_Asset_Paths_Exist()
         {
-            var component = _testBed.CreateComponent<UIComponentNoAttributes>();
-            Assert.That(component.GetAssetPaths().Count(), Is.EqualTo(0));
+            Assert.That(_component.GetAssetPaths().Count(), Is.EqualTo(0));
         }
     }
 }
