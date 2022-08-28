@@ -75,8 +75,6 @@ namespace UIComponents
             new ProfilerMarker("UIComponent.CacheSetup");
         private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
             new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
-        private static readonly ProfilerMarker PopulateFieldsProfilerMarker =
-            new ProfilerMarker("UIComponent.PopulateFields");
 
         private static readonly SynchronizationContext UnitySynchronizationContext;
 
@@ -91,19 +89,23 @@ namespace UIComponents
         /// </summary>
         protected UIComponent()
         {
-            DependencySetupProfilerMarker.Begin();
-            _componentType = GetType();
-            _dependencyInjector = DiContext.Current.GetInjector(_componentType);
-            DependencySetupProfilerMarker.End();
-
-            AssetResolver = Provide<IAssetResolver>();
-            Logger = Provide<IUIComponentLogger>();
-            
             CacheSetupProfilerMarker.Begin();
+            
+            _componentType = GetType();
             if (!CacheDictionary.ContainsKey(_componentType))
                 CacheDictionary.Add(_componentType, new UIComponentCache(_componentType));
+            
             CacheSetupProfilerMarker.End();
             
+            DependencySetupProfilerMarker.Begin();
+            
+            _dependencyInjector = DiContext.Current.GetInjector(_componentType);
+            AssetResolver = Provide<IAssetResolver>();
+            Logger = Provide<IUIComponentLogger>();
+            PopulateProvideFields();
+            
+            DependencySetupProfilerMarker.End();
+
             LayoutAndStylesSetupProfilerMarker.Begin();
 
             var layoutTask = GetLayout();
@@ -160,10 +162,7 @@ namespace UIComponents
             LoadLayout(layoutAsset);
             LoadStyles(styles);
             ApplyEffects();
-            PopulateFieldsProfilerMarker.Begin();
             PopulateQueryFields();
-            PopulateProvideFields();
-            PopulateFieldsProfilerMarker.End();
             RegisterEventInterfaceCallbacks();
             OnInit();
             Initialized = true;

@@ -29,6 +29,10 @@ namespace UIComponents
     [MeansImplicitUse]
     public class ProvideAttribute : Attribute
     {
+        /// <summary>
+        /// If set, an instance of the specified type will be provided and
+        /// cast to the field type.
+        /// </summary>
         public Type CastFrom { get; set; }
     }
 }
