@@ -1,5 +1,22 @@
 
 
+# [0.20.0](https://github.com/jonisavo/uicomponents/compare/v0.19.0...v0.20.0) (2022-08-28)
+
+
+### Features
+
+* create new asmdef for UIComponents.Testing ([95571ec](https://github.com/jonisavo/uicomponents/commit/95571ec31700af346ec7afbde8f7777c7646f861))
+* **TestBed:** add implicit conversion from TestBedBuilder ([99c5203](https://github.com/jonisavo/uicomponents/commit/99c520300b5475d5fd271de9f1dd11cafe6ca59d))
+* **TestBed:** add SetSingletonOverride instance method ([8fe0b9d](https://github.com/jonisavo/uicomponents/commit/8fe0b9d2fcf628cd9e7ef1a072b9a745b9bc3919))
+* **UIComponent:** add WaitForInitializationEnumerator method ([76ef531](https://github.com/jonisavo/uicomponents/commit/76ef5317984b9125c46848280961e5033ede1de2))
+* **UIComponent:** load assets asynchronously ([b95192c](https://github.com/jonisavo/uicomponents/commit/b95192ca688e446550520861c9ffd828f80d05d4))
+
+
+### BREAKING CHANGES
+
+* Usage of UIComponents.Testing now requires including an assembly definition reference.
+* **UIComponent:** Assets are now loaded asynchronously. Operations related to the DOM or stylesheets must now be done in the new virtual OnInit method.
+
 # [0.19.0](https://github.com/jonisavo/uicomponents/compare/v0.18.0...v0.19.0) (2022-08-20)
 
 
