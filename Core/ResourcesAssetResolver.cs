@@ -19,14 +19,7 @@ namespace UIComponents
 
             var taskCompletionSource = new TaskCompletionSource<T>();
 
-            request.completed += delegate(AsyncOperation operation)
-            {
-                if (operation.isDone) {
-                    taskCompletionSource.SetResult(request.asset as T);
-                } else {
-                    taskCompletionSource.SetException(new Exception("Failed to load asset"));
-                }
-            };
+            request.completed += operation => taskCompletionSource.SetResult(request.asset as T);
             
             return taskCompletionSource.Task;
         }
