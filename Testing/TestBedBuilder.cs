@@ -8,8 +8,7 @@ namespace UIComponents.Testing
     public class TestBedBuilder
     {
         private readonly TestBed _testBed;
-        private bool _built;
-        
+
         internal TestBedBuilder()
         {
             _testBed = new TestBed();
