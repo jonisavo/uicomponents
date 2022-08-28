@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UIComponents.DependencyInjection;
 
 namespace UIComponents.Testing
@@ -127,6 +128,17 @@ namespace UIComponents.Testing
         public async Task<TComponent> CreateComponentAsync<TComponent>() where TComponent : UIComponent, new()
         {
             return await CreateComponentAsync(() => new TComponent());
+        }
+        
+        /// <summary>
+        /// Overrides a singleton dependency.
+        /// </summary>
+        /// <param name="value">New singleton value</param>
+        /// <typeparam name="TDependency">Dependency type</typeparam>
+        /// <exception cref="ArgumentNullException">Thrown if value is null</exception>
+        public void SetSingletonOverride<TDependency>([NotNull] TDependency value) where TDependency : class
+        {
+            DiContainer.SetSingletonOverride(value);
         }
     }
 }

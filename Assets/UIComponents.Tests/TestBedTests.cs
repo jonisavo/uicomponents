@@ -18,7 +18,7 @@ namespace UIComponents.Tests
         
         private Dependency _dependencyInstance;
         private TransientDependency _transientDependencyInstance;
-        
+
         private interface IDependency {}
 
         private class Dependency : IDependency {}
@@ -88,6 +88,16 @@ namespace UIComponents.Tests
             Assert.That(dependency, Is.SameAs(_dependencyInstance));
         }
 
+        [Test]
+        public void Allows_Changing_Singleton_Instance()
+        {
+            var newDependency = new Dependency();
+            _testBed.SetSingletonOverride<IDependency>(newDependency);
+            var dependency = _testBed.Provide<Component, IDependency>();
+            Assert.That(dependency, Is.Not.SameAs(_dependencyInstance));
+            Assert.That(dependency, Is.SameAs(newDependency));
+        }
+
         [UnityTest]
         public IEnumerator Allows_Fetching_Component_With_Task()
         {
@@ -119,7 +129,7 @@ namespace UIComponents.Tests
             var mockResolver = MockUtilities.CreateMockResolver();
             mockResolver.LoadAsset<VisualTreeAsset>("Foo")
                 .Returns(Task.Delay(1000).ContinueWith(_ => ScriptableObject.CreateInstance<VisualTreeAsset>()));
-            _testBed.DiContainer.SetSingletonOverride(mockResolver);
+            _testBed.SetSingletonOverride(mockResolver);
             _testBed.AsyncTimeout = TimeSpan.Zero;
 
             TestBedTimeoutException exception = null;
