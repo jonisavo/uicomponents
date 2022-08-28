@@ -155,7 +155,12 @@ namespace UIComponents.DependencyInjection
             object instance = null;
 
             if (dependency.Scope == Scope.Singleton)
-                _container.TryGetSingletonInstance(initialProviderType, out instance);
+            {
+                _container.TryGetSingletonOverride(dependencyType, out instance);
+                
+                if (instance == null)
+                    _container.TryGetSingletonInstance(initialProviderType, out instance);
+            }
 
             if (instance == null)
                 instance = Activator.CreateInstance(initialProviderType);

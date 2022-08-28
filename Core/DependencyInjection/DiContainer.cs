@@ -38,10 +38,10 @@ namespace UIComponents.DependencyInjection
         
         private DependencyInjector CreateInjector(Type consumerType)
         {
-            var injectAttributes = (DependencyAttribute[])
+            var dependencyAttributes = (DependencyAttribute[])
                 consumerType.GetCustomAttributes(typeof(DependencyAttribute), true);
 
-            var injector = new DependencyInjector(injectAttributes, this);
+            var injector = new DependencyInjector(dependencyAttributes, this);
 
             InjectorDictionary.Add(consumerType, injector);
 
@@ -121,6 +121,9 @@ namespace UIComponents.DependencyInjection
                 throw new ArgumentNullException(nameof(value));
             
             _singletonOverrideDictionary[typeof(TDependency)] = value;
+            
+            foreach (var injector in InjectorDictionary.Values)
+                injector.ResetProvidedInstance<TDependency>();
         }
         
         /// <summary>
@@ -130,6 +133,9 @@ namespace UIComponents.DependencyInjection
         public void RemoveSingletonOverride<TDependency>() where TDependency : class
         {
             _singletonOverrideDictionary.Remove(typeof(TDependency));
+            
+            foreach (var injector in InjectorDictionary.Values)
+                injector.ResetProvidedInstance<TDependency>();
         }
         
         /// <summary>
