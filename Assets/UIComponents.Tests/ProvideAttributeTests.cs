@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using NSubstitute;
 using NUnit.Framework;
-using UIComponents.Experimental;
 using UIComponents.Testing;
 using UnityEngine.TestTools;
 

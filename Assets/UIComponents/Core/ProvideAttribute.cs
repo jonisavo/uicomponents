@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace UIComponents.Experimental
+namespace UIComponents
 {
     /// <summary>
     /// An attribute for specifying a field to be automatically
