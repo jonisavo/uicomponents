@@ -5,7 +5,7 @@ namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.20.0.0";
+        public const string Version = "0.21.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
@@ -13,8 +13,7 @@ namespace UIComponents.Benchmarks
             {
                 new SampleGroup("UIComponent.DependencySetup"),
                 new SampleGroup("UIComponent.CacheSetup"),
-                new SampleGroup("UIComponent.LayoutAndStylesSetup"),
-                new SampleGroup("UIComponent.PopulateFields")
+                new SampleGroup("UIComponent.LayoutAndStylesSetup")
             };
         }
         
