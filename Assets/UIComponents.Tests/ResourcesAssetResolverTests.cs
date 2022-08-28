@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -6,10 +8,10 @@ namespace UIComponents.Tests
     [TestFixture]
     public class ResourcesAssetResolverTests : AssetResolverTestSuite<ResourcesAssetResolver>
     {
-        [Test]
-        public void Should_Be_Able_To_Load_Existing_Asset_Synchronously()
+        [UnityTest]
+        public IEnumerator Should_Be_Able_To_Load_Existing_Asset()
         {
-            Assert_Loads_Existing_Asset<VisualTreeAsset>(
+            yield return Assert_Loads_Existing_Asset<VisualTreeAsset>(
                 "UIComponentTests/LayoutAttributeTests"
             );
         }
