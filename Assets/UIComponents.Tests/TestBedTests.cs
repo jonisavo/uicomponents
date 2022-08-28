@@ -99,6 +99,15 @@ namespace UIComponents.Tests
             
             Assert.That(component.Value, Is.True);
             Assert.That(component.GetDependency(), Is.SameAs(_dependencyInstance));
+
+            var anotherComponentTask = _testBed.CreateComponentAsync<Component>();
+
+            yield return componentTask.AsEnumerator();
+            
+            var anotherComponent = anotherComponentTask.Result;
+            
+            Assert.That(anotherComponent.Value, Is.False);
+            Assert.That(anotherComponent.GetDependency(), Is.SameAs(_dependencyInstance));
         }
         
         [Layout("Foo")]
