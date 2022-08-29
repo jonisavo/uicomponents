@@ -1,5 +1,23 @@
 
 
+# [0.21.0](https://github.com/jonisavo/uicomponents/compare/v0.20.0...v0.21.0) (2022-08-29)
+
+
+### Bug Fixes
+
+* **ProvideAttribute:** fix fields being populated after assets are loaded ([7f6519d](https://github.com/jonisavo/uicomponents/commit/7f6519dec749e58cff2be841d12105facdeaf605))
+
+
+### Features
+
+* **ProvideAttribute:** add CastForm property ([7ec0b11](https://github.com/jonisavo/uicomponents/commit/7ec0b11426ca849f0ad062e01acb0c082351ce65))
+* **ProvideAttribute:** move out of Experimental namespace ([53c7162](https://github.com/jonisavo/uicomponents/commit/53c7162a5cef5f42550d59bbfdf213b6cbbab0d8))
+
+
+### BREAKING CHANGES
+
+* **ProvideAttribute:** ProvideAttribute has been moved to the root UIComponents namespace.
+
 # [0.20.0](https://github.com/jonisavo/uicomponents/compare/v0.19.0...v0.20.0) (2022-08-28)
 
 
