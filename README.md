@@ -117,8 +117,8 @@ public class MyComponentTests
 
         var component = _testBed.CreateComponent<MyComponent>();
         // Wait until the component has loaded.
-        yield return _component.WaitForInitializationEnumerator();
-        Assert.That(_component.CountLabel.text, Is.EqualTo("42"));
+        yield return component.WaitForInitializationEnumerator();
+        Assert.That(component.CountLabel.text, Is.EqualTo("42"));
     }
 }
 ```
