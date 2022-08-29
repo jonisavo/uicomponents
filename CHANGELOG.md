@@ -1,5 +1,12 @@
 
 
+## [0.21.1](https://github.com/jonisavo/uicomponents/compare/v0.21.0...v0.21.1) (2022-08-29)
+
+
+### Features
+
+* **RootClassAttribute:** use BaseTypeRequired attribute ([1853095](https://github.com/jonisavo/uicomponents/commit/18530957f2dc37b51980f1550a05eb576eccc158))
+
 # [0.21.0](https://github.com/jonisavo/uicomponents/compare/v0.20.0...v0.21.0) (2022-08-29)
 
 
