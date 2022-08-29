@@ -1,8 +1,10 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace UIComponents
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [BaseTypeRequired(typeof(UIComponent))]
     public class RootClassAttribute : UIComponentEffectAttribute
     {
         private readonly string _className;
