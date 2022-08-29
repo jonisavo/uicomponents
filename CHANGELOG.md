@@ -10,7 +10,7 @@
 
 ### Features
 
-* **ProvideAttribute:** add CastForm property ([7ec0b11](https://github.com/jonisavo/uicomponents/commit/7ec0b11426ca849f0ad062e01acb0c082351ce65))
+* **ProvideAttribute:** add CastFrom property ([7ec0b11](https://github.com/jonisavo/uicomponents/commit/7ec0b11426ca849f0ad062e01acb0c082351ce65))
 * **ProvideAttribute:** move out of Experimental namespace ([53c7162](https://github.com/jonisavo/uicomponents/commit/53c7162a5cef5f42550d59bbfdf213b6cbbab0d8))
 
 
