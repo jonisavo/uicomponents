@@ -3,6 +3,9 @@ using JetBrains.Annotations;
 
 namespace UIComponents
 {
+    /// <summary>
+    /// Adds a USS class to the root element of a UIComponent.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [BaseTypeRequired(typeof(UIComponent))]
     public class RootClassAttribute : UIComponentEffectAttribute
