@@ -31,8 +31,14 @@ namespace UIComponents
     [MeansImplicitUse]
     public class QueryAttribute : Attribute
     {
+        /// <summary>
+        /// USS name to query by.
+        /// </summary>
         public string Name { get; set; }
         
+        /// <summary>
+        /// USS class name to query by.
+        /// </summary>
         public string Class { get; set; }
 
         public QueryAttribute(string name)

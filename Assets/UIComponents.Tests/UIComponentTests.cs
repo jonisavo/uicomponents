@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
+using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
 {
@@ -9,6 +11,15 @@ namespace UIComponents.Tests
         public class GetTypeName
         {
             private class TestComponent : UIComponent {}
+
+            [UnityTest]
+            public IEnumerator It_Is_Initialized()
+            {
+                var component = new TestComponent();
+                Assert.That(component.Initialized, Is.False);
+                yield return component.WaitForInitializationEnumerator();
+                Assert.That(component.Initialized, Is.True);
+            }
             
             [Test]
             public void ShouldReturnTypeName()

@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System.Threading.Tasks;
+using NSubstitute;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,9 +11,9 @@ namespace UIComponents.Tests.Utilities
         {
             var resolver = Substitute.For<IAssetResolver>();
             resolver.LoadAsset<VisualTreeAsset>(Arg.Any<string>())
-                .Returns(ScriptableObject.CreateInstance<VisualTreeAsset>());
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<VisualTreeAsset>()));
             resolver.LoadAsset<StyleSheet>(Arg.Any<string>())
-                .Returns(ScriptableObject.CreateInstance<StyleSheet>());
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
             return resolver;
         }
     }

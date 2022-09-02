@@ -1,12 +1,10 @@
 {
-    "name": "UIComponents.Editor",
+    "name": "UIComponents.Testing",
     "rootNamespace": "UIComponents",
     "references": [
         "GUID:d593635333b4cae48bac5b5f0b596e90"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

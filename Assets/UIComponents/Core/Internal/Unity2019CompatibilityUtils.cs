@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using UIComponents.Experimental;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Internal

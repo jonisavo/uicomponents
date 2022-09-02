@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 
 namespace UIComponents.Tests
@@ -26,28 +27,23 @@ namespace UIComponents.Tests
             [AssetPath("Assets/Invalid/Path")]
             private class UIComponentWithInvalidAssetPath : UIComponent {}
 
-            private IAssetResolver _assetResolver;
+            private TestBed _testBed;
+            private IAssetResolver _mockResolver;
 
-            [OneTimeSetUp]
-            public void OneTimeSetUp()
+            [SetUp]
+            public void SetUp()
             {
-                _assetResolver = MockUtilities.CreateMockResolver();
-                DependencyInjector.SetDependency<UIComponentWithValidAssetPath, IAssetResolver>(_assetResolver);
-                DependencyInjector.SetDependency<UIComponentWithInvalidAssetPath, IAssetResolver>(_assetResolver);
-            }
-            
-            [OneTimeTearDown]
-            public void OneTimeTearDown()
-            {
-                DependencyInjector.RestoreDefaultDependency<UIComponentWithValidAssetPath, IAssetResolver>();
-                DependencyInjector.RestoreDefaultDependency<UIComponentWithInvalidAssetPath, IAssetResolver>();
+                _mockResolver = MockUtilities.CreateMockResolver();
+                _testBed = TestBed.Create()
+                    .WithSingleton(_mockResolver)
+                    .Build();
             }
 
             [Test]
             public void Should_Return_Empty_String_If_No_Path_Is_Configured()
             {
                 var pathAttribute = new BasicPathAttribute(null);
-                var component = new UIComponentWithNoAssetPaths();
+                var component = _testBed.CreateComponent<UIComponentWithNoAssetPaths>();
                 
                 var path = pathAttribute.GetAssetPathForComponent(component);
                 
@@ -59,7 +55,7 @@ namespace UIComponents.Tests
             {
                 var assetsPathAttribute = new BasicPathAttribute("Assets/Asset");
                 var packagesPathAttribute = new BasicPathAttribute("Packages/Asset");
-                var component = new UIComponentWithValidAssetPath();
+                var component = _testBed.CreateComponent<UIComponentWithValidAssetPath>();
 
                 var assetPath = assetsPathAttribute.GetAssetPathForComponent(component);
                 var packagePath = packagesPathAttribute.GetAssetPathForComponent(component);
@@ -73,11 +69,11 @@ namespace UIComponents.Tests
             {
                 var pathAttribute = new BasicPathAttribute("MyAsset");
                 
-                _assetResolver.AssetExists("Assets/Valid/Path/MyAsset").Returns(true);
-                _assetResolver.AssetExists("Assets/Invalid/Path/MyAsset").Returns(false);
+                _mockResolver.AssetExists("Assets/Valid/Path/MyAsset").Returns(true);
+                _mockResolver.AssetExists("Assets/Invalid/Path/MyAsset").Returns(false);
 
-                var componentWithValidPath = new UIComponentWithValidAssetPath();
-                var componentWithInvalidPath = new UIComponentWithInvalidAssetPath();
+                var componentWithValidPath = _testBed.CreateComponent<UIComponentWithValidAssetPath>();
+                var componentWithInvalidPath = _testBed.CreateComponent<UIComponentWithInvalidAssetPath>();
 
                 var filledPath = pathAttribute.GetAssetPathForComponent(componentWithValidPath);
                 var ignoredPath = pathAttribute.GetAssetPathForComponent(componentWithInvalidPath);

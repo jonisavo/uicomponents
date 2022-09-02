@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using UIComponents.Cache;
+using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -45,6 +50,11 @@ namespace UIComponents
         /// Defaults to <see cref="ResourcesAssetResolver"/>.
         /// </summary>
         public readonly IAssetResolver AssetResolver;
+        
+        /// <summary>
+        /// Whether the UIComponent has been fully initialized.
+        /// </summary>
+        public bool Initialized { get; private set; }
 
         /// <summary>
         /// The IUIComponentLogger used by this UIComponent.
@@ -56,45 +66,58 @@ namespace UIComponents
 
         private readonly Type _componentType;
         
+        private readonly TaskCompletionSource<UIComponent> _initCompletionSource =
+            new TaskCompletionSource<UIComponent>();
+        
         private static readonly ProfilerMarker DependencySetupProfilerMarker =
             new ProfilerMarker("UIComponent.DependencySetup");
         private static readonly ProfilerMarker CacheSetupProfilerMarker =
             new ProfilerMarker("UIComponent.CacheSetup");
         private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
             new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
-        private static readonly ProfilerMarker PopulateFieldsProfilerMarker =
-            new ProfilerMarker("UIComponent.PopulateFields");
 
+        private static readonly SynchronizationContext UnitySynchronizationContext;
+
+        [ExcludeFromCoverage]
+        static UIComponent()
+        {
+            UnitySynchronizationContext = SynchronizationContext.Current;
+        }
 
         /// <summary>
         /// UIComponent's constructor loads the configured layout and stylesheets.
         /// </summary>
         protected UIComponent()
         {
-            DependencySetupProfilerMarker.Begin();
-            _componentType = GetType();
-            _dependencyInjector = DependencyInjector.GetInjector(_componentType);
-            DependencySetupProfilerMarker.End();
-
-            AssetResolver = _dependencyInjector.Provide<IAssetResolver>();
-            Logger = _dependencyInjector.Provide<IUIComponentLogger>();
-            
             CacheSetupProfilerMarker.Begin();
+            
+            _componentType = GetType();
             if (!CacheDictionary.ContainsKey(_componentType))
                 CacheDictionary.Add(_componentType, new UIComponentCache(_componentType));
+            
             CacheSetupProfilerMarker.End();
+            
+            DependencySetupProfilerMarker.Begin();
+            
+            _dependencyInjector = DiContext.Current.GetInjector(_componentType);
+            AssetResolver = Provide<IAssetResolver>();
+            Logger = Provide<IUIComponentLogger>();
+            PopulateProvideFields();
+            
+            DependencySetupProfilerMarker.End();
 
             LayoutAndStylesSetupProfilerMarker.Begin();
-            LoadLayout();
-            LoadStyles();
-            ApplyEffects();
-            LayoutAndStylesSetupProfilerMarker.End();
-            PopulateFieldsProfilerMarker.Begin();
-            PopulateQueryFields();
-            PopulateProvideFields();
-            PopulateFieldsProfilerMarker.End();
-            
-            RegisterEventInterfaceCallbacks();
+
+            var layoutTask = GetLayout();
+            var stylesTask = GetStyleSheets();
+
+            Task.WhenAll(layoutTask, stylesTask).ContinueWith(task =>
+            {
+                var layoutAsset = layoutTask.Result;
+                var styles = stylesTask.Result;
+                LayoutAndStylesSetupProfilerMarker.End();
+                UnitySynchronizationContext.Post(_ => Initialize(layoutAsset, styles), null);
+            });
         }
 
         private void RegisterEventInterfaceCallbacks()
@@ -118,6 +141,52 @@ namespace UIComponents
             if (this is IOnClick onClick)
                 RegisterCallback<ClickEvent>(onClick.OnClick);
 #endif
+        }
+        
+        private void LoadLayout([CanBeNull] VisualTreeAsset layoutAsset)
+        {
+            if (layoutAsset != null)
+                layoutAsset.CloneTree(this);
+        }
+
+        private void LoadStyles(IList<StyleSheet> styles)
+        {
+            var styleSheetCount = styles.Count;
+
+            for (var i = 0; i < styleSheetCount; i++)
+                styleSheets.Add(styles[i]);
+        }
+
+        private void Initialize([CanBeNull] VisualTreeAsset layoutAsset, IList<StyleSheet> styles)
+        {
+            LoadLayout(layoutAsset);
+            LoadStyles(styles);
+            ApplyEffects();
+            PopulateQueryFields();
+            RegisterEventInterfaceCallbacks();
+            OnInit();
+            Initialized = true;
+            _initCompletionSource.SetResult(this);
+        }
+
+        /// <summary>
+        /// Called when all assets have been loaded and fields populated.
+        /// </summary>
+        public virtual void OnInit()
+        {
+            
+        }
+        
+        /// <returns>A Task which resolves when the component has initialized</returns>
+        public Task<UIComponent> WaitForInitialization()
+        {
+            return _initCompletionSource.Task;
+        }
+        
+        /// <returns>An enumerator which yields when the component has initialized</returns>
+        public IEnumerator WaitForInitializationEnumerator()
+        {
+            yield return WaitForInitialization().AsEnumerator();
         }
         
         /// <summary>
@@ -169,60 +238,50 @@ namespace UIComponents
             return _dependencyInjector.TryProvide(out instance);
         }
         
-        [CanBeNull]
-        private VisualTreeAsset GetLayout()
+        private Task<VisualTreeAsset> GetLayout()
         {
             var layoutAttribute = CacheDictionary[_componentType].LayoutAttribute;
             
             if (layoutAttribute == null)
-                return null;
+                return Task.FromResult<VisualTreeAsset>(null);
 
             var assetPath = layoutAttribute.GetAssetPathForComponent(this);
             
             return AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
-        
-        private StyleSheet[] GetStyleSheets()
+
+        private async Task<List<StyleSheet>> GetStyleSheets()
         {
             var stylesheetAttributes = CacheDictionary[_componentType].StylesheetAttributes;
             var stylesheetAttributeCount = stylesheetAttributes.Count;
-            var loadedStyleSheets = new StyleSheet[stylesheetAttributeCount];
+            var styleSheetLoadTasks =
+                new Task<StyleSheet>[stylesheetAttributeCount];
+            var styleSheetAssetPaths = new string[stylesheetAttributeCount];
+
             for (var i = 0; i < stylesheetAttributeCount; i++)
             {
-                var assetPath = stylesheetAttributes[i].GetAssetPathForComponent(this);
-                var styleSheet = AssetResolver.LoadAsset<StyleSheet>(assetPath);
+                styleSheetAssetPaths[i] = stylesheetAttributes[i].GetAssetPathForComponent(this);
+                var loadOperation = AssetResolver.LoadAsset<StyleSheet>(styleSheetAssetPaths[i]);
+                styleSheetLoadTasks[i] = loadOperation;
+            }
+            
+            await Task.WhenAll(styleSheetLoadTasks);
+
+            var loadedStyleSheets = new List<StyleSheet>(stylesheetAttributeCount);
+
+            for (var i = 0; i < stylesheetAttributeCount; i++)
+            {
+                var styleSheet = styleSheetLoadTasks[i].Result;
 
                 if (styleSheet == null)
                 {
-                    Logger.LogError($"Could not find stylesheet {assetPath}", this);
+                    Logger.LogError($"Could not find stylesheet {styleSheetAssetPaths[i]}", this);
                     continue;
                 }
-                
-                loadedStyleSheets[i] = styleSheet;
+                loadedStyleSheets.Add(styleSheet);
             }
 
             return loadedStyleSheets;
-        }
-
-        private void LoadLayout()
-        {
-            var layoutAsset = GetLayout();
-            
-            if (layoutAsset != null)
-                layoutAsset.CloneTree(this);
-        }
-
-        private void LoadStyles()
-        {
-            var loadedStyleSheets = GetStyleSheets();
-            var styleSheetCount = loadedStyleSheets.Length;
-
-            if (styleSheetCount == 0)
-                return;
-
-            for (var i = 0; i < styleSheetCount; i++)
-                if (loadedStyleSheets[i] != null)
-                    styleSheets.Add(loadedStyleSheets[i]);
         }
 
         private void ApplyEffects()
@@ -284,18 +343,31 @@ namespace UIComponents
 
             foreach (var fieldInfo in provideAttributeDictionary.Keys)
             {
+                var fieldType = fieldInfo.FieldType;
+                
+                if (provideAttributeDictionary[fieldInfo].CastFrom != null)
+                    fieldType = provideAttributeDictionary[fieldInfo].CastFrom;
+                
                 object value;
 
                 try
                 {
-                    value = _dependencyInjector.Provide(fieldInfo.FieldType);
+                    value = _dependencyInjector.Provide(fieldType);
+
+                    if (provideAttributeDictionary[fieldInfo].CastFrom != null)
+                        value = Convert.ChangeType(value, fieldInfo.FieldType);
                 }
                 catch (MissingProviderException)
                 {
                     Logger.LogError($"Could not provide {fieldInfo.FieldType.Name} to {fieldInfo.Name}", this);
                     continue;
                 }
-                
+                catch (InvalidCastException)
+                {
+                    Logger.LogError($"Could not cast {fieldType.Name} to {fieldInfo.FieldType.Name}", this);
+                    continue;
+                }
+
                 fieldInfo.SetValue(this, value);
             }
         }

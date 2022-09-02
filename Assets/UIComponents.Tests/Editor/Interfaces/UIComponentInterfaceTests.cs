@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
 using UnityEditor;
-using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests.Editor.Interfaces
@@ -13,7 +14,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             public bool Fired { get; protected set; }
         }
 
-        private static void Assert_Registers_Event_Callback<TComponent, TEvent>()
+        private static IEnumerator Assert_Registers_Event_Callback<TComponent, TEvent>()
             where TComponent : BaseTestComponent, new()
             where TEvent : EventBase<TEvent>, new()
         {
@@ -21,6 +22,8 @@ namespace UIComponents.Tests.Editor.Interfaces
             var component = new TComponent();
             Assert.That(component.Fired, Is.False);
             window.AddTestComponent(component);
+
+            yield return component.WaitForInitializationEnumerator();
 
             using (var evt = new TEvent() { target = component })
                 component.SendEvent(evt);
@@ -34,10 +37,10 @@ namespace UIComponents.Tests.Editor.Interfaces
             public void OnGeometryChanged(GeometryChangedEvent evt) => Fired = true;
         }
 
-        [Test]
-        public void IOnGeometryChanged_Registers_GeometryChangedEvent_Callback()
+        [UnityTest]
+        public IEnumerator IOnGeometryChanged_Registers_GeometryChangedEvent_Callback()
         {
-            Assert_Registers_Event_Callback<UIComponentWithOnGeometryChanged, GeometryChangedEvent>();
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnGeometryChanged, GeometryChangedEvent>();
         }
 
         private class UIComponentWithOnAttachToPanel : BaseTestComponent, IOnAttachToPanel
@@ -45,10 +48,10 @@ namespace UIComponents.Tests.Editor.Interfaces
             public void OnAttachToPanel(AttachToPanelEvent evt) => Fired = true;
         }
         
-        [Test]
-        public void IOnAttachToPanel_Registers_AttachToPanelEvent_Callback()
+        [UnityTest]
+        public IEnumerator IOnAttachToPanel_Registers_AttachToPanelEvent_Callback()
         {
-            Assert_Registers_Event_Callback<UIComponentWithOnAttachToPanel, AttachToPanelEvent>();
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnAttachToPanel, AttachToPanelEvent>();
         }
 
         private class UIComponentWithOnDetachFromPanel : BaseTestComponent, IOnDetachFromPanel
@@ -56,10 +59,10 @@ namespace UIComponents.Tests.Editor.Interfaces
             public void OnDetachFromPanel(DetachFromPanelEvent evt) => Fired = true;
         }
 
-        [Test]
-        public void IOnDetachFromPanel_Registers_DetachFromPanelEvent_Callback()
+        [UnityTest]
+        public IEnumerator IOnDetachFromPanel_Registers_DetachFromPanelEvent_Callback()
         {
-            Assert_Registers_Event_Callback<UIComponentWithOnDetachFromPanel, DetachFromPanelEvent>();
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnDetachFromPanel, DetachFromPanelEvent>();
         }
         
         private class UIComponentWithOnMouseEnter : BaseTestComponent, IOnMouseEnter
@@ -67,10 +70,10 @@ namespace UIComponents.Tests.Editor.Interfaces
             public void OnMouseEnter(MouseEnterEvent evt) => Fired = true;
         }
 
-        [Test]
-        public void IOnMouseEnter_Registers_MouseEnterEvent_Callback()
+        [UnityTest]
+        public IEnumerator IOnMouseEnter_Registers_MouseEnterEvent_Callback()
         {
-            Assert_Registers_Event_Callback<UIComponentWithOnMouseEnter, MouseEnterEvent>();
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnMouseEnter, MouseEnterEvent>();
         }
         
         private class UIComponentWithOnMouseLeave : BaseTestComponent, IOnMouseLeave
@@ -78,10 +81,10 @@ namespace UIComponents.Tests.Editor.Interfaces
             public void OnMouseLeave(MouseLeaveEvent evt) => Fired = true;
         }
 
-        [Test]
-        public void IOnMouseLeave_Registers_MouseLeaveEvent_Callback()
+        [UnityTest]
+        public IEnumerator IOnMouseLeave_Registers_MouseLeaveEvent_Callback()
         {
-            Assert_Registers_Event_Callback<UIComponentWithOnMouseLeave, MouseLeaveEvent>();
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnMouseLeave, MouseLeaveEvent>();
         }
         
 #if UNITY_2020_3_OR_NEWER
@@ -90,10 +93,10 @@ namespace UIComponents.Tests.Editor.Interfaces
             public void OnClick(ClickEvent evt) => Fired = true;
         }
 
-        [Test]
-        public void IOnClick_Registers_ClickEvent_Callback()
+        [UnityTest]
+        public IEnumerator IOnClick_Registers_ClickEvent_Callback()
         {
-            Assert_Registers_Event_Callback<UIComponentWithOnClick, ClickEvent>();
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnClick, ClickEvent>();
         }
 #endif
     }

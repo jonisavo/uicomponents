@@ -2,6 +2,9 @@
 
 namespace UIComponents
 {
+    /// <summary>
+    /// The default logger for UIComponents. Uses Debug.Log.
+    /// </summary>
     public class UIComponentDebugLogger : IUIComponentLogger
     {
         public void Log(string message, UIComponent component)

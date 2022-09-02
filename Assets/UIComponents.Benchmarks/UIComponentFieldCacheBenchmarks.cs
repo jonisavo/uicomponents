@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using UIComponents.Cache;
-using UIComponents.Experimental;
 using Unity.PerformanceTesting;
 using UnityEngine.UIElements;
 

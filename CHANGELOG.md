@@ -1,5 +1,99 @@
 
 
+## [0.21.1](https://github.com/jonisavo/uicomponents/compare/v0.21.0...v0.21.1) (2022-08-29)
+
+
+### Features
+
+* **RootClassAttribute:** use BaseTypeRequired attribute ([1853095](https://github.com/jonisavo/uicomponents/commit/18530957f2dc37b51980f1550a05eb576eccc158))
+
+# [0.21.0](https://github.com/jonisavo/uicomponents/compare/v0.20.0...v0.21.0) (2022-08-29)
+
+
+### Bug Fixes
+
+* **ProvideAttribute:** fix fields being populated after assets are loaded ([7f6519d](https://github.com/jonisavo/uicomponents/commit/7f6519dec749e58cff2be841d12105facdeaf605))
+
+
+### Features
+
+* **ProvideAttribute:** add CastFrom property ([7ec0b11](https://github.com/jonisavo/uicomponents/commit/7ec0b11426ca849f0ad062e01acb0c082351ce65))
+* **ProvideAttribute:** move out of Experimental namespace ([53c7162](https://github.com/jonisavo/uicomponents/commit/53c7162a5cef5f42550d59bbfdf213b6cbbab0d8))
+
+
+### BREAKING CHANGES
+
+* **ProvideAttribute:** ProvideAttribute has been moved to the root UIComponents namespace.
+
+# [0.20.0](https://github.com/jonisavo/uicomponents/compare/v0.19.0...v0.20.0) (2022-08-28)
+
+
+### Features
+
+* create new asmdef for UIComponents.Testing ([95571ec](https://github.com/jonisavo/uicomponents/commit/95571ec31700af346ec7afbde8f7777c7646f861))
+* **TestBed:** add implicit conversion from TestBedBuilder ([99c5203](https://github.com/jonisavo/uicomponents/commit/99c520300b5475d5fd271de9f1dd11cafe6ca59d))
+* **TestBed:** add SetSingletonOverride instance method ([8fe0b9d](https://github.com/jonisavo/uicomponents/commit/8fe0b9d2fcf628cd9e7ef1a072b9a745b9bc3919))
+* **UIComponent:** add WaitForInitializationEnumerator method ([76ef531](https://github.com/jonisavo/uicomponents/commit/76ef5317984b9125c46848280961e5033ede1de2))
+* **UIComponent:** load assets asynchronously ([b95192c](https://github.com/jonisavo/uicomponents/commit/b95192ca688e446550520861c9ffd828f80d05d4))
+
+
+### BREAKING CHANGES
+
+* Usage of UIComponents.Testing now requires including an assembly definition reference.
+* **UIComponent:** Assets are now loaded asynchronously. Operations related to the DOM or stylesheets must now be done in the new virtual OnInit method.
+
+# [0.19.0](https://github.com/jonisavo/uicomponents/compare/v0.18.0...v0.19.0) (2022-08-20)
+
+
+### Features
+
+* add TestBed ([b25a6ad](https://github.com/jonisavo/uicomponents/commit/b25a6adea6d2322e351efce64b5302f608adf1dc))
+* **addressables:** set minimum Addressables version to 1.17.13 ([018923d](https://github.com/jonisavo/uicomponents/commit/018923dbd779bcc4863b05c60f7919d93ea323d0))
+
+
+### Reverts
+
+* Revert "test(benchmarks): ensure Addressables are initialized before running benchmarks" ([7f055a0](https://github.com/jonisavo/uicomponents/commit/7f055a07d7af2220506d698bdef67da76342411a))
+
+
+### BREAKING CHANGES
+
+* The new TestBed system replaces DependencyScope and DependencyInjector's static methods. They have been removed.
+* **addressables:** Preview versions of Addressables 1.17 are no longer supported.
+
+# [0.18.0](https://github.com/jonisavo/uicomponents/compare/v0.17.0...v0.18.0) (2022-07-12)
+
+
+### Features
+
+* add support for transient dependencies ([e20ee2b](https://github.com/jonisavo/uicomponents/commit/e20ee2b04ba0ff836e328e12f1f58a24ba304952))
+* **DependencyInjector:** rename RestoreDefaultDependency to ResetProvidedInstance ([4be20c7](https://github.com/jonisavo/uicomponents/commit/4be20c7f1e217589f1b5bb19babc664c66fe6ae2))
+* remove built-in AssetDatabase support ([ddc14b8](https://github.com/jonisavo/uicomponents/commit/ddc14b834bd6517bfa60e4a902feb8483a7bd783))
+
+
+### BREAKING CHANGES
+
+* AssetDatabaseAssetResolver has been removed, since working with hardcoded asset paths is difficult. If you want to use AssetDatabase, you can create your own IAssetResolver class.
+* **DependencyInjector:** DependencyInjector's RestoreDefaultDependency method has been renamed to ResetProvidedInstance
+
+# [0.17.0](https://github.com/jonisavo/uicomponents/compare/v0.16.0...v0.17.0) (2022-07-09)
+
+
+### Features
+
+* **docs:** add documentation link to new wiki ([a999223](https://github.com/jonisavo/uicomponents/commit/a999223f370abc4751e9e283c1e6f1d9fcebcf96))
+* **QueryAttribute:** move out of the experimental namespace ([dc40380](https://github.com/jonisavo/uicomponents/commit/dc403802f34f9537c93f2e75630275663880048c))
+
+
+### Performance Improvements
+
+* **FieldCache:** reduce initialization time and GC allocations ([35a9ab8](https://github.com/jonisavo/uicomponents/commit/35a9ab8f828aef71b46cdb9895a2ca0ced8319a0))
+
+
+### BREAKING CHANGES
+
+* **QueryAttribute:** QueryAttribute has been moved from the UIComponents.Experimental namespace to UIComponents.
+
 # [0.16.0](https://github.com/jonisavo/uicomponents/compare/v0.15.0...v0.16.0) (2022-06-24)
 
 

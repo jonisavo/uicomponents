@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using NSubstitute;
+﻿using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
-using UIComponents.Utilities;
+using UIComponents.Testing;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -35,10 +36,20 @@ namespace UIComponents.Tests
             public readonly List<Label> AllLabelsExplicit;
         }
 
-        [Test]
-        public void Should_Populate_Fields()
+        private TestBed _testBed;
+        
+        [SetUp]
+        public void SetUp()
         {
-            var component = new ComponentWithQueryAttribute();
+            _testBed = TestBed.Create().Build();
+        }
+
+        [UnityTest]
+        public IEnumerator Should_Populate_Fields()
+        {
+            var component = _testBed.CreateComponent<ComponentWithQueryAttribute>();
+
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.HelloWorldLabel, Is.InstanceOf<Label>());
             Assert.That(component.HelloWorldLabel.text, Is.EqualTo("Hello world!"));
@@ -67,10 +78,12 @@ namespace UIComponents.Tests
             public readonly Label FoldoutContent;
         }
         
-        [Test]
-        public void Should_Populate_Inherited_Fields()
+        [UnityTest]
+        public IEnumerator Should_Populate_Inherited_Fields()
         {
-            var component = new ChildComponentWithQueryAttribute();
+            var component = _testBed.CreateComponent<ChildComponentWithQueryAttribute>();
+
+            yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.HelloWorldLabel, Is.InstanceOf<Label>());
             Assert.That(component.TestFoldout, Is.InstanceOf<Foldout>());
@@ -91,10 +104,12 @@ namespace UIComponents.Tests
             public List<List<VisualElement>> InvalidList;
         }
 
-        [Test]
-        public void Should_Not_Populate_Invalid_Fields()
+        [UnityTest]
+        public IEnumerator Should_Not_Populate_Invalid_Fields()
         {
-            var component = new ComponentWithInvalidQueryAttribute();
+            var component = _testBed.CreateComponent<ComponentWithInvalidQueryAttribute>();
+            
+            yield return component.WaitForInitializationEnumerator();
 
             Assert.That(component.InvalidField, Is.Null);
             Assert.That(component.InvalidArray, Is.Null);

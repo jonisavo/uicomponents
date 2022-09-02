@@ -9,20 +9,20 @@ on:
   workflow_dispatch: {}
 
 env:
-  PROJECT_UNITY_VERSION: 2020.3.33f1
+  PROJECT_UNITY_VERSION: 2020.3.38f1
 
 jobs:
-  buildAndTestForLinuxBasedPlatforms:
+  buildAndTestForLinux:
     name: Build & Test for Linux on ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         unityVersion:
-          - 2019.4.39f1
-          - 2020.3.33f1
-          - 2021.3.4f1
-          - 2022.1.4f1
+          - 2019.4.40f1
+          - 2020.3.38f1
+          - 2021.3.8f1
+          - 2022.1.13f1
             
     steps:
       - uses: actions/checkout@v3
@@ -78,17 +78,17 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: StandaloneLinux64
 
-  buildForWindows:
+  buildAndTestForWindows:
     name: Build & Test for 64-bit Windows on ${{ matrix.unityVersion }}
-    runs-on: windows-2019
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
         unityVersion:
-          - 2019.4.39f1
-          - 2020.3.33f1
-          - 2021.3.4f1
-          - 2022.1.4f1
+          - 2019.4.40f1
+          - 2020.3.38f1
+          - 2021.3.9f1
+          - 2022.1.15f1
 
     steps:
       - uses: actions/checkout@v3

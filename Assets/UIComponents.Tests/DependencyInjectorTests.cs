@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using UIComponents.DependencyInjection;
 
 namespace UIComponents.Tests
 {
@@ -20,7 +21,7 @@ namespace UIComponents.Tests
                 new DependencyAttribute(typeof(IDependency), typeof(DependencyOne))
             };
 
-            var injector = new DependencyInjector(dependencyAttributes);
+            var injector = new DependencyInjector(dependencyAttributes, DiContext.Current.Container);
             
             Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
         }
@@ -31,7 +32,7 @@ namespace UIComponents.Tests
             [Test]
             public void Returns_Desired_Dependency()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
                 injector.SetDependency<IDependency>(new DependencyOne());
                 Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
             }
@@ -39,7 +40,7 @@ namespace UIComponents.Tests
             [Test]
             public void Throws_If_No_Provider_Exists()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
 
                 var exception = Assert.Throws<MissingProviderException>(
                     () => injector.Provide<IDependency>()
@@ -55,7 +56,7 @@ namespace UIComponents.Tests
             [Test]
             public void Returns_If_Dependency_Could_Be_Provided()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
                 
                 Assert.That(injector.TryProvide<IDependency>(out _), Is.False);
                 
@@ -70,7 +71,7 @@ namespace UIComponents.Tests
             [Test]
             public void Yields_Null_If_Dependency_Can_Not_Be_Provided()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
 
                 injector.TryProvide<IDependency>(out var instance);
                 
@@ -84,7 +85,7 @@ namespace UIComponents.Tests
             [Test]
             public void Switches_The_Dependency()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
                 
                 injector.SetDependency<IDependency>(new DependencyOne());
                 injector.SetDependency<IDependency>(new DependencyTwo());
@@ -95,7 +96,7 @@ namespace UIComponents.Tests
             [Test]
             public void Throws_Exception_If_Null_Is_Given_As_Parameter()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
 
                 Assert.Throws<ArgumentNullException>(
                     () => injector.SetDependency<IDependency>(null)
@@ -109,7 +110,7 @@ namespace UIComponents.Tests
             [Test]
             public void Removes_Dependency_Instance()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
                 
                 injector.SetDependency<IDependency>(new DependencyOne());
                 
@@ -121,46 +122,65 @@ namespace UIComponents.Tests
             [Test]
             public void Does_Not_Throw_If_Dependency_Does_Not_Exist()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
                 
                 Assert.DoesNotThrow(() => injector.ClearDependency<IDependency>());
             }
         }
 
         [TestFixture]
-        public class RestoreDefaultDependency
+        public class ResetProvidedInstance
         {
-            [Test]
-            public void Restores_Default_Dependency()
+            [SetUp]
+            public void SetUp()
             {
-                var dependencyAttribute =
-                    new DependencyAttribute(typeof(IDependency), typeof(DependencyOne));
-
-                var injector = new DependencyInjector(new[] {dependencyAttribute});
-                
-                injector.SetDependency<IDependency>(new DependencyTwo());
-
-                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyTwo>());
-                
-                injector.RestoreDefaultDependency<IDependency>();
-                
-                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
+                DiContext.Current.Container.Clear();
             }
-            
+
             [Test]
             public void Throws_If_No_Default_Dependency_Exists()
             {
-                var injector = new DependencyInjector();
+                var injector = new DependencyInjector(DiContext.Current.Container);
                 
                 Assert.Throws<InvalidOperationException>(
-                    () => injector.RestoreDefaultDependency<IDependency>()
+                    () => injector.ResetProvidedInstance<IDependency>()
                 );
                 
-                injector.SetDependency<IDependency>(new DependencyOne());
+                var initialDependency = new DependencyOne();
                 
-                Assert.Throws<InvalidOperationException>(
-                    () => injector.RestoreDefaultDependency<IDependency>()
+                injector.SetDependency<IDependency>(initialDependency);
+                
+                Assert.DoesNotThrow(
+                    () => injector.ResetProvidedInstance<IDependency>()
                 );
+            }
+
+            [Test]
+            public void Restores_Singleton_Instance()
+            {
+                var injector = new DependencyInjector(DiContext.Current.Container);
+
+                var singletonInstance = new DependencyOne();
+                
+                injector.SetDependency<IDependency>(singletonInstance);
+                injector.SetDependency<IDependency>(new DependencyTwo());
+                injector.ResetProvidedInstance<IDependency>();
+
+                Assert.That(injector.Provide<IDependency>(), Is.SameAs(singletonInstance));
+            }
+
+            [Test]
+            public void Creates_New_Transient_Instance()
+            {
+                var injector = new DependencyInjector(DiContext.Current.Container);
+                var transientInstance = new DependencyOne();
+                
+                injector.SetDependency<IDependency>(transientInstance, Scope.Transient);
+                injector.SetDependency<IDependency>(new DependencyTwo());
+                injector.ResetProvidedInstance<IDependency>();
+                
+                Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
+                Assert.That(injector.Provide<IDependency>(), Is.Not.SameAs(transientInstance));
             }
         }
     }

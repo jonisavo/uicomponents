@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace UIComponents.Experimental
+namespace UIComponents
 {
     /// <summary>
     /// An attribute for specifying a field to be automatically
@@ -19,6 +19,9 @@ namespace UIComponents.Experimental
     ///
     ///     [Provide]
     ///     private readonly IDataService DataService;
+    ///
+    ///     [Provide(CastFrom = typeof(IDataService))]
+    ///     private readonly DataService CastDataService;
     /// }
     /// </example>
     /// <seealso cref="DependencyAttribute"/>
@@ -26,6 +29,10 @@ namespace UIComponents.Experimental
     [MeansImplicitUse]
     public class ProvideAttribute : Attribute
     {
-        
+        /// <summary>
+        /// If set, an instance of the specified type will be provided and
+        /// cast to the field type.
+        /// </summary>
+        public Type CastFrom { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace UIComponents
+namespace UIComponents.DependencyInjection
 {
     /// <summary>
     /// The class responsible for providing UIComponents with their
@@ -12,184 +12,113 @@ namespace UIComponents
     /// <seealso cref="DependencyAttribute"/>
     public class DependencyInjector
     {
-        /// <summary>
-        /// Contains all injectors created for consumers.
-        /// </summary>
-        internal static readonly Dictionary<Type, DependencyInjector> InjectorDictionary =
-            new Dictionary<Type, DependencyInjector>();
-        
-        /// <summary>
-        /// Contains the instantiated dependencies which are consumed
-        /// by the interested parties.
-        /// </summary>
-        internal static readonly Dictionary<Type, object> InstantiatedInstanceDictionary
-            = new Dictionary<Type, object>();
+        private readonly DiContainer _container;
 
         /// <summary>
         /// Contains the dependencies the injector provides to its consumer.
         /// </summary>
-        internal readonly Dictionary<Type, object> DependencyDictionary
-            = new Dictionary<Type, object>();
-        
-        /// <summary>
-        /// Contains the default provider types for each dependency of the consumer.
-        /// Populated by <see cref="DependencyAttribute"/>.
-        /// </summary>
-        internal readonly Dictionary<Type, Type> DefaultDependencyTypeDictionary
-            = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Dependency> _dependencyDictionary
+            = new Dictionary<Type, Dependency>();
 
-        /// <summary>
-        /// Switches the dependency of a consumer.
-        /// </summary>
-        /// <remarks>
-        /// Can be used in unit tests to switch to
-        /// a mocked dependency.
-        /// </remarks>
-        /// <param name="provider">
-        /// The new instance used for the dependency
-        /// </param>
-        /// <typeparam name="TConsumer">Consumer type</typeparam>
-        /// <typeparam name="TDependency">Dependency type</typeparam>
-        public static void SetDependency<TConsumer, TDependency>(TDependency provider)
-            where TConsumer : class
-            where TDependency : class
-        {
-            var injector = GetInjector(typeof(TConsumer));
-            
-            injector.SetDependency(provider);
-        }
-
-        /// <summary>
-        /// Clears the dependency of a consumer.
-        /// </summary>
-        /// <remarks>
-        /// Can be used in unit tests to clear
-        /// a dependency between tests.
-        /// </remarks>
-        /// <typeparam name="TConsumer">Consumer type</typeparam>
-        /// <typeparam name="TDependency">Dependency type</typeparam>
-        public static void ClearDependency<TConsumer, TDependency>()
-            where TConsumer : class
-            where TDependency : class
-        {
-            var injector = GetInjector(typeof(TConsumer));
-            
-            injector.ClearDependency<TDependency>();
-        }
-        
-        /// <summary>
-        /// Restores the default dependency, which is the one
-        /// set by <see cref="DependencyAttribute"/>.
-        /// </summary>
-        /// <remarks>
-        /// Can be used in unit tests to clear
-        /// restore dependency between or after tests.
-        /// </remarks>
-        /// <typeparam name="TConsumer">Consumer type</typeparam>
-        /// <typeparam name="TDependency">Dependency type</typeparam>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown if no default dependency type exists
-        /// </exception>
-        public static void RestoreDefaultDependency<TConsumer, TDependency>()
-            where TConsumer : class
-            where TDependency : class
-        {
-            var injector = GetInjector(typeof(TConsumer));
-            
-            injector.RestoreDefaultDependency<TDependency>();
-        }
-
-        /// <summary>
-        /// Returns the injector of the given consumer type.
-        /// </summary>
-        /// <param name="consumerType">Consumer type</param>
-        /// <returns>Injector of the consumer type</returns>
-        public static DependencyInjector GetInjector(Type consumerType)
-        {
-            if (InjectorDictionary.ContainsKey(consumerType))
-                return InjectorDictionary[consumerType];
-
-            return CreateInjector(consumerType);
-        }
-        
-        /// <summary>
-        /// Removes the injector of the given consumer type.
-        /// Used primarily for testing.
-        /// </summary>
-        /// <param name="consumerType">Consumer type</param>
-        public static void RemoveInjector(Type consumerType)
-        {
-            InjectorDictionary.Remove(consumerType);
-        }
-        
-        private static DependencyInjector CreateInjector(Type consumerType)
-        {
-            var injectAttributes = (DependencyAttribute[])
-                consumerType.GetCustomAttributes(typeof(DependencyAttribute), true);
-            
-            var injector = new DependencyInjector(injectAttributes);
-
-            InjectorDictionary.Add(consumerType, injector);
-
-            return injector;
-        }
-        
-        private static object CreateInstance(Type dependencyType)
-        {
-            object instance;
-
-            if (InstantiatedInstanceDictionary.ContainsKey(dependencyType))
-            {
-                instance = InstantiatedInstanceDictionary[dependencyType];
-            }
-            else
-            {
-                instance = Activator.CreateInstance(dependencyType);
-                InstantiatedInstanceDictionary[dependencyType] = instance;
-            }
-
-            return instance;
-        }
-        
         /// <summary>
         /// Constructs a new injector with no dependencies configured.
         /// </summary>
-        public DependencyInjector() {}
+        /// <param name="container">Dependency injection container</param>
+        public DependencyInjector(DiContainer container)
+        {
+            _container = container;
+        }
 
         /// <summary>
         /// Constructs a new injector with dependencies configured
         /// according to the given DependencyAttributes.
         /// </summary>
         /// <param name="dependencyAttributes">Dependency attributes</param>
-        public DependencyInjector(IEnumerable<DependencyAttribute> dependencyAttributes)
+        /// <param name="container">Dependency injection container</param>
+        public DependencyInjector(IEnumerable<DependencyAttribute> dependencyAttributes, DiContainer container) : this(container)
         {
             foreach (var dependencyAttribute in dependencyAttributes)
             {
                 var dependencyType = dependencyAttribute.DependencyType;
-                var providerType = dependencyAttribute.ProvideType;
 
-                if (DependencyDictionary.ContainsKey(dependencyType))
+                if (_dependencyDictionary.ContainsKey(dependencyType))
                     continue;
-                
-                DependencyDictionary[dependencyType] = CreateInstance(providerType);
-                DefaultDependencyTypeDictionary[dependencyType] = providerType;
+
+                var providerType = dependencyAttribute.ProvideType;
+                var scope = dependencyAttribute.Scope;
+
+                var dependency = CreateDependency(dependencyType, providerType, scope);
+
+                _dependencyDictionary.Add(dependencyType, dependency);
             }
+        }
+        
+        private Dependency CreateSingletonDependency(Type dependencyType, Type providerType)
+        {
+            if (_container.TryGetSingletonOverride(dependencyType, out var overrideInstance))
+                return new Dependency(dependencyType, overrideInstance, Scope.Singleton);
+            
+            if (_container.TryGetSingletonInstance(providerType, out var instance))
+                return new Dependency(dependencyType, instance, Scope.Singleton);
+
+            var dependency = new Dependency(dependencyType, providerType, Scope.Singleton);
+            
+            _container.RegisterSingletonInstance(providerType, dependency.Instance);
+
+            return dependency;
+        }
+
+        /// <summary>
+        /// Creates a new Dependency object with the given dependency and provider types.
+        /// The dependency instance is created using the provider type.
+        /// </summary>
+        private Dependency CreateDependency(Type dependencyType, Type providerType, Scope scope)
+        {
+            if (scope == Scope.Singleton)
+                return CreateSingletonDependency(dependencyType, providerType);
+            
+            return new Dependency(dependencyType, providerType, Scope.Transient);
+        }
+        
+        /// <summary>
+        /// Creates a new Dependency object with the dependency type and provided instance.
+        /// </summary>
+        private Dependency CreateDependency(Type dependencyType, object instance, Scope scope)
+        {
+            var instanceType = instance.GetType();
+            
+            if (scope == Scope.Singleton && !_container.ContainsSingletonInstanceOfType(instanceType))
+                _container.RegisterSingletonInstance(instanceType, instance);
+            
+            return new Dependency(dependencyType, instance, scope);
         }
 
         /// <summary>
         /// Sets the instance used for a dependency.
         /// </summary>
         /// <param name="instance">New instance</param>
+        /// <param name="scope">Dependency scope</param>
         /// <typeparam name="T">Dependency type</typeparam>
         /// <exception cref="ArgumentNullException">
         /// Raised if the argument is null
         /// </exception>
-        public void SetDependency<T>([NotNull] T instance) where T : class
+        public void SetDependency<T>([NotNull] T instance, Scope scope = Scope.Singleton)
+            where T : class
         {
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
+
+            var dependencyType = typeof(T);
             
-            DependencyDictionary[typeof(T)] = instance;
+            if (_dependencyDictionary.ContainsKey(dependencyType))
+            {
+                _dependencyDictionary[dependencyType].ChangeInstance(instance);
+                return;
+            }
+            
+            var dependency = CreateDependency(dependencyType, instance, scope);
+            
+            _dependencyDictionary.Add(dependencyType, dependency);
         }
 
         /// <summary>
@@ -198,25 +127,53 @@ namespace UIComponents
         /// <typeparam name="T">Dependency type</typeparam>
         public void ClearDependency<T>() where T : class
         {
-            DependencyDictionary.Remove(typeof(T));
+            var type = typeof(T);
+            
+            if (_dependencyDictionary.ContainsKey(type))
+                _dependencyDictionary[type].Clear();
         }
 
         /// <summary>
-        /// Restores the default dependency, which is the one
-        /// set by <see cref="DependencyAttribute"/>.
+        /// Resets the provided instance of a dependency.
+        /// If a singleton instance exists, it is restored.
+        /// Otherwise, a new instance of the dependency is created.
         /// </summary>
         /// <typeparam name="T">Dependency type</typeparam>
         /// <exception cref="InvalidOperationException">
-        /// Thrown if no default dependency type exists
+        /// Thrown if no configured dependency exists
         /// </exception>
-        public void RestoreDefaultDependency<T>() where T : class
+        public void ResetProvidedInstance<T>() where T : class
         {
             var dependencyType = typeof(T);
             
-            if (!DefaultDependencyTypeDictionary.TryGetValue(dependencyType, out var providerType))
-                throw new InvalidOperationException($"No default dependency type for {dependencyType}");
+            if (!_dependencyDictionary.ContainsKey(dependencyType))
+                throw new InvalidOperationException($"No dependency configured for {dependencyType}");
 
-            DependencyDictionary[typeof(T)] = CreateInstance(providerType);
+            var dependency = _dependencyDictionary[dependencyType];
+            var initialProviderType = dependency.InitialProviderType;
+            
+            object instance = null;
+
+            if (dependency.Scope == Scope.Singleton)
+            {
+                _container.TryGetSingletonOverride(dependencyType, out instance);
+                
+                if (instance == null)
+                    _container.TryGetSingletonInstance(initialProviderType, out instance);
+            }
+
+            if (instance == null)
+                instance = Activator.CreateInstance(initialProviderType);
+
+            _dependencyDictionary[dependencyType].ChangeInstance(instance);
+        }
+
+        private bool HasProvider(Type dependencyType)
+        {
+            if (!_dependencyDictionary.ContainsKey(dependencyType))
+                return false;
+
+            return _dependencyDictionary[dependencyType].Instance != null;
         }
 
         /// <summary>
@@ -233,10 +190,10 @@ namespace UIComponents
         {
             var type = typeof(T);
 
-            if (!DependencyDictionary.ContainsKey(type))
+            if (!HasProvider(type))
                 throw new MissingProviderException(type);
             
-            return (T) DependencyDictionary[type];
+            return (T) _dependencyDictionary[type].Instance;
         }
         
         /// <summary>
@@ -251,10 +208,10 @@ namespace UIComponents
         [NotNull]
         public object Provide(Type type)
         {
-            if (!DependencyDictionary.ContainsKey(type))
+            if (!HasProvider(type))
                 throw new MissingProviderException(type);
             
-            return DependencyDictionary[type];
+            return _dependencyDictionary[type].Instance;
         }
         
         /// <summary>
@@ -269,10 +226,10 @@ namespace UIComponents
             instance = null;
             var type = typeof(T);
 
-            if (!DependencyDictionary.ContainsKey(type))
+            if (!HasProvider(type))
                 return false;
 
-            instance = (T) DependencyDictionary[type];
+            instance = (T) _dependencyDictionary[type].Instance;
 
             return true;
         }

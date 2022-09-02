@@ -20,7 +20,7 @@ namespace UIComponents.Samples.Counter
             incrementButton.text = "Increment";
             Add(incrementButton);
         }
-    
+
         private void IncrementCount()
         {
             _counterService.IncrementCount();

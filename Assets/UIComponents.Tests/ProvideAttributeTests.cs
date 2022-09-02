@@ -1,7 +1,6 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
-using UIComponents.Experimental;
-using UIComponents.Utilities;
+using UIComponents.Testing;
 
 namespace UIComponents.Tests
 {
@@ -36,34 +35,61 @@ namespace UIComponents.Tests
             public readonly IStringProperty StringProperty;
             [Provide]
             public readonly IFloatProperty FloatProperty;
+            [Provide(CastFrom = typeof(IFloatProperty))]
+            public readonly FloatClass FloatClassInstance;
+        }
+
+        private TestBed _testBed;
+        private IUIComponentLogger _mockLogger;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _mockLogger = Substitute.For<IUIComponentLogger>();
+            _testBed = TestBed.Create()
+                .WithSingleton(_mockLogger)
+                .Build();
         }
         
         [Test]
         public void Provides_Dependencies_Automatically()
         {
-            var component = new ComponentWithDependencies();
+            var component = _testBed.CreateComponent<ComponentWithDependencies>();
             Assert.That(component.StringProperty, Is.InstanceOf<StringClass>());
             Assert.That(component.FloatProperty, Is.InstanceOf<FloatClass>());
         }
+
+        [Test]
+        public void Allows_Providing_Dependencies_With_A_Cast()
+        {
+            var component = _testBed.CreateComponent<ComponentWithDependencies>();
+            Assert.That(component.FloatClassInstance, Is.InstanceOf<FloatClass>());
+        }
         
+        [Dependency(typeof(IFloatProperty), provide: typeof(FloatClass))]
         private class ComponentWithInvalidDependency : UIComponent
         {
             [Provide]
             public readonly IStringProperty StringProperty;
+
+            [Provide(CastFrom = typeof(IFloatProperty))]
+            public readonly StringClass StringClassInstance;
         }
         
         [Test]
-        public void Does_Not_Throw_When_Provider_Is_Missing()
+        public void Logs_Error_When_Provider_Is_Missing()
         {
-            var logger = Substitute.For<IUIComponentLogger>();
-
-            ComponentWithInvalidDependency component;
-            
-            using (new DependencyScope<ComponentWithInvalidDependency, IUIComponentLogger>(logger))
-                component = new ComponentWithInvalidDependency();
-            
+            var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
             Assert.That(component.StringProperty, Is.Null);
-            logger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
+            _mockLogger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
+        }
+
+        [Test]
+        public void Logs_Error_On_Invalid_Cast()
+        {
+            var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
+            Assert.That(component.StringClassInstance, Is.Null);
+            _mockLogger.Received().LogError("Could not cast IFloatProperty to StringClass", component);
         }
     }
 }

@@ -46,23 +46,31 @@ class MyComponent : UIComponent, IOnAttachToPanel
     // constructor. They are retrieved from Resources by default,
     // hence the lack of file extensions.
     
-    // Queries are made in the inherited constructor.
+    // Queries are made after all assets have loaded.
     [Query("count-label")]
-    private readonly Label _countLabel;
+    public readonly Label CountLabel;
     
+    // An instance of CounterService is injected into this field
+    // in the inherited constructor.
+    [Provide]
     private readonly ICounterService _counterService;
     
-    public MyComponent()
+    // The OnInit method is called after all assets have loaded.
+    // Any operations related to the DOM and stylesheets should
+    // be done here.
+    public override void OnInit()
     {
-        // Will yield a CounterService.
-        _counterService = Provide<ICounterService>();
+        CountLabel.text = _counterService.Count.ToString();
+        CountLabel.AddToClassList("new-class");
+        Add(new Label("Hello world"));
     }
     
-    // Event handlers are made in the inherited constructor.
-    // All you need to do is implement a supported interface.
+    // Event handlers are registered after all assets have loaded.
+    // To listen for events, all you need to do is implement
+    // a supported interface.
     public void OnAttachToPanel(AttachToPanelEvent evt)
     {
-        _countLabel.text = _counterService.Count.ToString();
+        CountLabel.text = _counterService.Count.ToString();
     }
 }
 ```
@@ -74,6 +82,46 @@ container.Add(new MyComponent());
 
 UIComponents are just VisualElements with some additional code in their
 constructor for loading assets automatically, among other things.
+
+## Testing
+
+The UIComponents package has been designed with testability in mind. The `UIComponents.Testing`
+assembly contains the `TestBed` helper class.
+
+```c#
+using UIComponents;
+using UIComponents.Testing;
+using NUnit.Framework;
+
+[TestFixture]
+public class MyComponentTests
+{
+    private TestBed _testBed;
+    private ICounterService _counterService;
+    
+    [SetUp]
+    public void SetUp()
+    {
+        // A mocking framework like NSubstitute is recommended.
+        // Here we don't use a mock at all.
+        _counterService = new CounterService();
+        _testBed = TestBed.Create()
+            .WithSingleton<ICounterService>(_counterService)
+            .Build();
+    }
+    
+    [UnityTest]
+    public IEnumerator It_Initializes_Count_Label_On_Init()
+    {
+        _counterService.Count = 42;
+
+        var component = _testBed.CreateComponent<MyComponent>();
+        // Wait until the component has loaded.
+        yield return component.WaitForInitializationEnumerator();
+        Assert.That(component.CountLabel.text, Is.EqualTo("42"));
+    }
+}
+```
 
 ## Installation
 
@@ -97,7 +145,7 @@ Alternatively, merge this snippet to your `Packages/manifest.json` file:
         }
     ],
     "dependencies": {
-        "io.savolainen.uicomponents": "0.16.0"
+        "io.savolainen.uicomponents": "0.21.1"
     }
 }
 ```
@@ -107,12 +155,12 @@ Alternatively, merge this snippet to your `Packages/manifest.json` file:
 Add this under `dependencies` in your `Packages/manifest.json` file:
 
 ```
-"io.savolainen.uicomponents": "https://github.com/jonisavo/uicomponents.git#upm/v0.16.0"
+"io.savolainen.uicomponents": "https://github.com/jonisavo/uicomponents.git#upm/v0.21.1"
 ```
 
-This will install version 0.16.0.
+This will install version 0.21.1.
 
-To update, change `upm/v0.16.0` to point to the latest version.
+To update, change `upm/v0.21.1` to point to the latest version.
 
 ## Documentation
 
