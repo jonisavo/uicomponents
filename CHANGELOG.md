@@ -1,5 +1,14 @@
 
 
+# [0.22.0](https://github.com/jonisavo/uicomponents/compare/v0.21.1...v0.22.0) (2022-09-03)
+
+
+### Features
+
+* **UIComponent:** add InitializationTask property ([5596a42](https://github.com/jonisavo/uicomponents/commit/5596a42e835c1505b283449c95aafd47b705cf79))
+* **UIComponent:** load bare components synchronously ([012945f](https://github.com/jonisavo/uicomponents/commit/012945ffc9b5ab99bd8fd21400b9137b100395fc))
+* **UIComponent:** make WaitForInitialization() obsolete ([40646b6](https://github.com/jonisavo/uicomponents/commit/40646b69b7c0978b26a56cba83adb37ae1b4a6a0))
+
 ## [0.21.1](https://github.com/jonisavo/uicomponents/compare/v0.21.0...v0.21.1) (2022-08-29)
 
 
