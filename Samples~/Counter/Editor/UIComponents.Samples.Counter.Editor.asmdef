@@ -1,0 +1,19 @@
+{
+    "name": "UIComponents.Samples.Counter.Editor",
+    "rootNamespace": "UIComponents.Samples",
+    "references": [
+        "GUID:d593635333b4cae48bac5b5f0b596e90",
+        "GUID:85e613970e1a4b2da36dc72b51d4b4d0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
