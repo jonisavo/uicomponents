@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UIComponents.Testing;
 using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -80,6 +83,38 @@ namespace UIComponents.Tests
                 
                 Assert.That(component.InitializationTask.IsCompleted, Is.True);
                 Assert.That(component.InitializationTask.Result, Is.SameAs(component));
+            }
+
+            [UnityTest]
+            public IEnumerator Allows_Waiting_For_Initialization()
+            {
+                var component = _testBed.CreateComponent<TestComponent>();
+                
+                Assert.That(component.Initialized, Is.False);
+
+                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+
+                yield return component.WaitForInitializationEnumerator();
+                
+                Assert.That(component.Initialized, Is.True);
+            }
+            
+            [UnityTest]
+            public IEnumerator Allows_Waiting_For_Initialization_With_Obsolete_Method()
+            {
+                var component = _testBed.CreateComponent<TestComponent>();
+                
+                Assert.That(component.Initialized, Is.False);
+                
+                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+
+                yield return component.WaitForInitialization().AsEnumerator();
+                
+                Assert.That(component.Initialized, Is.True);
             }
             
             private class BareTestComponent : UIComponent {}
