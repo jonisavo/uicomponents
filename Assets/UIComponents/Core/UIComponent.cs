@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using UIComponents.Cache;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
-using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -81,14 +79,6 @@ namespace UIComponents
         private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
             new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
 
-        private static readonly SynchronizationContext UnitySynchronizationContext;
-
-        [ExcludeFromCoverage]
-        static UIComponent()
-        {
-            UnitySynchronizationContext = SynchronizationContext.Current;
-        }
-
         /// <summary>
         /// UIComponent's constructor loads the configured layout and stylesheets.
         /// </summary>
@@ -111,18 +101,33 @@ namespace UIComponents
             
             DependencySetupProfilerMarker.End();
 
+            Initialize();
+        }
+
+        private async void Initialize()
+        {
             LayoutAndStylesSetupProfilerMarker.Begin();
 
             var layoutTask = GetLayout();
             var stylesTask = GetStyleSheets();
 
-            Task.WhenAll(layoutTask, stylesTask).ContinueWith(task =>
-            {
-                var layoutAsset = layoutTask.Result;
-                var styles = stylesTask.Result;
-                LayoutAndStylesSetupProfilerMarker.End();
-                UnitySynchronizationContext.Post(_ => Initialize(layoutAsset, styles), null);
-            });
+            await Task.WhenAll(layoutTask, stylesTask);
+            
+            var layoutAsset = layoutTask.Result;
+            var styles = stylesTask.Result;
+
+            LoadLayout(layoutAsset);
+            LoadStyles(styles);
+            
+            LayoutAndStylesSetupProfilerMarker.End();
+            
+            ApplyEffects();
+            PopulateQueryFields();
+            RegisterEventInterfaceCallbacks();
+            OnInit();
+            
+            Initialized = true;
+            _initCompletionSource.SetResult(this);
         }
 
         private void RegisterEventInterfaceCallbacks()
@@ -162,25 +167,14 @@ namespace UIComponents
                 styleSheets.Add(styles[i]);
         }
 
-        private void Initialize([CanBeNull] VisualTreeAsset layoutAsset, IList<StyleSheet> styles)
-        {
-            LoadLayout(layoutAsset);
-            LoadStyles(styles);
-            ApplyEffects();
-            PopulateQueryFields();
-            RegisterEventInterfaceCallbacks();
-            OnInit();
-            Initialized = true;
-            _initCompletionSource.SetResult(this);
-        }
-
         /// <summary>
         /// Called when all assets have been loaded and fields populated.
         /// </summary>
-        public virtual void OnInit()
-        {
-            
-        }
+        /// <remarks>
+        /// A bare component without assets will be initialized synchronously.
+        /// In this case, this method will be called before the constructor returns.
+        /// </remarks>
+        public virtual void OnInit() {}
         
         /// <returns>A Task which resolves when the component has initialized</returns>
         [Obsolete("Use InitializationTask instead.")]
