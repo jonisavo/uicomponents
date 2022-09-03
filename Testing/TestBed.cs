@@ -93,7 +93,7 @@ namespace UIComponents.Testing
         {
             var component = CreateComponent(factoryPredicate);
             
-            var initTask = component.WaitForInitialization();
+            var initTask = component.InitializationTask;
             var timeoutTask = Task.Delay(AsyncTimeout);
 
             var task = await Task.WhenAny(initTask, timeoutTask);

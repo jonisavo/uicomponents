@@ -57,6 +57,11 @@ namespace UIComponents
         public bool Initialized { get; private set; }
 
         /// <summary>
+        /// A Task that completes when the UIComponent has been fully initialized.
+        /// </summary>
+        public Task<UIComponent> InitializationTask => _initCompletionSource.Task;
+
+        /// <summary>
         /// The IUIComponentLogger used by this UIComponent.
         /// Defaults to <see cref="UIComponentDebugLogger"/>.
         /// </summary>
@@ -186,7 +191,7 @@ namespace UIComponents
         /// <returns>An enumerator which yields when the component has initialized</returns>
         public IEnumerator WaitForInitializationEnumerator()
         {
-            yield return WaitForInitialization().AsEnumerator();
+            yield return _initCompletionSource.Task.AsEnumerator();
         }
         
         /// <summary>
