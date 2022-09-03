@@ -183,6 +183,7 @@ namespace UIComponents
         }
         
         /// <returns>A Task which resolves when the component has initialized</returns>
+        [Obsolete("Use InitializationTask instead.")]
         public Task<UIComponent> WaitForInitialization()
         {
             return _initCompletionSource.Task;
