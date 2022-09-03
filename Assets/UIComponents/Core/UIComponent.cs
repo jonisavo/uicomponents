@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using UIComponents.Cache;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
-using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -57,6 +55,11 @@ namespace UIComponents
         public bool Initialized { get; private set; }
 
         /// <summary>
+        /// A Task that completes when the UIComponent has been fully initialized.
+        /// </summary>
+        public Task<UIComponent> InitializationTask => _initCompletionSource.Task;
+
+        /// <summary>
         /// The IUIComponentLogger used by this UIComponent.
         /// Defaults to <see cref="UIComponentDebugLogger"/>.
         /// </summary>
@@ -75,14 +78,6 @@ namespace UIComponents
             new ProfilerMarker("UIComponent.CacheSetup");
         private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
             new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
-
-        private static readonly SynchronizationContext UnitySynchronizationContext;
-
-        [ExcludeFromCoverage]
-        static UIComponent()
-        {
-            UnitySynchronizationContext = SynchronizationContext.Current;
-        }
 
         /// <summary>
         /// UIComponent's constructor loads the configured layout and stylesheets.
@@ -106,18 +101,33 @@ namespace UIComponents
             
             DependencySetupProfilerMarker.End();
 
+            Initialize();
+        }
+
+        private async void Initialize()
+        {
             LayoutAndStylesSetupProfilerMarker.Begin();
 
             var layoutTask = GetLayout();
             var stylesTask = GetStyleSheets();
 
-            Task.WhenAll(layoutTask, stylesTask).ContinueWith(task =>
-            {
-                var layoutAsset = layoutTask.Result;
-                var styles = stylesTask.Result;
-                LayoutAndStylesSetupProfilerMarker.End();
-                UnitySynchronizationContext.Post(_ => Initialize(layoutAsset, styles), null);
-            });
+            await Task.WhenAll(layoutTask, stylesTask);
+            
+            var layoutAsset = layoutTask.Result;
+            var styles = stylesTask.Result;
+
+            LoadLayout(layoutAsset);
+            LoadStyles(styles);
+            
+            LayoutAndStylesSetupProfilerMarker.End();
+            
+            ApplyEffects();
+            PopulateQueryFields();
+            RegisterEventInterfaceCallbacks();
+            OnInit();
+            
+            Initialized = true;
+            _initCompletionSource.SetResult(this);
         }
 
         private void RegisterEventInterfaceCallbacks()
@@ -157,27 +167,17 @@ namespace UIComponents
                 styleSheets.Add(styles[i]);
         }
 
-        private void Initialize([CanBeNull] VisualTreeAsset layoutAsset, IList<StyleSheet> styles)
-        {
-            LoadLayout(layoutAsset);
-            LoadStyles(styles);
-            ApplyEffects();
-            PopulateQueryFields();
-            RegisterEventInterfaceCallbacks();
-            OnInit();
-            Initialized = true;
-            _initCompletionSource.SetResult(this);
-        }
-
         /// <summary>
         /// Called when all assets have been loaded and fields populated.
         /// </summary>
-        public virtual void OnInit()
-        {
-            
-        }
+        /// <remarks>
+        /// A bare component without assets will be initialized synchronously.
+        /// In this case, this method will be called before the constructor returns.
+        /// </remarks>
+        public virtual void OnInit() {}
         
         /// <returns>A Task which resolves when the component has initialized</returns>
+        [Obsolete("Use InitializationTask instead.")]
         public Task<UIComponent> WaitForInitialization()
         {
             return _initCompletionSource.Task;
@@ -186,7 +186,7 @@ namespace UIComponents
         /// <returns>An enumerator which yields when the component has initialized</returns>
         public IEnumerator WaitForInitializationEnumerator()
         {
-            yield return WaitForInitialization().AsEnumerator();
+            yield return _initCompletionSource.Task.AsEnumerator();
         }
         
         /// <summary>
