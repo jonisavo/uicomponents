@@ -28,7 +28,7 @@ namespace UIComponents
     {
         private static readonly Dictionary<Type, UIComponentCache> CacheDictionary =
             new Dictionary<Type, UIComponentCache>();
-        
+
         /// <summary>
         /// Clears the cache of the UIComponent. Used primarily for testing.
         /// </summary>
@@ -37,7 +37,7 @@ namespace UIComponents
         {
             CacheDictionary.Remove(typeof(TComponent));
         }
-        
+
         internal static bool TryGetCache<TComponent>(out UIComponentCache cache) where TComponent : UIComponent
         {
             return CacheDictionary.TryGetValue(typeof(TComponent), out cache);
@@ -48,7 +48,7 @@ namespace UIComponents
         /// Defaults to <see cref="ResourcesAssetResolver"/>.
         /// </summary>
         public readonly IAssetResolver AssetResolver;
-        
+
         /// <summary>
         /// Whether the UIComponent has been fully initialized.
         /// </summary>
@@ -68,16 +68,16 @@ namespace UIComponents
         private readonly DependencyInjector _dependencyInjector;
 
         private readonly Type _componentType;
-        
+
         private readonly TaskCompletionSource<UIComponent> _initCompletionSource =
             new TaskCompletionSource<UIComponent>();
-        
+
         private static readonly ProfilerMarker DependencySetupProfilerMarker =
             new ProfilerMarker("UIComponent.DependencySetup");
         private static readonly ProfilerMarker CacheSetupProfilerMarker =
             new ProfilerMarker("UIComponent.CacheSetup");
-        private static readonly ProfilerMarker LayoutAndStylesSetupProfilerMarker =
-            new ProfilerMarker("UIComponent.LayoutAndStylesSetup");
+        private static readonly ProfilerMarker PostHierarchySetupProfilerMarker =
+            new ProfilerMarker("UIComponent.PostHierarchySetup");
 
         /// <summary>
         /// UIComponent's constructor loads the configured layout and stylesheets.
@@ -85,20 +85,20 @@ namespace UIComponents
         protected UIComponent()
         {
             CacheSetupProfilerMarker.Begin();
-            
+
             _componentType = GetType();
             if (!CacheDictionary.ContainsKey(_componentType))
                 CacheDictionary.Add(_componentType, new UIComponentCache(_componentType));
-            
+
             CacheSetupProfilerMarker.End();
-            
+
             DependencySetupProfilerMarker.Begin();
-            
+
             _dependencyInjector = DiContext.Current.GetInjector(_componentType);
             AssetResolver = Provide<IAssetResolver>();
             Logger = Provide<IUIComponentLogger>();
             PopulateProvideFields();
-            
+
             DependencySetupProfilerMarker.End();
 
             Initialize();
@@ -106,26 +106,27 @@ namespace UIComponents
 
         private async void Initialize()
         {
-            LayoutAndStylesSetupProfilerMarker.Begin();
-
             var layoutTask = GetLayout();
             var stylesTask = GetStyleSheets();
 
             await Task.WhenAll(layoutTask, stylesTask);
-            
+
             var layoutAsset = layoutTask.Result;
             var styles = stylesTask.Result;
 
             LoadLayout(layoutAsset);
             LoadStyles(styles);
-            
-            LayoutAndStylesSetupProfilerMarker.End();
-            
+
+            PostHierarchySetupProfilerMarker.Begin();
+
             ApplyEffects();
             PopulateQueryFields();
             RegisterEventInterfaceCallbacks();
+
+            PostHierarchySetupProfilerMarker.End();
+
             OnInit();
-            
+
             Initialized = true;
             _initCompletionSource.SetResult(this);
         }
@@ -134,25 +135,25 @@ namespace UIComponents
         {
             if (this is IOnAttachToPanel onAttachToPanel)
                 RegisterCallback<AttachToPanelEvent>(onAttachToPanel.OnAttachToPanel);
-            
+
             if (this is IOnDetachFromPanel onDetachFromPanel)
                 RegisterCallback<DetachFromPanelEvent>(onDetachFromPanel.OnDetachFromPanel);
 
             if (this is IOnGeometryChanged onGeometryChanged)
                 RegisterCallback<GeometryChangedEvent>(onGeometryChanged.OnGeometryChanged);
-            
+
             if (this is IOnMouseEnter onMouseEnter)
                 RegisterCallback<MouseEnterEvent>(onMouseEnter.OnMouseEnter);
-            
+
             if (this is IOnMouseLeave onMouseLeave)
                 RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
-            
+
 #if UNITY_2020_3_OR_NEWER
             if (this is IOnClick onClick)
                 RegisterCallback<ClickEvent>(onClick.OnClick);
 #endif
         }
-        
+
         private void LoadLayout([CanBeNull] VisualTreeAsset layoutAsset)
         {
             if (layoutAsset != null)
@@ -175,20 +176,20 @@ namespace UIComponents
         /// In this case, this method will be called before the constructor returns.
         /// </remarks>
         public virtual void OnInit() {}
-        
+
         /// <returns>A Task which resolves when the component has initialized</returns>
         [Obsolete("Use InitializationTask instead.")]
         public Task<UIComponent> WaitForInitialization()
         {
             return _initCompletionSource.Task;
         }
-        
+
         /// <returns>An enumerator which yields when the component has initialized</returns>
         public IEnumerator WaitForInitializationEnumerator()
         {
             yield return _initCompletionSource.Task.AsEnumerator();
         }
-        
+
         /// <summary>
         /// Returns an IEnumerable of all of the asset paths configured
         /// for the component.
@@ -202,7 +203,7 @@ namespace UIComponents
             for (var i = 0; i < assetPathCount; i++)
                 yield return assetPathAttributes[i].Path;
         }
-        
+
         /// <summary>
         /// Returns the component's type's name.
         /// </summary>
@@ -237,22 +238,23 @@ namespace UIComponents
         {
             return _dependencyInjector.TryProvide(out instance);
         }
-        
+
         private Task<VisualTreeAsset> GetLayout()
         {
             var layoutAttribute = CacheDictionary[_componentType].LayoutAttribute;
-            
+
             if (layoutAttribute == null)
                 return Task.FromResult<VisualTreeAsset>(null);
 
             var assetPath = layoutAttribute.GetAssetPathForComponent(this);
-            
+
             return AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
 
         private async Task<List<StyleSheet>> GetStyleSheets()
         {
-            var stylesheetAttributes = CacheDictionary[_componentType].StylesheetAttributes;
+            var stylesheetAttributes =
+                CacheDictionary[_componentType].StylesheetAttributes;
             var stylesheetAttributeCount = stylesheetAttributes.Count;
             var styleSheetLoadTasks =
                 new Task<StyleSheet>[stylesheetAttributeCount];
@@ -264,7 +266,7 @@ namespace UIComponents
                 var loadOperation = AssetResolver.LoadAsset<StyleSheet>(styleSheetAssetPaths[i]);
                 styleSheetLoadTasks[i] = loadOperation;
             }
-            
+
             await Task.WhenAll(styleSheetLoadTasks);
 
             var loadedStyleSheets = new List<StyleSheet>(stylesheetAttributeCount);
@@ -278,6 +280,7 @@ namespace UIComponents
                     Logger.LogError($"Could not find stylesheet {styleSheetAssetPaths[i]}", this);
                     continue;
                 }
+
                 loadedStyleSheets.Add(styleSheet);
             }
 
@@ -288,7 +291,7 @@ namespace UIComponents
         {
             var effectAttributes = CacheDictionary[_componentType].EffectAttributes;
             var effectAttributeCount = effectAttributes.Count;
-            
+
             for (var i = 0; i < effectAttributeCount; i++)
                 effectAttributes[i].Apply(this);
         }
@@ -307,7 +310,7 @@ namespace UIComponents
                 var concreteType = TypeUtils.GetConcreteType(fieldType);
 
                 var results = new List<VisualElement>();
-                
+
                 for (var i = 0; i < queryAttributes.Length; i++)
                 {
 #if !UNITY_2020_3_OR_NEWER
@@ -319,7 +322,7 @@ namespace UIComponents
 #endif
                     queryAttributes[i].Query(this, results);
                 }
-                
+
                 results.RemoveAll(result => !concreteType.IsInstanceOfType(result));
 
                 object value = null;
@@ -344,10 +347,10 @@ namespace UIComponents
             foreach (var fieldInfo in provideAttributeDictionary.Keys)
             {
                 var fieldType = fieldInfo.FieldType;
-                
+
                 if (provideAttributeDictionary[fieldInfo].CastFrom != null)
                     fieldType = provideAttributeDictionary[fieldInfo].CastFrom;
-                
+
                 object value;
 
                 try
