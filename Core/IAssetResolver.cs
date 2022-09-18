@@ -20,7 +20,10 @@ namespace UIComponents
         /// Returns whether the asset exists.
         /// </summary>
         /// <param name="assetPath">Asset path</param>
-        /// <returns>Whether the asset exists</returns>
-        bool AssetExists(string assetPath);
+        /// <returns>
+        /// A task which resolves to a boolean, which tells
+        /// whether the asset exists
+        /// </returns>
+        Task<bool> AssetExists(string assetPath);
     }
 }

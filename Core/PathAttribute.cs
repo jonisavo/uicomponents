@@ -1,6 +1,5 @@
 ﻿using System;
-using UnityEditor;
-using UnityEngine;
+using System.Threading.Tasks;
 
 namespace UIComponents
 {
@@ -21,14 +20,16 @@ namespace UIComponents
         /// The first valid path is chosen.
         /// </summary>
         /// <param name="component">UIComponent to get path for</param>
-        /// <returns>Asset path used by component</returns>
-        public string GetAssetPathForComponent(UIComponent component)
+        /// <returns>A Task which resolves to the asset path used by the component</returns>
+        public async Task<string> GetAssetPathForComponent(UIComponent component)
         {
             if (Path == null)
                 return string.Empty;
 
-            if (!ConfiguredPathIsComplete() && TryGetPathFromComponent(component, out var path))
-                return path;
+            var componentAssetPath = await GetPathFromComponent(component);
+
+            if (!ConfiguredPathIsComplete() && !string.IsNullOrEmpty(componentAssetPath))
+                return componentAssetPath;
 
             return Path;
         }
@@ -38,24 +39,22 @@ namespace UIComponents
             return Path.StartsWith("Assets/") ||
                    Path.StartsWith("Packages/");
         }
-
-        private bool TryGetPathFromComponent(UIComponent component, out string path)
+        
+        private async Task<string> GetPathFromComponent(UIComponent component)
         {
-            path = "";
-
             foreach (var pathPart in component.GetAssetPaths())
             {
                 var filePath = string.Join("/", pathPart, Path);
 
-                if (!component.AssetResolver.AssetExists(filePath))
+                var assetExists = await component.AssetResolver.AssetExists(filePath);
+                
+                if (!assetExists)
                     continue;
 
-                path = filePath;
-
-                return true;
+                return filePath;
             }
 
-            return false;
+            return null;
         }
     }
 }

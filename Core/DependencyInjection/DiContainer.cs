@@ -90,6 +90,24 @@ namespace UIComponents.DependencyInjection
         {
             return _singletonInstanceDictionary.TryGetValue(type, out instance);
         }
+
+        /// <summary>
+        /// Attempts to fetch a singleton instance.
+        /// </summary>
+        /// <typeparam name="T">Singleton type</typeparam>
+        /// <param name="instance">Singleton instance</param>
+        /// <returns>Whether the instance could be fetched</returns>
+        public bool TryGetSingletonInstance<T>(out T instance) where T : class
+        {
+            instance = null;
+            
+            if (!_singletonInstanceDictionary.TryGetValue(typeof(T), out var obj))
+                return false;
+
+            instance = obj as T;
+
+            return instance != null;
+        }
         
         /// <param name="instanceType">Type of the singleton instance</param>
         /// <param name="instance">Singleton instance to add</param>
