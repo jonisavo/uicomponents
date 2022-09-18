@@ -1,5 +1,25 @@
 
 
+# [0.23.0](https://github.com/jonisavo/uicomponents/compare/v0.22.0...v0.23.0) (2022-09-18)
+
+
+### Features
+
+* **IAssetResolver:** change AssetExists return type to Task<bool> ([3dfe624](https://github.com/jonisavo/uicomponents/commit/3dfe624c1966a2da23b0d166fc2b0a38dc10a38a))
+* make most classes sealed ([c4ff845](https://github.com/jonisavo/uicomponents/commit/c4ff845cf36f5e08e03b32650d1b88dc36fcd5eb))
+
+
+### Performance Improvements
+
+* **AddressableAssetResolver:** cache existence check results ([ea1560c](https://github.com/jonisavo/uicomponents/commit/ea1560c08e24d4331808a2296a96415c738a7389))
+* **UIComponent:** determine stylesheets asset paths in the same thread as the load operation ([33dcef6](https://github.com/jonisavo/uicomponents/commit/33dcef6f7526a3b5e5d5011cf531054c18d775d0))
+
+
+### BREAKING CHANGES
+
+* The following classes are now sealed: AssetPathAttribute, Dependency, DependencyAttribute, DependencyInjector, DiContainer, DiContext, LayoutAttribute, MissingProviderException, ProvideAttribute, QueryAttribute, RootClassAttribute, StylesheetAttribute, TestBed, TestBedBuilder, TestBedTimeoutException.
+* **IAssetResolver:** IAssetResolver's AssetExists now returns Task<bool>.
+
 # [0.22.0](https://github.com/jonisavo/uicomponents/compare/v0.21.1...v0.22.0) (2022-09-03)
 
 
