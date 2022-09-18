@@ -1,0 +1,8 @@
+﻿<UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label name="resources-example-header" text="ResourcesExampleComponent" />
+    <ui:VisualElement class="italic-label-container">
+        <ui:Label text="This is an example of a component loaded from Resources." />
+        <ui:Label text="Layouts and stylesheets are loaded from Resources by default." />
+        <ui:Label class="top-margin" text="This can be changed by overriding the IAssetResolver dependency." />
+    </ui:VisualElement>
+</UXML>
