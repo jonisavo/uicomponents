@@ -5,7 +5,7 @@ namespace UIComponents.Testing
     /// <summary>
     /// Thrown when an asynchronous TestBed operation times out.
     /// </summary>
-    public class TestBedTimeoutException : Exception
+    public sealed class TestBedTimeoutException : Exception
     {
         public override string Message { get; }
         

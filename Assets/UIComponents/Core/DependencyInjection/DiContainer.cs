@@ -7,7 +7,7 @@ namespace UIComponents.DependencyInjection
     /// <summary>
     /// A class for storing injectors and singleton instances.
     /// </summary>
-    public class DiContainer
+    public sealed class DiContainer
     {
         /// <summary>
         /// Contains all injectors created for consumers.

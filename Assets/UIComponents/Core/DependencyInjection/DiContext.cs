@@ -6,7 +6,7 @@ namespace UIComponents.DependencyInjection
     /// <summary>
     /// Dependency injection context for consumers.
     /// </summary>
-    public class DiContext
+    public sealed class DiContext
     {
         /// <summary>
         /// The current dependency injection context.

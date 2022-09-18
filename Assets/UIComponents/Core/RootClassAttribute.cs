@@ -8,7 +8,7 @@ namespace UIComponents
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [BaseTypeRequired(typeof(UIComponent))]
-    public class RootClassAttribute : UIComponentEffectAttribute
+    public sealed class RootClassAttribute : UIComponentEffectAttribute
     {
         private readonly string _className;
         
