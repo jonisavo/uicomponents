@@ -6,9 +6,9 @@ namespace UIComponents.Addressables
 {
     /// <summary>
     /// An IAssetResolver which loads assets with Addressables.
+    /// </summary>
     /// <seealso cref="DependencyAttribute"/>
     /// <seealso cref="UIComponent"/>
-    /// </summary>
     public class AddressableAssetResolver : IAssetResolver
     {
         public async Task<T> LoadAsset<T>(string assetPath) where T : UnityEngine.Object
@@ -28,8 +28,8 @@ namespace UIComponents.Addressables
 
             return asset;
         }
-        
-        public bool AssetExists(string assetPath)
+
+        public async Task<bool> AssetExists(string assetPath)
         {
             var handle = UnityEngine.AddressableAssets.Addressables.LoadResourceLocationsAsync(assetPath);
 
@@ -37,7 +37,7 @@ namespace UIComponents.Addressables
 
             try
             {
-                locations = handle.WaitForCompletion();
+                locations = await handle.Task;
             }
             finally
             {

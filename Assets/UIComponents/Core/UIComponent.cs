@@ -239,16 +239,16 @@ namespace UIComponents
             return _dependencyInjector.TryProvide(out instance);
         }
 
-        private Task<VisualTreeAsset> GetLayout()
+        private async Task<VisualTreeAsset> GetLayout()
         {
             var layoutAttribute = CacheDictionary[_componentType].LayoutAttribute;
 
             if (layoutAttribute == null)
-                return Task.FromResult<VisualTreeAsset>(null);
+                return null;
 
-            var assetPath = layoutAttribute.GetAssetPathForComponent(this);
+            var assetPath = await layoutAttribute.GetAssetPathForComponent(this);
 
-            return AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
+            return await AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
 
         private async Task<List<StyleSheet>> GetStyleSheets()
@@ -262,7 +262,7 @@ namespace UIComponents
 
             for (var i = 0; i < stylesheetAttributeCount; i++)
             {
-                styleSheetAssetPaths[i] = stylesheetAttributes[i].GetAssetPathForComponent(this);
+                styleSheetAssetPaths[i] = await stylesheetAttributes[i].GetAssetPathForComponent(this);
                 var loadOperation = AssetResolver.LoadAsset<StyleSheet>(styleSheetAssetPaths[i]);
                 styleSheetLoadTasks[i] = loadOperation;
             }

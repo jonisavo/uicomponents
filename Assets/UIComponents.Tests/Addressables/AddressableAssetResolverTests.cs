@@ -20,13 +20,13 @@ namespace UIComponents.Tests.Addressables
             );
         }
 
-        [Test]
-        public void Should_Be_Able_To_Tell_If_Asset_Exists()
+        [UnityTest]
+        public IEnumerator Should_Be_Able_To_Tell_If_Asset_Exists()
         {
-            Assert_Tells_If_Asset_Exists(
+            yield return Assert_Tells_If_Asset_Exists(
                 "Assets/UIComponents.Tests/Addressables/Assets/Component.uss"
             );
-            Assert_Tells_If_Asset_Exists(
+            yield return Assert_Tells_If_Asset_Exists(
                 "Assets/UIComponents.Tests/Addressables/Assets/Component.uxml"
             );
         }

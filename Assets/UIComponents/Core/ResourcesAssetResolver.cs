@@ -23,9 +23,15 @@ namespace UIComponents
             return taskCompletionSource.Task;
         }
 
-        public bool AssetExists(string assetPath)
+        public Task<bool> AssetExists(string assetPath)
         {
-            return Resources.Load(assetPath) != null;
+            var request = Resources.LoadAsync(assetPath);
+            
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            
+            request.completed += operation => taskCompletionSource.SetResult(request.asset != null);
+            
+            return taskCompletionSource.Task;
         }
     }
 }
