@@ -34,9 +34,9 @@ namespace UIComponents.Tests
                     source.SetResult(ScriptableObject.CreateInstance<T>());
                 }
 
-                public bool AssetExists(string assetPath)
+                public Task<bool> AssetExists(string assetPath)
                 {
-                    return true;
+                    return Task.FromResult(true);
                 }
             }
 

@@ -26,9 +26,19 @@ namespace UIComponents.Tests
             _container.RegisterSingletonInstance(StringType, "Hello world");
 
             var couldFetchValue = _container.TryGetSingletonInstance(StringType, out var text);
+            var couldFetchValueGeneric = _container.TryGetSingletonInstance<string>(out var textTwo);
             
             Assert.That(couldFetchValue, Is.True);
             Assert.That(text, Is.EqualTo("Hello world"));
+            Assert.That(couldFetchValueGeneric, Is.True);
+            Assert.That(textTwo, Is.EqualTo("Hello world"));
+        }
+
+        [Test]
+        public void Missing_Singleton_Instance_Can_Be_Queried()
+        {
+            Assert.That(_container.TryGetSingletonInstance(typeof(int[]), out _), Is.False);
+            Assert.That(_container.TryGetSingletonInstance<int[]>(out _), Is.False);
         }
 
         [Test]

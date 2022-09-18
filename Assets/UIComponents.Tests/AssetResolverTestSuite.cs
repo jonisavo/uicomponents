@@ -12,30 +12,33 @@ namespace UIComponents.Tests
         {
             var assetResolver = new T();
 
-            var obj = assetResolver.LoadAsset<TAsset>(assetPath);
+            var loadTask = assetResolver.LoadAsset<TAsset>(assetPath);
             
-            Assert.That(obj, Is.Not.Null);
-            
-            Assert.That(obj, Is.InstanceOf<Task<TAsset>>());
+            Assert.That(loadTask, Is.Not.Null);
 
-            yield return obj.AsEnumerator();
+            yield return loadTask.AsEnumerator();
             
-            Assert.That(obj.Result, Is.Not.Null);
+            Assert.That(loadTask.Result, Is.Not.Null);
             
-            Assert.That(obj.Result, Is.InstanceOf<TAsset>());
+            Assert.That(loadTask.Result, Is.InstanceOf<TAsset>());
         }
         
-        protected void Assert_Tells_If_Asset_Exists(string assetPath)
+        protected IEnumerator Assert_Tells_If_Asset_Exists(string assetPath)
         {
             var assetResolver = new T();
 
-            var existingAssetExists =
+            var existingAssetExistsTask =
                 assetResolver.AssetExists(assetPath);
-            var nonExistantAssetDoesNotExist =
+            var nonExistantAssetDoesNotExistTask =
                 assetResolver.AssetExists("SomeOtherAsset");
             
-            Assert.That(existingAssetExists, Is.True);
-            Assert.That(nonExistantAssetDoesNotExist, Is.False);
+            Assert.That(existingAssetExistsTask, Is.Not.Null);
+            Assert.That(nonExistantAssetDoesNotExistTask, Is.Not.Null);
+
+            yield return Task.WhenAll(existingAssetExistsTask, nonExistantAssetDoesNotExistTask).AsEnumerator();
+            
+            Assert.That(existingAssetExistsTask.Result, Is.True);
+            Assert.That(nonExistantAssetDoesNotExistTask.Result, Is.False);
         }
     }
 }
