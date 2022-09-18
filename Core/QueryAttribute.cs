@@ -29,7 +29,7 @@ namespace UIComponents
     /// </example>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     [MeansImplicitUse]
-    public class QueryAttribute : Attribute
+    public sealed class QueryAttribute : Attribute
     {
         /// <summary>
         /// USS name to query by.

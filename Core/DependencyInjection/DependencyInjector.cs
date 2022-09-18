@@ -10,7 +10,7 @@ namespace UIComponents.DependencyInjection
     /// </summary>
     /// <seealso cref="UIComponent"/>
     /// <seealso cref="DependencyAttribute"/>
-    public class DependencyInjector
+    public sealed class DependencyInjector
     {
         private readonly DiContainer _container;
 

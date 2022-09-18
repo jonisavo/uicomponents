@@ -27,7 +27,7 @@ namespace UIComponents
     /// <seealso cref="DependencyAttribute"/>
     [AttributeUsage(AttributeTargets.Field)]
     [MeansImplicitUse]
-    public class ProvideAttribute : Attribute
+    public sealed class ProvideAttribute : Attribute
     {
         /// <summary>
         /// If set, an instance of the specified type will be provided and

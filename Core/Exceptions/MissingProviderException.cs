@@ -5,7 +5,7 @@ namespace UIComponents
     /// <summary>
     /// Thrown when a dependency does not have a provider.
     /// </summary>
-    public class MissingProviderException : Exception
+    public sealed class MissingProviderException : Exception
     {
         /// <summary>
         /// The dependency type.

@@ -12,7 +12,7 @@ namespace UIComponents.Testing
     /// <para/>
     /// You can initialize an instance with <see cref="Create"/>.
     /// </summary>
-    public class TestBed
+    public sealed class TestBed
     {
         /// <summary>
         /// Timeout for async operations. Defaults to eight seconds.

@@ -6,7 +6,7 @@ namespace UIComponents.DependencyInjection
     /// <summary>
     /// An internal class for provided dependencies.
     /// </summary>
-    internal class Dependency
+    internal sealed class Dependency
     {
         /// <summary>
         /// The instance of the dependency which is provided to consumers.
