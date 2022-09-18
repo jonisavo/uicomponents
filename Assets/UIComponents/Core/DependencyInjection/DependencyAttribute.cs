@@ -7,7 +7,7 @@ namespace UIComponents
     /// </summary>
     /// <seealso cref="UIComponent"/>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class DependencyAttribute : Attribute
+    public sealed class DependencyAttribute : Attribute
     {
         public readonly Type DependencyType;
 

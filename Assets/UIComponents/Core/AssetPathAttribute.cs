@@ -31,7 +31,7 @@ namespace UIComponents
     /// </example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [BaseTypeRequired(typeof(UIComponent))]
-    public class AssetPathAttribute : Attribute
+    public sealed class AssetPathAttribute : Attribute
     {
         public readonly string Path;
         

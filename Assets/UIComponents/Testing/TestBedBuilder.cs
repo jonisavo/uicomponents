@@ -5,7 +5,7 @@ namespace UIComponents.Testing
     /// <summary>
     /// A class for configuring a <see cref="TestBed"/> instance with dependencies.
     /// </summary>
-    public class TestBedBuilder
+    public sealed class TestBedBuilder
     {
         private readonly TestBed _testBed;
 

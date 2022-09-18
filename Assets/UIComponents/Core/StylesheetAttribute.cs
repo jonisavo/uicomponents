@@ -9,7 +9,7 @@ namespace UIComponents
     /// <seealso cref="AssetPathAttribute"/>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [BaseTypeRequired(typeof(UIComponent))]
-    public class StylesheetAttribute : PathAttribute
+    public sealed class StylesheetAttribute : PathAttribute
     {
         public StylesheetAttribute(string path)
         {
