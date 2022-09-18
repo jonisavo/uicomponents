@@ -250,6 +250,26 @@ namespace UIComponents
 
             return await AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
         }
+        
+        private readonly struct StyleSheetLoadTuple
+        {
+            public readonly string Path;
+            public readonly StyleSheet StyleSheet;
+            
+            public StyleSheetLoadTuple(string path, StyleSheet styleSheet)
+            {
+                Path = path;
+                StyleSheet = styleSheet;
+            }
+        }
+
+        private async Task<StyleSheetLoadTuple> GetSingleStyleSheet(StylesheetAttribute stylesheetAttribute)
+        {
+            var assetPath = await stylesheetAttribute.GetAssetPathForComponent(this);
+            var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
+            
+            return new StyleSheetLoadTuple(assetPath, styleSheet);
+        }
 
         private async Task<List<StyleSheet>> GetStyleSheets()
         {
@@ -257,27 +277,22 @@ namespace UIComponents
                 CacheDictionary[_componentType].StylesheetAttributes;
             var stylesheetAttributeCount = stylesheetAttributes.Count;
             var styleSheetLoadTasks =
-                new Task<StyleSheet>[stylesheetAttributeCount];
-            var styleSheetAssetPaths = new string[stylesheetAttributeCount];
+                new Task<StyleSheetLoadTuple>[stylesheetAttributeCount];
 
             for (var i = 0; i < stylesheetAttributeCount; i++)
-            {
-                styleSheetAssetPaths[i] = await stylesheetAttributes[i].GetAssetPathForComponent(this);
-                var loadOperation = AssetResolver.LoadAsset<StyleSheet>(styleSheetAssetPaths[i]);
-                styleSheetLoadTasks[i] = loadOperation;
-            }
+                styleSheetLoadTasks[i] = GetSingleStyleSheet(stylesheetAttributes[i]);
 
             await Task.WhenAll(styleSheetLoadTasks);
 
             var loadedStyleSheets = new List<StyleSheet>(stylesheetAttributeCount);
 
-            for (var i = 0; i < stylesheetAttributeCount; i++)
+            foreach (var loadTask in styleSheetLoadTasks)
             {
-                var styleSheet = styleSheetLoadTasks[i].Result;
+                var styleSheet = loadTask.Result.StyleSheet;
 
                 if (styleSheet == null)
                 {
-                    Logger.LogError($"Could not find stylesheet {styleSheetAssetPaths[i]}", this);
+                    Logger.LogError($"Could not find stylesheet {loadTask.Result.Path}", this);
                     continue;
                 }
 

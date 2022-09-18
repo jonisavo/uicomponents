@@ -55,7 +55,8 @@ namespace UIComponents.Addressables
             
             var exists = locations.Count > 0;
             
-            AssetPathExistsCache.Add(assetPath, exists);
+            if (!AssetPathExistsCache.ContainsKey(assetPath))
+                AssetPathExistsCache.Add(assetPath, exists);
 
             return exists;
         }
