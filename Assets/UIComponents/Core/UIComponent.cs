@@ -152,6 +152,10 @@ namespace UIComponents
             if (this is IOnClick onClick)
                 RegisterCallback<ClickEvent>(onClick.OnClick);
 #endif
+#if UNITY_2021_3_OR_NEWER
+            if (this is IOnNavigationMove onNavigationMove)
+                RegisterCallback<NavigationMoveEvent>(onNavigationMove.OnNavigationMove);
+#endif
         }
 
         private void LoadLayout([CanBeNull] VisualTreeAsset layoutAsset)
