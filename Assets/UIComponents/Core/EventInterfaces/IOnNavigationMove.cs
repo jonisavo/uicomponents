@@ -1,16 +1,16 @@
-﻿#if UNITY_2020_3_OR_NEWER
+﻿#if UNITY_2021_3_OR_NEWER
 using UnityEngine.UIElements;
 
 namespace UIComponents
 {
     /// <summary>
     /// When implemented by a <see cref="UIComponent"/>,
-    /// a callback for <see cref="ClickEvent"/> is
+    /// a callback for <see cref="NavigationMoveEvent"/> is
     /// automatically registered in the UIComponent constructor.
     /// </summary>
-    public interface IOnClick
+    public interface IOnNavigationMove
     {
-        void OnClick(ClickEvent evt);
+        void OnNavigationMove(NavigationMoveEvent evt);
     }
 }
 #endif

@@ -14,14 +14,29 @@ namespace UIComponents.Tests.Editor.Interfaces
             public bool Fired { get; protected set; }
         }
 
-        private static IEnumerator Assert_Registers_Event_Callback<TComponent, TEvent>()
+        [SetUp]
+        public void SetUp()
+        {
+            _editorWindow = EditorWindow.GetWindow<InterfacesTestEditorWindow>();
+        }
+
+        private InterfacesTestEditorWindow _editorWindow;
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (_editorWindow)
+                _editorWindow.Close();
+            _editorWindow = null;
+        }
+
+        private IEnumerator Assert_Registers_Event_Callback<TComponent, TEvent>()
             where TComponent : BaseTestComponent, new()
             where TEvent : EventBase<TEvent>, new()
         {
-            var window = EditorWindow.GetWindow<InterfacesTestEditorWindow>();
             var component = new TComponent();
             Assert.That(component.Fired, Is.False);
-            window.AddTestComponent(component);
+            _editorWindow.AddTestComponent(component);
 
             yield return component.WaitForInitializationEnumerator();
 
@@ -29,7 +44,6 @@ namespace UIComponents.Tests.Editor.Interfaces
                 component.SendEvent(evt);
 
             Assert.That(component.Fired, Is.True);
-            window.Close();
         }
         
         private class UIComponentWithOnGeometryChanged : BaseTestComponent, IOnGeometryChanged
@@ -97,6 +111,18 @@ namespace UIComponents.Tests.Editor.Interfaces
         public IEnumerator IOnClick_Registers_ClickEvent_Callback()
         {
             yield return Assert_Registers_Event_Callback<UIComponentWithOnClick, ClickEvent>();
+        }
+#endif
+#if UNITY_2021_3_OR_NEWER
+        private class UIComponentWithOnNavigationMove : BaseTestComponent, IOnNavigationMove
+        {
+            public void OnNavigationMove(NavigationMoveEvent evt) => Fired = true;
+        }
+
+        [UnityTest]
+        public IEnumerator IOnNavigationMove_Registers_NavigationMoveEvent_Callback()
+        {
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnNavigationMove, NavigationMoveEvent>();
         }
 #endif
     }
