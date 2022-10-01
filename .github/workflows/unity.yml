@@ -53,10 +53,10 @@ jobs:
           customParameters: -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions "useProjectSettings;generateAdditionalMetrics"
           
       - name: Build Roslyn project
-        run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.csproj -c Release
+        run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release
         
       - name: Test Roslyn project
-        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.csproj -c Release --no-build --verbosity normal --logger "GitHubActions;report-warnings=false"
+        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal --logger "GitHubActions;report-warnings=false"
           
       - uses: actions/upload-artifact@v3
         if: always()
@@ -130,8 +130,8 @@ jobs:
           targetPlatform: StandaloneWindows64
         
       - name: Build Roslyn project
-        run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.csproj -c Release
+        run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release
 
       - name: Test Roslyn project
-        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.csproj -c Release --no-build --verbosity normal --logger "GitHubActions;report-warnings=false"
+        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal --logger "GitHubActions;report-warnings=false"
 
