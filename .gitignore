@@ -1,6 +1,7 @@
 /[Ll]ibrary/
 /[Tt]emp/
-/[Oo]bj/
+[Oo]bj/
+bin/
 /[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
@@ -70,3 +71,4 @@ crashlytics-build.properties
 /CodeCoverage/
 .idea/
 /artifacts/
+*.coverage
