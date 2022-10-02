@@ -21,8 +21,8 @@ jobs:
         unityVersion:
           - 2019.4.40f1
           - 2020.3.40f1
-          - 2021.3.10f1
-          - 2022.1.17f1
+          - 2021.3.11f1
+          - 2022.1.18f1
             
     steps:
       - uses: actions/checkout@v3
@@ -98,8 +98,8 @@ jobs:
         unityVersion:
           - 2019.4.40f1
           - 2020.3.40f1
-          - 2021.3.10f1
-          - 2022.1.17f1
+          - 2021.3.11f1
+          - 2022.1.18f1
 
     steps:
       - uses: actions/checkout@v3
