@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using UnityEngine.TestTools;
 
 namespace UIComponents.Experimental
 {
@@ -49,6 +50,7 @@ namespace UIComponents.Experimental
     /// </example>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     [Conditional("UNITY_EDITOR")]
+    [ExcludeFromCoverage]
     public sealed class TraitAttribute : Attribute
     {
         /// <summary>
