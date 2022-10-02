@@ -5,6 +5,7 @@
 
 ### Features
 
+* add source generation for UxmlTraits and UxmlFactory (Unity 2021.2+)
 * add IOnNavigationMove event interface ([174e2a0](https://github.com/jonisavo/uicomponents/commit/174e2a0a54e1d67396cd9399ae7c49d57af6c7e5))
 
 # [0.23.0](https://github.com/jonisavo/uicomponents/compare/v0.22.0...v0.23.0) (2022-09-18)
