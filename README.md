@@ -83,6 +83,63 @@ container.Add(new MyComponent());
 UIComponents are just VisualElements with some additional code in their
 constructor for loading assets automatically, among other things.
 
+## Source generation (experimental, Unity 2021.2+)
+
+UIComponents has a source generator for UxmlTraits and UxmlFactory.
+Simply apply the `Trait` attribute to your class fields and properties.
+Remember to make your class partial.
+
+```c#
+using UIComponents;
+using UIComponents.Experimental;
+
+public partial class MyComponent : UIComponent
+{
+    [Trait]
+    public string Description;
+
+    [Trait(Name = "header-color")]
+    public Color Color;
+    
+    public enum Greeting
+    {
+        Hello,
+        Hi,
+        Morning
+    }
+
+    [Trait(DefaultValue = Greeting.Morning)]
+    public Greeting Greeting;
+}
+```
+This generates:
+```c#
+public partial class MyComponent
+{
+    public new class UxmlFactory : UxmlFactory<MyComponent, UxmlTraits> {}
+
+    public new class UxmlTraits : UIElements.UxmlTraits
+    {
+        UxmlStringAttributeDescription m_Description = new UxmlStringAttributeDescription { name = "description" };
+        UxmlColorAttributeDescription m_Color = new UxmlColorAttributeDescription { name = "header-color" };
+        UxmlEnumAttributeDescription<MyComponent.Greeting> m_Greeting = new UxmlEnumAttributeDescription<MyComponent.Greeting> { name = "greeting" };
+
+        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+        {
+            base.Init(ve, bag, cc);
+            m_Greeting.defaultValue = (MyComponent.Greeting) 2;
+            ((MyComponent)ve).Description = m_Description.GetValueFromBag(bag, cc);
+            ((MyComponent)ve).Color = m_Color.GetValueFromBag(bag, cc);
+            ((MyComponent)ve).Greeting = m_Greeting.GetValueFromBag(bag, cc);
+        }
+    }
+}
+```
+
+Source generation is available in Unity 2021.2+ only. For more information, see
+the [Experimental features](https://github.com/jonisavo/uicomponents/wiki/7.-Experimental-features)
+wiki page.
+
 ## Testing
 
 The UIComponents package has been designed with testability in mind. The `UIComponents.Testing`

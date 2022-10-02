@@ -38,6 +38,11 @@ jobs:
             Library-StandaloneLinux64-
             Library-
             
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+            
       - uses: game-ci/unity-test-runner@v2
         id: testRunner
         env:
@@ -46,6 +51,12 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           customParameters: -debugCodeOptimization -enableCodeCoverage -coverageResultsPath ./CodeCoverage -coverageOptions "useProjectSettings;generateAdditionalMetrics"
+          
+      - name: Build Roslyn project
+        run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release
+        
+      - name: Test Roslyn project
+        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal
           
       - uses: actions/upload-artifact@v3
         if: always()
@@ -104,6 +115,11 @@ jobs:
             Library-StandaloneWindows64-
             Library-
             
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+            
       - uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -112,4 +128,9 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: StandaloneWindows64
+        
+      - name: Build Roslyn project
+        run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release
 
+      - name: Test Roslyn project
+        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal
