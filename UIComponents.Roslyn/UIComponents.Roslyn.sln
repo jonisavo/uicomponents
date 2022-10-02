@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UIComponents.Roslyn.Generation", "UIComponents.Roslyn.Generation\UIComponents.Roslyn.Generation.csproj", "{6CD78FB6-91D8-4088-95CC-E8B4340C1E68}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UIComponents.Roslyn.Generation.Tests", "UIComponents.Roslyn.Generation.Tests\UIComponents.Roslyn.Generation.Tests.csproj", "{91906D86-DCF0-450E-AAB9-4CE45F89C826}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CD78FB6-91D8-4088-95CC-E8B4340C1E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD78FB6-91D8-4088-95CC-E8B4340C1E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD78FB6-91D8-4088-95CC-E8B4340C1E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD78FB6-91D8-4088-95CC-E8B4340C1E68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91906D86-DCF0-450E-AAB9-4CE45F89C826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91906D86-DCF0-450E-AAB9-4CE45F89C826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91906D86-DCF0-450E-AAB9-4CE45F89C826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91906D86-DCF0-450E-AAB9-4CE45F89C826}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8447D296-8A77-4E44-B6C8-42CB334BA8F5}
+	EndGlobalSection
+EndGlobal
