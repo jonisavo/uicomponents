@@ -21,7 +21,7 @@ public partial class ComponentWithDefaultValueTraits
             base.Init(ve, bag, cc);
             m_Description.defaultValue = "Description not set.";
             m_Lives.defaultValue = 3;
-            m_MyValue.defaultValue = 1;
+            m_MyValue.defaultValue = (Some.Place.Where.Enum.Is.TheEnum) 1;
             ((ComponentWithDefaultValueTraits)ve).Description = m_Description.GetValueFromBag(bag, cc);
             ((ComponentWithDefaultValueTraits)ve).Lives = m_Lives.GetValueFromBag(bag, cc);
             ((ComponentWithDefaultValueTraits)ve).MyValue = m_MyValue.GetValueFromBag(bag, cc);

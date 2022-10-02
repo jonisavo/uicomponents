@@ -38,7 +38,10 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
             return _traitsToGenerate.Count > 0;
         }
 
-        private (string, string) GetTraitUxmlNameAndDefaultValue(Dictionary<string, TypedConstant> traitArguments, string traitDefaultName)
+        private (string, string) GetTraitUxmlNameAndDefaultValue(
+            Dictionary<string, TypedConstant> traitArguments,
+            ITypeSymbol typeSymbol,
+            string memberName)
         {
             string uxmlName = null;
             string defaultValue = null;
@@ -47,15 +50,20 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
                 uxmlName = traitArguments["Name"].Value?.ToString();
 
             if (string.IsNullOrEmpty(uxmlName))
-                uxmlName = traitDefaultName;
+                uxmlName = memberName.ToLower();
 
             if (traitArguments.ContainsKey("DefaultValue"))
             {
                 var defaultValueString = traitArguments["DefaultValue"].Value?.ToString();
 
-                if (!string.IsNullOrEmpty(defaultValueString) && traitArguments["DefaultValue"].Value is string)
-                    defaultValueString = $"\"{defaultValueString}\"";
+                var defaultValueObject = traitArguments["DefaultValue"].Value;
 
+                if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is string)
+                    defaultValueString = $"\"{defaultValueString}\"";
+                if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is bool)
+                    defaultValueString = defaultValueString.ToLower();
+                if (!string.IsNullOrEmpty(defaultValueString) && typeSymbol.TypeKind == TypeKind.Enum)
+                    defaultValueString = $"({typeSymbol.ToDisplayString()}) {defaultValueString}";
                 defaultValue = defaultValueString;
             }
 
@@ -95,7 +103,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
             foreach (var traitField in traitFields)
             {
                 var arguments = traitArguments[traitField];
-                var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, traitField.Name.ToLower());
+                var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, traitField.Type, traitField.Name);
 
                 traits.Add(TraitDescription.CreateFromFieldSymbol(traitField, uxmlName, defaultValue));
             }
@@ -130,7 +138,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
             foreach (var traitProperty in traitProperties)
             {
                 var arguments = traitArguments[traitProperty];
-                var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, traitProperty.Name.ToLower());
+                var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, traitProperty.Type, traitProperty.Name);
 
                 traits.Add(TraitDescription.CreateFromPropertySymbol(traitProperty, uxmlName, defaultValue));
             }
