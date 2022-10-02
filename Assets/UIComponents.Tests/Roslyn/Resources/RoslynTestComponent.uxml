@@ -1,0 +1,3 @@
+﻿<UXML xmlns:test="UIComponents.Tests.Roslyn">
+    <test:RoslynTestComponent current-time="123.456" text-color="#FF0000" greeting="Morning" enabled="false" />
+</UXML>
