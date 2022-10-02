@@ -96,20 +96,20 @@ public class Test
         [Fact]
         public Task Works_On_Non_UIComponent_Type()
         {
-            var source = $@"
+            var source = @"
 using UIComponents.Experimental;
 
 public partial class NonUIComponentClass
-{{
+{
     [Trait(Name = ""custom-trait-name"")]
     public int FieldTrait;
 
     [Trait(Name = ""my-property"")]
-    public float PropertyTrait {{ get; set; }}
+    public float PropertyTrait { get; set; }
 
     [Trait(Name = ""nope"")]
-    public bool PropertyWithoutSetter {{ get; }}
-}}";
+    public bool PropertyWithoutSetter { get; }
+}";
 
             return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
         }
@@ -117,27 +117,27 @@ public partial class NonUIComponentClass
         [Fact]
         public Task Generates_Enum_Trait_With_Internal_Enum()
         {
-            var source = $@"
+            var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
 public partial class OwnEnumComponent : UIComponent
-{{
+{
     public enum OwnEnum
-    {{
+    {
         A,
         B
-    }}
+    }
 
     [Trait]
     public OwnEnum FieldTrait;
 
     [Trait]
-    public OwnEnum PropertyTrait {{ get; set; }}
+    public OwnEnum PropertyTrait { get; set; }
 
     [Trait]
-    public OwnEnum PropertyWithoutSetter {{ get; }}
-}}";
+    public OwnEnum PropertyWithoutSetter { get; }
+}";
 
             return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
         }
@@ -145,33 +145,33 @@ public partial class OwnEnumComponent : UIComponent
         [Fact]
         public Task Generates_In_Namespace()
         {
-            var source = $@"
+            var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
 namespace Custom
-{{
+{
     namespace Components
-    {{
+    {
         public partial class CustomNamespaceComponent : UIComponent
-        {{
+        {
             public enum OwnEnum
-            {{
+            {
                 A,
                 B
-            }}
+            }
 
             [Trait]
             public OwnEnum FieldTrait;
 
             [Trait]
-            public OwnEnum PropertyTrait {{ get; set; }}
+            public OwnEnum PropertyTrait { get; set; }
 
             [Trait]
-            public OwnEnum PropertyWithoutSetter {{ get; }}
-        }}
-    }}
-}}";
+            public OwnEnum PropertyWithoutSetter { get; }
+        }
+    }
+}";
 
             return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
         }
@@ -179,21 +179,21 @@ namespace Custom
         [Fact]
         public Task Allows_Specifying_Uxml_Name()
         {
-            var source = $@"
+            var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
 public partial class CustomNamespaceComponent : UIComponent
-{{
+{
     [Trait(Name = ""custom-trait-name"")]
     public int FieldTrait;
 
     [Trait(Name = ""my-property"")]
-    public float PropertyTrait {{ get; set; }}
+    public float PropertyTrait { get; set; }
 
     [Trait(Name = ""nope"")]
-    public bool PropertyWithoutSetter {{ get; }}
-}}";
+    public bool PropertyWithoutSetter { get; }
+}";
 
             return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
         }
@@ -201,17 +201,17 @@ public partial class CustomNamespaceComponent : UIComponent
         [Fact]
         public Task Handles_Subclass()
         {
-            var source = $@"
+            var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
-public class MyComponent : UIComponent {{}}
+public class MyComponent : UIComponent {}
 
 public partial class MyComponentWithTraits : MyComponent
-{{
+{
     [Trait(Name = ""double-value"")]
     public double Trait;
-}}";
+}";
 
             return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
         }
@@ -219,21 +219,21 @@ public partial class MyComponentWithTraits : MyComponent
         [Fact]
         public Task Allows_Setting_Default_Value()
         {
-            var source = $@"
+            var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
 namespace Some.Place.Where.Enum.Is
-{{
+{
     public enum TheEnum
-    {{
+    {
         VALUE_A,
         VALUE_B
-    }}
-}}
+    }
+}
 
 public partial class ComponentWithDefaultValueTraits : UIComponent
-{{
+{
     [Trait(Name = ""description"", DefaultValue = ""Description not set."")]
     public string Description;
 
@@ -242,7 +242,41 @@ public partial class ComponentWithDefaultValueTraits : UIComponent
 
     [Trait(Name = ""custom-value"", DefaultValue = Some.Place.Where.Enum.Is.TheEnum.VALUE_B)]
     public Some.Place.Where.Enum.Is.TheEnum MyValue;
-}}";
+}";
+
+            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task Generates_Traits_For_Many_Classes()
+        {
+            var source = @"
+using UIComponents;
+using UIComponents.Experimental;
+
+public partial class FirstTraitClass
+{
+    [Trait(Name = ""custom-trait-name"")]
+    public int FieldTrait;
+
+    [Trait(Name = ""my-property"")]
+    public float PropertyTrait { get; set; }
+}
+
+public partial class SecondTraitClass
+{
+    [Trait(DefaultValue = true)]
+    public bool Enabled;
+
+    [Trait(Name = ""secret"")]
+    public long SomeValue;
+}
+
+public partial class ThirdTraitClass
+{
+    [Trait]
+    public string Name;
+}";
 
             return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
         }
