@@ -1,4 +1,4 @@
-﻿using UIComponents.Roslyn.Generation.Generators.Traits;
+﻿using UIComponents.Roslyn.Generation.Generators.Uxml;
 
 namespace UIComponents.Roslyn.Generation.Tests.Utilities
 {
@@ -26,7 +26,7 @@ public partial class {fieldTypeNameCap}ComponentWithUsing : UIComponent
             if (useUnityEngine)
                 source = "using UnityEngine;\r\n" + source;
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
     }
 }
