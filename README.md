@@ -86,7 +86,7 @@ constructor for loading assets automatically, among other things.
 ## Source generation (experimental, Unity 2021.2+)
 
 UIComponents has a source generator for UxmlTraits and UxmlFactory.
-Simply apply the `Trait` attribute to your class fields and properties.
+Simply apply the `UxmlName` attribute to your class and `Trait` attribute to your class fields and properties.
 Remember to make your class partial.
 
 ```c#
