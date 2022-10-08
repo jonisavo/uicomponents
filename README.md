@@ -11,7 +11,7 @@
 		<img src="https://img.shields.io/npm/v/io.savolainen.uicomponents?label=openupm&amp;registry_uri=https://package.openupm.com" alt="OpenUPM" />
 	</a>
     <a href="https://github.com/jonisavo/uicomponents/actions/workflows/ci.yml">
-        <img src="https://github.com/jonisavo/uicomponents/actions/workflows/unity.yml/badge.svg" alt="CI Status" />
+        <img src="https://github.com/jonisavo/uicomponents/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
     </a>
     <a href="https://codecov.io/gh/jonisavo/uicomponents">
       <img src="https://codecov.io/gh/jonisavo/uicomponents/branch/main/graph/badge.svg?token=A7DF04CF06" alt="Coverage Status" />
@@ -93,7 +93,8 @@ Remember to make your class partial.
 using UIComponents;
 using UIComponents.Experimental;
 
-public partial class MyComponent : UIComponent
+[UxmlName("Test")]
+public partial class TestComponent : UIComponent
 {
     [Trait]
     public string Description;
@@ -114,9 +115,20 @@ public partial class MyComponent : UIComponent
 ```
 This generates:
 ```c#
-public partial class MyComponent
+public partial class TestComponent
 {
-    public new class UxmlFactory : UxmlFactory<MyComponent, UxmlTraits> {}
+    public new class UxmlFactory : UxmlFactory<TestComponent, UxmlTraits>
+    {
+        public override string uxmlName
+        {
+            get { return "Test"; }
+        }
+
+        public override string uxmlQualifiedName
+        {
+            get { return uxmlNamespace + "." + uxmlName; }
+        }
+    }
 
     public new class UxmlTraits : UIElements.UxmlTraits
     {
