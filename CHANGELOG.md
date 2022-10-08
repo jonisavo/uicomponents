@@ -1,5 +1,18 @@
 
 
+# [0.25.0](https://github.com/jonisavo/uicomponents/compare/v0.24.0...v0.25.0) (2022-10-08)
+
+
+### Features
+
+* add experimental UxmlNameAttribute for generating UxmlFactory ([5df8799](https://github.com/jonisavo/uicomponents/commit/5df87996f32bc0db40cdfc525d842228ce47650d))
+* **Addressables:** increase minimum Addressables version to 1.18.19 ([0622e2e](https://github.com/jonisavo/uicomponents/commit/0622e2e028dc1d08c5fa8e3038de97329ed92f19))
+
+
+### BREAKING CHANGES
+
+* **Addressables:** The minimum Addressables version for UIComponents.Addressables has been increased to 1.18.19. Addressables 1.17 does not work with UIComponent's asynchronous loading.
+
 # [0.24.0](https://github.com/jonisavo/uicomponents/compare/v0.23.0...v0.24.0) (2022-10-02)
 
 

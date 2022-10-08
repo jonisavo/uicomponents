@@ -214,7 +214,7 @@ Alternatively, merge this snippet to your `Packages/manifest.json` file:
         }
     ],
     "dependencies": {
-        "io.savolainen.uicomponents": "0.24.0"
+        "io.savolainen.uicomponents": "0.25.0"
     }
 }
 ```
@@ -224,12 +224,12 @@ Alternatively, merge this snippet to your `Packages/manifest.json` file:
 Add this under `dependencies` in your `Packages/manifest.json` file:
 
 ```
-"io.savolainen.uicomponents": "https://github.com/jonisavo/uicomponents.git#upm/v0.24.0"
+"io.savolainen.uicomponents": "https://github.com/jonisavo/uicomponents.git#upm/v0.25.0"
 ```
 
-This will install version 0.24.0.
+This will install version 0.25.0.
 
-To update, change `upm/v0.24.0` to point to the latest version.
+To update, change `upm/v0.25.0` to point to the latest version.
 
 ## Documentation
 
