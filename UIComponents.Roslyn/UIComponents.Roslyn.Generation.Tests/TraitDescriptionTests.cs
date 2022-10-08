@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using NSubstitute;
-using UIComponents.Roslyn.Generation.Generators.Traits;
+using UIComponents.Roslyn.Generation.Generators.Uxml;
 
 namespace UIComponents.Roslyn.Generation.Tests
 {

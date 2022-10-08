@@ -7,67 +7,56 @@ using System.Text;
 using UIComponents.Roslyn.Generation.Readers;
 using UIComponents.Roslyn.Generation.SyntaxReceivers;
 
-namespace UIComponents.Roslyn.Generation.Generators.Traits
+namespace UIComponents.Roslyn.Generation.Generators.Uxml
 {
     /// <summary>
-    /// A generator for TraitAttribute. Generates a UxmlFactory and UxmlTraits implementation.
+    /// A generator for TraitAttribute and UxmlNameAttribute.
+    /// Generates UxmlFactory and UxmlTraits implementations.
     /// </summary>
     [Generator]
-    internal class UxmlTraitsAugmentGenerator : AugmentGenerator<UxmlTraitsSyntaxReceiver>
+    internal class UxmlAugmentGenerator : AugmentGenerator<UxmlTraitsSyntaxReceiver>
     {
         private INamedTypeSymbol _traitAttributeSymbol;
+        private INamedTypeSymbol _uxmlNameAttributeSymbol;
         private readonly List<TraitDescription> _traitsToGenerate =
             new List<TraitDescription>();
+        private UxmlFactoryInfo _uxmlFactoryInfo;
 
         protected override void OnBeforeExecute(GeneratorExecutionContext context)
         {
             _traitAttributeSymbol =
                 context.Compilation.GetTypeByMetadataName("UIComponents.Experimental.TraitAttribute");
+            _uxmlNameAttributeSymbol =
+                context.Compilation.GetTypeByMetadataName("UIComponents.Experimental.UxmlNameAttribute");
         }
 
         protected override bool ShouldGenerateSource(AugmentGenerationContext context)
         {
-            if (_traitAttributeSymbol == null)
+            if (_traitAttributeSymbol == null || _uxmlNameAttributeSymbol == null)
                 return false;
 
             _traitsToGenerate.Clear();
 
             GetTraitFields(context, _traitsToGenerate);
             GetTraitProperties(context, _traitsToGenerate);
+            _uxmlFactoryInfo = GetUxmlFactoryInfo(context);
 
-            return _traitsToGenerate.Count > 0;
+            return _traitsToGenerate.Count > 0 || !string.IsNullOrEmpty(_uxmlFactoryInfo.Name);
         }
 
-        private (string, string) GetTraitUxmlNameAndDefaultValue(
-            Dictionary<string, TypedConstant> traitArguments,
-            ITypeSymbol typeSymbol,
-            string memberName)
+        private void ReadAttributeArguments<TSyntax, TSymbol>(
+            TSyntax syntax,
+            AttributeArgumentReader<TSyntax> attributeArgumentReader,
+            SemanticModel classSemanticModel,
+            Dictionary<TSymbol, Dictionary<string, TypedConstant>> output
+            )
+            where TSyntax : SyntaxNode
+            where TSymbol : class, ISymbol
         {
-            string uxmlName = null;
-            string defaultValue = null;
-
-            if (traitArguments.ContainsKey("Name"))
-                uxmlName = traitArguments["Name"].Value?.ToString();
-
-            if (string.IsNullOrEmpty(uxmlName))
-                uxmlName = memberName.ToLower();
-
-            if (traitArguments.ContainsKey("DefaultValue"))
-            {
-                var defaultValueString = traitArguments["DefaultValue"].Value?.ToString();
-
-                var defaultValueObject = traitArguments["DefaultValue"].Value;
-
-                if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is string)
-                    defaultValueString = $"\"{defaultValueString}\"";
-                if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is bool)
-                    defaultValueString = defaultValueString.ToLower();
-                if (!string.IsNullOrEmpty(defaultValueString) && typeSymbol.TypeKind == TypeKind.Enum)
-                    defaultValueString = $"({typeSymbol.ToDisplayString()}) {defaultValueString}";
-                defaultValue = defaultValueString;
-            }
-
-            return (uxmlName, defaultValue);
+            var arguments = new Dictionary<string, TypedConstant>();
+            attributeArgumentReader.Read(syntax, arguments);
+            var fieldSymbol = classSemanticModel.GetDeclaredSymbol(syntax) as TSymbol;
+            output.Add(fieldSymbol, arguments);
         }
 
         private void GetTraitFields(AugmentGenerationContext context, IList<TraitDescription> traits)
@@ -92,21 +81,11 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
                 fieldAttributeReader.Read(fieldDeclaration, traitFields);
 
                 foreach (var variableDeclaration in fieldDeclaration.Declaration.Variables)
-                {
-                    var arguments = new Dictionary<string, TypedConstant>();
-                    variableAttributeArgumentReader.Read(variableDeclaration, arguments);
-                    var fieldSymbol = context.ClassSemanticModel.GetDeclaredSymbol(variableDeclaration) as IFieldSymbol;
-                    traitArguments.Add(fieldSymbol, arguments);
-                }
+                    ReadAttributeArguments(variableDeclaration, variableAttributeArgumentReader, context.ClassSemanticModel, traitArguments);
             }
 
             foreach (var traitField in traitFields)
-            {
-                var arguments = traitArguments[traitField];
-                var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, traitField.Type, traitField.Name);
-
-                traits.Add(TraitDescription.CreateFromFieldSymbol(traitField, uxmlName, defaultValue));
-            }
+                traits.Add(TraitDescription.CreateFromFieldSymbol(traitField, traitArguments[traitField]));
         }
 
         private void GetTraitProperties(AugmentGenerationContext context, IList<TraitDescription> traits)
@@ -129,19 +108,60 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
 
                 propertyAttributeReader.Read(propertyDeclaration, traitProperties);
 
-                var arguments = new Dictionary<string, TypedConstant>();
-                propertyAttributeArgumentReader.Read(propertyDeclaration, arguments);
-                var propertySymbol = context.ClassSemanticModel.GetDeclaredSymbol(propertyDeclaration) as IPropertySymbol;
-                traitArguments.Add(propertySymbol, arguments);
+                ReadAttributeArguments(propertyDeclaration, propertyAttributeArgumentReader, context.ClassSemanticModel, traitArguments);
             }
 
             foreach (var traitProperty in traitProperties)
-            {
-                var arguments = traitArguments[traitProperty];
-                var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, traitProperty.Type, traitProperty.Name);
+                traits.Add(TraitDescription.CreateFromPropertySymbol(traitProperty, traitArguments[traitProperty]));
+        }
 
-                traits.Add(TraitDescription.CreateFromPropertySymbol(traitProperty, uxmlName, defaultValue));
+        private UxmlFactoryInfo GetUxmlFactoryInfo(AugmentGenerationContext context)
+        {
+            var arguments = new Dictionary<string, TypedConstant>();
+            var classAttributeArgumentReader = new ClassAttributeArgumentReader(_uxmlNameAttributeSymbol, context.ClassSemanticModel);
+
+            classAttributeArgumentReader.Read(context.ClassSyntax, arguments);
+
+            if (arguments.Count == 0)
+                return default;
+
+            return UxmlFactoryInfo.CreateFromArguments(arguments);
+        }
+
+        private void WriteUxmlFactory(UxmlFactoryInfo info, AugmentGenerationContext context, StringBuilder stringBuilder)
+        {
+            var compilation = context.GeneratorExecutionContext.Compilation;
+            var uxmlTraitsMetadataName = $"{context.CurrentTypeSymbol.MetadataName}.UxmlTraits";
+
+            var traitsDefined = _traitsToGenerate.Count > 0 ||
+                compilation.GetTypeByMetadataName(uxmlTraitsMetadataName) != null;
+
+            stringBuilder.Append("    ")
+                .Append($"public new partial class UxmlFactory : UxmlFactory<{context.TypeName}");
+
+            if (traitsDefined)
+                stringBuilder.Append(", UxmlTraits>");
+            else
+                stringBuilder.Append(">");
+
+            if (string.IsNullOrEmpty(info.Name))
+            {
+                stringBuilder.AppendLine(" {}");
+                return;
             }
+
+            stringBuilder.AppendLine($@"
+    {{
+        public override string uxmlName
+        {{
+            get {{ return ""{info.Name}""; }}
+        }}
+
+        public override string uxmlQualifiedName
+        {{
+            get {{ return uxmlNamespace + ""."" + uxmlName; }}
+        }}
+    }}");
         }
 
         private void WriteTraitDescriptionVariables(List<TraitDescription> traits, StringBuilder stringBuilder)
@@ -177,14 +197,12 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
             }
         }
 
-        protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
+        private void WriteUxmlTraits(List<TraitDescription> traits, AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.AppendLine("using UnityEngine.UIElements;").AppendLine();
+            if (traits.Count == 0)
+                return;
 
-            stringBuilder.AppendLine($@"public partial class {context.TypeName}
-{{
-    public new partial class UxmlFactory : UxmlFactory<{context.TypeName}, UxmlTraits> {{}}
-
+            stringBuilder.AppendLine($@"
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {{");
             WriteTraitDescriptionVariables(_traitsToGenerate, stringBuilder);
@@ -198,13 +216,26 @@ namespace UIComponents.Roslyn.Generation.Generators.Traits
             WriteTraitDescriptionInitialization(_traitsToGenerate, context, stringBuilder);
 
             stringBuilder.Append("        ").AppendLine($@"}}
-    }}
-}}");
+    }}");
+        }
+
+        protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
+        {
+            stringBuilder.AppendLine("using UnityEngine.UIElements;").AppendLine();
+
+            stringBuilder.AppendLine($@"public partial class {context.TypeName}
+{{");
+
+            WriteUxmlFactory(_uxmlFactoryInfo, context, stringBuilder);
+
+            WriteUxmlTraits(_traitsToGenerate, context, stringBuilder);
+
+            stringBuilder.AppendLine("}");
         }
 
         protected override string GetHintPostfix()
         {
-            return "UxmlTraits";
+            return "Uxml";
         }
     }
 }

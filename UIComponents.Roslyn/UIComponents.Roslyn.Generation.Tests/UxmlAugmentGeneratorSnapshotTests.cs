@@ -1,5 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp;
-using UIComponents.Roslyn.Generation.Generators.Traits;
+using UIComponents.Roslyn.Generation.Generators.Uxml;
 using UIComponents.Roslyn.Generation.Tests.Utilities;
 
 namespace UnityEngine
@@ -18,7 +18,7 @@ public enum MyEnum
 namespace UIComponents.Roslyn.Generation.Tests
 {
     [UsesVerify]
-    public class UxmlTraitsAugmentGeneratorSnapshotTests : TraitTestFixture
+    public class UxmlAugmentGeneratorSnapshotTests : TraitTestFixture
     {
         [Fact]
         public Task Generates_String_Traits()
@@ -86,7 +86,7 @@ public class Test
                 syntaxTrees: new[] { syntaxTree }
             );
 
-            var generator = new UxmlTraitsAugmentGenerator();
+            var generator = new UxmlAugmentGenerator();
 
             var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
 
@@ -111,7 +111,7 @@ public partial class NonUIComponentClass
     public bool PropertyWithoutSetter { get; }
 }";
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
 
         [Fact]
@@ -139,7 +139,7 @@ public partial class OwnEnumComponent : UIComponent
     public OwnEnum PropertyWithoutSetter { get; }
 }";
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
 
         [Fact]
@@ -173,7 +173,7 @@ namespace Custom
     }
 }";
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
 
         [Fact]
@@ -195,7 +195,7 @@ public partial class CustomNamespaceComponent : UIComponent
     public bool PropertyWithoutSetter { get; }
 }";
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
 
         [Fact]
@@ -213,7 +213,7 @@ public partial class MyComponentWithTraits : MyComponent
     public double Trait;
 }";
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
 
         [Fact]
@@ -244,7 +244,7 @@ public partial class ComponentWithDefaultValueTraits : UIComponent
     public Some.Place.Where.Enum.Is.TheEnum MyValue;
 }";
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
 
         [Fact]
@@ -278,7 +278,40 @@ public partial class ThirdTraitClass
     public string Name;
 }";
 
-            return GeneratorTester.Verify<UxmlTraitsAugmentGenerator>(source);
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task Generates_UxmlFactory_With_UxmlName()
+        {
+            var source = @"
+using UIComponents;
+using UIComponents.Experimental;
+
+[UxmlName(""MyUxmlNameAttribute"")]
+public partial class MyUxmlNameAttributeComponent : UIComponent
+{
+  
+}
+";
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task Generates_Both_Traits_And_UxmlFactory()
+        {
+            var source = @"
+using UIComponents;
+using UIComponents.Experimental;
+
+[UxmlName(""AwesomeUxmlName"")]
+public partial class ComponentWithUxmlNameAndTraits : UIComponent
+{
+    [Trait(DefaultValue = true)]
+    public bool Value;
+}
+";
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
     }
 }
