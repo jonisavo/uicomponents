@@ -6,9 +6,8 @@ namespace UIComponents.Experimental
 {
     /// <summary>
     /// When used in Unity 2021.2 or later, this attribute will generate
-    /// UxmlTraits and UxmlFactory implementations automatically when
-    /// applied to a field or property which has a set method. The class
-    /// must be partial.
+    /// an UxmlTraits implementation when applied to a field or property
+    /// which has a set method. The class must be partial.
     /// </summary>
     /// <example>
     /// <code>
