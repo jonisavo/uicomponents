@@ -4,6 +4,9 @@
     "version": "0.25.0",
     "description": "A small front-end framework for Unity's UIToolkit.",
     "unity": "2019.3",
+    "dependencies": {
+        "com.unity.roslyn": "0.2.2-preview"
+    },
     "author": {
         "name": "Joni Savolainen",
         "email": "joni@savolainen.io",
