@@ -117,6 +117,18 @@ namespace UIComponents
             LoadLayout(layoutAsset);
             LoadStyles(styles);
 
+            var childInitializationTasks = new List<Task>();
+
+            for (var i = 0; i < childCount; i++)
+            {
+                var child = hierarchy.ElementAt(i);
+                
+                if (child is UIComponent component)
+                    childInitializationTasks.Add(component.InitializationTask);
+            }
+
+            await Task.WhenAll(childInitializationTasks);
+
             PostHierarchySetupProfilerMarker.Begin();
 
             ApplyEffects();
