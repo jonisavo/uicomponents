@@ -18,19 +18,23 @@ namespace UIComponents.Tests
         {
             private class MockAssetResolver : IAssetResolver
             {
-                public readonly Dictionary<string, object> TaskCompletionSources =
+                private readonly Dictionary<string, object> _taskCompletionSources =
                     new Dictionary<string, object>();
 
                 public Task<T> LoadAsset<T>(string assetPath) where T : Object
                 {
-                    var source = new TaskCompletionSource<T>();
-                    TaskCompletionSources.Add(assetPath, source);
-                    return source.Task;
+                    if (!_taskCompletionSources.ContainsKey(assetPath))
+                    {
+                        var source = new TaskCompletionSource<T>();
+                        _taskCompletionSources.Add(assetPath, source);
+                    }
+
+                    return ((TaskCompletionSource<T>) _taskCompletionSources[assetPath]).Task;
                 }
 
                 public void CompleteLoad<T>(string assetPath) where T : ScriptableObject
                 {
-                    var source = (TaskCompletionSource<T>) TaskCompletionSources[assetPath];
+                    var source = (TaskCompletionSource<T>) _taskCompletionSources[assetPath];
                     source.SetResult(ScriptableObject.CreateInstance<T>());
                 }
 
@@ -113,6 +117,58 @@ namespace UIComponents.Tests
                 _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
 
                 yield return component.WaitForInitialization().AsEnumerator();
+                
+                Assert.That(component.Initialized, Is.True);
+            }
+            
+            [Layout("Child")]
+            [Stylesheet("ChildStylesheet")]
+            private class ChildComponent : UIComponent {}
+            
+            [Layout("NestedChild")]
+            private class NestedChildComponent : UIComponent {}
+
+            [Test]
+            public void Does_Not_Initialize_If_Children_Are_Uninitialized()
+            {
+                var component = _testBed.CreateComponent<TestComponent>();
+
+                var firstChild = _testBed.CreateComponent<ChildComponent>();
+                var secondChild = _testBed.CreateComponent<ChildComponent>();
+
+                component.Add(firstChild);
+                component.Add(secondChild);
+                
+                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+
+                Assert.That(component.Initialized, Is.False);
+            }
+
+            [Test]
+            public void Initializes_When_Children_Are_Initialized()
+            {
+                var component = _testBed.CreateComponent<TestComponent>();
+
+                var firstChild = _testBed.CreateComponent<ChildComponent>();
+                var secondChild = _testBed.CreateComponent<ChildComponent>();
+
+                var nestedChild = _testBed.CreateComponent<NestedChildComponent>();
+                
+                firstChild.Add(nestedChild);
+
+                component.Add(firstChild);
+                component.Add(secondChild);
+                
+                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+
+                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Child");
+                _mockAssetResolver.CompleteLoad<StyleSheet>("ChildStylesheet");
+                
+                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("NestedChild");
                 
                 Assert.That(component.Initialized, Is.True);
             }
