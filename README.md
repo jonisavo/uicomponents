@@ -231,6 +231,12 @@ This will install version 0.25.0.
 
 To update, change `upm/v0.25.0` to point to the latest version.
 
+### With .unitypackage
+
+Download the latest `.unitypackage` from the [releases](https://github.com/jonisavo/uicomponents/releases) page.
+
+To update, remove the existing files and extract the new `.unitypackage`.
+
 ## Documentation
 
 Refer to the [wiki](https://github.com/jonisavo/uicomponents/wiki) for documentation.
