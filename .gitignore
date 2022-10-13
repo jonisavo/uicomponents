@@ -72,3 +72,4 @@ crashlytics-build.properties
 .idea/
 /artifacts/
 *.coverage
+/dist

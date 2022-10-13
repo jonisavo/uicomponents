@@ -6,6 +6,7 @@ git:
 
 github:
   release: true
+  assets: ["dist/UIComponents_v${version}.unitypackage"]
 
 npm: false
 
@@ -17,3 +18,4 @@ plugins:
     
 hooks:
   after:bump: "node ./Scripts/update_package_version.js ${version}"
+  before:github: "node ./Scripts/generate_unitypackage.js v${version}"
