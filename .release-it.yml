@@ -6,7 +6,7 @@ git:
 
 github:
   release: true
-  assets: ["dist/*.unitypackage"]
+  assets: ["dist/UIComponents_v${version}.unitypackage"]
 
 npm: false
 
