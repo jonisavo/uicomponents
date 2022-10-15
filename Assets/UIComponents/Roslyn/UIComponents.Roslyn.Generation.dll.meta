@@ -2,17 +2,18 @@ fileFormatVersion: 2
 guid: 2b6c49308b2fef34e8f771338b430aa7
 labels:
 - RoslynAnalyzer
+- SourceGenerator
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
   iconMap: {}
   executionOrder: {}
   defineConstraints:
-  - UNITY_2021_2_OR_NEWER
+  - UNITY_2020_3_OR_NEWER
   isPreloaded: 0
   isOverridable: 0
-  isExplicitlyReferenced: 0
-  validateReferences: 1
+  isExplicitlyReferenced: 1
+  validateReferences: 0
   platformData:
   - first:
       : Any
