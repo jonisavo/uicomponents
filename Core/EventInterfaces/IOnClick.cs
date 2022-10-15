@@ -1,5 +1,4 @@
-﻿#if UNITY_2020_3_OR_NEWER
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace UIComponents
 {
@@ -13,4 +12,3 @@ namespace UIComponents
         void OnClick(ClickEvent evt);
     }
 }
-#endif
