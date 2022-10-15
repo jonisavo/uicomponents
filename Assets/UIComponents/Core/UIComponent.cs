@@ -159,11 +159,10 @@ namespace UIComponents
 
             if (this is IOnMouseLeave onMouseLeave)
                 RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
-
-#if UNITY_2020_3_OR_NEWER
+            
             if (this is IOnClick onClick)
                 RegisterCallback<ClickEvent>(onClick.OnClick);
-#endif
+            
 #if UNITY_2021_3_OR_NEWER
             if (this is IOnNavigationMove onNavigationMove)
                 RegisterCallback<NavigationMoveEvent>(onNavigationMove.OnNavigationMove);
@@ -343,16 +342,7 @@ namespace UIComponents
                 var results = new List<VisualElement>();
 
                 for (var i = 0; i < queryAttributes.Length; i++)
-                {
-#if !UNITY_2020_3_OR_NEWER
-                    if (queryAttributes[i].Name == null && queryAttributes[i].Class == null)
-                    {
-                        Unity2019CompatibilityUtils.QueryByDesiredType(queryAttributes[i], this, concreteType, results);
-                        continue;
-                    }
-#endif
                     queryAttributes[i].Query(this, results);
-                }
 
                 results.RemoveAll(result => !concreteType.IsInstanceOfType(result));
 
