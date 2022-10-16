@@ -18,6 +18,7 @@ namespace UIComponents.Roslyn.Generation.Generators
 
         private AugmentGenerationContext _currentContext
             = new AugmentGenerationContext();
+        private ParentClass _currentParentClass;
 
         private StringBuilder _stringBuilder = new StringBuilder();
 
@@ -47,21 +48,16 @@ namespace UIComponents.Roslyn.Generation.Generators
         /// <returns>A postfix used for the hint file name.</returns>
         protected abstract string GetHintPostfix();
 
-        protected string GetMetadataName(string namespaceName, string typeName)
-        {
-            var metadataNameBuilder = new StringBuilder();
-
-            if (!string.IsNullOrEmpty(namespaceName))
-                metadataNameBuilder.Append(namespaceName).Append(".");
-
-            metadataNameBuilder.Append(typeName);
-
-            return metadataNameBuilder.ToString();
-        }
-
         private string GetHintName()
         {
-            var hintBuilder = new StringBuilder(_currentContext.TypeName);
+            var hintBuilder = new StringBuilder();
+
+            var parentClassString = _currentParentClass?.ToString();
+
+            if (!string.IsNullOrEmpty(parentClassString))
+                hintBuilder.Append(parentClassString).Append(".");
+
+            hintBuilder.Append(_currentContext.TypeName);
 
             var postfix = GetHintPostfix();
 
@@ -73,17 +69,22 @@ namespace UIComponents.Roslyn.Generation.Generators
             return hintBuilder.ToString();
         }
 
+        protected virtual void BuildUsingStatements(StringBuilder stringBuilder)
+        {
+            stringBuilder.AppendLine("using UnityEngine.UIElements;").AppendLine();
+        }
+
         private void ExecuteForClass(ClassDeclarationSyntax node, GeneratorExecutionContext context)
         {
             _stringBuilder.Clear();
             _currentContext.ClassSyntax = node;
             _currentContext.ClassSemanticModel = context.Compilation.GetSemanticModel(node.SyntaxTree);
-            _currentContext.CurrentTypeNamespace = CodeAnalyzingUtilities.GetTypeNamespace(node);
-            _currentContext.TypeName = CodeAnalyzingUtilities.GetTypeName(node);
-            var currentTypeMetadataName =
-                GetMetadataName(_currentContext.CurrentTypeNamespace, _currentContext.TypeName);
+            _currentContext.CurrentTypeNamespace = RoslynUtilities.GetTypeNamespace(node);
+            _currentContext.TypeName = RoslynUtilities.GetTypeName(node);
+            _currentParentClass = ParentClass.GetParentClasses(_currentContext.ClassSyntax);
+
             _currentContext.CurrentTypeSymbol =
-                context.Compilation.GetTypeByMetadataName(currentTypeMetadataName);
+                _currentContext.ClassSemanticModel.GetDeclaredSymbol(node) as INamedTypeSymbol;
 
             if (!ShouldGenerateSource(_currentContext))
                 return;
@@ -94,9 +95,22 @@ namespace UIComponents.Roslyn.Generation.Generators
 // </auto-generated>
 ");
 
+            BuildUsingStatements(_stringBuilder);
+
             using (new WithinNamespaceScope(_currentContext.CurrentTypeNamespace, _stringBuilder))
             {
-                GenerateSource(_currentContext, _stringBuilder);
+                using (new WithinParentClassScope(_currentParentClass, _stringBuilder))
+                {
+                    var accessibility = _currentContext.CurrentTypeSymbol.DeclaredAccessibility
+                        .ToString()
+                        .ToLower();
+
+                    _stringBuilder.AppendLine($@"{accessibility} partial class {_currentContext.TypeName}
+{{");
+                    GenerateSource(_currentContext, _stringBuilder);
+
+                    _stringBuilder.AppendLine("}");
+                }
             }
 
             context.AddSource(GetHintName(), SourceText.From(_stringBuilder.ToString(), Encoding.UTF8));

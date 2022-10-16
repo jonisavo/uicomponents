@@ -52,11 +52,5 @@ namespace UIComponents.Tests
             Assert.That(_component.styleSheets.count, Is.Zero);
             _mockResolver.DidNotReceive().LoadAsset<StyleSheet>(Arg.Any<string>());
         }
-
-        [Test]
-        public void No_Asset_Paths_Exist()
-        {
-            Assert.That(_component.GetAssetPaths().Count(), Is.EqualTo(0));
-        }
     }
 }

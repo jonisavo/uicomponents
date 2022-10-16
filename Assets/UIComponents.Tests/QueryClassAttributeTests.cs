@@ -8,10 +8,10 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class QueryClassAttributeTests
+    public partial class QueryClassAttributeTests
     {
         [Layout("UIComponentTests/QueryClassAttributeTest")]
-        private class QueryClassTestComponent : UIComponent
+        private partial class QueryClassTestComponent : UIComponent
         {
             [Query(Class = "class1")]
             public VisualElement[] AllClassOneElementsArray;
@@ -27,16 +27,6 @@ namespace UIComponents.Tests
 
             [Query(Class = "class1")]
             public List<Label> ClassOneLabelList;
-
-            [Query(Class = "class1")]
-            [Query(Class = "class2")]
-            [Query(Class = "class3")]
-            public VisualElement[] AllElements;
-
-            [Query(Class = "class1")]
-            [Query(Class = "class2")]
-            [Query(Class = "class3")]
-            public Label[] AllLabels;
 
             [Query(Class = "no-such-class")]
             public Label[] EmptyLabelArray;
@@ -97,22 +87,6 @@ namespace UIComponents.Tests
             Assert.That(_queryClassTestComponent.ClassOneLabelList.Count, Is.EqualTo(3));
             AssertAllElementsAreOfType(_queryClassTestComponent.ClassOneLabelList);
         }
-        
-        
-        [Test]
-        public void Populates_Array_With_All_Elements_With_Multiple_Classes()
-        {
-            Assert.That(_queryClassTestComponent.AllElements, Is.Not.Null);
-            Assert.That(_queryClassTestComponent.AllElements.Length, Is.EqualTo(7));
-        }
-        
-        [Test]
-        public void Populates_Typed_Array_With_Multiple_Classes()
-        {
-            Assert.That(_queryClassTestComponent.AllLabels, Is.Not.Null);
-            Assert.That(_queryClassTestComponent.AllLabels.Length, Is.EqualTo(5));
-            AssertAllElementsAreOfType(_queryClassTestComponent.AllLabels);
-        }
 
         [Test]
         public void Creates_Empty_List_And_Array_If_No_Elements_Are_Found()
@@ -130,12 +104,10 @@ namespace UIComponents.Tests
         }
 
         [Layout("UIComponentTests/QueryClassAttributeTest")]
-        private class UIComponentWithNameAndClassQuery : UIComponent
+        private partial class UIComponentWithNameAndClassQuery : UIComponent
         {
-            [Query("class1-first")]
-            [Query(Class = "class2")]
-            [Query(Class = "class3")]
-            public readonly Label[] Labels;
+            [Query("class3-second", Class = "class3")]
+            public Label[] Labels;
         }
         
         [UnityTest]
@@ -145,7 +117,7 @@ namespace UIComponents.Tests
             yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.Labels, Is.Not.Null);
-            Assert.That(component.Labels.Length, Is.EqualTo(3));
+            Assert.That(component.Labels.Length, Is.EqualTo(1));
         }
     }
 }

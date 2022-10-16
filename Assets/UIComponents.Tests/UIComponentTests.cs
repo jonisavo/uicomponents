@@ -11,10 +11,10 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class UIComponentTests
+    public partial class UIComponentTests
     {
         [TestFixture]
-        public class Initialization
+        public partial class Initialization
         {
             private class MockAssetResolver : IAssetResolver
             {
@@ -47,7 +47,7 @@ namespace UIComponents.Tests
             [Layout("Layout")]
             [Stylesheet("Stylesheet1")]
             [Stylesheet("Stylesheet2")]
-            private class TestComponent : UIComponent {}
+            private partial class TestComponent : UIComponent {}
 
             private TestBed _testBed;
             private MockAssetResolver _mockAssetResolver;
@@ -123,10 +123,10 @@ namespace UIComponents.Tests
             
             [Layout("Child")]
             [Stylesheet("ChildStylesheet")]
-            private class ChildComponent : UIComponent {}
+            private partial class ChildComponent : UIComponent {}
             
             [Layout("NestedChild")]
-            private class NestedChildComponent : UIComponent {}
+            private partial class NestedChildComponent : UIComponent {}
 
             [Test]
             public void Does_Not_Initialize_If_Children_Are_Uninitialized()
@@ -173,7 +173,7 @@ namespace UIComponents.Tests
                 Assert.That(component.Initialized, Is.True);
             }
             
-            private class BareTestComponent : UIComponent {}
+            private partial class BareTestComponent : UIComponent {}
 
             [Test]
             public void Bare_Component_Initializes_Synchronously()
@@ -184,9 +184,9 @@ namespace UIComponents.Tests
         }
         
         [TestFixture]
-        public class GetTypeName
+        public partial class GetTypeName
         {
-            private class TestComponent : UIComponent {}
+            private partial class TestComponent : UIComponent {}
 
             [Test]
             public void ShouldReturnTypeName()

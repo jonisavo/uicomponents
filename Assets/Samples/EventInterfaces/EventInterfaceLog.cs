@@ -5,7 +5,7 @@ namespace UIComponents.Samples.EventInterfaces
     [Layout("EventInterfaceLog")]
     [Stylesheet("EventInterfaceLog.style")]
     [Dependency(typeof(IEventLogService), provide: typeof(EventLogService))]
-    public class EventInterfaceLog : UIComponent
+    public partial class EventInterfaceLog : UIComponent
     {
         public new class UxmlFactory : UxmlFactory<EventInterfaceLog> {}
         

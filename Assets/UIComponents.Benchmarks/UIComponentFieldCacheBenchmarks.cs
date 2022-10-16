@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace UIComponents.Benchmarks
 {
-    public class UIComponentFieldCacheBenchmarks
+    public partial class UIComponentFieldCacheBenchmarks
     {
         private class EmptyComponent : UIComponent {}
 
@@ -27,34 +27,30 @@ namespace UIComponents.Benchmarks
             MeasureFieldCache<EmptyComponent>();
         }
 
-        private class ComponentWithFields : UIComponent
+        private partial class ComponentWithFields : UIComponent
         {
             [Query("hello-world-label")]
-            public readonly Label HelloWorldLabel;
+            public Label HelloWorldLabel;
             
             [Query(Name = "test-foldout")]
-            public readonly Foldout TestFoldout;
+            public Foldout TestFoldout;
 
             [Query]
-            public readonly Label FirstLabel;
+            public Label FirstLabel;
 
             [Query(Class = "text")]
-            public readonly Label[] LabelsWithTextClass;
+            public Label[] LabelsWithTextClass;
 
             [Query(Name = "hello-world-label", Class = "text")]
-            public readonly Label HelloWorldLabelWithTextClass;
+            public Label HelloWorldLabelWithTextClass;
 
             [Query]
-            public readonly List<Label> AllLabelsImplicit;
+            public List<Label> AllLabels;
 
-            [Query(Name = "hello-world-label")]
-            [Query(Name = "foldout-content")]
-            public readonly List<Label> AllLabelsExplicit;
-            
             [Provide]
-            public readonly IList StringProperty;
+            public IList StringProperty;
             [Provide]
-            public readonly IList FloatProperty;
+            public IList FloatProperty;
         }
         
         [Test, Performance, Version(BenchmarkUtils.Version)]

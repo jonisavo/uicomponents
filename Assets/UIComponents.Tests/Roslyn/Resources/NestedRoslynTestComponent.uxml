@@ -1,0 +1,3 @@
+﻿<UXML xmlns:test="UIComponents.Tests.Roslyn">
+    <test:NestedRoslynTest trait="Hello world" />
+</UXML>

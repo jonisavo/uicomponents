@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using System.Diagnostics;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -27,8 +28,9 @@ namespace UIComponents
     ///     public readonly Label[] AllLabels;
     /// }
     /// </example>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-    [MeansImplicitUse]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
+    [ExcludeFromCoverage]
     public sealed class QueryAttribute : Attribute
     {
         /// <summary>

@@ -206,20 +206,6 @@ namespace UIComponents
         }
 
         /// <summary>
-        /// Returns an IEnumerable of all of the asset paths configured
-        /// for the component.
-        /// </summary>
-        /// <returns>Asset paths of the component</returns>
-        public IEnumerable<string> GetAssetPaths()
-        {
-            var assetPathAttributes = CacheDictionary[_componentType].AssetPathAttributes;
-            var assetPathCount = assetPathAttributes.Count;
-
-            for (var i = 0; i < assetPathCount; i++)
-                yield return assetPathAttributes[i].Path;
-        }
-
-        /// <summary>
         /// Returns the component's type's name.
         /// </summary>
         /// <returns>Type name</returns>
@@ -254,19 +240,17 @@ namespace UIComponents
             return _dependencyInjector.TryProvide(out instance);
         }
 
-        private async Task<VisualTreeAsset> GetLayout()
+        protected virtual Task<VisualTreeAsset> StartLayoutLoad()
         {
-            var layoutAttribute = CacheDictionary[_componentType].LayoutAttribute;
+            return Task.FromResult<VisualTreeAsset>(null);
+        }
 
-            if (layoutAttribute == null)
-                return null;
-
-            var assetPath = await layoutAttribute.GetAssetPathForComponent(this);
-
-            return await AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
+        private Task<VisualTreeAsset> GetLayout()
+        {
+            return StartLayoutLoad();
         }
         
-        private readonly struct StyleSheetLoadTuple
+        protected readonly struct StyleSheetLoadTuple
         {
             public readonly string Path;
             public readonly StyleSheet StyleSheet;
@@ -278,28 +262,19 @@ namespace UIComponents
             }
         }
 
-        private async Task<StyleSheetLoadTuple> GetSingleStyleSheet(StylesheetAttribute stylesheetAttribute)
+        protected virtual Task<StyleSheetLoadTuple>[] StartStyleSheetLoad()
         {
-            var assetPath = await stylesheetAttribute.GetAssetPathForComponent(this);
-            var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
-            
-            return new StyleSheetLoadTuple(assetPath, styleSheet);
+            return Array.Empty<Task<StyleSheetLoadTuple>>();
         }
 
         private async Task<List<StyleSheet>> GetStyleSheets()
         {
-            var stylesheetAttributes =
-                CacheDictionary[_componentType].StylesheetAttributes;
-            var stylesheetAttributeCount = stylesheetAttributes.Count;
             var styleSheetLoadTasks =
-                new Task<StyleSheetLoadTuple>[stylesheetAttributeCount];
-
-            for (var i = 0; i < stylesheetAttributeCount; i++)
-                styleSheetLoadTasks[i] = GetSingleStyleSheet(stylesheetAttributes[i]);
+                StartStyleSheetLoad();
 
             await Task.WhenAll(styleSheetLoadTasks);
 
-            var loadedStyleSheets = new List<StyleSheet>(stylesheetAttributeCount);
+            var loadedStyleSheets = new List<StyleSheet>(styleSheetLoadTasks.Length);
 
             foreach (var loadTask in styleSheetLoadTasks)
             {
@@ -326,41 +301,9 @@ namespace UIComponents
                 effectAttributes[i].Apply(this);
         }
 
-        private void PopulateQueryFields()
-        {
-            var fieldCache = CacheDictionary[_componentType].FieldCache;
-            var queryAttributeDictionary = fieldCache.QueryAttributes;
+        protected virtual void PopulateQueryFields() {}
 
-            foreach (var queryAttributeKeyPair in queryAttributeDictionary)
-            {
-                var fieldInfo = queryAttributeKeyPair.Key;
-                var queryAttributes = queryAttributeKeyPair.Value;
-
-                var fieldType = fieldInfo.FieldType;
-                var concreteType = TypeUtils.GetConcreteType(fieldType);
-
-                var results = new List<VisualElement>();
-
-                for (var i = 0; i < queryAttributes.Length; i++)
-                    queryAttributes[i].Query(this, results);
-
-                results.RemoveAll(result => !concreteType.IsInstanceOfType(result));
-
-                object value = null;
-
-                if (fieldType.IsArray)
-                    value = CollectionUtils.CreateArrayOfType(concreteType, results);
-                else if (CollectionUtils.TypeQualifiesAsList(fieldType))
-                    value = CollectionUtils.CreateListOfType(concreteType, results);
-                else if (results.Count > 0)
-                    value = results[0];
-
-                if (value != null)
-                    fieldInfo.SetValue(this, value);
-            }
-        }
-
-        private void PopulateProvideFields()
+        protected virtual void PopulateProvideFields()
         {
             var fieldCache = CacheDictionary[_componentType].FieldCache;
             var provideAttributeDictionary = fieldCache.ProvideAttributes;
