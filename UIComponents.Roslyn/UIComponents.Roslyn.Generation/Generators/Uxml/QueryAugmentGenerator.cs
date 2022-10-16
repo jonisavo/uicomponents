@@ -11,7 +11,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
     {
         private INamedTypeSymbol _queryAttributeSymbol;
         private INamedTypeSymbol _visualElementSymbol;
-        private List<QueryDescription> _queryDescriptions =
+        private readonly List<QueryDescription> _queryDescriptions =
             new List<QueryDescription>();
 
         protected override void OnBeforeExecute(GeneratorExecutionContext context)

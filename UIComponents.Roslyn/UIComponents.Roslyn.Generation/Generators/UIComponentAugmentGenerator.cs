@@ -18,6 +18,7 @@ namespace UIComponents.Roslyn.Generation.Generators
             UIComponentSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
             AssetPathAttributeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.AssetPathAttribute");
         }
+
         protected List<string> GetPathAttributeValues(
             INamedTypeSymbol attributeSymbol,
             AugmentGenerationContext context,

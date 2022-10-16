@@ -1,11 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using UIComponents.Roslyn.Generation.Generators.AssetLoad;
+﻿using UIComponents.Roslyn.Generation.Generators.AssetLoad;
 using UIComponents.Roslyn.Generation.Tests.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Tests
 {
     [UsesVerify]
-    public class StylesheetAugmentGeneratorSnapshotTests : TraitTestFixture
+    public class StylesheetAugmentGeneratorSnapshotTests
     {
         [Fact]
         public Task It_Generates_Stylesheet_Call()
@@ -87,24 +86,14 @@ public partial class ParentClass
         [Fact]
         public Task Does_Not_Generate_If_Stylesheet_Type_Is_Missing()
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(@"
+            var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
 [Stylesheet(""Components/StylesheetTestComponentStyle"")]
 public partial class StylesheetTestComponent : UIComponent {}
-");
-
-            var compilation = CSharpCompilation.Create(
-                assemblyName: "Tests",
-                syntaxTrees: new[] { syntaxTree }
-            );
-
-            var generator = new StylesheetAugmentGenerator();
-
-            var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
-
-            return Verify(driver).UseDirectory("Snapshots");
+";
+            return GeneratorTester.VerifyWithoutReferences<StylesheetAugmentGenerator>(source);
         }
     }
 }

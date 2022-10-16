@@ -118,5 +118,18 @@ namespace UIComponents.Roslyn.Generation.Utilities
                 current = current.BaseType;
             }
         }
+
+        public static IEnumerable<AttributeData> GetAllAttributesOfType(ITypeSymbol typeSymbol)
+        {
+            var current = typeSymbol;
+
+            while (current != null)
+            {
+                foreach (var attribute in current.GetAttributes())
+                    yield return attribute;
+
+                current = current.BaseType;
+            }
+        }
     }
 }

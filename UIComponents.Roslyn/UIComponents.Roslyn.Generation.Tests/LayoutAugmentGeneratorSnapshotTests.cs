@@ -1,11 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using UIComponents.Roslyn.Generation.Generators.AssetLoad;
+﻿using UIComponents.Roslyn.Generation.Generators.AssetLoad;
 using UIComponents.Roslyn.Generation.Tests.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Tests
 {
     [UsesVerify]
-    public class LayoutAugmentGeneratorSnapshotTests : TraitTestFixture
+    public class LayoutAugmentGeneratorSnapshotTests
     {
         [Fact]
         public Task It_Generates_Layout_Call()
@@ -100,24 +99,15 @@ public partial class ParentClass
         [Fact]
         public Task Does_Not_Generate_If_Layout_Type_Is_Missing()
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(@"
+            var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
 [Layout(""Components/LayoutTestComponent"")]
 public partial class LayoutTestComponent : UIComponent {}
-");
+";
 
-            var compilation = CSharpCompilation.Create(
-                assemblyName: "Tests",
-                syntaxTrees: new[] { syntaxTree }
-            );
-
-            var generator = new LayoutAugmentGenerator();
-
-            var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
-
-            return Verify(driver).UseDirectory("Snapshots");
+            return GeneratorTester.VerifyWithoutReferences<LayoutAugmentGenerator>(source);
         }
     }
 }

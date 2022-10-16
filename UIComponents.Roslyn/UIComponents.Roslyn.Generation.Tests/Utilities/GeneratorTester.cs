@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Reflection;
+using UIComponents.Roslyn.Generation.Generators.AssetLoad;
 
 namespace UIComponents.Roslyn.Generation.Tests.Utilities
 {
@@ -29,6 +30,22 @@ namespace UIComponents.Roslyn.Generation.Tests.Utilities
             var driver = CSharpGeneratorDriver.Create(generator);
 
             driver = (CSharpGeneratorDriver)driver.RunGenerators(compilation);
+
+            return Verifier.Verify(driver).UseDirectory("../Snapshots");
+        }
+
+        public static Task VerifyWithoutReferences<TGenerator>(string source) where TGenerator : ISourceGenerator, new()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+
+            var compilation = CSharpCompilation.Create(
+                assemblyName: "Tests",
+                syntaxTrees: new[] { syntaxTree }
+            );
+
+            var generator = new TGenerator();
+
+            var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
 
             return Verifier.Verify(driver).UseDirectory("../Snapshots");
         }

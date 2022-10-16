@@ -71,7 +71,7 @@ namespace UIComponents.Roslyn.Generation.Tests
         [Fact]
         public Task Does_Not_Generate_If_TraitAttribute_Type_IsMissing()
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(@"
+            var source = @"
 using UIComponents.Experimental;
 
 public class Test
@@ -79,18 +79,8 @@ public class Test
     [Trait]
     public int Number;
 }
-");
-
-            var compilation = CSharpCompilation.Create(
-                assemblyName: "Tests",
-                syntaxTrees: new[] { syntaxTree }
-            );
-
-            var generator = new UxmlAugmentGenerator();
-
-            var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
-
-            return Verify(driver).UseDirectory("Snapshots");
+";
+            return GeneratorTester.VerifyWithoutReferences<UxmlAugmentGenerator>(source);
         }
 
         [Fact]

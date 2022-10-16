@@ -20,7 +20,7 @@ namespace UIComponents.Roslyn.Generation.Generators
             = new AugmentGenerationContext();
         private ParentClass _currentParentClass;
 
-        private StringBuilder _stringBuilder = new StringBuilder();
+        private readonly StringBuilder _stringBuilder = new StringBuilder();
 
         public void Initialize(GeneratorInitializationContext context)
         {
