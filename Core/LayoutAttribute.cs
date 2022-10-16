@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using JetBrains.Annotations;
+using UnityEngine.TestTools;
 
 namespace UIComponents
 {
@@ -7,10 +9,14 @@ namespace UIComponents
     /// Specifies the path to the .uxml layout file used by a UIComponent.
     /// </summary>
     /// <seealso cref="AssetPathAttribute"/>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     [BaseTypeRequired(typeof(UIComponent))]
-    public sealed class LayoutAttribute : PathAttribute
+    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
+    [ExcludeFromCoverage]
+    public sealed class LayoutAttribute : Attribute
     {
+        public readonly string Path;
+        
         public LayoutAttribute(string path)
         {
             Path = path;
