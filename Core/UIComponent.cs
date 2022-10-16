@@ -292,14 +292,7 @@ namespace UIComponents
             return loadedStyleSheets;
         }
 
-        private void ApplyEffects()
-        {
-            var effectAttributes = CacheDictionary[_componentType].EffectAttributes;
-            var effectAttributeCount = effectAttributes.Count;
-
-            for (var i = 0; i < effectAttributeCount; i++)
-                effectAttributes[i].Apply(this);
-        }
+        protected virtual void ApplyEffects() {}
 
         protected virtual void PopulateQueryFields() {}
 
