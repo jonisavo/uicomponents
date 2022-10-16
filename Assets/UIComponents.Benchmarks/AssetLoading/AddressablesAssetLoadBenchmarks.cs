@@ -5,14 +5,14 @@ using Unity.PerformanceTesting;
 namespace UIComponents.Benchmarks.AssetLoading
 {
     [TestFixture]
-    public class AddressablesAssetLoadBenchmarks
+    public partial class AddressablesAssetLoadBenchmarks
     {
-        [AssetPath("Assets/Samples/Addressables/Data")]
+        [AssetPath("Assets/Samples/Addressables/Data/")]
         [Layout("AddressablesExampleComponent.uxml")]
         [Stylesheet("AddressablesExampleComponent.uss")]
         [Stylesheet("Box.uss")]
         [Dependency(typeof(IAssetResolver), provide: typeof(AddressableAssetResolver), Scope.Transient)]
-        private class ComponentWithAssets : UIComponent {}
+        private partial class ComponentWithAssets : UIComponent {}
 
         [Test, Performance, Version(BenchmarkUtils.Version)]
         public void InitializeComponentWithWarmCache()

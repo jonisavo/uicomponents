@@ -37,5 +37,17 @@ namespace UIComponents.Tests.Roslyn
             Assert.That(component.CurrentTime, Is.EqualTo(123.456));
             Assert.That(component.Enabled, Is.EqualTo(false));
         }
+
+        [Test]
+        public void Generates_Traits_For_Nested_Class()
+        {
+            var layout = Resources.Load<VisualTreeAsset>("NestedRoslynTestComponent");
+            var container = new VisualElement();
+            layout.CloneTree(container);
+
+            var component = container.Q<NestParentClass.NestedRoslynTestComponent>();
+            
+            Assert.That(component.Trait, Is.EqualTo("Hello world"));
+        }
     }
 }

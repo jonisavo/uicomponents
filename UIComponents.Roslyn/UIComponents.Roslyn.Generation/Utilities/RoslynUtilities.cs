@@ -1,0 +1,122 @@
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+
+namespace UIComponents.Roslyn.Generation.Utilities
+{
+    internal static class RoslynUtilities
+    {
+        // https://andrewlock.net/creating-a-source-generator-part-5-finding-a-type-declarations-namespace-and-type-hierarchy/
+        public static string GetTypeNamespace(SyntaxNode syntaxNode)
+        {
+            if (syntaxNode == null)
+                return string.Empty;
+
+            var currentNamespace = string.Empty;
+
+            var potentialNamespaceParent = syntaxNode.Parent;
+
+            while (potentialNamespaceParent != null && !(potentialNamespaceParent is NamespaceDeclarationSyntax))
+                potentialNamespaceParent = potentialNamespaceParent.Parent;
+
+            if (potentialNamespaceParent is NamespaceDeclarationSyntax namespaceParent)
+            {
+                currentNamespace = namespaceParent.Name.ToString();
+
+                while (true)
+                {
+                    if (!(namespaceParent.Parent is NamespaceDeclarationSyntax parent))
+                        break;
+
+                    currentNamespace = $"{parent.Name}.{currentNamespace}";
+                    namespaceParent = parent;
+                }
+            }
+
+            return currentNamespace;
+        }
+
+        public static BaseTypeDeclarationSyntax GetBaseTypeSyntax(SyntaxNode syntaxNode)
+        {
+            while (syntaxNode != null)
+            {
+                if (syntaxNode is BaseTypeDeclarationSyntax typeDeclarationSyntax)
+                    return typeDeclarationSyntax;
+
+                syntaxNode = syntaxNode.Parent;
+            }
+
+            return null;
+        }
+
+        public static string GetTypeName(SyntaxNode syntaxNode)
+        {
+            var baseTypeSyntaxNode = GetBaseTypeSyntax(syntaxNode);
+
+            if (baseTypeSyntaxNode == null)
+                return string.Empty;
+
+            return baseTypeSyntaxNode.Identifier.ValueText;
+        }
+
+        public static bool HasBaseType(INamedTypeSymbol type, INamedTypeSymbol desiredBaseType)
+        {
+            var current = type;
+
+            while (current != null)
+            {
+                if (current.Equals(desiredBaseType, SymbolEqualityComparer.Default))
+                    return true;
+
+                current = current.BaseType;
+            }
+
+            return false;
+        }
+
+        public static void ReadAttributeArguments(AttributeData attributeData, Dictionary<string, TypedConstant> output)
+        {
+            var constructorArgs = attributeData.ConstructorArguments;
+
+            for (var i = 0; i < constructorArgs.Length; i++)
+                output.Add($"constructor_{i}", constructorArgs[i]);
+
+            foreach (var argument in attributeData.NamedArguments)
+                output.Add(argument.Key, argument.Value);
+        }
+
+        public static ITypeSymbol GetMemberType(ISymbol symbol)
+        {
+            if (symbol is IFieldSymbol fieldSymbol)
+                return fieldSymbol.Type;
+            else if (symbol is IPropertySymbol propertySymbol)
+                return propertySymbol.Type;
+
+            return null;
+        }
+
+        public static ITypeSymbol GetConcreteType(ITypeSymbol symbol)
+        {
+            if (symbol is IArrayTypeSymbol arrayTypeSymbol)
+                return arrayTypeSymbol.ElementType;
+
+            if (symbol is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType)
+                return namedTypeSymbol.TypeArguments[0];
+
+            return symbol;
+        }
+
+        public static IEnumerable<ISymbol> GetAllMembersOfType(ITypeSymbol typeSymbol)
+        {
+            var current = typeSymbol;
+
+            while (current != null)
+            {
+                foreach (var member in current.GetMembers())
+                    yield return member;
+
+                current = current.BaseType;
+            }
+        }
+    }
+}

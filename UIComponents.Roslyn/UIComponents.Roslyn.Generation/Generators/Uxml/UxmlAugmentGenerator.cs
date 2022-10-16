@@ -14,7 +14,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
     /// Generates UxmlFactory and UxmlTraits implementations.
     /// </summary>
     [Generator]
-    internal class UxmlAugmentGenerator : AugmentGenerator<UxmlTraitsSyntaxReceiver>
+    internal class UxmlAugmentGenerator : AugmentGenerator<ClassMemberSyntaxReceiver>
     {
         private INamedTypeSymbol _traitAttributeSymbol;
         private INamedTypeSymbol _uxmlNameAttributeSymbol;
@@ -46,17 +46,17 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
         private void ReadAttributeArguments<TSyntax, TSymbol>(
             TSyntax syntax,
-            AttributeArgumentReader<TSyntax> attributeArgumentReader,
+            AttributeArgumentReader attributeArgumentReader,
             SemanticModel classSemanticModel,
             Dictionary<TSymbol, Dictionary<string, TypedConstant>> output
             )
             where TSyntax : SyntaxNode
             where TSymbol : class, ISymbol
         {
-            var arguments = new Dictionary<string, TypedConstant>();
-            attributeArgumentReader.Read(syntax, arguments);
+            var attributeArguments = new Dictionary<AttributeData, Dictionary<string, TypedConstant>>();
+            attributeArgumentReader.Read(syntax, attributeArguments);
             var fieldSymbol = classSemanticModel.GetDeclaredSymbol(syntax) as TSymbol;
-            output.Add(fieldSymbol, arguments);
+            output.Add(fieldSymbol, attributeArguments.Values.First());
         }
 
         private void GetTraitFields(AugmentGenerationContext context, IList<TraitDescription> traits)
@@ -65,8 +65,8 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var traitArguments = new Dictionary<IFieldSymbol, Dictionary<string, TypedConstant>>();
             var fieldAttributeReader =
                 new FieldAttributeReader(_traitAttributeSymbol, context.ClassSemanticModel);
-            var variableAttributeArgumentReader =
-                new VariableAttributeArgumentReader(_traitAttributeSymbol, context.ClassSemanticModel);
+            var attributeArgumentReader =
+                new AttributeArgumentReader(_traitAttributeSymbol, context.ClassSemanticModel);
 
             foreach (var fieldOrProperty in SyntaxReceiver.FieldsAndProperties)
             {
@@ -81,7 +81,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 fieldAttributeReader.Read(fieldDeclaration, traitFields);
 
                 foreach (var variableDeclaration in fieldDeclaration.Declaration.Variables)
-                    ReadAttributeArguments(variableDeclaration, variableAttributeArgumentReader, context.ClassSemanticModel, traitArguments);
+                    ReadAttributeArguments(variableDeclaration, attributeArgumentReader, context.ClassSemanticModel, traitArguments);
             }
 
             foreach (var traitField in traitFields)
@@ -93,8 +93,8 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var traitProperties = new List<IPropertySymbol>();
             var traitArguments = new Dictionary<IPropertySymbol, Dictionary<string, TypedConstant>>();
             var propertyAttributeReader = new PropertyAttributeReader(_traitAttributeSymbol, context.ClassSemanticModel);
-            var propertyAttributeArgumentReader =
-                new PropertyAttributeArgumentReader(_traitAttributeSymbol, context.ClassSemanticModel);
+            var attributeArgumentReader =
+                new AttributeArgumentReader(_traitAttributeSymbol, context.ClassSemanticModel);
 
             foreach (var fieldOrProperty in SyntaxReceiver.FieldsAndProperties)
             {
@@ -108,7 +108,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
                 propertyAttributeReader.Read(propertyDeclaration, traitProperties);
 
-                ReadAttributeArguments(propertyDeclaration, propertyAttributeArgumentReader, context.ClassSemanticModel, traitArguments);
+                ReadAttributeArguments(propertyDeclaration, attributeArgumentReader, context.ClassSemanticModel, traitArguments);
             }
 
             foreach (var traitProperty in traitProperties)
@@ -117,15 +117,20 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
         private UxmlFactoryInfo GetUxmlFactoryInfo(AugmentGenerationContext context)
         {
-            var arguments = new Dictionary<string, TypedConstant>();
+            var attributeArguments = new Dictionary<AttributeData, Dictionary<string, TypedConstant>>();
             var classAttributeArgumentReader = new ClassAttributeArgumentReader(_uxmlNameAttributeSymbol, context.ClassSemanticModel);
 
-            classAttributeArgumentReader.Read(context.ClassSyntax, arguments);
+            classAttributeArgumentReader.Read(context.ClassSyntax, attributeArguments);
 
-            if (arguments.Count == 0)
-                return default;
+            foreach (var arguments in attributeArguments.Values)
+            {
+                if (attributeArguments.Count == 0)
+                    continue;
 
-            return UxmlFactoryInfo.CreateFromArguments(arguments);
+                return UxmlFactoryInfo.CreateFromArguments(arguments);
+            }
+
+            return default;
         }
 
         private void WriteUxmlFactory(UxmlFactoryInfo info, AugmentGenerationContext context, StringBuilder stringBuilder)
@@ -221,16 +226,9 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.AppendLine("using UnityEngine.UIElements;").AppendLine();
-
-            stringBuilder.AppendLine($@"public partial class {context.TypeName}
-{{");
-
             WriteUxmlFactory(_uxmlFactoryInfo, context, stringBuilder);
 
             WriteUxmlTraits(_traitsToGenerate, context, stringBuilder);
-
-            stringBuilder.AppendLine("}");
         }
 
         protected override string GetHintPostfix()

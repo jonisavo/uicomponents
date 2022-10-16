@@ -1,10 +1,12 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NSubstitute;
 using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Tests
 {
-    public class CodeAnalyzingUtilitiesTests
+    public class RoslynUtilitiesTests
     {
         public class GetTypeNamespace
         {
@@ -26,7 +28,7 @@ namespace Hello
                 var nodes = syntaxTree.GetRoot().DescendantNodes();
                 var classSyntax = nodes.OfType<ClassDeclarationSyntax>().First();
 
-                Assert.Equal("Hello.World", CodeAnalyzingUtilities.GetTypeNamespace(classSyntax));
+                Assert.Equal("Hello.World", RoslynUtilities.GetTypeNamespace(classSyntax));
             }
 
             [Fact]
@@ -43,13 +45,13 @@ public class A_Thing
                 var classSyntax =
                     nodes.OfType<ClassDeclarationSyntax>().First();
 
-                Assert.Equal("", CodeAnalyzingUtilities.GetTypeNamespace(classSyntax));
+                Assert.Equal("", RoslynUtilities.GetTypeNamespace(classSyntax));
             }
 
             [Fact]
             public void Returns_Empty_String_If_Syntax_Node_Is_Null()
             {
-                Assert.Equal("", CodeAnalyzingUtilities.GetTypeNamespace(null));
+                Assert.Equal("", RoslynUtilities.GetTypeNamespace(null));
             }
         }
 
@@ -73,10 +75,10 @@ public class MyAttribute : Attribute
                 var propertyBlockSyntax =
                     nodes.OfType<AccessorDeclarationSyntax>().First();
 
-                var excpectedBaseTypeSyntax = nodes.OfType<BaseTypeDeclarationSyntax>().First();
-                var baseTypeSyntax = CodeAnalyzingUtilities.GetBaseTypeSyntax(propertyBlockSyntax);
+                var expectedBaseTypeSyntax = nodes.OfType<BaseTypeDeclarationSyntax>().First();
+                var baseTypeSyntax = RoslynUtilities.GetBaseTypeSyntax(propertyBlockSyntax);
 
-                Assert.Equal(excpectedBaseTypeSyntax, baseTypeSyntax);
+                Assert.Equal(expectedBaseTypeSyntax, baseTypeSyntax);
             }
 
             [Fact]
@@ -91,7 +93,7 @@ using System.Runtime.CompilerServices;
                 var attributeSyntax =
                     nodes.OfType<AttributeSyntax>().First();
 
-                var baseTypeSyntax = CodeAnalyzingUtilities.GetBaseTypeSyntax(attributeSyntax);
+                var baseTypeSyntax = RoslynUtilities.GetBaseTypeSyntax(attributeSyntax);
 
                 Assert.Null(baseTypeSyntax);
             }
@@ -117,7 +119,7 @@ public class MyAttribute
                 var propertyBlockSyntax =
                     nodes.OfType<AccessorDeclarationSyntax>().First();
 
-                var typeName = CodeAnalyzingUtilities.GetTypeName(propertyBlockSyntax);
+                var typeName = RoslynUtilities.GetTypeName(propertyBlockSyntax);
 
                 Assert.Equal("MyAttribute", typeName);
             }
@@ -134,9 +136,21 @@ using System.Runtime.CompilerServices;
                 var attributeSyntax =
                     nodes.OfType<AttributeSyntax>().First();
 
-                var typeName = CodeAnalyzingUtilities.GetTypeName(attributeSyntax);
+                var typeName = RoslynUtilities.GetTypeName(attributeSyntax);
 
                 Assert.Equal("", typeName);
+            }
+        }
+
+        public class GetMemberType
+        {
+            [Fact]
+            public void Returns_Null_If_Member_Is_Not_Field_Or_Property()
+            {
+                var typeSymbol = Substitute.For<ITypeSymbol>();
+                var memberType = RoslynUtilities.GetMemberType(typeSymbol);
+
+                Assert.Null(memberType);
             }
         }
     }

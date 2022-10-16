@@ -10,18 +10,18 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class LayoutAttributeTests
+    public partial class LayoutAttributeTests
     {
         [Layout("Assets/MyAsset.uxml")]
-        private class UIComponentWithLayout : UIComponent {}
+        private partial class UIComponentWithLayout : UIComponent {}
         
-        private class InheritedComponentWithoutAttribute : UIComponentWithLayout {}
+        private partial class InheritedComponentWithoutAttribute : UIComponentWithLayout {}
         
         [Layout("Assets/MyOtherAsset.uxml")]
-        private class InheritedComponentWithAttribute : UIComponentWithLayout {}
+        private partial class InheritedComponentWithAttribute : UIComponentWithLayout {}
         
         [Layout("Assets/MissingAsset.uxml")]
-        private class UIComponentWithNullLayout : UIComponent {}
+        private partial class UIComponentWithNullLayout : UIComponent {}
 
         private TestBed _testBed;
         private IAssetResolver _mockResolver;

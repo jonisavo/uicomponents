@@ -4,10 +4,10 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
-namespace Custom.Components
-{
 using UnityEngine.UIElements;
 
+namespace Custom.Components
+{
 public partial class CustomNamespaceComponent
 {
     public new partial class UxmlFactory : UxmlFactory<CustomNamespaceComponent, UxmlTraits> {}

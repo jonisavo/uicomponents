@@ -6,5 +6,5 @@
     [Layout("Components/ResourcesExampleComponent")]
     [Stylesheet("Components/ResourcesExampleComponent.style")]
     [Stylesheet("Margins")]
-    public class ResourcesExampleComponent : UIComponent {}
+    public partial class ResourcesExampleComponent : UIComponent {}
 }

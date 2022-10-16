@@ -5,11 +5,11 @@ using UIComponents.Tests.Utilities;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class UIComponentCacheTests
+    public partial class UIComponentCacheTests
     {
         [Layout("TestLayout")]
         [Stylesheet("TestStylesheet")]
-        private class TestComponent : UIComponent {}
+        private partial class TestComponent : UIComponent {}
 
         private TestBed _testBed;
 
@@ -29,8 +29,6 @@ namespace UIComponents.Tests
             Assert.That(UIComponent.TryGetCache<TestComponent>(out _), Is.False);
             var component = _testBed.CreateComponent<TestComponent>();
             Assert.That(UIComponent.TryGetCache<TestComponent>(out var cache), Is.True);
-            Assert.That(cache.LayoutAttribute, Is.Not.Null);
-            Assert.That(cache.StylesheetAttributes.Count, Is.EqualTo(1));
         }
 
         [Test]

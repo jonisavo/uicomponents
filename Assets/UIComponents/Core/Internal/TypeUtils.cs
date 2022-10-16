@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace UIComponents.Internal
 {
@@ -17,10 +18,17 @@ namespace UIComponents.Internal
             if (type.IsArray)
                 return type.GetElementType();
 
-            if (CollectionUtils.TypeQualifiesAsList(type))
+            if (TypeQualifiesAsList(type))
                 return type.GenericTypeArguments[0];
 
             return type;
+        }
+        
+        public static bool TypeQualifiesAsList(Type elementType)
+        {
+            return typeof(IList).IsAssignableFrom(elementType) &&
+                   elementType.IsGenericType &&
+                   elementType.GenericTypeArguments.Length == 1;
         }
     }
 }

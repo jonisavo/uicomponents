@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.Uxml
 {
@@ -74,7 +75,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 var defaultValueObject = traitArguments[DefaultValueArgumentName].Value;
 
                 if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is string)
-                    defaultValueString = $"\"{defaultValueString}\"";
+                    defaultValueString = StringUtilities.AddQuotesToString(defaultValueString);
                 if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is bool)
                     defaultValueString = defaultValueString.ToLower();
                 if (!string.IsNullOrEmpty(defaultValueString) && typeSymbol.TypeKind == TypeKind.Enum)
