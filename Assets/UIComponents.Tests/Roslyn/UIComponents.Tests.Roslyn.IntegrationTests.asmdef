@@ -2,19 +2,21 @@
     "name": "UIComponents.Tests.Roslyn.IntegrationTests",
     "rootNamespace": "UIComponents.Tests",
     "references": [
-        "GUID:d593635333b4cae48bac5b5f0b596e90"
+        "GUID:d593635333b4cae48bac5b5f0b596e90",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "optionalUnityReferences": [
-        "TestAssemblies"
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
     ],
+    "autoReferenced": false,
     "defineConstraints": [
-        "UNITY_2021_2_OR_NEWER"
+        "UNITY_2020_3_OR_NEWER",
+        "UNITY_INCLUDE_TESTS"
     ],
     "versionDefines": [],
     "noEngineReferences": false

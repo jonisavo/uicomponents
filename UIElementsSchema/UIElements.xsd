@@ -3,6 +3,7 @@
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:import schemaLocation="UnityEditor.UIElements.xsd" namespace="UnityEditor.UIElements" />
   <xs:import schemaLocation="UnityEditor.UIElements.Debugger.xsd" namespace="UnityEditor.UIElements.Debugger" />
+  <xs:import schemaLocation="UIComponents.Tests.Roslyn.xsd" namespace="UIComponents.Tests.Roslyn" />
   <xs:import schemaLocation="UIComponents.Samples.EventInterfaces.xsd" namespace="UIComponents.Samples.EventInterfaces" />
   <xs:import schemaLocation="UnityEditor.PackageManager.UI.xsd" namespace="UnityEditor.PackageManager.UI" />
 </xs:schema>
