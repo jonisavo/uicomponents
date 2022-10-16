@@ -302,50 +302,9 @@ namespace UIComponents
                 effectAttributes[i].Apply(this);
         }
 
-        private void PopulateQueryFields()
-        {
-            var fieldCache = CacheDictionary[_componentType].FieldCache;
-            var queryAttributeDictionary = fieldCache.QueryAttributes;
+        protected virtual void PopulateQueryFields() {}
 
-            foreach (var queryAttributeKeyPair in queryAttributeDictionary)
-            {
-                var fieldInfo = queryAttributeKeyPair.Key;
-                var queryAttributes = queryAttributeKeyPair.Value;
-
-                var fieldType = fieldInfo.FieldType;
-                var concreteType = TypeUtils.GetConcreteType(fieldType);
-
-                var results = new List<VisualElement>();
-
-                for (var i = 0; i < queryAttributes.Length; i++)
-                {
-#if !UNITY_2020_3_OR_NEWER
-                    if (queryAttributes[i].Name == null && queryAttributes[i].Class == null)
-                    {
-                        Unity2019CompatibilityUtils.QueryByDesiredType(queryAttributes[i], this, concreteType, results);
-                        continue;
-                    }
-#endif
-                    queryAttributes[i].Query(this, results);
-                }
-
-                results.RemoveAll(result => !concreteType.IsInstanceOfType(result));
-
-                object value = null;
-
-                if (fieldType.IsArray)
-                    value = CollectionUtils.CreateArrayOfType(concreteType, results);
-                else if (CollectionUtils.TypeQualifiesAsList(fieldType))
-                    value = CollectionUtils.CreateListOfType(concreteType, results);
-                else if (results.Count > 0)
-                    value = results[0];
-
-                if (value != null)
-                    fieldInfo.SetValue(this, value);
-            }
-        }
-
-        private void PopulateProvideFields()
+        protected virtual void PopulateProvideFields()
         {
             var fieldCache = CacheDictionary[_componentType].FieldCache;
             var provideAttributeDictionary = fieldCache.ProvideAttributes;
