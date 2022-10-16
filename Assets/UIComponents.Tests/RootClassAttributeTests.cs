@@ -6,10 +6,10 @@ using UnityEngine.TestTools;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class RootClassAttributeTests
+    public partial class RootClassAttributeTests
     {
         [RootClass("test-class")]
-        private class ComponentWithRootClass : UIComponent {}
+        private partial class ComponentWithRootClass : UIComponent {}
 
         private TestBed _testBed;
         
@@ -30,7 +30,7 @@ namespace UIComponents.Tests
         
         [RootClass("other-test-class")]
         [RootClass("final-test-class")]
-        private class ChildComponentWithRootClass : ComponentWithRootClass {}
+        private partial class ChildComponentWithRootClass : ComponentWithRootClass {}
         
         [UnityTest]
         public IEnumerator Adds_Class_To_Component_And_Child_Component()

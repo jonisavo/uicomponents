@@ -1,33 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class UIComponentEffectAttributeTests
+    public partial class UIComponentEffectAttributeTests
     {
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
         private class TestEffectAttribute : UIComponentEffectAttribute
         {
-            public override void Apply(UIComponent component) {}
+            public override void Apply(UIComponent component)
+            {
+                if (component is UIComponentWithEffects componentWithEffects)
+                    componentWithEffects.AppliedEffects.Add(Priority);
+            }
         }
-        
+
+        [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+        private class AnotherTestEffectAttribute : TestEffectAttribute
+        {
+            public override int Priority { get; set; } = 999;
+        }
+
         [TestEffect]
         [TestEffect(Priority = -2)]
+        [AnotherTestEffect]
         [TestEffect(Priority = 5)]
-        private class UIComponentWithEffects : UIComponent {}
+        private partial class UIComponentWithEffects : UIComponent
+        {
+            public readonly List<int> AppliedEffects = new List<int>();
+        }
 
         [Test]
         public void Effects_Are_Sorted_By_Priority()
         {
             var component = new UIComponentWithEffects();
-            
-            Assert.That(UIComponent.TryGetCache<UIComponentWithEffects>(out var cache), Is.True);
-            
-            Assert.That(cache.EffectAttributes.Count, Is.EqualTo(3));
-            Assert.That(cache.EffectAttributes[0].Priority, Is.EqualTo(5));
-            Assert.That(cache.EffectAttributes[1].Priority, Is.EqualTo(0));
-            Assert.That(cache.EffectAttributes[2].Priority, Is.EqualTo(-2));
+
+            Assert.That(component.AppliedEffects.Count, Is.EqualTo(4));
+            Assert.That(component.AppliedEffects[0], Is.EqualTo(999));
+            Assert.That(component.AppliedEffects[1], Is.EqualTo(5));
+            Assert.That(component.AppliedEffects[2], Is.EqualTo(0));
+            Assert.That(component.AppliedEffects[3], Is.EqualTo(-2));
         }
     }
 }

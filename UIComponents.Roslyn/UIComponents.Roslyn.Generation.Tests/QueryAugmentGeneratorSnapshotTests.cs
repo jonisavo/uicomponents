@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using UIComponents.Roslyn.Generation.Generators.Uxml;
+﻿using UIComponents.Roslyn.Generation.Generators.Uxml;
 using UIComponents.Roslyn.Generation.Tests.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Tests
@@ -264,7 +263,7 @@ public partial class NoVisualElementQueryComponent : UIComponent
         [Fact]
         public Task Does_Not_Generate_If_UIComponent_Type_Is_Missing()
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(@"
+            var source = @"
 using UIComponents;
 
 public class MyComponent : UIComponent {}
@@ -277,24 +276,14 @@ public partial class NoUIComponentTypeComponent : UIComponent
     [Query(""uxml-name"")]
     public MyComponent anotherElement;
 }
-");
-
-            var compilation = CSharpCompilation.Create(
-                assemblyName: "Tests",
-                syntaxTrees: new[] { syntaxTree }
-            );
-
-            var generator = new QueryAugmentGenerator();
-
-            var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
-
-            return Verify(driver).UseDirectory("Snapshots");
+";
+            return GeneratorTester.VerifyWithoutReferences<QueryAugmentGenerator>(source);
         }
 
         [Fact]
         public Task Does_Not_Generate_If_QueryAttribute_Type_Is_Missing()
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(@"
+            var source = @"
 namespace UIComponents
 {
     public class UIComponent {}
@@ -312,18 +301,8 @@ public partial class NoQueryTypeComponent : UIComponents.UIComponent
     [UIComponents.Query(""uxml-name"")]
     public MyComponent anotherElement;
 }
-");
-
-            var compilation = CSharpCompilation.Create(
-                assemblyName: "Tests",
-                syntaxTrees: new[] { syntaxTree }
-            );
-
-            var generator = new QueryAugmentGenerator();
-
-            var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
-
-            return Verify(driver).UseDirectory("Snapshots");
+";
+            return GeneratorTester.VerifyWithoutReferences<QueryAugmentGenerator>(source);
         }
     }
 }
