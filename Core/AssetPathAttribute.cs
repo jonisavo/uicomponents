@@ -14,7 +14,7 @@ namespace UIComponents
     /// [AssetPath("Components/MyComponent/")]
     /// [Layout("MyComponent")] // resolves to Components/MyComponent/MyComponent(.uxml)
     /// [Stylesheet("MyComponent.style")] // resolves to Components/MyComponent/MyComponent.style(.uss)
-    /// public class MyComponent : UIComponent {}
+    /// public partial class MyComponent : UIComponent {}
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
