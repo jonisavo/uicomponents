@@ -38,12 +38,32 @@ namespace UIComponents.Tests
             }
 
             [Test]
+            public void Returns_Desired_Dependency_With_Non_Generic_Method()
+            {
+                var injector = new DependencyInjector(DiContext.Current.Container);
+                injector.SetDependency<IDependency>(new DependencyOne());
+                Assert.That(injector.Provide(typeof(IDependency)), Is.InstanceOf<DependencyOne>());
+            }
+
+            [Test]
             public void Throws_If_No_Provider_Exists()
             {
                 var injector = new DependencyInjector(DiContext.Current.Container);
 
                 var exception = Assert.Throws<MissingProviderException>(
                     () => injector.Provide<IDependency>()
+                );
+                
+                Assert.That(exception.Message, Is.EqualTo("No provider found for IDependency"));
+            }
+            
+            [Test]
+            public void Throws_If_No_Provider_Exists_With_Non_Generic_Method()
+            {
+                var injector = new DependencyInjector(DiContext.Current.Container);
+
+                var exception = Assert.Throws<MissingProviderException>(
+                    () => injector.Provide(typeof(IDependency))
                 );
                 
                 Assert.That(exception.Message, Is.EqualTo("No provider found for IDependency"));

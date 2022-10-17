@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using UIComponents.Cache;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
@@ -26,23 +25,6 @@ namespace UIComponents
     [Dependency(typeof(IUIComponentLogger), provide: typeof(UIComponentDebugLogger))]
     public abstract class UIComponent : VisualElement
     {
-        private static readonly Dictionary<Type, UIComponentCache> CacheDictionary =
-            new Dictionary<Type, UIComponentCache>();
-
-        /// <summary>
-        /// Clears the cache of the UIComponent. Used primarily for testing.
-        /// </summary>
-        /// <typeparam name="TComponent">Component type</typeparam>
-        public static void ClearCache<TComponent>() where TComponent : UIComponent
-        {
-            CacheDictionary.Remove(typeof(TComponent));
-        }
-
-        internal static bool TryGetCache<TComponent>(out UIComponentCache cache) where TComponent : UIComponent
-        {
-            return CacheDictionary.TryGetValue(typeof(TComponent), out cache);
-        }
-
         /// <summary>
         /// The IAssetResolver used by this UIComponent.
         /// Defaults to <see cref="ResourcesAssetResolver"/>.
@@ -74,8 +56,6 @@ namespace UIComponents
 
         private static readonly ProfilerMarker DependencySetupProfilerMarker =
             new ProfilerMarker("UIComponent.DependencySetup");
-        private static readonly ProfilerMarker CacheSetupProfilerMarker =
-            new ProfilerMarker("UIComponent.CacheSetup");
         private static readonly ProfilerMarker PostHierarchySetupProfilerMarker =
             new ProfilerMarker("UIComponent.PostHierarchySetup");
 
@@ -84,13 +64,7 @@ namespace UIComponents
         /// </summary>
         protected UIComponent()
         {
-            CacheSetupProfilerMarker.Begin();
-
             _componentType = GetType();
-            if (!CacheDictionary.ContainsKey(_componentType))
-                CacheDictionary.Add(_componentType, new UIComponentCache(_componentType));
-
-            CacheSetupProfilerMarker.End();
 
             DependencySetupProfilerMarker.Begin();
 
@@ -296,40 +270,6 @@ namespace UIComponents
 
         protected virtual void PopulateQueryFields() {}
 
-        protected virtual void PopulateProvideFields()
-        {
-            var fieldCache = CacheDictionary[_componentType].FieldCache;
-            var provideAttributeDictionary = fieldCache.ProvideAttributes;
-
-            foreach (var fieldInfo in provideAttributeDictionary.Keys)
-            {
-                var fieldType = fieldInfo.FieldType;
-
-                if (provideAttributeDictionary[fieldInfo].CastFrom != null)
-                    fieldType = provideAttributeDictionary[fieldInfo].CastFrom;
-
-                object value;
-
-                try
-                {
-                    value = _dependencyInjector.Provide(fieldType);
-
-                    if (provideAttributeDictionary[fieldInfo].CastFrom != null)
-                        value = Convert.ChangeType(value, fieldInfo.FieldType);
-                }
-                catch (MissingProviderException)
-                {
-                    Logger.LogError($"Could not provide {fieldInfo.FieldType.Name} to {fieldInfo.Name}", this);
-                    continue;
-                }
-                catch (InvalidCastException)
-                {
-                    Logger.LogError($"Could not cast {fieldType.Name} to {fieldInfo.FieldType.Name}", this);
-                    continue;
-                }
-
-                fieldInfo.SetValue(this, value);
-            }
-        }
+        protected virtual void PopulateProvideFields() {}
     }
 }

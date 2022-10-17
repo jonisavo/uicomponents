@@ -5,7 +5,7 @@ using UIComponents.Testing;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class ProvideAttributeTests
+    public partial class ProvideAttributeTests
     {
         private interface IStringProperty
         {
@@ -29,14 +29,14 @@ namespace UIComponents.Tests
 
         [Dependency(typeof(IStringProperty), provide: typeof(StringClass))]
         [Dependency(typeof(IFloatProperty), provide: typeof(FloatClass))]
-        private class ComponentWithDependencies : UIComponent
+        private partial class ComponentWithDependencies : UIComponent
         {
             [Provide]
-            public readonly IStringProperty StringProperty;
+            public IStringProperty StringProperty;
             [Provide]
-            public readonly IFloatProperty FloatProperty;
+            public IFloatProperty FloatProperty;
             [Provide(CastFrom = typeof(IFloatProperty))]
-            public readonly FloatClass FloatClassInstance;
+            public FloatClass FloatClassInstance;
         }
 
         private TestBed _testBed;
@@ -67,13 +67,13 @@ namespace UIComponents.Tests
         }
         
         [Dependency(typeof(IFloatProperty), provide: typeof(FloatClass))]
-        private class ComponentWithInvalidDependency : UIComponent
+        private partial class ComponentWithInvalidDependency : UIComponent
         {
             [Provide]
-            public readonly IStringProperty StringProperty;
+            public IStringProperty StringProperty;
 
             [Provide(CastFrom = typeof(IFloatProperty))]
-            public readonly StringClass StringClassInstance;
+            public StringClass StringClassInstance;
         }
         
         [Test]

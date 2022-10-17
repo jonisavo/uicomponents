@@ -56,7 +56,10 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var attributeArguments = new Dictionary<AttributeData, Dictionary<string, TypedConstant>>();
             attributeArgumentReader.Read(syntax, attributeArguments);
             var fieldSymbol = classSemanticModel.GetDeclaredSymbol(syntax) as TSymbol;
-            output.Add(fieldSymbol, attributeArguments.Values.First());
+            var arguments = attributeArguments.Values.ToArray();
+
+            if (arguments.Length > 0)
+                output.Add(fieldSymbol, arguments[0]);
         }
 
         private void GetTraitFields(AugmentGenerationContext context, IList<TraitDescription> traits)
