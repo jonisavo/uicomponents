@@ -1,5 +1,6 @@
 ﻿using System;
-using JetBrains.Annotations;
+using System.Diagnostics;
+using UnityEngine.TestTools;
 
 namespace UIComponents
 {
@@ -12,21 +13,22 @@ namespace UIComponents
     /// <example>
     /// [Dependency(typeof(ILogger), provide: typeof(MyLogger)]
     /// [Dependency(typeof(IDataService), provide: typeof(DataService)]
-    /// public class ComponentWithDependencies : UIComponent
+    /// public partial class ComponentWithDependencies : UIComponent
     /// {
     ///     [Provide]
-    ///     private readonly ILogger Logger;
+    ///     private ILogger _logger;
     ///
     ///     [Provide]
-    ///     private readonly IDataService DataService;
+    ///     private IDataService _dataService;
     ///
     ///     [Provide(CastFrom = typeof(IDataService))]
-    ///     private readonly DataService CastDataService;
+    ///     private DataService _castDataService;
     /// }
     /// </example>
     /// <seealso cref="DependencyAttribute"/>
-    [AttributeUsage(AttributeTargets.Field)]
-    [MeansImplicitUse]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
+    [ExcludeFromCoverage]
     public sealed class ProvideAttribute : Attribute
     {
         /// <summary>
