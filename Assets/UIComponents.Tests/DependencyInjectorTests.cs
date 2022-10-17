@@ -56,6 +56,18 @@ namespace UIComponents.Tests
                 
                 Assert.That(exception.Message, Is.EqualTo("No provider found for IDependency"));
             }
+            
+            [Test]
+            public void Throws_If_No_Provider_Exists_With_Non_Generic_Method()
+            {
+                var injector = new DependencyInjector(DiContext.Current.Container);
+
+                var exception = Assert.Throws<MissingProviderException>(
+                    () => injector.Provide(typeof(IDependency))
+                );
+                
+                Assert.That(exception.Message, Is.EqualTo("No provider found for IDependency"));
+            }
         }
 
         [TestFixture]
