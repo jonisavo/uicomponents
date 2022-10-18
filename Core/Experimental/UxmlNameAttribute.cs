@@ -36,7 +36,7 @@ namespace UIComponents.Experimental
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    [Conditional("UNITY_EDITOR")]
+    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [BaseTypeRequired(typeof(VisualElement))]
     [ExcludeFromCoverage]
     public sealed class UxmlNameAttribute : Attribute
