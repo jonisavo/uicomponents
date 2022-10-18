@@ -13,13 +13,13 @@ namespace UIComponents.Experimental
     /// <code>
     /// public partial class MyComponent : UIComponent
     /// {
-    ///     [Trait]
+    ///     [UxmlTrait]
     ///     public string Description;
     ///
-    ///     [Trait(Name = "a-color")]
+    ///     [UxmlTrait(Name = "a-color")]
     ///     public Color Color;
     ///
-    ///     [Trait(DefaultValue = 3)]
+    ///     [UxmlTrait(DefaultValue = 3)]
     ///     public int Lives;
     /// }
     ///
@@ -48,9 +48,9 @@ namespace UIComponents.Experimental
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    [Conditional("UNITY_EDITOR")]
+    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [ExcludeFromCoverage]
-    public sealed class TraitAttribute : Attribute
+    public sealed class UxmlTraitAttribute : Attribute
     {
         /// <summary>
         /// Defines a custom UXML name for the trait.

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests.Roslyn
 {
     [TestFixture]
-    public class TraitTests
+    public class UxmlTraitTests
     {
         [Test]
         public void Generates_Traits_For_Non_UIComponent_Class()

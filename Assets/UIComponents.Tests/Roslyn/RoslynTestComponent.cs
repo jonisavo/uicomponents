@@ -12,16 +12,16 @@ namespace UIComponents.Tests.Roslyn
             Morning
         }
 
-        [Trait(Name = "text-color")]
+        [UxmlTrait(Name = "text-color")]
         public Color TextColor;
 
-        [Trait(Name = "current-time")]
+        [UxmlTrait(Name = "current-time")]
         public double CurrentTime;
 
-        [Trait(DefaultValue = Greetings.Morning)]
+        [UxmlTrait(DefaultValue = Greetings.Morning)]
         public Greetings Greeting;
 
-        [Trait(DefaultValue = true)]
+        [UxmlTrait(DefaultValue = true)]
         public bool Enabled;
     }
 }
