@@ -4,7 +4,7 @@ namespace UIComponents.Experimental
 {
     [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public sealed class TraitAttribute : Attribute
+    public sealed class UxmlTraitAttribute : Attribute
     {
         public string Name { get; set; }
         

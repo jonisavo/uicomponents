@@ -7,7 +7,7 @@ namespace UIComponents.Tests.Roslyn
         [UxmlName("NestedRoslynTest")]
         public partial class NestedRoslynTestComponent : UIComponent
         {
-            [Trait]
+            [UxmlTrait]
             public string Trait { get; set; }
         }   
     }
