@@ -4,17 +4,21 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class MyEnumComponentWithUsing
 {
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlFactory : UxmlFactory<MyEnumComponentWithUsing, UxmlTraits> {}
 
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlEnumAttributeDescription<MyEnum> m_FieldTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "fieldtrait" };
         UxmlEnumAttributeDescription<MyEnum> m_PropertyTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "propertytrait" };
 
+        [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

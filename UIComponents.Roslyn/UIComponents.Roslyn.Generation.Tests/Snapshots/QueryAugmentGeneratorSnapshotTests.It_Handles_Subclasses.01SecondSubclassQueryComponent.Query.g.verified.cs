@@ -5,11 +5,13 @@
 // </auto-generated>
 
 using System.Collections.Generic;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class SecondSubclassQueryComponent
 {
-    protected override void PopulateQueryFields()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override void UIC_PopulateQueryFields()
     {
         subclassQueryComponent = this.Query<SubclassQueryComponent>(null, "asdf").First();
         var subclassElementsList = new List<UnityEngine.UIElements.VisualElement>();

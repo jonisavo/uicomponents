@@ -5,23 +5,26 @@
 // </auto-generated>
 
 using System.Threading.Tasks;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class StylesheetTestComponent
 {
-    private async Task<StyleSheetLoadTuple> GetSingleStyleSheet(string assetPath)
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    private async Task<StyleSheetLoadTuple> UIC_GetSingleStyleSheet(string assetPath)
     {
         var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
         return new StyleSheetLoadTuple(assetPath, styleSheet);
     }
 
-    protected override Task<StyleSheetLoadTuple>[] StartStyleSheetLoad()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
         var assetPaths = new string[] { "Components/StylesheetTestComponentStyle" };
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)
-            styleSheetLoadTasks[i] = GetSingleStyleSheet(assetPaths[i]);
+            styleSheetLoadTasks[i] = UIC_GetSingleStyleSheet(assetPaths[i]);
 
         return styleSheetLoadTasks;
     }

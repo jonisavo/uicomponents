@@ -48,7 +48,8 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("    ").AppendLine($@"protected override Task<VisualTreeAsset> StartLayoutLoad()
+            stringBuilder.Append("    ").AppendLine($@"{Constants.GeneratedCodeAttribute}
+    protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {{
         return AssetResolver.LoadAsset<VisualTreeAsset>(""{_layoutDescription.Path}"");
     }}");

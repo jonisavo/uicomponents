@@ -129,7 +129,8 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("    ").AppendLine($@"protected override void PopulateQueryFields()
+            stringBuilder.Append("    ").AppendLine($@"{Constants.GeneratedCodeAttribute}
+    protected override void UIC_PopulateQueryFields()
     {{");
 
             foreach (var queryDescription in _queryDescriptions)

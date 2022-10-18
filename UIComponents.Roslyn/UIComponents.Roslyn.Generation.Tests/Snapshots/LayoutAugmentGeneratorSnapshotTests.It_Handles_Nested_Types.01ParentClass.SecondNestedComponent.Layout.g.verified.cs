@@ -5,13 +5,15 @@
 // </auto-generated>
 
 using System.Threading.Tasks;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class ParentClass 
 {
 private partial class SecondNestedComponent
 {
-    protected override Task<VisualTreeAsset> StartLayoutLoad()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         return AssetResolver.LoadAsset<VisualTreeAsset>("Components/SecondNestedComponent");
     }

@@ -71,7 +71,10 @@ namespace UIComponents.Roslyn.Generation.Generators
 
         protected virtual void BuildUsingStatements(StringBuilder stringBuilder)
         {
-            stringBuilder.AppendLine("using UnityEngine.UIElements;").AppendLine();
+            stringBuilder
+                .AppendLine("using System.CodeDom.Compiler;")
+                .AppendLine("using UnityEngine.UIElements;")
+                .AppendLine();
         }
 
         private void ExecuteForClass(ClassDeclarationSyntax node, GeneratorExecutionContext context)

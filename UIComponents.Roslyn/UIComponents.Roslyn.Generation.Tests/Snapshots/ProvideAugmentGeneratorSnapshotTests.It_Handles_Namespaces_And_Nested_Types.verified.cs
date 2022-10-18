@@ -6,6 +6,7 @@
 
 using System;
 using UIComponents;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 namespace Components
@@ -14,6 +15,7 @@ public partial class ParentClass
 {
 private partial class NestedProvideComponent
 {
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
     {
         try
@@ -30,7 +32,8 @@ private partial class NestedProvideComponent
         }
     }
 
-    protected override void PopulateProvideFields()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override void UIC_PopulateProvideFields()
     {
         UIC_SetProvideField<Dependencies.IDependency, Dependencies.IDependency>(ref Dependency, "Dependency");
         UIC_SetProvideField<Dependencies.Dependency, IDependency>(ref ConcreteDependency, "ConcreteDependency");

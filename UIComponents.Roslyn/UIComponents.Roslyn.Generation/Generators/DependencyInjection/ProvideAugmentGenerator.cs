@@ -88,7 +88,9 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
         {
             stringBuilder
                 .Append("    ")
-                .AppendLine(@"private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
+                .Append(Constants.GeneratedCodeAttribute)
+                .AppendLine(@"
+    private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
     {
         try
         {
@@ -105,7 +107,11 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
     }
 ");
 
-            stringBuilder.Append("    ").AppendLine(@"protected override void PopulateProvideFields()
+            stringBuilder
+                .Append("    ")
+                .Append(Constants.GeneratedCodeAttribute)
+                .AppendLine(@"
+    protected override void UIC_PopulateProvideFields()
     {");
 
             foreach (var provideDescription in _provideDescriptions)

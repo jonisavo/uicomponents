@@ -5,11 +5,13 @@
 // </auto-generated>
 
 using System.Collections.Generic;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class BaseQueryComponent
 {
-    protected override void PopulateQueryFields()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override void UIC_PopulateQueryFields()
     {
         baseElement = this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).First();
         anotherBaseElement = this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", (string) null).First();
