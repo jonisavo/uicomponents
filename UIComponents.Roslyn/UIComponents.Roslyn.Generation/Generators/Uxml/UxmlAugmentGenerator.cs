@@ -144,7 +144,10 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var traitsDefined = _traitsToGenerate.Count > 0 ||
                 compilation.GetTypeByMetadataName(uxmlTraitsMetadataName) != null;
 
-            stringBuilder.Append("    ")
+            stringBuilder
+                .Append("    ")
+                .AppendLine(Constants.GeneratedCodeAttribute)
+                .Append("    ")
                 .Append($"public new partial class UxmlFactory : UxmlFactory<{context.TypeName}");
 
             if (traitsDefined)
@@ -160,11 +163,13 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
             stringBuilder.AppendLine($@"
     {{
+        {Constants.GeneratedCodeAttribute}
         public override string uxmlName
         {{
             get {{ return ""{info.Name}""; }}
         }}
 
+        {Constants.GeneratedCodeAttribute}
         public override string uxmlQualifiedName
         {{
             get {{ return uxmlNamespace + ""."" + uxmlName; }}
@@ -211,11 +216,13 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 return;
 
             stringBuilder.AppendLine($@"
+    {Constants.GeneratedCodeAttribute}
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {{");
             WriteTraitDescriptionVariables(_traitsToGenerate, stringBuilder);
 
             stringBuilder.AppendLine($@"
+        {Constants.GeneratedCodeAttribute}
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {{
             base.Init(ve, bag, cc);");

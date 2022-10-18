@@ -52,7 +52,11 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
 
         private void GenerateEffectArrayInitialization(StringBuilder stringBuilder)
         {
-            stringBuilder.Append("    ").AppendLine(@"private static void UIC_InitializeEffectAttributes()
+            stringBuilder
+                .Append("    ")
+                .Append(Constants.GeneratedCodeAttribute)
+                .AppendLine(@"
+    private static void UIC_InitializeEffectAttributes()
     {
         UIC_EffectAttributes = new [] {");
 
@@ -81,20 +85,23 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
         {
             stringBuilder
                 .Append("    ")
+                .AppendLine(Constants.GeneratedCodeAttribute)
+                .Append("    ")
                 .AppendLine("private static UIComponentEffectAttribute[] UIC_EffectAttributes;")
                 .AppendLine();
 
             GenerateEffectArrayInitialization(stringBuilder);
 
-            stringBuilder.AppendLine(@"
-    protected override void ApplyEffects()
-    {
+            stringBuilder.AppendLine($@"
+    {Constants.GeneratedCodeAttribute}
+    protected override void UIC_ApplyEffects()
+    {{
         if (UIC_EffectAttributes == null)
             UIC_InitializeEffectAttributes();
 
         foreach (var effect in UIC_EffectAttributes)
             effect.Apply(this);
-    }");
+    }}");
         }
 
         protected override string GetHintPostfix()

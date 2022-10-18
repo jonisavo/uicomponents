@@ -5,12 +5,15 @@
 // </auto-generated>
 
 using System;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class SecondSubclassEffectComponent
 {
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     private static UIComponentEffectAttribute[] UIC_EffectAttributes;
 
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     private static void UIC_InitializeEffectAttributes()
     {
         UIC_EffectAttributes = new [] {
@@ -21,7 +24,8 @@ public partial class SecondSubclassEffectComponent
         Array.Sort(UIC_EffectAttributes);
     }
 
-    protected override void ApplyEffects()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override void UIC_ApplyEffects()
     {
         if (UIC_EffectAttributes == null)
             UIC_InitializeEffectAttributes();

@@ -59,19 +59,21 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("    ").AppendLine($@"private async Task<StyleSheetLoadTuple> GetSingleStyleSheet(string assetPath)
+            stringBuilder.Append("    ").AppendLine($@"{Constants.GeneratedCodeAttribute}
+    private async Task<StyleSheetLoadTuple> UIC_GetSingleStyleSheet(string assetPath)
     {{
         var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
         return new StyleSheetLoadTuple(assetPath, styleSheet);
     }}
 
-    protected override Task<StyleSheetLoadTuple>[] StartStyleSheetLoad()
+    {Constants.GeneratedCodeAttribute}
+    protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {{
         var assetPaths = new string[] {{ {string.Join(", ", _stylesheetDescriptions.Select(desc => $"\"{desc.Path}\""))} }};
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)
-            styleSheetLoadTasks[i] = GetSingleStyleSheet(assetPaths[i]);
+            styleSheetLoadTasks[i] = UIC_GetSingleStyleSheet(assetPaths[i]);
 
         return styleSheetLoadTasks;
     }}");

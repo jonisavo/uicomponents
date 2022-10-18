@@ -34,18 +34,47 @@ const packageJsonString = JSON.stringify(packageJson, null, 4);
 
 fs.writeFileSync(packageJsonPath, packageJsonString);
 
-// Update README.md
+// Update other files
 
 const readmePath = path.resolve(__dirname, '..', 'README.md');
+const roslynProjectPath = path.resolve(__dirname, '..', 'UIComponents.Roslyn');
+const roslynConstantsPath = path.resolve(
+    roslynProjectPath,
+    'UIComponents.Roslyn.Generation',
+    'Constants.cs'
+);
+const roslynSnapshotsFolderPath = path.resolve(
+    roslynProjectPath,
+    'UIComponents.Roslyn.Generation.Tests',
+    'Snapshots'
+);
 
-if (!fs.existsSync(readmePath)) {
-    console.error('README.md not found. Skipping.');
-    process.exit(0);
+function replaceVersionInFile(filePath) {
+    if (!fs.existsSync(filePath)) {
+        console.error(`${filePath} not found. Skipping.`);
+        return;
+    }
+    
+    const fileString = fs.readFileSync(filePath).toString();
+
+    const newFileString = fileString.replace(new RegExp(currentVersion, 'g'), args[0]);
+
+    fs.writeFileSync(filePath, newFileString);
 }
 
-const readmeContents = String(fs.readFileSync(readmePath));
+const pathsToReplace = [
+    readmePath,
+    roslynConstantsPath
+];
 
-const modifiedReadmeContents = readmeContents
-    .replaceAll(currentVersion, args[0]);
+const verifiedSnapshotFiles = fs.readdirSync(roslynSnapshotsFolderPath);
 
-fs.writeFileSync(readmePath, modifiedReadmeContents);
+for (const file of verifiedSnapshotFiles) {
+    if (file.endsWith('.verified.cs')) {
+        pathsToReplace.push(path.resolve(roslynSnapshotsFolderPath, file));
+    }
+}
+
+for (const path of pathsToReplace) {
+    replaceVersionInFile(path);
+}

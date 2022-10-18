@@ -5,11 +5,13 @@
 // </auto-generated>
 
 using System.Collections.Generic;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class InvalidUsageQueryComponent
 {
-    protected override void PopulateQueryFields()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override void UIC_PopulateQueryFields()
     {
         element = this.Query<UnityEngine.UIElements.VisualElement>("valid-usage", (string) null).First();
     }

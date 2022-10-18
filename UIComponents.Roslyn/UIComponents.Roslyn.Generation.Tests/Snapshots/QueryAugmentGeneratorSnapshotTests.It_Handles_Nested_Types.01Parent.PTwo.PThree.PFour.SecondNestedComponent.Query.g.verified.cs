@@ -5,6 +5,7 @@
 // </auto-generated>
 
 using System.Collections.Generic;
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class Parent 
@@ -17,7 +18,8 @@ internal partial class PFour
 {
 private partial class SecondNestedComponent
 {
-    protected override void PopulateQueryFields()
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    protected override void UIC_PopulateQueryFields()
     {
         component = this.Query<Parent.PTwo.PThree.PFour.FirstNestedComponent>(null, (string) null).First();
     }
