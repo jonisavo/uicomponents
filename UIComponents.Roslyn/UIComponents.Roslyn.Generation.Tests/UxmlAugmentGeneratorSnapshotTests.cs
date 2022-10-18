@@ -76,7 +76,7 @@ using UIComponents.Experimental;
 
 public class Test
 {
-    [Trait]
+    [UxmlTrait]
     public int Number;
 }
 ";
@@ -91,13 +91,13 @@ using UIComponents.Experimental;
 
 public partial class NonUIComponentClass
 {
-    [Trait(Name = ""custom-trait-name"")]
+    [UxmlTrait(Name = ""custom-trait-name"")]
     public int FieldTrait;
 
-    [Trait(Name = ""my-property"")]
+    [UxmlTrait(Name = ""my-property"")]
     public float PropertyTrait { get; set; }
 
-    [Trait(Name = ""nope"")]
+    [UxmlTrait(Name = ""nope"")]
     public bool PropertyWithoutSetter { get; }
 }";
 
@@ -119,13 +119,13 @@ public partial class OwnEnumComponent : UIComponent
         B
     }
 
-    [Trait]
+    [UxmlTrait]
     public OwnEnum FieldTrait;
 
-    [Trait]
+    [UxmlTrait]
     public OwnEnum PropertyTrait { get; set; }
 
-    [Trait]
+    [UxmlTrait]
     public OwnEnum PropertyWithoutSetter { get; }
 }";
 
@@ -151,13 +151,13 @@ namespace Custom
                 B
             }
 
-            [Trait]
+            [UxmlTrait]
             public OwnEnum FieldTrait;
 
-            [Trait]
+            [UxmlTrait]
             public OwnEnum PropertyTrait { get; set; }
 
-            [Trait]
+            [UxmlTrait]
             public OwnEnum PropertyWithoutSetter { get; }
         }
     }
@@ -175,13 +175,13 @@ using UIComponents.Experimental;
 
 public partial class CustomNamespaceComponent : UIComponent
 {
-    [Trait(Name = ""custom-trait-name"")]
+    [UxmlTrait(Name = ""custom-trait-name"")]
     public int FieldTrait;
 
-    [Trait(Name = ""my-property"")]
+    [UxmlTrait(Name = ""my-property"")]
     public float PropertyTrait { get; set; }
 
-    [Trait(Name = ""nope"")]
+    [UxmlTrait(Name = ""nope"")]
     public bool PropertyWithoutSetter { get; }
 }";
 
@@ -199,7 +199,7 @@ public class MyComponent : UIComponent {}
 
 public partial class MyComponentWithTraits : MyComponent
 {
-    [Trait(Name = ""double-value"")]
+    [UxmlTrait(Name = ""double-value"")]
     public double Trait;
 }";
 
@@ -224,13 +224,13 @@ namespace Some.Place.Where.Enum.Is
 
 public partial class ComponentWithDefaultValueTraits : UIComponent
 {
-    [Trait(Name = ""description"", DefaultValue = ""Description not set."")]
+    [UxmlTrait(Name = ""description"", DefaultValue = ""Description not set."")]
     public string Description;
 
-    [Trait(Name = ""lives"", DefaultValue = 3)]
+    [UxmlTrait(Name = ""lives"", DefaultValue = 3)]
     public int Lives;
 
-    [Trait(Name = ""custom-value"", DefaultValue = Some.Place.Where.Enum.Is.TheEnum.VALUE_B)]
+    [UxmlTrait(Name = ""custom-value"", DefaultValue = Some.Place.Where.Enum.Is.TheEnum.VALUE_B)]
     public Some.Place.Where.Enum.Is.TheEnum MyValue;
 }";
 
@@ -246,25 +246,25 @@ using UIComponents.Experimental;
 
 public partial class FirstTraitClass
 {
-    [Trait(Name = ""custom-trait-name"")]
+    [UxmlTrait(Name = ""custom-trait-name"")]
     public int FieldTrait;
 
-    [Trait(Name = ""my-property"")]
+    [UxmlTrait(Name = ""my-property"")]
     public float PropertyTrait { get; set; }
 }
 
 public partial class SecondTraitClass
 {
-    [Trait(DefaultValue = true)]
+    [UxmlTrait(DefaultValue = true)]
     public bool Enabled;
 
-    [Trait(Name = ""secret"")]
+    [UxmlTrait(Name = ""secret"")]
     public long SomeValue;
 }
 
 public partial class ThirdTraitClass
 {
-    [Trait]
+    [UxmlTrait]
     public string Name;
 }";
 
@@ -297,7 +297,7 @@ using UIComponents.Experimental;
 [UxmlName(""AwesomeUxmlName"")]
 public partial class ComponentWithUxmlNameAndTraits : UIComponent
 {
-    [Trait(DefaultValue = true)]
+    [UxmlTrait(DefaultValue = true)]
     public bool Value;
 }
 ";
