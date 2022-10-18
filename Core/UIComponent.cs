@@ -71,7 +71,7 @@ namespace UIComponents
             _dependencyInjector = DiContext.Current.GetInjector(_componentType);
             AssetResolver = Provide<IAssetResolver>();
             Logger = Provide<IUIComponentLogger>();
-            PopulateProvideFields();
+            UIC_PopulateProvideFields();
 
             DependencySetupProfilerMarker.End();
 
@@ -105,8 +105,8 @@ namespace UIComponents
 
             PostHierarchySetupProfilerMarker.Begin();
 
-            ApplyEffects();
-            PopulateQueryFields();
+            UIC_ApplyEffects();
+            UIC_PopulateQueryFields();
             RegisterEventInterfaceCallbacks();
 
             PostHierarchySetupProfilerMarker.End();
@@ -213,15 +213,15 @@ namespace UIComponents
         {
             return _dependencyInjector.TryProvide(out instance);
         }
-
-        protected virtual Task<VisualTreeAsset> StartLayoutLoad()
+        
+        protected virtual Task<VisualTreeAsset> UIC_StartLayoutLoad()
         {
             return Task.FromResult<VisualTreeAsset>(null);
         }
-
+        
         private Task<VisualTreeAsset> GetLayout()
         {
-            return StartLayoutLoad();
+            return UIC_StartLayoutLoad();
         }
         
         protected readonly struct StyleSheetLoadTuple
@@ -236,7 +236,7 @@ namespace UIComponents
             }
         }
 
-        protected virtual Task<StyleSheetLoadTuple>[] StartStyleSheetLoad()
+        protected virtual Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
         {
             return Array.Empty<Task<StyleSheetLoadTuple>>();
         }
@@ -244,7 +244,7 @@ namespace UIComponents
         private async Task<List<StyleSheet>> GetStyleSheets()
         {
             var styleSheetLoadTasks =
-                StartStyleSheetLoad();
+                UIC_StartStyleSheetLoad();
 
             await Task.WhenAll(styleSheetLoadTasks);
 
@@ -266,10 +266,10 @@ namespace UIComponents
             return loadedStyleSheets;
         }
 
-        protected virtual void ApplyEffects() {}
+        protected virtual void UIC_ApplyEffects() {}
 
-        protected virtual void PopulateQueryFields() {}
+        protected virtual void UIC_PopulateQueryFields() {}
 
-        protected virtual void PopulateProvideFields() {}
+        protected virtual void UIC_PopulateProvideFields() {}
     }
 }
