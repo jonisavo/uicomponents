@@ -32,13 +32,13 @@ public partial class StylesheetTestComponent {}
         }
 
         [Fact]
-        public Task It_Takes_AssetPathAttribute_Into_Account()
+        public Task It_Takes_AssetPrefixAttribute_Into_Account()
         {
             var source = @"
 using UIComponents;
 using UIComponents.Experimental;
 
-[AssetPath(""UI/"")]
+[AssetPrefix(""UI/"")]
 [Stylesheet(""Components/StylesheetTestComponentStyle"")]
 public partial class StylesheetTestComponent : UIComponent {}
 ";

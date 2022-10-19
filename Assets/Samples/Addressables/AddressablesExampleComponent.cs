@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace UIComponents.Samples.Addressables
 {
-    [AssetPath("Assets/Samples/Addressables/Data/")]
+    [AssetPrefix("Assets/Samples/Addressables/Data/")]
     [Layout("AddressablesExampleComponent.uxml")]
     [Stylesheet("AddressablesExampleComponent.uss")]
     [Stylesheet("Box.uss")]

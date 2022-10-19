@@ -6,12 +6,13 @@ using UnityEngine.TestTools;
 namespace UIComponents
 {
     /// <summary>
-    /// If present, specifies a base path of assets configured for a UIComponent.
+    /// If present, specifies a prefix for assets configured for a UIComponent.
+    /// Used by <see cref="LayoutAttribute"/> and <see cref="StylesheetAttribute"/>.
     /// </summary>
     /// <example>
     /// <code>
     /// // This example uses Resources.
-    /// [AssetPath("Components/MyComponent/")]
+    /// [AssetPrefix("Components/MyComponent/")]
     /// [Layout("MyComponent")] // resolves to Components/MyComponent/MyComponent(.uxml)
     /// [Stylesheet("MyComponent.style")] // resolves to Components/MyComponent/MyComponent.style(.uss)
     /// public partial class MyComponent : UIComponent {}
@@ -21,11 +22,11 @@ namespace UIComponents
     [BaseTypeRequired(typeof(UIComponent))]
     [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [ExcludeFromCoverage]
-    public sealed class AssetPathAttribute : Attribute
+    public sealed class AssetPrefixAttribute : Attribute
     {
         public readonly string Path;
         
-        public AssetPathAttribute(string path)
+        public AssetPrefixAttribute(string path)
         {
             Path = path;
         }

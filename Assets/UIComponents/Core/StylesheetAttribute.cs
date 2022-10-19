@@ -8,7 +8,7 @@ namespace UIComponents
     /// <summary>
     /// Specifies the path to a .uss stylesheet file used by a UIComponent.
     /// </summary>
-    /// <seealso cref="AssetPathAttribute"/>
+    /// <seealso cref="AssetPrefixAttribute"/>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     [BaseTypeRequired(typeof(UIComponent))]
     [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
