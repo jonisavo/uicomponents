@@ -7,31 +7,51 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
     internal readonly struct QueryDescription
     {
         public readonly ISymbol MemberSymbol;
-        public readonly string UxmlName;
-        public readonly string ClassName;
 
-        public QueryDescription(ISymbol memberSymbol, string uxmlName, string className)
+        public readonly struct QueryCall
         {
-            MemberSymbol = memberSymbol;
-            UxmlName = uxmlName ?? "null";
-            ClassName = className ?? "(string) null";
+            public readonly string UxmlName;
+            public readonly string ClassName;
+
+            public QueryCall(string uxmlName, string className)
+            {
+                UxmlName = uxmlName ?? "null";
+                ClassName = className ?? "(string) null";
+            }
         }
 
-        public static QueryDescription CreateFromMember(ISymbol memberSymbol, Dictionary<string, TypedConstant> arguments)
+        public readonly List<QueryCall> QueryCalls;
+
+        public QueryDescription(ISymbol memberSymbol, List<QueryCall> queryCalls)
         {
-            string uxmlName = null;
-            string ussClassName = null;
+            MemberSymbol = memberSymbol;
+            QueryCalls = queryCalls;
+        }
 
-            if (arguments.TryGetValue("constructor_0", out var uxmlConstructorArg))
-                uxmlName = StringUtilities.AddQuotesToString(uxmlConstructorArg.Value as string);
+        public static QueryDescription CreateFromMember(ISymbol memberSymbol, Dictionary<AttributeData, Dictionary<string, TypedConstant>> attributes)
+        {
+            var queryCalls = new List<QueryCall>();
 
-            if (arguments.TryGetValue("Name", out var uxmlNameArg))
-                uxmlName = StringUtilities.AddQuotesToString(uxmlNameArg.Value as string);
+            foreach (var attribute in attributes)
+            {
+                string uxmlName = null;
+                string ussClassName = null;
 
-            if (arguments.TryGetValue("Class", out var ussClassNameArg))
-                ussClassName = StringUtilities.AddQuotesToString(ussClassNameArg.Value as string);
+                var arguments = attribute.Value;
 
-            return new QueryDescription(memberSymbol, uxmlName, ussClassName);
+                if (arguments.TryGetValue("constructor_0", out var uxmlConstructorArg))
+                    uxmlName = StringUtilities.AddQuotesToString(uxmlConstructorArg.Value as string);
+
+                if (arguments.TryGetValue("Name", out var uxmlNameArg))
+                    uxmlName = StringUtilities.AddQuotesToString(uxmlNameArg.Value as string);
+
+                if (arguments.TryGetValue("Class", out var ussClassNameArg))
+                    ussClassName = StringUtilities.AddQuotesToString(ussClassNameArg.Value as string);
+
+                queryCalls.Add(new QueryCall(uxmlName, ussClassName));
+            }
+
+            return new QueryDescription(memberSymbol, queryCalls);
         }
     }
 }

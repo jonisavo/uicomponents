@@ -13,10 +13,10 @@ public partial class ArrayQueryComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     protected override void UIC_PopulateQueryFields()
     {
-        var elementsList = new List<UnityEngine.UIElements.VisualElement>();
-        this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class-name").ToList(elementsList);
-        elements = new UnityEngine.UIElements.VisualElement[elementsList.Count];
-        for (var i = 0; i < elementsList.Count; i++)
-            elements[i] = elementsList[i];
+        var UIC_elementsList = new List<UnityEngine.UIElements.VisualElement>();
+        this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class-name").ToList(UIC_elementsList);
+        elements = new UnityEngine.UIElements.VisualElement[UIC_elementsList.Count];
+        for (var i = 0; i < UIC_elementsList.Count; i++)
+            elements[i] = UIC_elementsList[i];
     }
 }

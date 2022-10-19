@@ -21,8 +21,13 @@ public partial class FirstNestedComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     protected override void UIC_PopulateQueryFields()
     {
-        field = this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).First();
-        elements = this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class-name").ToList();
+        var UIC_fieldList = new List<UnityEngine.UIElements.VisualElement>();
+        this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_fieldList);
+        if (UIC_fieldList.Count > 0)
+             field = UIC_fieldList[0];
+        var UIC_elementsList = new List<UnityEngine.UIElements.VisualElement>();
+        this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class-name").ToList(UIC_elementsList);
+        elements = UIC_elementsList;
     }
 }
 }

@@ -191,6 +191,33 @@ namespace UILibrary
         }
 
         [Fact]
+        public Task It_Handles_Multiple_Query_Attributes()
+        {
+            var source = @"
+using System.Collections.Generic;
+using UnityEngine.UIElements;
+using UIComponents;
+
+public partial class MultipleQueryComponent : UIComponent
+{
+    [Query]
+    [Query(Class = ""test"")]
+    public VisualElement firstElement;
+
+    [Query(""uxml-name"", Class = ""class"")]
+    [Query(Class = ""class-name"")]
+    public VisualElement[] manyElementsArray;
+
+    [Query(Name = ""name"" Class = ""class"")]
+    [Query(Name = ""other-name"" Class = ""other-class"")]
+    [Query(Name = ""third-name"" Class = ""third-class"")]
+    public List<VisualElement> manyElementsList;
+}
+";
+            return GeneratorTester.Verify<QueryAugmentGenerator>(source);
+        }
+
+        [Fact]
         public Task Does_Not_Generate_If_No_Queries_Exist()
         {
             var source = @"

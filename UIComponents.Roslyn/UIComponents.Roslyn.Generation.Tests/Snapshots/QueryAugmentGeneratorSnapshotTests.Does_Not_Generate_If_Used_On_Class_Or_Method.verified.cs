@@ -13,6 +13,9 @@ public partial class InvalidUsageQueryComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     protected override void UIC_PopulateQueryFields()
     {
-        element = this.Query<UnityEngine.UIElements.VisualElement>("valid-usage", (string) null).First();
+        var UIC_elementList = new List<UnityEngine.UIElements.VisualElement>();
+        this.Query<UnityEngine.UIElements.VisualElement>("valid-usage", (string) null).ToList(UIC_elementList);
+        if (UIC_elementList.Count > 0)
+             element = UIC_elementList[0];
     }
 }
