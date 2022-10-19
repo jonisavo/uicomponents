@@ -7,7 +7,7 @@ namespace UIComponents.Benchmarks.AssetLoading
     [TestFixture]
     public partial class AddressablesAssetLoadBenchmarks
     {
-        [AssetPath("Assets/Samples/Addressables/Data/")]
+        [AssetPrefix("Assets/Samples/Addressables/Data/")]
         [Layout("AddressablesExampleComponent.uxml")]
         [Stylesheet("AddressablesExampleComponent.uss")]
         [Stylesheet("Box.uss")]

@@ -19,8 +19,8 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
         {
             var layoutStringBuilder = new StringBuilder();
 
-            if (!string.IsNullOrEmpty(CurrentAssetPathValue))
-                layoutStringBuilder.Append(CurrentAssetPathValue);
+            if (!string.IsNullOrEmpty(CurrentAssetPrefix))
+                layoutStringBuilder.Append(CurrentAssetPrefix);
 
             var layoutPath = GetPathAttributeValue(_layoutAttributeSymbol, context);
 

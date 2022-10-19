@@ -8,7 +8,7 @@ namespace UIComponents
     /// <summary>
     /// Specifies the path to the .uxml layout file used by a UIComponent.
     /// </summary>
-    /// <seealso cref="AssetPathAttribute"/>
+    /// <seealso cref="AssetPrefixAttribute"/>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     [BaseTypeRequired(typeof(UIComponent))]
     [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]

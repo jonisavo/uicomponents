@@ -4,11 +4,11 @@ namespace UIComponents
 {
     [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public class AssetPathAttribute : Attribute
+    public class AssetPrefixAttribute : Attribute
     {
         public readonly string Path;
 
-        public AssetPathAttribute(string path)
+        public AssetPrefixAttribute(string path)
         {
             Path = path;
         }

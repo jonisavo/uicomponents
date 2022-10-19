@@ -9,14 +9,14 @@ namespace UIComponents.Roslyn.Generation.Generators
     internal abstract class UIComponentAugmentGenerator : AugmentGenerator<ClassSyntaxReceiver>
     {
         protected INamedTypeSymbol UIComponentSymbol;
-        protected INamedTypeSymbol AssetPathAttributeSymbol;
+        protected INamedTypeSymbol AssetPrefixAttributeSymbol;
 
-        protected string CurrentAssetPathValue;
+        protected string CurrentAssetPrefix;
 
         protected override void OnBeforeExecute(GeneratorExecutionContext context)
         {
             UIComponentSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
-            AssetPathAttributeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.AssetPathAttribute");
+            AssetPrefixAttributeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.AssetPrefixAttribute");
         }
 
         protected List<string> GetPathAttributeValues(
@@ -51,10 +51,10 @@ namespace UIComponents.Roslyn.Generation.Generators
 
         protected override bool ShouldGenerateSource(AugmentGenerationContext context)
         {
-            if (UIComponentSymbol == null || AssetPathAttributeSymbol == null)
+            if (UIComponentSymbol == null || AssetPrefixAttributeSymbol == null)
                 return false;
 
-            CurrentAssetPathValue = GetPathAttributeValue(AssetPathAttributeSymbol, context);
+            CurrentAssetPrefix = GetPathAttributeValue(AssetPrefixAttributeSymbol, context);
 
             return RoslynUtilities.HasBaseType(context.CurrentTypeSymbol, UIComponentSymbol);
         }

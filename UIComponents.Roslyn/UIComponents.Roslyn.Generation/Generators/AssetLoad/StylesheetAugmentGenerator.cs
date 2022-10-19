@@ -23,8 +23,8 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
         {
             var stylesheetStringBuilder = new StringBuilder();
 
-            if (!string.IsNullOrEmpty(CurrentAssetPathValue))
-                stylesheetStringBuilder.Append(CurrentAssetPathValue);
+            if (!string.IsNullOrEmpty(CurrentAssetPrefix))
+                stylesheetStringBuilder.Append(CurrentAssetPrefix);
 
             if (!string.IsNullOrEmpty(stylesheetPath))
                 stylesheetStringBuilder.Append(stylesheetPath);
