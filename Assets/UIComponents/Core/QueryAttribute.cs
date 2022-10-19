@@ -12,6 +12,7 @@ namespace UIComponents
     /// Queries are made in the UIComponent constructor.
     /// </summary>
     /// <example>
+    /// <code>
     /// [Layout("MyLayout")]
     /// public partial class ComponentWithQueries : UIComponent
     /// {
@@ -26,9 +27,14 @@ namespace UIComponents
     ///     
     ///     [Query]
     ///     public Label[] AllLabels;
+    ///     
+    ///     [Query(Name = "first-name")]
+    ///     [Query(Name = "second-name")]
+    ///     public List&lt;VisualElement&gt; MultipleQueries;
     /// }
+    /// </code>
     /// </example>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = false)]
     [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [ExcludeFromCoverage]
     public sealed class QueryAttribute : Attribute
@@ -49,10 +55,5 @@ namespace UIComponents
         }
         
         public QueryAttribute() {}
-
-        public void Query(VisualElement root, List<VisualElement> results)
-        {
-            root.Query(Name, Class).ToList(results);
-        }
     }
 }

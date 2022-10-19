@@ -60,8 +60,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                     RoslynUtilities.ReadAttributeArguments(attribute, attributeArgs);
                 }
 
-                foreach (var arguments in argumentsDictionary.Values)
-                    queryDescriptions.Add(QueryDescription.CreateFromMember(member, arguments));
+                queryDescriptions.Add(QueryDescription.CreateFromMember(member, argumentsDictionary));
             }
         }
 
@@ -84,22 +83,27 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var concreteMemberType = RoslynUtilities.GetConcreteType(memberType);
             var concreteMemberTypeName = concreteMemberType.ToDisplayString();
 
-            var queryCallString = $"this.Query<{concreteMemberTypeName}>({queryDescription.UxmlName}, {queryDescription.ClassName})";
+            const string Padding = "        ";
+
+            var listVariableName = $"UIC_{memberSymbol.Name}List";
+            stringBuilder
+                .Append(Padding)
+                .AppendLine($"var {listVariableName} = new List<{concreteMemberTypeName}>();");
+
+            foreach (var queryCall in queryDescription.QueryCalls)
+            {
+                var queryCallString = $"this.Query<{concreteMemberTypeName}>({queryCall.UxmlName}, {queryCall.ClassName})";
+
+                stringBuilder
+                    .Append(Padding)
+                    .Append(queryCallString)
+                    .AppendLine($".ToList({listVariableName});");
+            }
 
             if (memberType is IArrayTypeSymbol)
             {
-                var listVariableName = $"{memberSymbol.Name}List";
                 stringBuilder
-                    .Append("        ")
-                    .AppendLine($"var {listVariableName} = new List<{concreteMemberTypeName}>();");
-
-                stringBuilder
-                    .Append("        ")
-                    .Append(queryCallString)
-                    .AppendLine($".ToList({listVariableName});");
-
-                stringBuilder
-                    .Append("        ")
+                    .Append(Padding)
                     .Append($"{memberSymbol.Name} = new {concreteMemberTypeName}[{listVariableName}.Count];");
 
                 stringBuilder.AppendLine($@"
@@ -108,16 +112,19 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             }
             else
             {
+                var memberIsNotList = memberType.Name != "List";
+
+                if (memberIsNotList)
+                    stringBuilder.Append(Padding).AppendLine($"if ({listVariableName}.Count > 0)").Append("     ");
+
                 stringBuilder
-                    .Append("        ")
-                    .Append($"{memberSymbol.Name} = this.Query<{concreteMemberTypeName}>({queryDescription.UxmlName}, {queryDescription.ClassName})");
+                    .Append(Padding)
+                    .Append($"{memberSymbol.Name} = {listVariableName}");
 
-                var name = memberType.Name;
+                if (memberIsNotList)
+                    stringBuilder.Append("[0]");
 
-                if (name == "List")
-                    stringBuilder.AppendLine(".ToList();");
-                else
-                    stringBuilder.AppendLine(".First();");
+                stringBuilder.AppendLine(";");
             }
         }
 

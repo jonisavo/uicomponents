@@ -29,7 +29,11 @@ namespace UIComponents.Tests
             public Label HelloWorldLabelWithTextClass;
 
             [Query]
-            public List<Label> AllLabels;
+            public List<Label> AllLabelsImplicit;
+
+            [Query(Name = "hello-world-label")]
+            [Query(Name = "foldout-content")]
+            public List<Label> AllLabelsExplicit;
         }
 
         private TestBed _testBed;
@@ -59,9 +63,13 @@ namespace UIComponents.Tests
             
             Assert.That(component.HelloWorldLabelWithTextClass, Is.SameAs(component.HelloWorldLabel));
 
-            Assert.That(component.AllLabels, Is.InstanceOf<List<Label>>());
-            Assert.That(component.AllLabels.Count, Is.EqualTo(2));
-            Assert.That(component.AllLabels[1].text, Is.EqualTo("Foldout content"));
+            Assert.That(component.AllLabelsImplicit, Is.InstanceOf<List<Label>>());
+            Assert.That(component.AllLabelsImplicit.Count, Is.EqualTo(2));
+            Assert.That(component.AllLabelsImplicit[1].text, Is.EqualTo("Foldout content"));
+
+            Assert.That(component.AllLabelsExplicit, Is.InstanceOf<List<Label>>());
+            Assert.That(component.AllLabelsExplicit.Count, Is.EqualTo(2));
+            Assert.That(component.AllLabelsExplicit[1].text, Is.EqualTo("Foldout content"));
         }
 
         private partial class ChildComponentWithQueryAttribute : ComponentWithQueryAttribute
