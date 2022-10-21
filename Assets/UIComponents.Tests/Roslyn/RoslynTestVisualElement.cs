@@ -1,5 +1,4 @@
-﻿using UIComponents.Experimental;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace UIComponents.Tests.Roslyn
 {
