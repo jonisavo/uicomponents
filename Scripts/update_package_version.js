@@ -36,19 +36,6 @@ fs.writeFileSync(packageJsonPath, packageJsonString);
 
 // Update other files
 
-const readmePath = path.resolve(__dirname, '..', 'README.md');
-const roslynProjectPath = path.resolve(__dirname, '..', 'UIComponents.Roslyn');
-const roslynConstantsPath = path.resolve(
-    roslynProjectPath,
-    'UIComponents.Roslyn.Generation',
-    'Constants.cs'
-);
-const roslynSnapshotsFolderPath = path.resolve(
-    roslynProjectPath,
-    'UIComponents.Roslyn.Generation.Tests',
-    'Snapshots'
-);
-
 function replaceVersionInFile(filePath) {
     if (!fs.existsSync(filePath)) {
         console.error(`${filePath} not found. Skipping.`);
@@ -62,18 +49,9 @@ function replaceVersionInFile(filePath) {
     fs.writeFileSync(filePath, newFileString);
 }
 
-const pathsToReplace = [
-    readmePath,
-    roslynConstantsPath
-];
+const readmePath = path.resolve(__dirname, '..', 'README.md');
 
-const verifiedSnapshotFiles = fs.readdirSync(roslynSnapshotsFolderPath);
-
-for (const file of verifiedSnapshotFiles) {
-    if (file.endsWith('.verified.cs')) {
-        pathsToReplace.push(path.resolve(roslynSnapshotsFolderPath, file));
-    }
-}
+const pathsToReplace = [readmePath];
 
 for (const path of pathsToReplace) {
     replaceVersionInFile(path);
