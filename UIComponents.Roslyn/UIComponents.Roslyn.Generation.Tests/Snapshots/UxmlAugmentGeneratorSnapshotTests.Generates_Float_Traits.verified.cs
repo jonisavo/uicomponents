@@ -15,8 +15,8 @@ public partial class FloatComponentWithUsing
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlFloatAttributeDescription m_FieldTrait = new UxmlFloatAttributeDescription { name = "fieldtrait" };
-        UxmlFloatAttributeDescription m_PropertyTrait = new UxmlFloatAttributeDescription { name = "propertytrait" };
+        UxmlFloatAttributeDescription m_FieldTrait = new UxmlFloatAttributeDescription { name = "field-trait" };
+        UxmlFloatAttributeDescription m_PropertyTrait = new UxmlFloatAttributeDescription { name = "property-trait" };
 
         [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)

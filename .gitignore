@@ -40,6 +40,7 @@ ExportedObj/
 *.booproj
 *.svd
 *.pdb
+!/Assets/UIComponents/Roslyn/*.pdb
 *.mdb
 *.opendb
 *.VC.db
@@ -47,6 +48,7 @@ ExportedObj/
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
+!/Assets/UIComponents/Roslyn/*.pdb.meta
 *.mdb.meta
 
 # Unity3D generated file on crash reports

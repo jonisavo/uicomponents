@@ -10,7 +10,6 @@ namespace UIComponents.Roslyn.Generation.Tests.Utilities
 
             var source = $@"
 using UIComponents;
-using UIComponents.Experimental;
 
 public partial class {fieldTypeNameCap}ComponentWithUsing : UIComponent
 {{

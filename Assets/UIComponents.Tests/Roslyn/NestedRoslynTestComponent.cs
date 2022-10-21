@@ -1,6 +1,4 @@
-﻿using UIComponents.Experimental;
-
-namespace UIComponents.Tests.Roslyn
+﻿namespace UIComponents.Tests.Roslyn
 {
     public partial class NestParentClass
     {

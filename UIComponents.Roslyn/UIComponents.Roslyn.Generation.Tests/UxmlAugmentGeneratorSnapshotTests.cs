@@ -71,7 +71,7 @@ namespace UIComponents.Roslyn.Generation.Tests
         public Task Does_Not_Generate_If_TraitAttribute_Type_IsMissing()
         {
             var source = @"
-using UIComponents.Experimental;
+using UIComponents;
 
 public class Test
 {
@@ -86,7 +86,7 @@ public class Test
         public Task Works_On_Non_UIComponent_Type()
         {
             var source = @"
-using UIComponents.Experimental;
+using UIComponents;
 
 public partial class NonUIComponentClass
 {
@@ -108,7 +108,6 @@ public partial class NonUIComponentClass
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 public partial class OwnEnumComponent : UIComponent
 {
@@ -136,7 +135,6 @@ public partial class OwnEnumComponent : UIComponent
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 namespace Custom
 {
@@ -170,7 +168,6 @@ namespace Custom
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 public partial class CustomNamespaceComponent : UIComponent
 {
@@ -192,7 +189,6 @@ public partial class CustomNamespaceComponent : UIComponent
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 public class MyComponent : UIComponent {}
 
@@ -210,7 +206,6 @@ public partial class MyComponentWithTraits : MyComponent
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 namespace Some.Place.Where.Enum.Is
 {
@@ -241,7 +236,6 @@ public partial class ComponentWithDefaultValueTraits : UIComponent
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 public partial class FirstTraitClass
 {
@@ -290,13 +284,27 @@ public partial class MyUxmlNameAttributeComponent : UIComponent
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [UxmlName(""AwesomeUxmlName"")]
 public partial class ComponentWithUxmlNameAndTraits : UIComponent
 {
     [UxmlTrait(DefaultValue = true)]
     public bool Value;
+}
+";
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task Handles_Long_Member_Name_For_Trait()
+        {
+            var source = @"
+using UIComponents;
+
+public partial class LongTraitNameComponent : UIComponent
+{
+    [UxmlTrait]
+    public int HereIsALongMemberNameWithALotOfComplexity123Test_Hello___WorldA;
 }
 ";
             return GeneratorTester.Verify<UxmlAugmentGenerator>(source);

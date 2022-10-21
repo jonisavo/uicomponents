@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.Uxml
@@ -54,6 +56,33 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             }
         }
 
+        private static string StringToKebabCase(string inputString)
+        {
+            var stringWithoutUnderscores = inputString.Replace("_", "-");
+            var compactStringBuilder = new StringBuilder();
+
+            for (var i = 0; i < stringWithoutUnderscores.Length; i++)
+            {
+                var character = stringWithoutUnderscores[i]; 
+
+                if (i > 0)
+                {
+                    var previousCharacter = stringWithoutUnderscores[i - 1];
+
+                    if (character == '-' && previousCharacter == '-')
+                        continue;
+                }
+
+                compactStringBuilder.Append(character);
+            }
+
+            var compactString = compactStringBuilder.ToString();
+            // https://gist.github.com/nblackburn/875e6ff75bc8ce171c758bf75f304707?permalink_comment_id=3677597#gistcomment-3677597
+            var kebabCaseStringPartOne = Regex.Replace(compactString, @"\B([A-Z])(?=[a-z])", "-$1");
+            var finalKebabCaseString = Regex.Replace(kebabCaseStringPartOne, @"\B([a-z0-9])([A-Z])", "$1-$2");
+            return finalKebabCaseString.ToLower();
+        }
+
         private static (string, string) GetTraitUxmlNameAndDefaultValue(
             Dictionary<string, TypedConstant> traitArguments,
             ITypeSymbol typeSymbol,
@@ -66,7 +95,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 uxmlName = traitArguments[NameArgumentName].Value?.ToString();
 
             if (string.IsNullOrEmpty(uxmlName))
-                uxmlName = memberName.ToLower();
+                uxmlName = StringToKebabCase(memberName);
 
             if (traitArguments.ContainsKey(DefaultValueArgumentName))
             {

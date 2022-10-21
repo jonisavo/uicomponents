@@ -1,5 +1,4 @@
-﻿using UIComponents.Experimental;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UIComponents.Tests.Roslyn
 {
@@ -12,10 +11,10 @@ namespace UIComponents.Tests.Roslyn
             Morning
         }
 
-        [UxmlTrait(Name = "text-color")]
+        [UxmlTrait]
         public Color TextColor;
 
-        [UxmlTrait(Name = "current-time")]
+        [UxmlTrait(Name = "time")]
         public double CurrentTime;
 
         [UxmlTrait(DefaultValue = Greetings.Morning)]

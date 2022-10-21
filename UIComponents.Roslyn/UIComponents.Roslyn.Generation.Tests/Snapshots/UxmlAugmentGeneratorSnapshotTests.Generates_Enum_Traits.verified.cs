@@ -15,8 +15,8 @@ public partial class MyEnumComponentWithUsing
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlEnumAttributeDescription<MyEnum> m_FieldTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "fieldtrait" };
-        UxmlEnumAttributeDescription<MyEnum> m_PropertyTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "propertytrait" };
+        UxmlEnumAttributeDescription<MyEnum> m_FieldTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "field-trait" };
+        UxmlEnumAttributeDescription<MyEnum> m_PropertyTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "property-trait" };
 
         [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)

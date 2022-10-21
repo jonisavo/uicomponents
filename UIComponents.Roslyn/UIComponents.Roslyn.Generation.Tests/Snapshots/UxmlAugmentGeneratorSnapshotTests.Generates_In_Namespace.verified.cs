@@ -17,8 +17,8 @@ public partial class CustomNamespaceComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> m_FieldTrait = new UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> { name = "fieldtrait" };
-        UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> m_PropertyTrait = new UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> { name = "propertytrait" };
+        UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> m_FieldTrait = new UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> { name = "field-trait" };
+        UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> m_PropertyTrait = new UxmlEnumAttributeDescription<Custom.Components.CustomNamespaceComponent.OwnEnum> { name = "property-trait" };
 
         [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
