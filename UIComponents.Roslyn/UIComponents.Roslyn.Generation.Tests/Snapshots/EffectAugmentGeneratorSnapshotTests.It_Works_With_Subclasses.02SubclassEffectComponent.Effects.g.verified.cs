@@ -17,7 +17,7 @@ public partial class SubclassEffectComponent
     private static void UIC_InitializeEffectAttributes()
     {
         UIC_EffectAttributes = new [] {
-            new TestEffectWithArgumentsAttribute(8) { Name = "John Smith", Number = 3.14, Priority = -5 },
+            new TestEffectWithArgumentsAttribute(8, "Hello world") { Name = "John Smith", Number = 3.14, Priority = -5 },
             new TestEffectAttribute()
         };
         Array.Sort(UIC_EffectAttributes);

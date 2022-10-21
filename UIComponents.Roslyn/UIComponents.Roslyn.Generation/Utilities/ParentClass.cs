@@ -57,8 +57,6 @@ namespace UIComponents.Roslyn.Generation.Utilities
                 return "protected";
             else if (modifierString.Contains("internal"))
                 return "internal";
-            else if (modifierString.Contains("file"))
-                return "file";
 
             return "public";
         }

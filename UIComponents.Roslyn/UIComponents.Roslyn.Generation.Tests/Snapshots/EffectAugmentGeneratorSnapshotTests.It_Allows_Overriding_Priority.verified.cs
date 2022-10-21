@@ -18,7 +18,7 @@ public partial class PriorityEffectComponent
     {
         UIC_EffectAttributes = new [] {
             new TestEffectAttribute() { Priority = 8 },
-            new TestEffectWithArgumentsAttribute(8) { Name = "John Smith", Number = 3.14, Priority = -5 }
+            new TestEffectWithArgumentsAttribute(8, "Hello world") { Name = "John Smith", Number = 3.14, Priority = -5 }
         };
         Array.Sort(UIC_EffectAttributes);
     }

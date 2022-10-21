@@ -127,7 +127,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
             foreach (var arguments in attributeArguments.Values)
             {
-                if (attributeArguments.Count == 0)
+                if (arguments.Count == 0)
                     continue;
 
                 return UxmlFactoryInfo.CreateFromArguments(arguments);

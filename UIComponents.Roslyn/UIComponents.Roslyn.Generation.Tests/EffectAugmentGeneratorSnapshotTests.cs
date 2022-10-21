@@ -17,7 +17,7 @@ public class TestEffectWithArgumentsAttribute : UIComponentEffectAttribute
 
     public float Number { get; set; }
 
-    public TestEffectWithArguments(int integer) {}
+    public TestEffectWithArguments(int integer, string text) {}
 }
 ";
         [Fact]
@@ -29,7 +29,7 @@ using UIComponents;
 {TestEffectDeclarations}
 
 [TestEffect]
-[TestEffectWithArguments(8, Name = ""John Smith"", Number = 3.14f)]
+[TestEffectWithArguments(8, ""Hello world"", Name = ""John Smith"", Number = 3.14f)]
 public partial class BasicEffectComponent : UIComponent {{}}
 ";
             return GeneratorTester.Verify<EffectAugmentGenerator>(source);
@@ -44,7 +44,7 @@ using UIComponents;
 {TestEffectDeclarations}
 
 [TestEffect(Priority = 8)]
-[TestEffectWithArguments(8, Name = ""John Smith"", Number = 3.14f, Priority = -5)]
+[TestEffectWithArguments(8, ""Hello world"", Name = ""John Smith"", Number = 3.14f, Priority = -5)]
 public partial class PriorityEffectComponent : UIComponent {{}}
 ";
             return GeneratorTester.Verify<EffectAugmentGenerator>(source);
@@ -67,7 +67,7 @@ public class ExtraEffectAttribute : UIComponentEffectAttribute
 [TestEffect]
 public partial class BaseEffectComponent : UIComponent {{}}
 
-[TestEffectWithArguments(8, Name = ""John Smith"", Number = 3.14f, Priority = -5)]
+[TestEffectWithArguments(8, ""Hello world"", Name = ""John Smith"", Number = 3.14f, Priority = -5)]
 public partial class SubclassEffectComponent : BaseEffectComponent {{}}
 
 [ExtraEffect]

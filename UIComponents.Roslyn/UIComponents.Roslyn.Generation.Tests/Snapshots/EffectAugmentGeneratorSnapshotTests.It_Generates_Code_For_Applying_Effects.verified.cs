@@ -18,7 +18,7 @@ public partial class BasicEffectComponent
     {
         UIC_EffectAttributes = new [] {
             new TestEffectAttribute(),
-            new TestEffectWithArgumentsAttribute(8) { Name = "John Smith", Number = 3.14 }
+            new TestEffectWithArgumentsAttribute(8, "Hello world") { Name = "John Smith", Number = 3.14 }
         };
         Array.Sort(UIC_EffectAttributes);
     }
