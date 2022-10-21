@@ -1,4 +1,3 @@
-using Microsoft.CodeAnalysis.CSharp;
 using UIComponents.Roslyn.Generation.Generators.Uxml;
 using UIComponents.Roslyn.Generation.Tests.Utilities;
 
@@ -276,7 +275,6 @@ public partial class ThirdTraitClass
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [UxmlName(""MyUxmlNameAttribute"")]
 public partial class MyUxmlNameAttributeComponent : UIComponent

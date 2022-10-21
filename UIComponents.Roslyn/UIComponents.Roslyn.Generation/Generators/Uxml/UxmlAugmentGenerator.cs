@@ -27,7 +27,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             _traitAttributeSymbol =
                 context.Compilation.GetTypeByMetadataName("UIComponents.Experimental.UxmlTraitAttribute");
             _uxmlNameAttributeSymbol =
-                context.Compilation.GetTypeByMetadataName("UIComponents.Experimental.UxmlNameAttribute");
+                context.Compilation.GetTypeByMetadataName("UIComponents.UxmlNameAttribute");
         }
 
         protected override bool ShouldGenerateSource(AugmentGenerationContext context)

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
-namespace UIComponents.Experimental
+namespace UIComponents
 {
     /// <summary>
     /// When used in Unity 2021.2 or later, this attribute will generate
