@@ -301,5 +301,21 @@ public partial class ComponentWithUxmlNameAndTraits : UIComponent
 ";
             return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
+
+        [Fact]
+        public Task Handles_Long_Member_Name_For_Trait()
+        {
+            var source = @"
+using UIComponents;
+using UIComponents.Experimental;
+
+public partial class LongTraitNameComponent : UIComponent
+{
+    [UxmlTrait]
+    public int HereIsALongMemberNameWithALotOfComplexity123Test_Hello___WorldA;
+}
+";
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
+        }
     }
 }

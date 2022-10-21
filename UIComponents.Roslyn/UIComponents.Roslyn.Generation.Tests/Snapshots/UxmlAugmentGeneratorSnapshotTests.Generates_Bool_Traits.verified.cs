@@ -15,8 +15,8 @@ public partial class BoolComponentWithUsing
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlBoolAttributeDescription m_FieldTrait = new UxmlBoolAttributeDescription { name = "fieldtrait" };
-        UxmlBoolAttributeDescription m_PropertyTrait = new UxmlBoolAttributeDescription { name = "propertytrait" };
+        UxmlBoolAttributeDescription m_FieldTrait = new UxmlBoolAttributeDescription { name = "field-trait" };
+        UxmlBoolAttributeDescription m_PropertyTrait = new UxmlBoolAttributeDescription { name = "property-trait" };
 
         [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)

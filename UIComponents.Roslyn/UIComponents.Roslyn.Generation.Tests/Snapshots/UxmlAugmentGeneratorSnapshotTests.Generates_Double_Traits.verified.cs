@@ -15,8 +15,8 @@ public partial class DoubleComponentWithUsing
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlDoubleAttributeDescription m_FieldTrait = new UxmlDoubleAttributeDescription { name = "fieldtrait" };
-        UxmlDoubleAttributeDescription m_PropertyTrait = new UxmlDoubleAttributeDescription { name = "propertytrait" };
+        UxmlDoubleAttributeDescription m_FieldTrait = new UxmlDoubleAttributeDescription { name = "field-trait" };
+        UxmlDoubleAttributeDescription m_PropertyTrait = new UxmlDoubleAttributeDescription { name = "property-trait" };
 
         [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)

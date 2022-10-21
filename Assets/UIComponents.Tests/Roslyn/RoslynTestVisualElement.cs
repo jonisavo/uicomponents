@@ -11,10 +11,10 @@ namespace UIComponents.Tests.Roslyn
         [UxmlTrait]
         public int Age;
 
-        [UxmlTrait(Name = "unix-timestamp")]
+        [UxmlTrait(Name = "timestamp", DefaultValue = -1)]
         public long UnixTimestamp;
         
-        [UxmlTrait(Name = "music-volume", DefaultValue = 1.0f)]
+        [UxmlTrait(DefaultValue = 1.0f)]
         public float MusicVolume { get; set; }
     }
 }

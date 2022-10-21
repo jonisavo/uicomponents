@@ -15,8 +15,8 @@ public partial class ColorComponentWithUsing
     [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlColorAttributeDescription m_FieldTrait = new UxmlColorAttributeDescription { name = "fieldtrait" };
-        UxmlColorAttributeDescription m_PropertyTrait = new UxmlColorAttributeDescription { name = "propertytrait" };
+        UxmlColorAttributeDescription m_FieldTrait = new UxmlColorAttributeDescription { name = "field-trait" };
+        UxmlColorAttributeDescription m_PropertyTrait = new UxmlColorAttributeDescription { name = "property-trait" };
 
         [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
