@@ -100,8 +100,8 @@ Instantiation in UXML:
 <Counter increment-text="+1" />
 ```
 
-UIComponents are just VisualElements with some additional code in their
-constructor for loading assets automatically, among other things.
+UIComponents are VisualElements with protected virtual methods which are overridden
+via source generation. Those virtual methods are called in the inherited constructor.
 
 ## Testing
 
