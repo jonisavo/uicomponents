@@ -9,15 +9,15 @@ using UnityEngine.UIElements;
 
 public partial class MyComponentWithTraits
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     public new partial class UxmlFactory : UxmlFactory<MyComponentWithTraits, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlDoubleAttributeDescription m_Trait = new UxmlDoubleAttributeDescription { name = "double-value" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

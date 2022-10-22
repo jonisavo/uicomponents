@@ -18,7 +18,7 @@ internal partial class PFour
 {
 private partial class SecondNestedComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     protected override void UIC_PopulateQueryFields()
     {
         var UIC_componentList = new List<Parent.PTwo.PThree.PFour.FirstNestedComponent>();

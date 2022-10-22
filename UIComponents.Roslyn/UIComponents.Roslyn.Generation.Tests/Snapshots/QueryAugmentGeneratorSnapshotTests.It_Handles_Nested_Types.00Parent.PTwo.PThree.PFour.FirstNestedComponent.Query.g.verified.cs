@@ -18,7 +18,7 @@ internal partial class PFour
 {
 public partial class FirstNestedComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     protected override void UIC_PopulateQueryFields()
     {
         var UIC_fieldList = new List<UnityEngine.UIElements.VisualElement>();

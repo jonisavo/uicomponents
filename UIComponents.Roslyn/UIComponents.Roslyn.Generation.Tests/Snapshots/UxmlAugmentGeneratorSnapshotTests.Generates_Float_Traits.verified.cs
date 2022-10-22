@@ -9,16 +9,16 @@ using UnityEngine.UIElements;
 
 public partial class FloatComponentWithUsing
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     public new partial class UxmlFactory : UxmlFactory<FloatComponentWithUsing, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlFloatAttributeDescription m_FieldTrait = new UxmlFloatAttributeDescription { name = "field-trait" };
         UxmlFloatAttributeDescription m_PropertyTrait = new UxmlFloatAttributeDescription { name = "property-trait" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

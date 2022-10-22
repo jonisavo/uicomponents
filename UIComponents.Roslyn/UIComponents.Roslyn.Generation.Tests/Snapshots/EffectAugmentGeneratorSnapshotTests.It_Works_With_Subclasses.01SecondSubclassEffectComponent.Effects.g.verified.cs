@@ -10,10 +10,10 @@ using UnityEngine.UIElements;
 
 public partial class SecondSubclassEffectComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     private static UIComponentEffectAttribute[] UIC_EffectAttributes;
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     private static void UIC_InitializeEffectAttributes()
     {
         UIC_EffectAttributes = new [] {
@@ -24,7 +24,7 @@ public partial class SecondSubclassEffectComponent
         Array.Sort(UIC_EffectAttributes);
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     protected override void UIC_ApplyEffects()
     {
         if (UIC_EffectAttributes == null)
