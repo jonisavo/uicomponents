@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - main
+      - next
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_dispatch: {}
 
 env:
-  PROJECT_UNITY_VERSION: 2020.3.40f1
+  PROJECT_UNITY_VERSION: 2020.3.41f1
 
 jobs:
   buildAndTestForLinux:
@@ -19,8 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         unityVersion:
-          - 2019.4.40f1
-          - 2020.3.40f1
+          - 2020.3.41f1
           - 2021.3.11f1
           - 2022.1.18f1
             
@@ -96,8 +96,7 @@ jobs:
       fail-fast: false
       matrix:
         unityVersion:
-          - 2019.4.40f1
-          - 2020.3.40f1
+          - 2020.3.41f1
           - 2021.3.11f1
           - 2022.1.18f1
 

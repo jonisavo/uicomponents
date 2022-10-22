@@ -14,13 +14,13 @@ namespace UIComponents
         /// <summary>
         /// The priority of the effect. Defaults to 0.
         /// </summary>
-        public int Priority { get; set; } = 0;
-        
+        public virtual int Priority { get; set; } = 0;
+
         public abstract void Apply(UIComponent component);
         
         public int CompareTo(UIComponentEffectAttribute other)
         {
-            return Priority.CompareTo(other.Priority);
+            return other.Priority.CompareTo(Priority);
         }
     }
 }

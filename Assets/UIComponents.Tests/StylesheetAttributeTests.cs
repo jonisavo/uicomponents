@@ -11,14 +11,14 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class StylesheetAttributeTests
+    public partial class StylesheetAttributeTests
     {
         [Stylesheet("Assets/StylesheetOne.uss")]
         [Stylesheet("Assets/StylesheetTwo.uss")]
-        private class UIComponentWithTwoStylesheets : UIComponent {}
+        private partial class UIComponentWithTwoStylesheets : UIComponent {}
         
         [Stylesheet("Assets/StylesheetThree.uss")]
-        private class InheritedComponent : UIComponentWithTwoStylesheets {}
+        private partial class InheritedComponent : UIComponentWithTwoStylesheets {}
 
         private TestBed _testBed;
         private IAssetResolver _mockResolver;

@@ -4,18 +4,22 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class ComponentWithDefaultValueTraits
 {
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlFactory : UxmlFactory<ComponentWithDefaultValueTraits, UxmlTraits> {}
 
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlStringAttributeDescription m_Description = new UxmlStringAttributeDescription { name = "description" };
         UxmlIntAttributeDescription m_Lives = new UxmlIntAttributeDescription { name = "lives" };
         UxmlEnumAttributeDescription<Some.Place.Where.Enum.Is.TheEnum> m_MyValue = new UxmlEnumAttributeDescription<Some.Place.Where.Enum.Is.TheEnum> { name = "custom-value" };
 
+        [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

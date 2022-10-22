@@ -10,17 +10,16 @@ namespace UIComponents.Roslyn.Generation.Tests.Utilities
 
             var source = $@"
 using UIComponents;
-using UIComponents.Experimental;
 
 public partial class {fieldTypeNameCap}ComponentWithUsing : UIComponent
 {{
-    [Trait]
+    [UxmlTrait]
     public {fieldTypeName} FieldTrait;
 
-    [Trait]
+    [UxmlTrait]
     public {fieldTypeName} PropertyTrait {{ get; set; }}
 
-    [Trait]
+    [UxmlTrait]
     public {fieldTypeName} PropertyWithoutSetter {{ get; }}
 }}";
             if (useUnityEngine)

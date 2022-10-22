@@ -4,12 +4,12 @@ using UnityEngine.UIElements;
 
 namespace UIComponents.Samples.Addressables
 {
-    [AssetPath("Assets/Samples/Addressables/Data")]
+    [AssetPrefix("Assets/Samples/Addressables/Data/")]
     [Layout("AddressablesExampleComponent.uxml")]
     [Stylesheet("AddressablesExampleComponent.uss")]
     [Stylesheet("Box.uss")]
     [Dependency(typeof(IAssetResolver), provide: typeof(AddressableAssetResolver))]
-    public class AddressablesExampleComponent : UIComponent
+    public partial class AddressablesExampleComponent : UIComponent
     {
         private readonly Label _loadingLabel;
         

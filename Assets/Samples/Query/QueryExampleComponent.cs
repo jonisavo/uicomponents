@@ -5,19 +5,19 @@ namespace UIComponents.Samples.Query
 {
     [Layout("QueryExampleComponent")]
     [Stylesheet("QueryExampleComponent.styles")]
-    public class QueryExampleComponent : UIComponent
+    public partial class QueryExampleComponent : UIComponent
     {
         [Query("my-label")]
-        private readonly Label MyLabel;
+        private Label MyLabel;
     
         [Query(Name = "my-foldout")]
-        private readonly Foldout MyFoldout;
+        private Foldout MyFoldout;
 
         [Query(Class = "description")]
-        private readonly Label[] DescriptionLabels;
+        private Label[] DescriptionLabels;
 
         [Query]
-        private readonly VisualElement[] Everything;
+        private VisualElement[] Everything;
 
         public override void OnInit()
         {

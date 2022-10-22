@@ -3,7 +3,7 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/jonisavo/uicomponents/main/logo.png" alt="Logo" width="200px" height="200px" />
     <br />
-    <i>A small front-end framework for Unity's UIToolkit.</i>
+    <i>A front-end framework for Unity's UIToolkit, powered by source generation.</i>
 </p>
 
 <p align="center">
@@ -29,31 +29,47 @@ working with Unity's new UIToolkit system. It offers ways to load UXML and USS
 files automatically, and decouple your UI code from other systems via
 dependency injection.
 
-See an example of usage below.
+UIComponents makes heavy use of code generation. It reduces boilerplate by generating vast amounts
+of code for you.
+
+## Requirements
+
+UIComponents requires Unity 2020.3 or newer. Unity's `com.unity.roslyn` package is used to enable
+source generation in Unity 2020.
 
 ## Example usage
 
 ```c#
+using UnityEngine.UIElements;
 using UIComponents;
 
-[Layout("MyComponent/MyComponent")]
-[Stylesheet("MyComponent/MyComponent.style")]
+[UxmlName("Counter")] // A UxmlFactory implementation is generated.
+[Layout("CounterComponent/CounterComponent")]
+[Stylesheet("CounterComponent/CounterComponent.style")]
 [Stylesheet("Common")]
 [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
-class MyComponent : UIComponent, IOnAttachToPanel
+public partial class CounterComponent : UIComponent, IOnAttachToPanel
 {
     // The layout and stylesheets are loaded in the inherited
     // constructor. They are retrieved from Resources by default,
     // hence the lack of file extensions.
     
+    // An UxmlTraits implementation is generated automatically for this class.
+    [UxmlTrait(DefaultValue = "Increment")]
+    public string IncrementText;
+    
     // Queries are made after all assets have loaded.
+    // The query calls are generated automatically for you.
     [Query("count-label")]
-    public readonly Label CountLabel;
+    public Label CountLabel;
+    
+    [Query("increment-button")]
+    public Button IncrementButton;
     
     // An instance of CounterService is injected into this field
     // in the inherited constructor.
     [Provide]
-    private readonly ICounterService _counterService;
+    private ICounterService _counterService;
     
     // The OnInit method is called after all assets have loaded.
     // Any operations related to the DOM and stylesheets should
@@ -61,8 +77,7 @@ class MyComponent : UIComponent, IOnAttachToPanel
     public override void OnInit()
     {
         CountLabel.text = _counterService.Count.ToString();
-        CountLabel.AddToClassList("new-class");
-        Add(new Label("Hello world"));
+        IncrementButton.text = IncrementText;
     }
     
     // Event handlers are registered after all assets have loaded.
@@ -75,82 +90,21 @@ class MyComponent : UIComponent, IOnAttachToPanel
 }
 ```
 
+Instantiation in code:
+
 ```c#
 var container = new VisualElement();
-container.Add(new MyComponent());
+container.Add(new CounterComponent() { IncrementText = "+1" });
 ```
 
-UIComponents are just VisualElements with some additional code in their
-constructor for loading assets automatically, among other things.
+Instantiation in UXML:
 
-## Source generation (experimental, Unity 2021.2+)
-
-UIComponents has a source generator for UxmlTraits and UxmlFactory.
-Simply apply the `UxmlName` attribute to your class and `Trait` attribute to your class fields and properties.
-Remember to make your class partial.
-
-```c#
-using UIComponents;
-using UIComponents.Experimental;
-
-[UxmlName("Test")]
-public partial class TestComponent : UIComponent
-{
-    [Trait]
-    public string Description;
-
-    [Trait(Name = "header-color")]
-    public Color Color;
-    
-    public enum Greeting
-    {
-        Hello,
-        Hi,
-        Morning
-    }
-
-    [Trait(DefaultValue = Greeting.Morning)]
-    public Greeting Greeting;
-}
-```
-This generates:
-```c#
-public partial class TestComponent
-{
-    public new class UxmlFactory : UxmlFactory<TestComponent, UxmlTraits>
-    {
-        public override string uxmlName
-        {
-            get { return "Test"; }
-        }
-
-        public override string uxmlQualifiedName
-        {
-            get { return uxmlNamespace + "." + uxmlName; }
-        }
-    }
-
-    public new class UxmlTraits : UIElements.UxmlTraits
-    {
-        UxmlStringAttributeDescription m_Description = new UxmlStringAttributeDescription { name = "description" };
-        UxmlColorAttributeDescription m_Color = new UxmlColorAttributeDescription { name = "header-color" };
-        UxmlEnumAttributeDescription<MyComponent.Greeting> m_Greeting = new UxmlEnumAttributeDescription<MyComponent.Greeting> { name = "greeting" };
-
-        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
-        {
-            base.Init(ve, bag, cc);
-            m_Greeting.defaultValue = (MyComponent.Greeting) 2;
-            ((MyComponent)ve).Description = m_Description.GetValueFromBag(bag, cc);
-            ((MyComponent)ve).Color = m_Color.GetValueFromBag(bag, cc);
-            ((MyComponent)ve).Greeting = m_Greeting.GetValueFromBag(bag, cc);
-        }
-    }
-}
+```xml
+<Counter increment-text="+1" />
 ```
 
-Source generation is available in Unity 2021.2+ only. For more information, see
-the [Experimental features](https://github.com/jonisavo/uicomponents/wiki/7.-Experimental-features)
-wiki page.
+UIComponents are VisualElements with protected virtual methods which are overridden
+via source generation. Those virtual methods are called in the inherited constructor.
 
 ## Testing
 
@@ -161,9 +115,10 @@ assembly contains the `TestBed` helper class.
 using UIComponents;
 using UIComponents.Testing;
 using NUnit.Framework;
+using UnityEngine.TestTools;
 
 [TestFixture]
-public class MyComponentTests
+public class CounterComponentTests
 {
     private TestBed _testBed;
     private ICounterService _counterService;
@@ -184,7 +139,7 @@ public class MyComponentTests
     {
         _counterService.Count = 42;
 
-        var component = _testBed.CreateComponent<MyComponent>();
+        var component = _testBed.CreateComponent<CounterComponent>();
         // Wait until the component has loaded.
         yield return component.WaitForInitializationEnumerator();
         Assert.That(component.CountLabel.text, Is.EqualTo("42"));
@@ -237,19 +192,26 @@ Download the latest `.unitypackage` from the [releases](https://github.com/jonis
 
 To update, remove the existing files and extract the new `.unitypackage`.
 
+NOTE: [com.unity.roslyn](https://docs.unity3d.com/Packages/com.unity.roslyn@0.2/manual/index.html) is
+required in Unity 2020. There are two `.unitypackage` archives. The archive with the `_with_roslyn` suffix
+has `com.unity.roslyn` included.
+
 ## Documentation
 
 Refer to the [wiki](https://github.com/jonisavo/uicomponents/wiki) for documentation.
 
-- [Layouts and stylesheets](https://github.com/jonisavo/uicomponents/wiki/2.-Layouts-and-stylesheets): see how UIComponents 
+- [UxmlFactory & UxmlTraits generation](https://github.com/jonisavo/uicomponents/wiki/2.-UxmlFactory-&-UxmlTraits-generation): see
+how you can use the `[UxmlName]` and `[UxmlTrait]` attributes to generate `UxmlFactory` and `UxmlTraits` implementations for
+your VisualElements.
+- [Layouts and stylesheets](https://github.com/jonisavo/uicomponents/wiki/3.-Layouts-and-stylesheets): see how UIComponents
 loads layouts and stylesheets automatically, and how you can use `[Query]` to query for elements.
-- [Asset loading](https://github.com/jonisavo/uicomponents/wiki/3.-Asset-loading): UIComponents loads assets from Resources
+- [Asset loading](https://github.com/jonisavo/uicomponents/wiki/4.-Asset-loading): UIComponents loads assets from Resources
 by default. See how you can use different methods.
-- [Dependency injection](https://github.com/jonisavo/uicomponents/wiki/4.-Dependency-injection): UIComponents comes
+- [Dependency injection](https://github.com/jonisavo/uicomponents/wiki/5.-Dependency-injection): UIComponents comes
 with a simple dependency injection system. See how you can use it to decouple your UI code from other logic.
-- [Event interfaces](https://github.com/jonisavo/uicomponents/wiki/5.-Event-interfaces): a list of interfaces
+- [Event interfaces](https://github.com/jonisavo/uicomponents/wiki/6.-Event-interfaces): a list of interfaces
 whose methods will be automatically registered as event callbacks.
-- [Logging](https://github.com/jonisavo/uicomponents/wiki/6.-Logging): for when you want to use something other
+- [Logging](https://github.com/jonisavo/uicomponents/wiki/7.-Logging): for when you want to use something other
 than `Debug.Log`.
-- [Experimental features](https://github.com/jonisavo/uicomponents/wiki/7.-Experimental-features): new features that
+- [Experimental features](https://github.com/jonisavo/uicomponents/wiki/8.-Experimental-features): new features that
 are subject to change.

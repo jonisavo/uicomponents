@@ -46,6 +46,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.roslyn": {
+      "version": "0.2.2-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.scriptablebuildpipeline": {
       "version": "1.19.2",
       "depth": 1,

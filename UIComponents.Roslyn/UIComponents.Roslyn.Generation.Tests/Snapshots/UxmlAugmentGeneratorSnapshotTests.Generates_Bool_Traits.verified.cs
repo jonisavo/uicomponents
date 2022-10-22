@@ -4,17 +4,21 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
 public partial class BoolComponentWithUsing
 {
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlFactory : UxmlFactory<BoolComponentWithUsing, UxmlTraits> {}
 
+    [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlBoolAttributeDescription m_FieldTrait = new UxmlBoolAttributeDescription { name = "fieldtrait" };
-        UxmlBoolAttributeDescription m_PropertyTrait = new UxmlBoolAttributeDescription { name = "propertytrait" };
+        UxmlBoolAttributeDescription m_FieldTrait = new UxmlBoolAttributeDescription { name = "field-trait" };
+        UxmlBoolAttributeDescription m_PropertyTrait = new UxmlBoolAttributeDescription { name = "property-trait" };
 
+        [GeneratedCode("UIComponents.Roslyn.Generation", "0.26.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

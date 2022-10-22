@@ -8,10 +8,10 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class QueryClassAttributeTests
+    public partial class QueryClassAttributeTests
     {
         [Layout("UIComponentTests/QueryClassAttributeTest")]
-        private class QueryClassTestComponent : UIComponent
+        private partial class QueryClassTestComponent : UIComponent
         {
             [Query(Class = "class1")]
             public VisualElement[] AllClassOneElementsArray;
@@ -27,7 +27,7 @@ namespace UIComponents.Tests
 
             [Query(Class = "class1")]
             public List<Label> ClassOneLabelList;
-
+            
             [Query(Class = "class1")]
             [Query(Class = "class2")]
             [Query(Class = "class3")]
@@ -98,14 +98,13 @@ namespace UIComponents.Tests
             AssertAllElementsAreOfType(_queryClassTestComponent.ClassOneLabelList);
         }
         
-        
         [Test]
         public void Populates_Array_With_All_Elements_With_Multiple_Classes()
         {
             Assert.That(_queryClassTestComponent.AllElements, Is.Not.Null);
             Assert.That(_queryClassTestComponent.AllElements.Length, Is.EqualTo(7));
         }
-        
+
         [Test]
         public void Populates_Typed_Array_With_Multiple_Classes()
         {
@@ -130,12 +129,12 @@ namespace UIComponents.Tests
         }
 
         [Layout("UIComponentTests/QueryClassAttributeTest")]
-        private class UIComponentWithNameAndClassQuery : UIComponent
+        private partial class UIComponentWithNameAndClassQuery : UIComponent
         {
             [Query("class1-first")]
             [Query(Class = "class2")]
             [Query(Class = "class3")]
-            public readonly Label[] Labels;
+            public Label[] Labels;
         }
         
         [UnityTest]

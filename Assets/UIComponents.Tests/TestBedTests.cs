@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class TestBedTests
+    public partial class TestBedTests
     {
         private TestBed _testBed;
         
@@ -122,7 +122,7 @@ namespace UIComponents.Tests
         }
         
         [Layout("Foo")]
-        private class ComponentWithLayout : Component {}
+        private partial class ComponentWithLayout : Component {}
 
         [Test]
         public void Allows_Setting_Timeout_For_Async_Operations()

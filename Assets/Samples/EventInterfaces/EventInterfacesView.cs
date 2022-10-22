@@ -4,7 +4,7 @@ namespace UIComponents.Samples.EventInterfaces
 {
     [Layout("EventInterfacesView")]
     [Dependency(typeof(IEventLogService), provide: typeof(EventLogService))]
-    public class EventInterfacesView : UIComponent,
+    public partial class EventInterfacesView : UIComponent,
         IOnAttachToPanel, IOnGeometryChanged, IOnDetachFromPanel,
         IOnMouseLeave, IOnMouseEnter
 #if UNITY_2020_3_OR_NEWER

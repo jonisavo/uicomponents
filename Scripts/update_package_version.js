@@ -34,18 +34,25 @@ const packageJsonString = JSON.stringify(packageJson, null, 4);
 
 fs.writeFileSync(packageJsonPath, packageJsonString);
 
-// Update README.md
+// Update other files
+
+function replaceVersionInFile(filePath) {
+    if (!fs.existsSync(filePath)) {
+        console.error(`${filePath} not found. Skipping.`);
+        return;
+    }
+    
+    const fileString = fs.readFileSync(filePath).toString();
+
+    const newFileString = fileString.replace(new RegExp(currentVersion, 'g'), args[0]);
+
+    fs.writeFileSync(filePath, newFileString);
+}
 
 const readmePath = path.resolve(__dirname, '..', 'README.md');
 
-if (!fs.existsSync(readmePath)) {
-    console.error('README.md not found. Skipping.');
-    process.exit(0);
+const pathsToReplace = [readmePath];
+
+for (const path of pathsToReplace) {
+    replaceVersionInFile(path);
 }
-
-const readmeContents = String(fs.readFileSync(readmePath));
-
-const modifiedReadmeContents = readmeContents
-    .replaceAll(currentVersion, args[0]);
-
-fs.writeFileSync(readmePath, modifiedReadmeContents);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using System.Diagnostics;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -11,24 +12,31 @@ namespace UIComponents
     /// Queries are made in the UIComponent constructor.
     /// </summary>
     /// <example>
+    /// <code>
     /// [Layout("MyLayout")]
-    /// public class ComponentWithQueries : UIComponent
+    /// public partial class ComponentWithQueries : UIComponent
     /// {
     ///     [Query(Name = "hello-world-label")]
-    ///     private readonly Label HelloWorldLabel;
+    ///     private Label HelloWorldLabel;
     ///
     ///     [Query(Class = "red")]
-    ///     private readonly Label[] RedLabels;
+    ///     private Label[] RedLabels;
     ///
     ///     [Query]
-    ///     private readonly Label FirstLabel;
+    ///     private Label FirstLabel;
     ///     
     ///     [Query]
-    ///     public readonly Label[] AllLabels;
+    ///     public Label[] AllLabels;
+    ///     
+    ///     [Query(Name = "first-name")]
+    ///     [Query(Name = "second-name")]
+    ///     public List&lt;VisualElement&gt; MultipleQueries;
     /// }
+    /// </code>
     /// </example>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-    [MeansImplicitUse]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = false)]
+    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
+    [ExcludeFromCoverage]
     public sealed class QueryAttribute : Attribute
     {
         /// <summary>
@@ -47,10 +55,5 @@ namespace UIComponents
         }
         
         public QueryAttribute() {}
-
-        public void Query(VisualElement root, List<VisualElement> results)
-        {
-            root.Query(Name, Class).ToList(results);
-        }
     }
 }

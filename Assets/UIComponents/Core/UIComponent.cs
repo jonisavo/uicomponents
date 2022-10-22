@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using UIComponents.Cache;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
@@ -26,23 +25,6 @@ namespace UIComponents
     [Dependency(typeof(IUIComponentLogger), provide: typeof(UIComponentDebugLogger))]
     public abstract class UIComponent : VisualElement
     {
-        private static readonly Dictionary<Type, UIComponentCache> CacheDictionary =
-            new Dictionary<Type, UIComponentCache>();
-
-        /// <summary>
-        /// Clears the cache of the UIComponent. Used primarily for testing.
-        /// </summary>
-        /// <typeparam name="TComponent">Component type</typeparam>
-        public static void ClearCache<TComponent>() where TComponent : UIComponent
-        {
-            CacheDictionary.Remove(typeof(TComponent));
-        }
-
-        internal static bool TryGetCache<TComponent>(out UIComponentCache cache) where TComponent : UIComponent
-        {
-            return CacheDictionary.TryGetValue(typeof(TComponent), out cache);
-        }
-
         /// <summary>
         /// The IAssetResolver used by this UIComponent.
         /// Defaults to <see cref="ResourcesAssetResolver"/>.
@@ -74,8 +56,6 @@ namespace UIComponents
 
         private static readonly ProfilerMarker DependencySetupProfilerMarker =
             new ProfilerMarker("UIComponent.DependencySetup");
-        private static readonly ProfilerMarker CacheSetupProfilerMarker =
-            new ProfilerMarker("UIComponent.CacheSetup");
         private static readonly ProfilerMarker PostHierarchySetupProfilerMarker =
             new ProfilerMarker("UIComponent.PostHierarchySetup");
 
@@ -84,20 +64,14 @@ namespace UIComponents
         /// </summary>
         protected UIComponent()
         {
-            CacheSetupProfilerMarker.Begin();
-
             _componentType = GetType();
-            if (!CacheDictionary.ContainsKey(_componentType))
-                CacheDictionary.Add(_componentType, new UIComponentCache(_componentType));
-
-            CacheSetupProfilerMarker.End();
 
             DependencySetupProfilerMarker.Begin();
 
             _dependencyInjector = DiContext.Current.GetInjector(_componentType);
             AssetResolver = Provide<IAssetResolver>();
             Logger = Provide<IUIComponentLogger>();
-            PopulateProvideFields();
+            UIC_PopulateProvideFields();
 
             DependencySetupProfilerMarker.End();
 
@@ -131,8 +105,8 @@ namespace UIComponents
 
             PostHierarchySetupProfilerMarker.Begin();
 
-            ApplyEffects();
-            PopulateQueryFields();
+            UIC_ApplyEffects();
+            UIC_PopulateQueryFields();
             RegisterEventInterfaceCallbacks();
 
             PostHierarchySetupProfilerMarker.End();
@@ -159,11 +133,10 @@ namespace UIComponents
 
             if (this is IOnMouseLeave onMouseLeave)
                 RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
-
-#if UNITY_2020_3_OR_NEWER
+            
             if (this is IOnClick onClick)
                 RegisterCallback<ClickEvent>(onClick.OnClick);
-#endif
+            
 #if UNITY_2021_3_OR_NEWER
             if (this is IOnNavigationMove onNavigationMove)
                 RegisterCallback<NavigationMoveEvent>(onNavigationMove.OnNavigationMove);
@@ -207,20 +180,6 @@ namespace UIComponents
         }
 
         /// <summary>
-        /// Returns an IEnumerable of all of the asset paths configured
-        /// for the component.
-        /// </summary>
-        /// <returns>Asset paths of the component</returns>
-        public IEnumerable<string> GetAssetPaths()
-        {
-            var assetPathAttributes = CacheDictionary[_componentType].AssetPathAttributes;
-            var assetPathCount = assetPathAttributes.Count;
-
-            for (var i = 0; i < assetPathCount; i++)
-                yield return assetPathAttributes[i].Path;
-        }
-
-        /// <summary>
         /// Returns the component's type's name.
         /// </summary>
         /// <returns>Type name</returns>
@@ -254,20 +213,18 @@ namespace UIComponents
         {
             return _dependencyInjector.TryProvide(out instance);
         }
-
-        private async Task<VisualTreeAsset> GetLayout()
+        
+        protected virtual Task<VisualTreeAsset> UIC_StartLayoutLoad()
         {
-            var layoutAttribute = CacheDictionary[_componentType].LayoutAttribute;
-
-            if (layoutAttribute == null)
-                return null;
-
-            var assetPath = await layoutAttribute.GetAssetPathForComponent(this);
-
-            return await AssetResolver.LoadAsset<VisualTreeAsset>(assetPath);
+            return Task.FromResult<VisualTreeAsset>(null);
         }
         
-        private readonly struct StyleSheetLoadTuple
+        private Task<VisualTreeAsset> GetLayout()
+        {
+            return UIC_StartLayoutLoad();
+        }
+        
+        protected readonly struct StyleSheetLoadTuple
         {
             public readonly string Path;
             public readonly StyleSheet StyleSheet;
@@ -279,28 +236,19 @@ namespace UIComponents
             }
         }
 
-        private async Task<StyleSheetLoadTuple> GetSingleStyleSheet(StylesheetAttribute stylesheetAttribute)
+        protected virtual Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
         {
-            var assetPath = await stylesheetAttribute.GetAssetPathForComponent(this);
-            var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
-            
-            return new StyleSheetLoadTuple(assetPath, styleSheet);
+            return Array.Empty<Task<StyleSheetLoadTuple>>();
         }
 
         private async Task<List<StyleSheet>> GetStyleSheets()
         {
-            var stylesheetAttributes =
-                CacheDictionary[_componentType].StylesheetAttributes;
-            var stylesheetAttributeCount = stylesheetAttributes.Count;
             var styleSheetLoadTasks =
-                new Task<StyleSheetLoadTuple>[stylesheetAttributeCount];
-
-            for (var i = 0; i < stylesheetAttributeCount; i++)
-                styleSheetLoadTasks[i] = GetSingleStyleSheet(stylesheetAttributes[i]);
+                UIC_StartStyleSheetLoad();
 
             await Task.WhenAll(styleSheetLoadTasks);
 
-            var loadedStyleSheets = new List<StyleSheet>(stylesheetAttributeCount);
+            var loadedStyleSheets = new List<StyleSheet>(styleSheetLoadTasks.Length);
 
             foreach (var loadTask in styleSheetLoadTasks)
             {
@@ -318,92 +266,10 @@ namespace UIComponents
             return loadedStyleSheets;
         }
 
-        private void ApplyEffects()
-        {
-            var effectAttributes = CacheDictionary[_componentType].EffectAttributes;
-            var effectAttributeCount = effectAttributes.Count;
+        protected virtual void UIC_ApplyEffects() {}
 
-            for (var i = 0; i < effectAttributeCount; i++)
-                effectAttributes[i].Apply(this);
-        }
+        protected virtual void UIC_PopulateQueryFields() {}
 
-        private void PopulateQueryFields()
-        {
-            var fieldCache = CacheDictionary[_componentType].FieldCache;
-            var queryAttributeDictionary = fieldCache.QueryAttributes;
-
-            foreach (var queryAttributeKeyPair in queryAttributeDictionary)
-            {
-                var fieldInfo = queryAttributeKeyPair.Key;
-                var queryAttributes = queryAttributeKeyPair.Value;
-
-                var fieldType = fieldInfo.FieldType;
-                var concreteType = TypeUtils.GetConcreteType(fieldType);
-
-                var results = new List<VisualElement>();
-
-                for (var i = 0; i < queryAttributes.Length; i++)
-                {
-#if !UNITY_2020_3_OR_NEWER
-                    if (queryAttributes[i].Name == null && queryAttributes[i].Class == null)
-                    {
-                        Unity2019CompatibilityUtils.QueryByDesiredType(queryAttributes[i], this, concreteType, results);
-                        continue;
-                    }
-#endif
-                    queryAttributes[i].Query(this, results);
-                }
-
-                results.RemoveAll(result => !concreteType.IsInstanceOfType(result));
-
-                object value = null;
-
-                if (fieldType.IsArray)
-                    value = CollectionUtils.CreateArrayOfType(concreteType, results);
-                else if (CollectionUtils.TypeQualifiesAsList(fieldType))
-                    value = CollectionUtils.CreateListOfType(concreteType, results);
-                else if (results.Count > 0)
-                    value = results[0];
-
-                if (value != null)
-                    fieldInfo.SetValue(this, value);
-            }
-        }
-
-        private void PopulateProvideFields()
-        {
-            var fieldCache = CacheDictionary[_componentType].FieldCache;
-            var provideAttributeDictionary = fieldCache.ProvideAttributes;
-
-            foreach (var fieldInfo in provideAttributeDictionary.Keys)
-            {
-                var fieldType = fieldInfo.FieldType;
-
-                if (provideAttributeDictionary[fieldInfo].CastFrom != null)
-                    fieldType = provideAttributeDictionary[fieldInfo].CastFrom;
-
-                object value;
-
-                try
-                {
-                    value = _dependencyInjector.Provide(fieldType);
-
-                    if (provideAttributeDictionary[fieldInfo].CastFrom != null)
-                        value = Convert.ChangeType(value, fieldInfo.FieldType);
-                }
-                catch (MissingProviderException)
-                {
-                    Logger.LogError($"Could not provide {fieldInfo.FieldType.Name} to {fieldInfo.Name}", this);
-                    continue;
-                }
-                catch (InvalidCastException)
-                {
-                    Logger.LogError($"Could not cast {fieldType.Name} to {fieldInfo.FieldType.Name}", this);
-                    continue;
-                }
-
-                fieldInfo.SetValue(this, value);
-            }
-        }
+        protected virtual void UIC_PopulateProvideFields() {}
     }
 }
