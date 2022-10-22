@@ -7,9 +7,8 @@ using UnityEngine.UIElements;
 namespace UIComponents
 {
     /// <summary>
-    /// When used in Unity 2021.2 or later, this attribute will generate
-    /// a UxmlFactory implementation automatically when
-    /// applied to a partial class.
+    /// When applied to a partial class, this attribute will generate
+    /// a UxmlFactory implementation automatically.
     /// </summary>
     /// <example>
     /// <code>
