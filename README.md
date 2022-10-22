@@ -97,7 +97,7 @@ container.Add(new CounterComponent());
 Instantiation in UXML:
 
 ```xml
-<ui:CounterComponent increment-text="+1" />
+<Counter increment-text="+1" />
 ```
 
 UIComponents are just VisualElements with some additional code in their
@@ -189,8 +189,9 @@ Download the latest `.unitypackage` from the [releases](https://github.com/jonis
 
 To update, remove the existing files and extract the new `.unitypackage`.
 
-NOTE: [com.unity.roslyn](https://docs.unity3d.com/Packages/com.unity.roslyn@0.2/manual/index.html), which is
-required in Unity 2020, is not included in the `.unitypackage`. You can get the source from [this mirror](https://github.com/needle-mirror/com.unity.roslyn).
+NOTE: [com.unity.roslyn](https://docs.unity3d.com/Packages/com.unity.roslyn@0.2/manual/index.html) is
+required in Unity 2020. There are two `.unitypackage` archives. The archive with the `_with_roslyn` suffix
+has `com.unity.roslyn` included.
 
 ## Documentation
 
