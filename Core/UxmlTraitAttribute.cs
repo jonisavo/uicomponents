@@ -5,9 +5,8 @@ using UnityEngine.TestTools;
 namespace UIComponents
 {
     /// <summary>
-    /// When used in Unity 2021.2 or later, this attribute will generate
-    /// an UxmlTraits implementation when applied to a field or property
-    /// which has a set method. The class must be partial.
+    /// When applied to a field or property or a class, generates
+    /// a UxmlTraits implementation. The class must be partial.
     /// </summary>
     /// <example>
     /// <code>
