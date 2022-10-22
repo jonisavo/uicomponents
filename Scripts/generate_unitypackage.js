@@ -35,14 +35,14 @@ fs.mkdirSync(path.join(distFolder, 'Assets', 'Plugins'));
 fs.mkdirSync(outputFolder); 
 
 fs.cpSync(uiComponentsFolder, outputFolder, { recursive: true });
-fs.cpSync(samplesFolder, path.join(outputFolder, 'Samples~'), { recursive: true });
+fs.cpSync(samplesFolder, path.join(outputFolder, 'Samples'), { recursive: true });
 
-const samplesFiles = fs.readdirSync(path.join(outputFolder, 'Samples~'));
+const samplesFiles = fs.readdirSync(path.join(outputFolder, 'Samples'));
 
 for (const file of samplesFiles)
 {
     if (file.endsWith('.meta')) {
-        fs.rmSync(path.join(outputFolder, 'Samples~', file));
+        fs.rmSync(path.join(outputFolder, 'Samples', file));
     }
 }
 
