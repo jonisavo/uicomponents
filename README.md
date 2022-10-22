@@ -91,7 +91,7 @@ Instantiation in code:
 
 ```c#
 var container = new VisualElement();
-container.Add(new CounterComponent());
+container.Add(new CounterComponent() { IncrementText = "+1" });
 ```
 
 Instantiation in UXML:
