@@ -1,11 +1,14 @@
 //
 // generate_unitypackage.js
 //
-// This script creates a .unitypackage in the dist folder.
+// This script creates .unitypackage files in the dist folder.
+// The first file includes UIComponents only and the second
+// has com.unity.roslyn included.
 //
 
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const execSync = require('child_process').execSync;
 
 const args = process.argv.slice(2);
@@ -21,7 +24,17 @@ const rootFolder = path.resolve(__dirname, '..');
 const samplesFolder = path.resolve(rootFolder, 'Assets', 'Samples');
 const uiComponentsFolder = path.resolve(rootFolder, 'Assets', 'UIComponents');
 const distFolder = path.resolve(rootFolder, 'dist');
-const outputFolder = path.resolve(distFolder, 'Assets', 'Plugins', 'UIComponents');
+const outputPluginsFolder = path.resolve(distFolder, 'Plugins');
+const outputFolder = path.resolve(outputPluginsFolder, 'UIComponents');
+const roslynPackageFolder = path.resolve(
+    rootFolder, 'Library', 'PackageCache',
+    'com.unity.roslyn@0.2.2-preview'
+);
+
+const dsStoreFile = path.join(rootFolder, '.DS_Store');
+if (fs.existsSync(dsStoreFile)) {
+    fs.rmSync(dsStoreFile);
+}
 
 try {
     fs.rmSync(distFolder, { recursive: true });
@@ -30,8 +43,7 @@ try {
 }
 
 fs.mkdirSync(distFolder);
-fs.mkdirSync(path.join(distFolder, 'Assets'));
-fs.mkdirSync(path.join(distFolder, 'Assets', 'Plugins'));
+fs.mkdirSync(outputPluginsFolder);
 fs.mkdirSync(outputFolder); 
 
 fs.cpSync(uiComponentsFolder, outputFolder, { recursive: true });
@@ -56,10 +68,31 @@ for (const file of files) {
 
 const unityPackerPath = path.join(rootFolder, 'Scripts', 'UnityPacker.exe');
 
-const command = `${unityPackerPath} . ${'UIComponents_' + version}`;
+function createUnityPackerCommand(packageName) {
+    let cmd = `${unityPackerPath} . ${packageName} Assets/ unitypackage`;
 
-console.log(`Executing command: ${command} in ${distFolder}`);
+    if (os.platform() !== 'win32') {
+        cmd = 'mono ' + cmd;
+    }
+    
+    return cmd;
+}
 
-const output = execSync(command, { cwd: distFolder });
+const command = createUnityPackerCommand('UIComponents_' + version);
 
-console.log(output.toString());
+function executeCommand(command) {
+    console.log(`Executing command: ${command} in ${distFolder}`);
+
+    const output = execSync(command, { cwd: distFolder });
+
+    console.log(output.toString()); 
+}
+
+executeCommand(command);
+
+fs.mkdirSync(path.join(outputPluginsFolder, 'com.unity.roslyn'));
+fs.cpSync(roslynPackageFolder, path.join(outputPluginsFolder, 'com.unity.roslyn'), { recursive: true });
+
+const secondCommand = createUnityPackerCommand('UIComponents_' + version + '_with_roslyn');;
+
+executeCommand(secondCommand);
