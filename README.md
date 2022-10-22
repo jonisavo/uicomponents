@@ -112,9 +112,10 @@ assembly contains the `TestBed` helper class.
 using UIComponents;
 using UIComponents.Testing;
 using NUnit.Framework;
+using UnityEngine.TestTools;
 
 [TestFixture]
-public class MyComponentTests
+public class CounterComponentTests
 {
     private TestBed _testBed;
     private ICounterService _counterService;
@@ -135,7 +136,7 @@ public class MyComponentTests
     {
         _counterService.Count = 42;
 
-        var component = _testBed.CreateComponent<MyComponent>();
+        var component = _testBed.CreateComponent<CounterComponent>();
         // Wait until the component has loaded.
         yield return component.WaitForInitializationEnumerator();
         Assert.That(component.CountLabel.text, Is.EqualTo("42"));
