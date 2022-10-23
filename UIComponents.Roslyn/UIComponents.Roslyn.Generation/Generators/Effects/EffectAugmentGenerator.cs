@@ -47,6 +47,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
         protected override void BuildUsingStatements(StringBuilder stringBuilder)
         {
             stringBuilder.AppendLine("using System;");
+            stringBuilder.AppendLine("using UIComponents;");
             base.BuildUsingStatements(stringBuilder);
         }
 
