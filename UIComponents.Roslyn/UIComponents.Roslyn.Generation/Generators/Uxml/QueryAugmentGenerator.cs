@@ -80,8 +80,9 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var memberSymbol = queryDescription.MemberSymbol;
             var memberType = RoslynUtilities.GetMemberType(memberSymbol);
 
+            var namespaceString = memberSymbol.ContainingNamespace.ToDisplayString();
             var concreteMemberType = RoslynUtilities.GetConcreteType(memberType);
-            var concreteMemberTypeName = concreteMemberType.ToDisplayString();
+            var concreteMemberTypeName = RoslynUtilities.GetTypeNameWithoutRootNamespace(concreteMemberType, namespaceString);
 
             const string Padding = "        ";
 

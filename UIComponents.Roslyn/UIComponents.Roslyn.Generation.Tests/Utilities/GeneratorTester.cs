@@ -7,9 +7,12 @@ namespace UIComponents.Roslyn.Generation.Tests.Utilities
 {
     internal class GeneratorTester
     {
-        public static Task Verify<TGenerator>(string source) where TGenerator : ISourceGenerator, new()
+        public static Task Verify<TGenerator>(params string[] sources) where TGenerator : ISourceGenerator, new()
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            var syntaxTrees = new SyntaxTree[sources.Length];
+
+            for (var i = 0; i < sources.Length; i++)
+                syntaxTrees[i] = CSharpSyntaxTree.ParseText(sources[i]);
 
             var references = new[]
             {
@@ -21,7 +24,7 @@ namespace UIComponents.Roslyn.Generation.Tests.Utilities
 
             var compilation = CSharpCompilation.Create(
                 assemblyName: "Tests",
-                syntaxTrees: new[] { syntaxTree },
+                syntaxTrees: syntaxTrees,
                 references: references
             );
 

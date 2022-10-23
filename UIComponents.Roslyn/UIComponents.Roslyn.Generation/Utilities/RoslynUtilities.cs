@@ -9,15 +9,8 @@ namespace UIComponents.Roslyn.Generation.Utilities
         // https://andrewlock.net/creating-a-source-generator-part-5-finding-a-type-declarations-namespace-and-type-hierarchy/
         public static string GetTypeNamespace(SyntaxNode syntaxNode)
         {
-            if (syntaxNode == null)
-                return string.Empty;
-
             var currentNamespace = string.Empty;
-
-            var potentialNamespaceParent = syntaxNode.Parent;
-
-            while (potentialNamespaceParent != null && !(potentialNamespaceParent is NamespaceDeclarationSyntax))
-                potentialNamespaceParent = potentialNamespaceParent.Parent;
+            var potentialNamespaceParent = GetNamespaceDeclaration(syntaxNode);
 
             if (potentialNamespaceParent is NamespaceDeclarationSyntax namespaceParent)
             {
@@ -35,6 +28,38 @@ namespace UIComponents.Roslyn.Generation.Utilities
 
             return currentNamespace;
         }
+
+        public static NamespaceDeclarationSyntax GetNamespaceDeclaration(SyntaxNode syntaxNode)
+        {
+            if (syntaxNode == null)
+                return null;
+
+            var potentialNamespaceParent = syntaxNode.Parent;
+
+            while (potentialNamespaceParent != null && !(potentialNamespaceParent is NamespaceDeclarationSyntax))
+                potentialNamespaceParent = potentialNamespaceParent.Parent;
+
+            return potentialNamespaceParent as NamespaceDeclarationSyntax;
+        }
+
+        public static string GetTypeNameWithoutRootNamespace(ITypeSymbol type, string nameSpace)
+        {
+            var displayString = type.ToDisplayString();
+
+            var namespaceParts = nameSpace.Split('.');
+
+            if (namespaceParts.Length < 2)
+                return displayString;
+
+            var rootNamespace = namespaceParts[0];
+
+            if (!displayString.StartsWith(rootNamespace))
+                return displayString;
+
+            var firstDotIndex = displayString.IndexOf('.') + 1;
+
+            return displayString.Substring(firstDotIndex);
+        } 
 
         public static BaseTypeDeclarationSyntax GetBaseTypeSyntax(SyntaxNode syntaxNode)
         {

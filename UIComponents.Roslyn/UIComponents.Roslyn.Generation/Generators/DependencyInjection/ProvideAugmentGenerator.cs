@@ -116,11 +116,13 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 
             foreach (var provideDescription in _provideDescriptions)
             {
+                var typeName =
+                    RoslynUtilities.GetTypeNameWithoutRootNamespace(provideDescription.Field.Type, context.CurrentTypeNamespace);
                 stringBuilder
                     .Append("        UIC_SetProvideField<")
-                    .Append(provideDescription.Field.Type.ToDisplayString())
+                    .Append(typeName)
                     .Append(", ")
-                    .Append(provideDescription.GetCastFromTypeName())
+                    .Append(provideDescription.GetCastFromTypeName(context.CurrentTypeNamespace))
                     .Append(">(ref ")
                     .Append(provideDescription.Field.Name)
                     .Append(", ")

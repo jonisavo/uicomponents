@@ -123,6 +123,31 @@ namespace Components
         }
 
         [Fact]
+        public Task It_Handles_Common_Namespaces()
+        {
+            var firstSource = @"
+namespace MyLibrary.Core.Services
+{
+    public interface IService {}
+}
+";
+            var secondSource = @"
+using UIComponents;
+using MyLibrary.Core.Services;
+
+namespace MyLibrary.GUI
+{
+    public class GuiComponent
+    {
+        [Provide]
+        public IService service;
+    }
+}
+";
+            return GeneratorTester.Verify<ProvideAugmentGenerator>(firstSource, secondSource);
+        }
+
+        [Fact]
         public Task It_Does_Not_Generate_For_Non_Interface_Or_Class_Fields()
         {
             var source = @"

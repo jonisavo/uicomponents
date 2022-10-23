@@ -218,6 +218,33 @@ public partial class MultipleQueryComponent : UIComponent
         }
 
         [Fact]
+        public Task It_Handles_Common_Namespaces()
+        {
+            var firstSource = @"
+using UnityEngine.UIElements;
+
+namespace MyLibrary.Core.Elements;
+{
+    public class MyElement : VisualElement {}
+}
+";
+            var secondSource = @"
+using UIComponents;
+using MyLibrary.Core.Elements;
+
+namespace MyLibrary.GUI
+{
+    public class MyComponent : UIComponent
+    {
+        [Query]
+        public MyElement element;
+    }
+}
+";
+            return GeneratorTester.Verify<QueryAugmentGenerator>(firstSource, secondSource);
+        }
+
+        [Fact]
         public Task Does_Not_Generate_If_No_Queries_Exist()
         {
             var source = @"
