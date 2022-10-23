@@ -22,12 +22,12 @@ namespace UIComponents.Tests
 
         private TestBed _testBed;
         private IAssetResolver _mockResolver;
-        private IUIComponentLogger _mockLogger;
+        private ILogger _mockLogger;
 
         [SetUp]
         public void SetUp()
         {
-            _mockLogger = Substitute.For<IUIComponentLogger>();
+            _mockLogger = Substitute.For<ILogger>();
             _mockResolver = MockUtilities.CreateMockResolver();
             _mockResolver.LoadAsset<StyleSheet>("Assets/StylesheetOne.uss")
                 .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));

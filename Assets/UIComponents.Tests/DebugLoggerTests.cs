@@ -5,19 +5,19 @@ using UnityEngine.TestTools;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class UIComponentDebugLoggerTests
+    public class DebugLoggerTests
     {
         private class TestComponent : UIComponent {}
 
         private TestComponent _testComponent;
 
-        private UIComponentDebugLogger _logger;
+        private DebugLogger _logger;
         
         [SetUp]
         public void SetUp()
         {
             _testComponent = new TestComponent();
-            _logger = new UIComponentDebugLogger();
+            _logger = new DebugLogger();
         }
         
         [Test]

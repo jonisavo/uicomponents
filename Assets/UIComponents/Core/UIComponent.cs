@@ -20,9 +20,9 @@ namespace UIComponents
     /// <seealso cref="StylesheetAttribute"/>
     /// <seealso cref="DependencyAttribute"/>
     /// <seealso cref="ResourcesAssetResolver"/>
-    /// <seealso cref="UIComponentDebugLogger"/>
+    /// <seealso cref="DebugLogger"/>
     [Dependency(typeof(IAssetResolver), provide: typeof(ResourcesAssetResolver))]
-    [Dependency(typeof(IUIComponentLogger), provide: typeof(UIComponentDebugLogger))]
+    [Dependency(typeof(ILogger), provide: typeof(DebugLogger))]
     public abstract class UIComponent : VisualElement
     {
         /// <summary>
@@ -42,10 +42,10 @@ namespace UIComponents
         public Task<UIComponent> InitializationTask => _initCompletionSource.Task;
 
         /// <summary>
-        /// The IUIComponentLogger used by this UIComponent.
-        /// Defaults to <see cref="UIComponentDebugLogger"/>.
+        /// The logger used by this UIComponent.
+        /// Defaults to <see cref="DebugLogger"/>.
         /// </summary>
-        protected readonly IUIComponentLogger Logger;
+        protected readonly ILogger Logger;
 
         private readonly DependencyInjector _dependencyInjector;
 
@@ -70,7 +70,7 @@ namespace UIComponents
 
             _dependencyInjector = DiContext.Current.GetInjector(_componentType);
             AssetResolver = Provide<IAssetResolver>();
-            Logger = Provide<IUIComponentLogger>();
+            Logger = Provide<ILogger>();
             UIC_PopulateProvideFields();
 
             DependencySetupProfilerMarker.End();
@@ -177,15 +177,6 @@ namespace UIComponents
         public IEnumerator WaitForInitializationEnumerator()
         {
             yield return _initCompletionSource.Task.AsEnumerator();
-        }
-
-        /// <summary>
-        /// Returns the component's type's name.
-        /// </summary>
-        /// <returns>Type name</returns>
-        public string GetTypeName()
-        {
-            return _componentType.Name;
         }
 
         /// <summary>

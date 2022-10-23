@@ -182,18 +182,5 @@ namespace UIComponents.Tests
                 Assert.That(component.Initialized, Is.True);
             }
         }
-        
-        [TestFixture]
-        public partial class GetTypeName
-        {
-            private partial class TestComponent : UIComponent {}
-
-            [Test]
-            public void ShouldReturnTypeName()
-            {
-                var component = new TestComponent();
-                Assert.That(nameof(TestComponent), Is.EqualTo(component.GetTypeName()));
-            }
-        }
     }
 }

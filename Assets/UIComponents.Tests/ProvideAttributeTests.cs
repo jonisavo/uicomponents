@@ -40,12 +40,12 @@ namespace UIComponents.Tests
         }
 
         private TestBed _testBed;
-        private IUIComponentLogger _mockLogger;
+        private ILogger _mockLogger;
 
         [SetUp]
         public void SetUp()
         {
-            _mockLogger = Substitute.For<IUIComponentLogger>();
+            _mockLogger = Substitute.For<ILogger>();
             _testBed = TestBed.Create()
                 .WithSingleton(_mockLogger)
                 .Build();
