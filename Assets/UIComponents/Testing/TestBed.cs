@@ -99,7 +99,7 @@ namespace UIComponents.Testing
             var task = await Task.WhenAny(initTask, timeoutTask);
 
             if (task == timeoutTask)
-                throw new TestBedTimeoutException(component.GetTypeName(), (int) AsyncTimeout.TotalMilliseconds);
+                throw new TestBedTimeoutException(component.GetType().Name, (int) AsyncTimeout.TotalMilliseconds);
             
             var initializedComponent = await initTask;
 
