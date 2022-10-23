@@ -11,7 +11,6 @@ namespace UIComponents.Roslyn.Generation.Tests
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [Layout(""Components/LayoutTestComponent"")]
 public partial class LayoutTestComponent : UIComponent {}
@@ -23,10 +22,22 @@ public partial class LayoutTestComponent : UIComponent {}
         public Task It_Does_Not_Generate_A_Call_For_Non_UIComponent_Class()
         {
             var source = @"
-using UIComponents.Experimental;
+using UIComponents;
 
 [Layout(""Components/LayoutTestComponent"")]
 public partial class LayoutTestComponent {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Does_Not_Generate_For_Abstract_Class()
+        {
+            var source = @"
+using UIComponents;
+
+[Layout(""Components/LayoutTestComponent"")]
+public partial abstract class AbstractLayoutComponent : UIComponent {}
 ";
             return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
         }
@@ -36,7 +47,6 @@ public partial class LayoutTestComponent {}
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [AssetPrefix(""UI/"")]
 [Layout(""Components/LayoutTestComponent"")]
@@ -50,7 +60,6 @@ public partial class LayoutTestComponent : UIComponent {}
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [Layout(""Components/BaseLayoutComponent"")]
 public partial class BaseLayoutComponent : UIComponent {}
@@ -67,7 +76,6 @@ public partial class ThirdLayoutComponent : SuperclassLayoutComponent {}
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [Layout(""Components/BaseLayoutComponent"")]
 public partial class BaseLayoutComponent : UIComponent {}
@@ -83,7 +91,6 @@ public partial class OverriddenLayoutComponent : BaseLayoutComponent {}
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 public partial class ParentClass
 {
@@ -101,7 +108,6 @@ public partial class ParentClass
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [Layout(""Components/LayoutTestComponent"")]
 public partial class LayoutTestComponent : UIComponent {}

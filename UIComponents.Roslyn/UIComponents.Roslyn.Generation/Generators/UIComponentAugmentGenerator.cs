@@ -54,6 +54,9 @@ namespace UIComponents.Roslyn.Generation.Generators
             if (UIComponentSymbol == null || AssetPrefixAttributeSymbol == null)
                 return false;
 
+            if (context.CurrentTypeSymbol.IsAbstract)
+                return false;
+
             CurrentAssetPrefix = GetPathAttributeValue(AssetPrefixAttributeSymbol, context);
 
             return RoslynUtilities.HasBaseType(context.CurrentTypeSymbol, UIComponentSymbol);

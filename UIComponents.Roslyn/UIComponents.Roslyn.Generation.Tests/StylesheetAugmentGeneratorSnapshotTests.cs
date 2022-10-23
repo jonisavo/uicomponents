@@ -11,7 +11,6 @@ namespace UIComponents.Roslyn.Generation.Tests
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [Stylesheet(""Components/StylesheetTestComponentStyle"")]
 public partial class StylesheetTestComponent : UIComponent {}
@@ -23,7 +22,7 @@ public partial class StylesheetTestComponent : UIComponent {}
         public Task It_Does_Not_Generate_A_Call_For_Non_UIComponent_Class()
         {
             var source = @"
-using UIComponents.Experimental;
+using UIComponents;
 
 [Stylesheet(""Components/StylesheetTestComponentStyle"")]
 public partial class StylesheetTestComponent {}
@@ -36,7 +35,6 @@ public partial class StylesheetTestComponent {}
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [AssetPrefix(""UI/"")]
 [Stylesheet(""Components/StylesheetTestComponentStyle"")]
@@ -50,7 +48,6 @@ public partial class StylesheetTestComponent : UIComponent {}
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [Stylesheet(""Components/BaseStylesheet"")]
 public abstract partial class BaseStylesheetComponent : UIComponent {}
@@ -70,7 +67,6 @@ public partial class ThirdStylesheetComponent : ConcreteStylesheetComponent {}
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 public partial class ParentClass
 {
@@ -88,7 +84,6 @@ public partial class ParentClass
         {
             var source = @"
 using UIComponents;
-using UIComponents.Experimental;
 
 [Stylesheet(""Components/StylesheetTestComponentStyle"")]
 public partial class StylesheetTestComponent : UIComponent {}
