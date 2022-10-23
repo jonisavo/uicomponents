@@ -1,5 +1,50 @@
 
 
+# [1.0.0-alpha.1](https://github.com/jonisavo/uicomponents/compare/v0.26.0...v1.0.0-alpha.1) (2022-10-23)
+
+
+### Bug Fixes
+
+* ignore abstract classes in code generation ([b53523b](https://github.com/jonisavo/uicomponents/commit/b53523b027d648a30bce2cf6c44215f18137eba6))
+* resolve namespace conflicts in generated code ([a1eb455](https://github.com/jonisavo/uicomponents/commit/a1eb455893038c656116450e671e8bf0b5057b99))
+
+
+### Features
+
+* annotate generated code with GeneratedCodeAttribute ([75b0c35](https://github.com/jonisavo/uicomponents/commit/75b0c359ade0b4fa5cc86ee81f481a00ad74e71d))
+* enable source generation in Unity 2020 ([f870d70](https://github.com/jonisavo/uicomponents/commit/f870d7018bb66826811e1b5ec0d25c6490c6a026))
+* include samples in .unitypackage ([b1f1fb1](https://github.com/jonisavo/uicomponents/commit/b1f1fb1001a907428bfc9d983e83326c77939adb))
+* **ProvideAttribute:** use source generation ([eed6208](https://github.com/jonisavo/uicomponents/commit/eed6208c30cf83e1742cb33c727f3dea2aa82510))
+* **QueryAttribute:** now uses source generation instead of reflection ([a43e019](https://github.com/jonisavo/uicomponents/commit/a43e019224f6d667b87630d14a963c1d7266768c))
+* remove UIComponent's static ClearCache method ([f236780](https://github.com/jonisavo/uicomponents/commit/f2367807c828fcff918bc5283920bd313ab8c9f1))
+* remove Unity 2019 support ([2456730](https://github.com/jonisavo/uicomponents/commit/24567309f64399d7f057b35cc7aa935dff47e709))
+* rename AssetPathAttribute to AssetPrefixAttribute ([eb0ccf1](https://github.com/jonisavo/uicomponents/commit/eb0ccf121b14018b5247f6d6046194407bddde59))
+* rename IUIComponentLogger to ILogger, turn caller argument type to object ([5749d0f](https://github.com/jonisavo/uicomponents/commit/5749d0f981a8d6d9f05e1b76bc4eae606b86eced))
+* rename TraitAttribute to UxmlTraitAttribute ([da47d4c](https://github.com/jonisavo/uicomponents/commit/da47d4cf030b956cbcbcd08df541fa4a3250d04e))
+* **UIComponent:** apply effects with source generation ([b118405](https://github.com/jonisavo/uicomponents/commit/b1184057ecf8b9b516ff06eb469653fdaad385e3))
+* **UIComponent:** remove GetTypeName method ([1f7343a](https://github.com/jonisavo/uicomponents/commit/1f7343a09ef312c30f73f602a5cfb59708ddfca5))
+* **UIComponent:** use source generation for layouts and stylesheets ([a8d5e01](https://github.com/jonisavo/uicomponents/commit/a8d5e01bbad22ec447f7eaab81b3f20b8ec965a0))
+* **UxmlNameAttribute:** move from UIComponents.Experimental namespace to UIComponents ([a484ec4](https://github.com/jonisavo/uicomponents/commit/a484ec43aa0f8436929967d4246ef1781a76f262))
+* **UxmlTraitAttribute:** move from UIComponents.Experimental namespace to UIComponents ([e1ba54a](https://github.com/jonisavo/uicomponents/commit/e1ba54a206d9d50395670f65816fd6459a47c2b6))
+* **UxmlTraitAttribute:** use a kebab-case version of member name by default ([7bfb5e0](https://github.com/jonisavo/uicomponents/commit/7bfb5e0a296e3dba8effa464aa2c54fae4651bd5))
+
+
+### BREAKING CHANGES
+
+* **UIComponent:** UIComponent's GetTypeName method has been removed as it was unnecessary. Use GetType().Name instead.
+* The IUIComponentLogger interface has been renamed to ILogger. It's methods' second argument is now of type object rather than UIComponent.
+* **UxmlTraitAttribute:** UxmlTraitAttribute has been moved from the UIComponents.Experimental namespace to UIComponents.
+* **UxmlTraitAttribute:** UxmlNameAttribute now uses a kebab-case version of the member name by default.
+* **UxmlNameAttribute:** UxmlNameAttribute has been moved from the UIComponents.Experimental namespace to UIComponents.
+* AssetPathAttribute has been renamed to AssetPrefixAttribute.
+* TraitAttribute has been renamed to UxmlTraitAttribute.
+* Because of the removal of reflection, the UIComponent attribute cache has been removed. UIComponent's static ClearCache method has been removed, as well.
+* **ProvideAttribute:** ProvideAttribute now uses source generation and requires a partial class.
+* **UIComponent:** Effects use source generation, which means that RootClassAttribute now requires a partial class to function.
+* **QueryAttribute:** QueryAttribute uses source generation now. Classes that use it must be partial.
+* **UIComponent:** LayoutAttribute and StylesheetAttribute use source generation now and require classes to be partial. GetAssetPaths function has been removed from UIComponent. Only one AssetPath attribute can be used with a class.
+* Unity 2019 support has been removed.
+
 # [0.26.0](https://github.com/jonisavo/uicomponents/compare/v0.25.0...v0.26.0) (2022-10-13)
 
 

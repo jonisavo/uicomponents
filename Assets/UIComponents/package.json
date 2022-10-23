@@ -1,7 +1,7 @@
 {
     "name": "io.savolainen.uicomponents",
     "displayName": "UIComponents",
-    "version": "0.26.0",
+    "version": "1.0.0-alpha.1",
     "description": "A small front-end framework for Unity's UIToolkit.",
     "unity": "2020.3",
     "dependencies": {
