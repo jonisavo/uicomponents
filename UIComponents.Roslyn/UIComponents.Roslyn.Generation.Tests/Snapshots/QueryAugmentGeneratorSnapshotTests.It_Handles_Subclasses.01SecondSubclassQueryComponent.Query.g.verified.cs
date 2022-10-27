@@ -16,12 +16,16 @@ public partial class SecondSubclassQueryComponent
         // subclassQueryComponent
         var UIC_subclassQueryComponentList = new List<SubclassQueryComponent>();
         this.Query<SubclassQueryComponent>(null, "asdf").ToList(UIC_subclassQueryComponentList);
+        if (UIC_subclassQueryComponentList.Count == 0)
+            Logger.LogError("Query (subclassQueryComponent): No instances of SubclassQueryComponent found", this);
         if (UIC_subclassQueryComponentList.Count > 0)
              subclassQueryComponent = UIC_subclassQueryComponentList[0];
 
         // subclassElements
         var UIC_subclassElementsList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>("foo", "bar").ToList(UIC_subclassElementsList);
+        if (UIC_subclassElementsList.Count == 0)
+            Logger.LogError("Query (subclassElements): No instances of UnityEngine.UIElements.VisualElement found", this);
         subclassElements = new UnityEngine.UIElements.VisualElement[UIC_subclassElementsList.Count];
         for (var i = 0; i < UIC_subclassElementsList.Count; i++)
             subclassElements[i] = UIC_subclassElementsList[i];
@@ -29,23 +33,31 @@ public partial class SecondSubclassQueryComponent
         // subclassList
         var UIC_subclassListList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_subclassListList);
+        if (UIC_subclassListList.Count == 0)
+            Logger.LogError("Query (subclassList): No instances of UnityEngine.UIElements.VisualElement found", this);
         subclassList = UIC_subclassListList;
 
         // baseQueryComponent
         var UIC_baseQueryComponentList = new List<BaseQueryComponent>();
         this.Query<BaseQueryComponent>("fourth-uxml-name", "third-class-name").ToList(UIC_baseQueryComponentList);
+        if (UIC_baseQueryComponentList.Count == 0)
+            Logger.LogError("Query (baseQueryComponent): No instances of BaseQueryComponent found", this);
         if (UIC_baseQueryComponentList.Count > 0)
              baseQueryComponent = UIC_baseQueryComponentList[0];
 
         // baseElement
         var UIC_baseElementList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_baseElementList);
+        if (UIC_baseElementList.Count == 0)
+            Logger.LogError("Query (baseElement): No instances of UnityEngine.UIElements.VisualElement found", this);
         if (UIC_baseElementList.Count > 0)
              baseElement = UIC_baseElementList[0];
 
         // anotherBaseElement
         var UIC_anotherBaseElementList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", (string) null).ToList(UIC_anotherBaseElementList);
+        if (UIC_anotherBaseElementList.Count == 0)
+            Logger.LogError("Query (anotherBaseElement): No instances of UnityEngine.UIElements.VisualElement found", this);
         if (UIC_anotherBaseElementList.Count > 0)
              anotherBaseElement = UIC_anotherBaseElementList[0];
     }

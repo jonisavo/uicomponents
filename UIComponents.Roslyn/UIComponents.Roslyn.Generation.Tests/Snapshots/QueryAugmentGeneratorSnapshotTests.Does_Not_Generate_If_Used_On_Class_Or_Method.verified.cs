@@ -16,6 +16,8 @@ public partial class InvalidUsageQueryComponent
         // element
         var UIC_elementList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>("valid-usage", (string) null).ToList(UIC_elementList);
+        if (UIC_elementList.Count == 0)
+            Logger.LogError("Query (element): No instances of UnityEngine.UIElements.VisualElement found", this);
         if (UIC_elementList.Count > 0)
              element = UIC_elementList[0];
     }

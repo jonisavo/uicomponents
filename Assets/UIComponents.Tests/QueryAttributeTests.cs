@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Testing;
 using UnityEngine.TestTools;
@@ -37,11 +38,13 @@ namespace UIComponents.Tests
         }
 
         private TestBed _testBed;
+        private ILogger _mockLogger;
         
         [SetUp]
         public void SetUp()
         {
-            _testBed = TestBed.Create().Build();
+            _mockLogger = Substitute.For<ILogger>();
+            _testBed = TestBed.Create().WithSingleton(_mockLogger).Build();
         }
 
         [UnityTest]
@@ -114,6 +117,34 @@ namespace UIComponents.Tests
             Assert.That(component.InvalidField, Is.Null);
             Assert.That(component.InvalidArray, Is.Null);
             Assert.That(component.InvalidList, Is.Null);
+        }
+
+        private partial class ComponentWithMissingFields : UIComponent
+        {
+            [Query]
+            public Label label;
+
+            [Query]
+            public ComponentWithQueryAttribute[] components;
+
+            [Query]
+            public List<Button> buttons;
+        }
+
+        [UnityTest]
+        public IEnumerator Should_Log_Errors_If_Query_Yields_No_Results()
+        {
+            var component = _testBed.CreateComponent<ComponentWithMissingFields>();
+            
+            yield return component.WaitForInitializationEnumerator();
+            
+            Assert.That(component.label, Is.Null);
+            Assert.That(component.components.Length, Is.EqualTo(0));
+            Assert.That(component.buttons.Count, Is.EqualTo(0));
+            
+            _mockLogger.Received().LogError("Query (label): No instances of UnityEngine.UIElements.Label found", component);
+            _mockLogger.Received().LogError("Query (components): No instances of Tests.QueryAttributeTests.ComponentWithQueryAttribute found", component);
+            _mockLogger.Received().LogError("Query (buttons): No instances of UnityEngine.UIElements.Button found", component);
         }
     }
 }

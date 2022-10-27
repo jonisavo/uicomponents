@@ -16,12 +16,16 @@ public partial class BaseQueryComponent
         // baseElement
         var UIC_baseElementList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_baseElementList);
+        if (UIC_baseElementList.Count == 0)
+            Logger.LogError("Query (baseElement): No instances of UnityEngine.UIElements.VisualElement found", this);
         if (UIC_baseElementList.Count > 0)
              baseElement = UIC_baseElementList[0];
 
         // anotherBaseElement
         var UIC_anotherBaseElementList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", (string) null).ToList(UIC_anotherBaseElementList);
+        if (UIC_anotherBaseElementList.Count == 0)
+            Logger.LogError("Query (anotherBaseElement): No instances of UnityEngine.UIElements.VisualElement found", this);
         if (UIC_anotherBaseElementList.Count > 0)
              anotherBaseElement = UIC_anotherBaseElementList[0];
     }

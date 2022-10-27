@@ -17,6 +17,8 @@ public partial class MultipleQueryComponent
         var UIC_firstElementList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_firstElementList);
         this.Query<UnityEngine.UIElements.VisualElement>(null, "test").ToList(UIC_firstElementList);
+        if (UIC_firstElementList.Count == 0)
+            Logger.LogError("Query (firstElement): No instances of UnityEngine.UIElements.VisualElement found", this);
         if (UIC_firstElementList.Count > 0)
              firstElement = UIC_firstElementList[0];
 
@@ -24,6 +26,8 @@ public partial class MultipleQueryComponent
         var UIC_manyElementsArrayList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class").ToList(UIC_manyElementsArrayList);
         this.Query<UnityEngine.UIElements.VisualElement>(null, "class-name").ToList(UIC_manyElementsArrayList);
+        if (UIC_manyElementsArrayList.Count == 0)
+            Logger.LogError("Query (manyElementsArray): No instances of UnityEngine.UIElements.VisualElement found", this);
         manyElementsArray = new UnityEngine.UIElements.VisualElement[UIC_manyElementsArrayList.Count];
         for (var i = 0; i < UIC_manyElementsArrayList.Count; i++)
             manyElementsArray[i] = UIC_manyElementsArrayList[i];
@@ -33,6 +37,8 @@ public partial class MultipleQueryComponent
         this.Query<UnityEngine.UIElements.VisualElement>("name", "class").ToList(UIC_manyElementsListList);
         this.Query<UnityEngine.UIElements.VisualElement>("other-name", "other-class").ToList(UIC_manyElementsListList);
         this.Query<UnityEngine.UIElements.VisualElement>("third-name", "third-class").ToList(UIC_manyElementsListList);
+        if (UIC_manyElementsListList.Count == 0)
+            Logger.LogError("Query (manyElementsList): No instances of UnityEngine.UIElements.VisualElement found", this);
         manyElementsList = UIC_manyElementsListList;
     }
 }

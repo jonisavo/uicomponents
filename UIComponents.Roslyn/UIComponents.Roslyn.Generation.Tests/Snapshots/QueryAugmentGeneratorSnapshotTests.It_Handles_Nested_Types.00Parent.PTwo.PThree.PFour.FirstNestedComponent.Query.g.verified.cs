@@ -24,12 +24,16 @@ public partial class FirstNestedComponent
         // field
         var UIC_fieldList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_fieldList);
+        if (UIC_fieldList.Count == 0)
+            Logger.LogError("Query (field): No instances of UnityEngine.UIElements.VisualElement found", this);
         if (UIC_fieldList.Count > 0)
              field = UIC_fieldList[0];
 
         // elements
         var UIC_elementsList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class-name").ToList(UIC_elementsList);
+        if (UIC_elementsList.Count == 0)
+            Logger.LogError("Query (elements): No instances of UnityEngine.UIElements.VisualElement found", this);
         elements = UIC_elementsList;
     }
 }

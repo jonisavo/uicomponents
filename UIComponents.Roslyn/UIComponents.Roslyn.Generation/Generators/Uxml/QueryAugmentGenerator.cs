@@ -106,6 +106,9 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                     .AppendLine($".ToList({listVariableName});");
             }
 
+            stringBuilder.Append(Padding).AppendLine($@"if ({listVariableName}.Count == 0)
+            Logger.LogError(""Query ({memberSymbol.Name}): No instances of {concreteMemberTypeName} found"", this);");
+
             if (memberType is IArrayTypeSymbol)
             {
                 stringBuilder
