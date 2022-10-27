@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using NSubstitute;
 using NUnit.Framework;
 using UIComponents.Testing;
 using UnityEngine.TestTools;
@@ -55,12 +56,14 @@ namespace UIComponents.Tests
         }
 
         private TestBed _testBed;
+        private ILogger _mockLogger;
         private QueryClassTestComponent _queryClassTestComponent;
         
         [UnitySetUp]
         public IEnumerator UnitySetUp()
         {
-            _testBed = TestBed.Create().Build();
+            _mockLogger = Substitute.For<ILogger>();
+            _testBed = TestBed.Create().WithSingleton(_mockLogger).Build();
             _queryClassTestComponent = _testBed.CreateComponent<QueryClassTestComponent>();
             yield return _queryClassTestComponent.WaitForInitializationEnumerator();
         }

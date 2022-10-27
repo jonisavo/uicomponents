@@ -15,8 +15,11 @@ public partial class MyComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     protected override void UIC_PopulateQueryFields()
     {
+        // element
         var UIC_elementList = new List<Core.Elements.MyElement>();
         this.Query<Core.Elements.MyElement>(null, (string) null).ToList(UIC_elementList);
+        if (UIC_elementList.Count == 0)
+            Logger.LogError("Query (element): No instances of Core.Elements.MyElement found", this);
         if (UIC_elementList.Count > 0)
              element = UIC_elementList[0];
     }
