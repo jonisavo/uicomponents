@@ -86,6 +86,11 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
             const string Padding = "        ";
 
+            stringBuilder
+                .Append(Padding)
+                .Append("// ")
+                .AppendLine(memberSymbol.Name);
+
             var listVariableName = $"UIC_{memberSymbol.Name}List";
             stringBuilder
                 .Append(Padding)
@@ -141,8 +146,13 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
     protected override void UIC_PopulateQueryFields()
     {{");
 
-            foreach (var queryDescription in _queryDescriptions)
-                GenerateQueryAssignment(queryDescription, stringBuilder);
+            for (var i = 0; i < _queryDescriptions.Count; i++)
+            {
+                GenerateQueryAssignment(_queryDescriptions[i], stringBuilder);
+
+                if (i != _queryDescriptions.Count - 1)
+                    stringBuilder.AppendLine();
+            }
 
             stringBuilder.AppendLine("    }");
         }

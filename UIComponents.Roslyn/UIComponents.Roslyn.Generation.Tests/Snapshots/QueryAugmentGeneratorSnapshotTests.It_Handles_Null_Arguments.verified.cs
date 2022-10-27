@@ -13,6 +13,7 @@ public partial class NullQueryComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     protected override void UIC_PopulateQueryFields()
     {
+        // elements
         var UIC_elementsList = new List<UnityEngine.UIElements.VisualElement>();
         this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_elementsList);
         elements = UIC_elementsList;

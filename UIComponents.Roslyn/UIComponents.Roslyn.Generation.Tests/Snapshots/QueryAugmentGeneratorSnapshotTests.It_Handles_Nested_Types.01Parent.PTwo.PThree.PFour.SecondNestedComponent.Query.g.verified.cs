@@ -21,6 +21,7 @@ private partial class SecondNestedComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
     protected override void UIC_PopulateQueryFields()
     {
+        // component
         var UIC_componentList = new List<Parent.PTwo.PThree.PFour.FirstNestedComponent>();
         this.Query<Parent.PTwo.PThree.PFour.FirstNestedComponent>(null, (string) null).ToList(UIC_componentList);
         if (UIC_componentList.Count > 0)
