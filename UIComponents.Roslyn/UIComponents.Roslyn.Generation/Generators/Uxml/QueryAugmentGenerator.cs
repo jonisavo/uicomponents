@@ -84,36 +84,28 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var concreteMemberType = RoslynUtilities.GetConcreteType(memberType);
             var concreteMemberTypeName = RoslynUtilities.GetTypeNameWithoutRootNamespace(concreteMemberType, namespaceString);
 
-            const string Padding = "        ";
-
-            stringBuilder
-                .Append(Padding)
-                .Append("// ")
-                .AppendLine(memberSymbol.Name);
-
+            stringBuilder.AppendLineWithPadding($"// {memberSymbol.Name}", 2);
+            
             var listVariableName = $"UIC_{memberSymbol.Name}List";
             stringBuilder
-                .Append(Padding)
-                .AppendLine($"var {listVariableName} = new List<{concreteMemberTypeName}>();");
+                .AppendLineWithPadding($"var {listVariableName} = new List<{concreteMemberTypeName}>();", 2);
 
             foreach (var queryCall in queryDescription.QueryCalls)
             {
                 var queryCallString = $"this.Query<{concreteMemberTypeName}>({queryCall.UxmlName}, {queryCall.ClassName})";
 
                 stringBuilder
-                    .Append(Padding)
-                    .Append(queryCallString)
+                    .AppendWithPadding(queryCallString, 2)
                     .AppendLine($".ToList({listVariableName});");
             }
 
-            stringBuilder.Append(Padding).AppendLine($@"if ({listVariableName}.Count == 0)
-            Logger.LogError(""Query ({memberSymbol.Name}): No instances of {concreteMemberTypeName} found"", this);");
+            stringBuilder.AppendLineWithPadding($@"if ({listVariableName}.Count == 0)
+            Logger.LogError(""Query ({memberSymbol.Name}): No instances of {concreteMemberTypeName} found"", this);", 2);
 
             if (memberType is IArrayTypeSymbol)
             {
                 stringBuilder
-                    .Append(Padding)
-                    .Append($"{memberSymbol.Name} = new {concreteMemberTypeName}[{listVariableName}.Count];");
+                    .AppendWithPadding($"{memberSymbol.Name} = new {concreteMemberTypeName}[{listVariableName}.Count];", 2);
 
                 stringBuilder.AppendLine($@"
         for (var i = 0; i < {listVariableName}.Count; i++)
@@ -124,11 +116,10 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 var memberIsNotList = memberType.Name != "List";
 
                 if (memberIsNotList)
-                    stringBuilder.Append(Padding).AppendLine($"if ({listVariableName}.Count > 0)").Append("     ");
+                    stringBuilder.AppendLineWithPadding($"if ({listVariableName}.Count > 0)", 2).AppendPadding();
 
                 stringBuilder
-                    .Append(Padding)
-                    .Append($"{memberSymbol.Name} = {listVariableName}");
+                    .AppendWithPadding($"{memberSymbol.Name} = {listVariableName}", 2);
 
                 if (memberIsNotList)
                     stringBuilder.Append("[0]");
@@ -145,7 +136,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("    ").AppendLine($@"{Constants.GeneratedCodeAttribute}
+            stringBuilder.AppendPadding().AppendLine($@"{Constants.GeneratedCodeAttribute}
     protected override void UIC_PopulateQueryFields()
     {{");
 

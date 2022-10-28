@@ -9,4 +9,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Generators\InterfaceModifiers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Generators\InterfaceModifiers\" />
+  </ItemGroup>
 </Project>

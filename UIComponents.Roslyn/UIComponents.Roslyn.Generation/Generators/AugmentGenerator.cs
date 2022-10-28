@@ -108,8 +108,7 @@ namespace UIComponents.Roslyn.Generation.Generators
                         .ToString()
                         .ToLower();
 
-                    _stringBuilder.AppendLine($@"{accessibility} partial class {_currentContext.TypeName}
-{{");
+                    _stringBuilder.AppendLine($"{accessibility} partial class {_currentContext.TypeName}\n{{");
                     GenerateSource(_currentContext, _stringBuilder);
 
                     _stringBuilder.AppendLine("}");

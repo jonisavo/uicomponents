@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using UIComponents.Roslyn.Generation.Readers;
 using UIComponents.Roslyn.Generation.SyntaxReceivers;
+using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.Uxml
 {
@@ -145,9 +146,9 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 compilation.GetTypeByMetadataName(uxmlTraitsMetadataName) != null;
 
             stringBuilder
-                .Append("    ")
-                .AppendLine(Constants.GeneratedCodeAttribute)
-                .Append("    ")
+                .AppendPadding()
+                .AppendCodeGeneratedAttribute()
+                .AppendPadding()
                 .Append($"public new partial class UxmlFactory : UxmlFactory<{context.TypeName}");
 
             if (traitsDefined)
@@ -182,7 +183,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             foreach (var trait in traits)
             {
                 stringBuilder
-                    .Append("        ")
+                    .AppendPadding(2)
                     .AppendLine($"{trait.Type} {trait.TraitMemberName} = new {trait.Type} {{ name = \"{trait.UxmlName}\" }};");
             }
         }
@@ -195,7 +196,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                     continue;
 
                 stringBuilder
-                    .Append("            ")
+                    .AppendPadding(3)
                     .AppendLine($"{trait.TraitMemberName}.defaultValue = {trait.DefaultValue};");
             }
         }
@@ -205,7 +206,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             foreach (var trait in traits)
             {
                 stringBuilder
-                    .Append("            ")
+                    .AppendPadding(3)
                     .AppendLine($"(({context.TypeName})ve).{trait.ClassMemberName} = {trait.TraitMemberName}.GetValueFromBag(bag, cc);");
             }
         }
@@ -230,7 +231,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             WriteTraitDescriptionDefaultValues(_traitsToGenerate, stringBuilder);
             WriteTraitDescriptionInitialization(_traitsToGenerate, context, stringBuilder);
 
-            stringBuilder.Append("        ").AppendLine($@"}}
+            stringBuilder.AppendPadding(2).AppendLine($@"}}
     }}");
         }
 

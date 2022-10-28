@@ -1,4 +1,5 @@
-﻿using UnityEngine.UIElements;
+﻿using UIComponents.InterfaceModifiers;
+using UnityEngine.UIElements;
 
 namespace UIComponents
 {
@@ -7,6 +8,7 @@ namespace UIComponents
     /// a callback for <see cref="MouseEnterEvent"/> is
     /// automatically registered in the UIComponent constructor.
     /// </summary>
+    [RegistersCallback(typeof(MouseEnterEvent))]
     public interface IOnMouseEnter
     {
         void OnMouseEnter(MouseEnterEvent evt);

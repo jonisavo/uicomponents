@@ -6,10 +6,7 @@ namespace UIComponents.Samples.EventInterfaces
     [Dependency(typeof(IEventLogService), provide: typeof(EventLogService))]
     public partial class EventInterfacesView : UIComponent,
         IOnAttachToPanel, IOnGeometryChanged, IOnDetachFromPanel,
-        IOnMouseLeave, IOnMouseEnter
-#if UNITY_2020_3_OR_NEWER
-        , IOnClick
-#endif
+        IOnMouseLeave, IOnMouseEnter, IOnClick
     {
         private readonly IEventLogService _eventLogService;
 
@@ -55,14 +52,12 @@ namespace UIComponents.Samples.EventInterfaces
         {
             _eventLogService.Log(evt);
         }
-
-#if UNITY_2020_3_OR_NEWER
+        
         public void OnClick(ClickEvent evt)
         {
             _eventLogService.Log(evt);
         }
-#endif
-        
+
         private void OnClearButtonClicked()
         {
             _eventLogService.Clear();

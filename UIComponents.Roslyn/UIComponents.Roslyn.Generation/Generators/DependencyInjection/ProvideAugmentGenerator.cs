@@ -87,10 +87,9 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
             stringBuilder
-                .Append("    ")
-                .Append(Constants.GeneratedCodeAttribute)
-                .AppendLine(@"
-    private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
+                .AppendPadding()
+                .AppendCodeGeneratedAttribute()
+                .AppendLineWithPadding(@"private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
     {
         try
         {
@@ -108,10 +107,9 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 ");
 
             stringBuilder
-                .Append("    ")
-                .Append(Constants.GeneratedCodeAttribute)
-                .AppendLine(@"
-    protected override void UIC_PopulateProvideFields()
+                .AppendPadding()
+                .AppendCodeGeneratedAttribute()
+                .AppendLineWithPadding(@"protected override void UIC_PopulateProvideFields()
     {");
 
             foreach (var provideDescription in _provideDescriptions)
@@ -119,7 +117,7 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
                 var typeName =
                     RoslynUtilities.GetTypeNameWithoutRootNamespace(provideDescription.Field.Type, context.CurrentTypeNamespace);
                 stringBuilder
-                    .Append("        UIC_SetProvideField<")
+                    .AppendWithPadding("UIC_SetProvideField<", 2)
                     .Append(typeName)
                     .Append(", ")
                     .Append(provideDescription.GetCastFromTypeName(context.CurrentTypeNamespace))
@@ -130,7 +128,7 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
                     .AppendLine(");");
             }
 
-            stringBuilder.AppendLine("    }");
+            stringBuilder.AppendLineWithPadding("}");
         }
 
         protected override string GetHintPostfix()

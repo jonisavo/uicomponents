@@ -25,6 +25,11 @@ namespace UIComponents.Roslyn.Generation.Readers
         {
             var typeSymbol = SemanticModel.GetDeclaredSymbol(syntaxNode) as INamedTypeSymbol;
 
+            ReadWithSymbol(typeSymbol, output);
+        }
+
+        public void ReadWithSymbol(INamedTypeSymbol typeSymbol, Dictionary<AttributeData, Dictionary<string, TypedConstant>> output)
+        {
             if (_mode == ClassAttributeArgumentReaderMode.CurrentFirst)
                 GetArgumentsCurrentFirst(typeSymbol, output);
             else if (_mode == ClassAttributeArgumentReaderMode.BaseFirst)

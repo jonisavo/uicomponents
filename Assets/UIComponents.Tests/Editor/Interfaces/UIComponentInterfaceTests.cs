@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests.Editor.Interfaces
 {
     [TestFixture]
-    public class UIComponentInterfaceTests
+    public partial class UIComponentInterfaceTests
     {
         private class BaseTestComponent : UIComponent
         {
@@ -46,7 +46,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             Assert.That(component.Fired, Is.True);
         }
         
-        private class UIComponentWithOnGeometryChanged : BaseTestComponent, IOnGeometryChanged
+        private partial class UIComponentWithOnGeometryChanged : BaseTestComponent, IOnGeometryChanged
         {
             public void OnGeometryChanged(GeometryChangedEvent evt) => Fired = true;
         }
@@ -57,7 +57,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             yield return Assert_Registers_Event_Callback<UIComponentWithOnGeometryChanged, GeometryChangedEvent>();
         }
 
-        private class UIComponentWithOnAttachToPanel : BaseTestComponent, IOnAttachToPanel
+        private partial class UIComponentWithOnAttachToPanel : BaseTestComponent, IOnAttachToPanel
         {
             public void OnAttachToPanel(AttachToPanelEvent evt) => Fired = true;
         }
@@ -68,7 +68,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             yield return Assert_Registers_Event_Callback<UIComponentWithOnAttachToPanel, AttachToPanelEvent>();
         }
 
-        private class UIComponentWithOnDetachFromPanel : BaseTestComponent, IOnDetachFromPanel
+        private partial class UIComponentWithOnDetachFromPanel : BaseTestComponent, IOnDetachFromPanel
         {
             public void OnDetachFromPanel(DetachFromPanelEvent evt) => Fired = true;
         }
@@ -79,7 +79,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             yield return Assert_Registers_Event_Callback<UIComponentWithOnDetachFromPanel, DetachFromPanelEvent>();
         }
         
-        private class UIComponentWithOnMouseEnter : BaseTestComponent, IOnMouseEnter
+        private partial class UIComponentWithOnMouseEnter : BaseTestComponent, IOnMouseEnter
         {
             public void OnMouseEnter(MouseEnterEvent evt) => Fired = true;
         }
@@ -90,7 +90,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             yield return Assert_Registers_Event_Callback<UIComponentWithOnMouseEnter, MouseEnterEvent>();
         }
         
-        private class UIComponentWithOnMouseLeave : BaseTestComponent, IOnMouseLeave
+        private partial class UIComponentWithOnMouseLeave : BaseTestComponent, IOnMouseLeave
         {
             public void OnMouseLeave(MouseLeaveEvent evt) => Fired = true;
         }
@@ -101,7 +101,7 @@ namespace UIComponents.Tests.Editor.Interfaces
             yield return Assert_Registers_Event_Callback<UIComponentWithOnMouseLeave, MouseLeaveEvent>();
         }
         
-        private class UIComponentWithOnClick : BaseTestComponent, IOnClick
+        private partial class UIComponentWithOnClick : BaseTestComponent, IOnClick
         {
             public void OnClick(ClickEvent evt) => Fired = true;
         }
@@ -113,7 +113,7 @@ namespace UIComponents.Tests.Editor.Interfaces
         }
         
 #if UNITY_2021_3_OR_NEWER
-        private class UIComponentWithOnNavigationMove : BaseTestComponent, IOnNavigationMove
+        private partial class UIComponentWithOnNavigationMove : BaseTestComponent, IOnNavigationMove
         {
             public void OnNavigationMove(NavigationMoveEvent evt) => Fired = true;
         }
