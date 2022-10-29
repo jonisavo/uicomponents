@@ -8,18 +8,14 @@ namespace UIComponents.Samples.EventInterfaces
         IOnAttachToPanel, IOnGeometryChanged, IOnDetachFromPanel,
         IOnMouseLeave, IOnMouseEnter, IOnClick
     {
-        private readonly IEventLogService _eventLogService;
+        [Provide]
+        private IEventLogService _eventLogService;
 
+        [Query("log-clear-button")]
         private Button _clearButton;
-        
-        public EventInterfacesView()
-        {
-            _eventLogService = Provide<IEventLogService>();
-        }
 
         public override void OnInit()
         {
-            _clearButton = this.Q<Button>("log-clear-button");
             _clearButton.clicked += OnClearButtonClicked;
         }
         

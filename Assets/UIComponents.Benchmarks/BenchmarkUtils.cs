@@ -5,14 +5,13 @@ namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.27.0.0";
+        public const string Version = "0.28.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
             return new[]
             {
-                new SampleGroup("UIComponent.DependencySetup"),
-                new SampleGroup("UIComponent.PostHierarchySetup"),
+                new SampleGroup("UIComponent.DependencySetup")
             };
         }
         

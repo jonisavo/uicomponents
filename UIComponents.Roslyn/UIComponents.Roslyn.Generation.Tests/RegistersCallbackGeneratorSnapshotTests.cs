@@ -1,5 +1,4 @@
-﻿using System;
-using UIComponents.Roslyn.Generation.Tests.Utilities;
+﻿using UIComponents.Roslyn.Generation.Tests.Utilities;
 using UIComponents.Roslyn.Generation.Generators.InterfaceModifiers;
 
 namespace UIComponents.Roslyn.Generation.Tests
@@ -104,27 +103,62 @@ public partial class BaseClass
         [Fact]
         public Task It_Handles_Nested_Types_And_Namespace()
         {
-            var source = @"
-using UIComponents;
+            var eventSource = @"
 using UIComponents.InterfaceModifiers;
 
-namespace MyLibrary.Tests.Runtime.Interfaces
+namespace UnityEngine.UIElements
 {
-    public partial class Components
+    public class CallbackEvent {}
+
+    public class Event {}
+}
+
+namespace UIComponents
+{
+    [RegistersCallback(typeof(UnityEngine.UIElements.CallbackEvent))]
+    public interface IOnCallback {}
+
+    [RegistersCallback(typeof(UnityEngine.UIElements.Event))]
+    public interface IOnEvent {}
+}
+";
+            var source = @"
+using UIComponents;
+
+namespace UIComponents.Tests.Editor.Interfaces
+{
+    public partial class Tests
     {
-        [RegistersCallback(typeof(OnCallbackEvent))]
-        private interface IOnCallback {}
-
-        [RegistersCallback(typeof(OnEvent))]
-        private interface IOnEvent {}
-
         private class BaseTestComponent : UIComponent {}
 
-        private partial class ComponentWithOnCallback : BaseTestComponent, IOnCallback {}
+        private partial class OnCallbackComponent : BaseTestComponent, IOnCallback {}
 
-        private partial class ComponentWithOnEvent : BaseTestComponent, IOnEvent {}
+        private partial class OnEventComponent : BaseTestComponent, IOnEvent {}
     }    
 }
+";
+            return GeneratorTester.Verify<RegistersCallbackGenerator>(eventSource, source);
+        }
+
+        [Fact]
+        public Task It_Handles_Interface_Inheritance()
+        {
+            var source = @"
+using UIComponents.InterfaceModifiers;
+
+public class MyEvent {}
+
+public class OtherEvent {}
+
+[RegistersCallback(typeof(MyEvent))]
+public interface IOnMyEvent {}
+
+[RegistersCallback(typeof(OtherEvent))]
+public interface IOnOtherEvent {}
+
+public interface IEventHandler : IOnMyEvent, IOnOtherEvent {}
+
+public class EventHandler : IEventHandler {}
 ";
             return GeneratorTester.Verify<RegistersCallbackGenerator>(source);
         }

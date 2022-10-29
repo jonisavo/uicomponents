@@ -1,13 +1,11 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
-using UIComponents.Roslyn.Generation.SyntaxReceivers;
-using UIComponents.Roslyn.Generation.Readers;
 using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
 {
+    [Generator]
     internal class RegistersCallbackGenerator : InterfaceModifierGenerator<RegistersCallbackDescription>
     {
         protected override string GetAttributeName()
@@ -56,12 +54,12 @@ namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
             stringBuilder
                 .AppendPadding()
                 .AppendCodeGeneratedAttribute()
-                .AppendLineWithPadding("protected override void UIC_DeregisterCallbacks()")
+                .AppendLineWithPadding("protected override void UIC_UnregisterCallbacks()")
                 .AppendLineWithPadding("{");
 
             foreach (var description in ModifierDescriptions)
                 stringBuilder
-                    .AppendWithPadding("DeregisterCallback<", 2)
+                    .AppendWithPadding("UnregisterCallback<", 2)
                     .Append(context.GetTypeName(description.EventType))
                     .Append(">(")
                     .Append(GetCallbackNameForType(description.InterfaceType))

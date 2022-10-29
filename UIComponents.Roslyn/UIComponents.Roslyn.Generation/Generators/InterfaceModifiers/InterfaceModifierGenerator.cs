@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using UIComponents.Roslyn.Generation.SyntaxReceivers;
@@ -37,9 +36,6 @@ namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
         protected override bool ShouldGenerateSource(AugmentGenerationContext context)
         {
             if (InterfaceModifierAttributeSymbol == null)
-                return false;
-
-            if (context.CurrentTypeSymbol.TypeKind != TypeKind.Class)
                 return false;
 
             if (context.CurrentTypeSymbol.IsAbstract)
