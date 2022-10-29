@@ -9,7 +9,7 @@ namespace UIComponents
     /// a callback for <see cref="NavigationMoveEvent"/> is
     /// automatically registered in the UIComponent constructor.
     /// </summary>
-    [RegistersCallback(typeof(NavigationMoveEvents))]
+    [RegistersCallback(typeof(NavigationMoveEvent))]
     public interface IOnNavigationMove
     {
         void OnNavigationMove(NavigationMoveEvent evt);
