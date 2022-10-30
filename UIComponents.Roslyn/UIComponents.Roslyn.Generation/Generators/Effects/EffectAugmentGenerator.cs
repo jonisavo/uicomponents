@@ -7,7 +7,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 namespace UIComponents.Roslyn.Generation.Generators.Effects
 {
     [Generator]
-    internal class EffectAugmentGenerator : UIComponentAugmentGenerator
+    public sealed class EffectAugmentGenerator : UIComponentAugmentGenerator
     {
         private INamedTypeSymbol _uiComponentEffectSymbol;
         private readonly List<EffectDescription> _effectDescriptions =

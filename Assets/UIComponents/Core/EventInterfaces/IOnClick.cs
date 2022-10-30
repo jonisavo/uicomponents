@@ -1,5 +1,4 @@
-﻿using UIComponents.InterfaceModifiers;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace UIComponents
 {
@@ -8,7 +7,6 @@ namespace UIComponents
     /// a callback for <see cref="ClickEvent"/> is
     /// automatically registered in the UIComponent constructor.
     /// </summary>
-    [RegistersCallback(typeof(ClickEvent))]
     public interface IOnClick
     {
         void OnClick(ClickEvent evt);

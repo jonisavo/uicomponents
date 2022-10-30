@@ -5,7 +5,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Readers
 {
-    internal class AttributeArgumentReader : AttributeReader<SyntaxNode, Dictionary<AttributeData, Dictionary<string, TypedConstant>>>
+    public class AttributeArgumentReader : AttributeReader<SyntaxNode, Dictionary<AttributeData, Dictionary<string, TypedConstant>>>
     {
         public AttributeArgumentReader(INamedTypeSymbol attributeSymbol, SemanticModel semanticModel) : base(attributeSymbol, semanticModel) {}
 

@@ -1,5 +1,4 @@
-﻿using UIComponents.InterfaceModifiers;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace UIComponents
 {
@@ -8,7 +7,6 @@ namespace UIComponents
     /// a callback for <see cref="MouseLeaveEvent"/> is
     /// automatically registered in the UIComponent constructor.
     /// </summary>
-    [RegistersCallback(typeof(MouseLeaveEvent))]
     public interface IOnMouseLeave
     {
         void OnMouseLeave(MouseLeaveEvent evt);

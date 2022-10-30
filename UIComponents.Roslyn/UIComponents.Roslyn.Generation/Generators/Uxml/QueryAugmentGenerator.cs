@@ -7,7 +7,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 namespace UIComponents.Roslyn.Generation.Generators.Uxml
 {
     [Generator]
-    internal class QueryAugmentGenerator : UIComponentAugmentGenerator
+    public sealed class QueryAugmentGenerator : UIComponentAugmentGenerator
     {
         private INamedTypeSymbol _queryAttributeSymbol;
         private INamedTypeSymbol _visualElementSymbol;

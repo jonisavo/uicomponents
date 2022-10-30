@@ -15,7 +15,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
     /// Generates UxmlFactory and UxmlTraits implementations.
     /// </summary>
     [Generator]
-    internal class UxmlAugmentGenerator : AugmentGenerator<ClassMemberSyntaxReceiver>
+    public sealed class UxmlAugmentGenerator : AugmentGenerator<ClassMemberSyntaxReceiver>
     {
         private INamedTypeSymbol _traitAttributeSymbol;
         private INamedTypeSymbol _uxmlNameAttributeSymbol;

@@ -7,7 +7,7 @@ using UIComponents.Roslyn.Generation.Readers;
 
 namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
 {
-    internal abstract class InterfaceModifierGenerator<T> : AugmentGenerator<ClassSyntaxReceiver>
+    public abstract class InterfaceModifierGenerator<T> : AugmentGenerator<ClassSyntaxReceiver>
     {
         protected INamedTypeSymbol InterfaceModifierAttributeSymbol;
         protected readonly List<T> ModifierDescriptions = new List<T>();

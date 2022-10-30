@@ -1,9 +1,8 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace UIComponents.Roslyn.Generation.Utilities
 {
-    internal static class StringBuilderExtensions
+    public static class StringBuilderExtensions
     {
         public static StringBuilder AppendPadding(this StringBuilder stringBuilder, uint tabs = 1)
         {

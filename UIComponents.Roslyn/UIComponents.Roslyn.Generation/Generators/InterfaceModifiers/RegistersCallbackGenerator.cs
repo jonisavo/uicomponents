@@ -5,8 +5,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
 {
-    [Generator]
-    internal class RegistersCallbackGenerator : InterfaceModifierGenerator<RegistersCallbackDescription>
+    public sealed class RegistersCallbackGenerator : InterfaceModifierGenerator<RegistersCallbackDescription>
     {
         protected override string GetAttributeName()
         {

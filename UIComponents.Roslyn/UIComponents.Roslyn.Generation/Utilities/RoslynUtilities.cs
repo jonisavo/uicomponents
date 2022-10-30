@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace UIComponents.Roslyn.Generation.Utilities
 {
-    internal static class RoslynUtilities
+    public static class RoslynUtilities
     {
         // https://andrewlock.net/creating-a-source-generator-part-5-finding-a-type-declarations-namespace-and-type-hierarchy/
         public static string GetTypeNamespace(SyntaxNode syntaxNode)

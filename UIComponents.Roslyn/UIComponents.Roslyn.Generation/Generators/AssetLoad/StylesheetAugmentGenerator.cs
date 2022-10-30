@@ -8,7 +8,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 {
     [Generator]
-    internal class StylesheetAugmentGenerator : UIComponentAugmentGenerator
+    public sealed class StylesheetAugmentGenerator : UIComponentAugmentGenerator
     {
         private INamedTypeSymbol _stylesheetAttributeSymbol;
         private readonly List<StylesheetDescription> _stylesheetDescriptions
@@ -35,7 +35,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
         private void GetStylesheetDescriptions(AugmentGenerationContext context, IList<StylesheetDescription> stylesheets)
         {
-            var stylesheetPaths = GetPathAttributeValues(_stylesheetAttributeSymbol, context, ClassAttributeArgumentReaderMode.BaseFirst);
+            var stylesheetPaths = GetPathAttributeValues(_stylesheetAttributeSymbol, context, AttributeReadOrder.BaseFirst);
 
             foreach (var path in stylesheetPaths)
                 stylesheets.Add(GetStylesheetDescription(path));

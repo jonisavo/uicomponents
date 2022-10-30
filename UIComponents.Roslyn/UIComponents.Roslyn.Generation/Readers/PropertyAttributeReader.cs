@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace UIComponents.Roslyn.Generation.Readers
 {
-    internal class PropertyAttributeReader : AttributeReader<PropertyDeclarationSyntax, IList<IPropertySymbol>>
+    public sealed class PropertyAttributeReader : AttributeReader<PropertyDeclarationSyntax, IList<IPropertySymbol>>
     {
         public PropertyAttributeReader(INamedTypeSymbol attributeSymbol, SemanticModel semanticModel) : base(attributeSymbol, semanticModel) {}
 

@@ -8,7 +8,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 {
     [Generator]
-    internal class ProvideAugmentGenerator : AugmentGenerator<ClassSyntaxReceiver>
+    public sealed class ProvideAugmentGenerator : AugmentGenerator<ClassSyntaxReceiver>
     {
         private INamedTypeSymbol _provideAttributeSymbol;
         private readonly List<ProvideDescription> _provideDescriptions =

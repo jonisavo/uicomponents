@@ -72,11 +72,6 @@ namespace UIComponents
             Initialize();
         }
 
-        ~UIComponent()
-        {
-            UIC_UnregisterCallbacks();
-        }
-
         private async void Initialize()
         {
             var layoutTask = GetLayout();
@@ -104,7 +99,7 @@ namespace UIComponents
 
             UIC_ApplyEffects();
             UIC_PopulateQueryFields();
-            UIC_RegisterCallbacks();
+            RegisterEventInterfaceCallbacks();
 
             OnInit();
 
@@ -112,9 +107,31 @@ namespace UIComponents
             _initCompletionSource.SetResult(this);
         }
         
-        protected virtual void UIC_RegisterCallbacks() {}
+        private void RegisterEventInterfaceCallbacks()
+        {
+            if (this is IOnAttachToPanel onAttachToPanel)
+                RegisterCallback<AttachToPanelEvent>(onAttachToPanel.OnAttachToPanel);
 
-        protected virtual void UIC_UnregisterCallbacks() {}
+            if (this is IOnDetachFromPanel onDetachFromPanel)
+                RegisterCallback<DetachFromPanelEvent>(onDetachFromPanel.OnDetachFromPanel);
+
+            if (this is IOnGeometryChanged onGeometryChanged)
+                RegisterCallback<GeometryChangedEvent>(onGeometryChanged.OnGeometryChanged);
+
+            if (this is IOnMouseEnter onMouseEnter)
+                RegisterCallback<MouseEnterEvent>(onMouseEnter.OnMouseEnter);
+
+            if (this is IOnMouseLeave onMouseLeave)
+                RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
+            
+            if (this is IOnClick onClick)
+                RegisterCallback<ClickEvent>(onClick.OnClick);
+            
+#if UNITY_2021_3_OR_NEWER
+            if (this is IOnNavigationMove onNavigationMove)
+                RegisterCallback<NavigationMoveEvent>(onNavigationMove.OnNavigationMove);
+#endif
+        }
 
         private void LoadLayout([CanBeNull] VisualTreeAsset layoutAsset)
         {

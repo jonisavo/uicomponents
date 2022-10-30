@@ -5,7 +5,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 {
     [Generator]
-    internal class LayoutAugmentGenerator : UIComponentAugmentGenerator
+    public sealed class LayoutAugmentGenerator : UIComponentAugmentGenerator
     {
         private INamedTypeSymbol _layoutAttributeSymbol;
         private LayoutDescription _layoutDescription;

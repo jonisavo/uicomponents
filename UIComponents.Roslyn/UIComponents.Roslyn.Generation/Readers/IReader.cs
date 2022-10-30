@@ -7,7 +7,7 @@ namespace UIComponents.Roslyn.Generation.Readers
     /// </summary>
     /// <typeparam name="TSyntaxNode">Syntax node type</typeparam>
     /// <typeparam name="TData">Data type</typeparam>
-    internal interface IReader<TSyntaxNode, TData> where TSyntaxNode : SyntaxNode
+    public interface IReader<TSyntaxNode, TData> where TSyntaxNode : SyntaxNode
     {
         /// <summary>
         /// Navigates the syntax node looking for data.
