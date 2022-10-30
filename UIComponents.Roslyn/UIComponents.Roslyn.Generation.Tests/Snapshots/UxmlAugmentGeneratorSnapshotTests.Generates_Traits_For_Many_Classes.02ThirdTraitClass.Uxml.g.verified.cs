@@ -9,15 +9,15 @@ using UnityEngine.UIElements;
 
 public partial class ThirdTraitClass
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     public new partial class UxmlFactory : UxmlFactory<ThirdTraitClass, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlStringAttributeDescription m_Name = new UxmlStringAttributeDescription { name = "name" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

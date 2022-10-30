@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 public partial class OverriddenLayoutComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         return AssetResolver.LoadAsset<VisualTreeAsset>("Components/OverriddenLayoutComponent");

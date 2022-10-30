@@ -1,5 +1,13 @@
 
 
+# [1.0.0-alpha.2](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2022-10-30)
+
+
+### Features
+
+* **QueryAttribute:** annotate each assignment in generated code ([2a3a924](https://github.com/jonisavo/uicomponents/commit/2a3a924a87bbe031bb8e814ca1d69e594e2ccbbe))
+* **QueryAttribute:** log error if no elements are found ([58582cc](https://github.com/jonisavo/uicomponents/commit/58582cc9a00b4a5cd6e9ea16945275b3cd1a91ae))
+
 # [1.0.0-alpha.1](https://github.com/jonisavo/uicomponents/compare/v0.26.0...v1.0.0-alpha.1) (2022-10-23)
 
 

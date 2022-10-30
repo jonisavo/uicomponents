@@ -11,10 +11,10 @@ using UnityEngine.UIElements;
 
 public partial class PriorityEffectComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     private static UIComponentEffectAttribute[] UIC_EffectAttributes;
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     private static void UIC_InitializeEffectAttributes()
     {
         UIC_EffectAttributes = new [] {
@@ -24,7 +24,7 @@ public partial class PriorityEffectComponent
         Array.Sort(UIC_EffectAttributes);
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     protected override void UIC_ApplyEffects()
     {
         if (UIC_EffectAttributes == null)

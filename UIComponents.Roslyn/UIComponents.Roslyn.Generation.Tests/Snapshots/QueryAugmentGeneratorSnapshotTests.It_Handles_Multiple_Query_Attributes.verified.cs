@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 public partial class MultipleQueryComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     protected override void UIC_PopulateQueryFields()
     {
         // firstElement
