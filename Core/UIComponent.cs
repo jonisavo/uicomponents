@@ -49,26 +49,20 @@ namespace UIComponents
 
         private readonly DependencyInjector _dependencyInjector;
 
-        private readonly Type _componentType;
-
         private readonly TaskCompletionSource<UIComponent> _initCompletionSource =
             new TaskCompletionSource<UIComponent>();
 
         private static readonly ProfilerMarker DependencySetupProfilerMarker =
             new ProfilerMarker("UIComponent.DependencySetup");
-        private static readonly ProfilerMarker PostHierarchySetupProfilerMarker =
-            new ProfilerMarker("UIComponent.PostHierarchySetup");
 
         /// <summary>
         /// UIComponent's constructor loads the configured layout and stylesheets.
         /// </summary>
         protected UIComponent()
         {
-            _componentType = GetType();
-
             DependencySetupProfilerMarker.Begin();
 
-            _dependencyInjector = DiContext.Current.GetInjector(_componentType);
+            _dependencyInjector = DiContext.Current.GetInjector(GetType());
             AssetResolver = Provide<IAssetResolver>();
             Logger = Provide<ILogger>();
             UIC_PopulateProvideFields();
@@ -103,20 +97,16 @@ namespace UIComponents
 
             await Task.WhenAll(childInitializationTasks);
 
-            PostHierarchySetupProfilerMarker.Begin();
-
             UIC_ApplyEffects();
             UIC_PopulateQueryFields();
             RegisterEventInterfaceCallbacks();
-
-            PostHierarchySetupProfilerMarker.End();
 
             OnInit();
 
             Initialized = true;
             _initCompletionSource.SetResult(this);
         }
-
+        
         private void RegisterEventInterfaceCallbacks()
         {
             if (this is IOnAttachToPanel onAttachToPanel)
@@ -151,9 +141,7 @@ namespace UIComponents
 
         private void LoadStyles(IList<StyleSheet> styles)
         {
-            var styleSheetCount = styles.Count;
-
-            for (var i = 0; i < styleSheetCount; i++)
+            for (var i = 0; i < styles.Count; i++)
                 styleSheets.Add(styles[i]);
         }
 
