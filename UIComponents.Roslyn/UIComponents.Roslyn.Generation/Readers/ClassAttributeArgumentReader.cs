@@ -3,31 +3,36 @@ using System.Collections.Generic;
 
 namespace UIComponents.Roslyn.Generation.Readers
 {
-    internal enum ClassAttributeArgumentReaderMode
+    public enum AttributeReadOrder
     {
         CurrentFirst,
         BaseFirst
     }
 
-    internal class ClassAttributeArgumentReader : AttributeArgumentReader
+    public sealed class ClassAttributeArgumentReader : AttributeArgumentReader
     {
-        private ClassAttributeArgumentReaderMode _mode =
-            ClassAttributeArgumentReaderMode.CurrentFirst;
+        private AttributeReadOrder _readOrder =
+            AttributeReadOrder.CurrentFirst;
 
         public ClassAttributeArgumentReader(INamedTypeSymbol attributeSymbol, SemanticModel semanticModel) : base(attributeSymbol, semanticModel) {}
 
-        public void SetMode(ClassAttributeArgumentReaderMode mode)
+        public void SetReadOrder(AttributeReadOrder mode)
         {
-            _mode = mode;
+            _readOrder = mode;
         }
 
         public override void Read(SyntaxNode syntaxNode, Dictionary<AttributeData, Dictionary<string, TypedConstant>> output)
         {
             var typeSymbol = SemanticModel.GetDeclaredSymbol(syntaxNode) as INamedTypeSymbol;
 
-            if (_mode == ClassAttributeArgumentReaderMode.CurrentFirst)
+            ReadWithSymbol(typeSymbol, output);
+        }
+
+        public void ReadWithSymbol(INamedTypeSymbol typeSymbol, Dictionary<AttributeData, Dictionary<string, TypedConstant>> output)
+        {
+            if (_readOrder == AttributeReadOrder.CurrentFirst)
                 GetArgumentsCurrentFirst(typeSymbol, output);
-            else if (_mode == ClassAttributeArgumentReaderMode.BaseFirst)
+            else if (_readOrder == AttributeReadOrder.BaseFirst)
                 GetArgumentBaseFirst(typeSymbol, output);
         }
 

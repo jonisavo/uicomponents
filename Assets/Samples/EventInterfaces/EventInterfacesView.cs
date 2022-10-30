@@ -6,23 +6,16 @@ namespace UIComponents.Samples.EventInterfaces
     [Dependency(typeof(IEventLogService), provide: typeof(EventLogService))]
     public partial class EventInterfacesView : UIComponent,
         IOnAttachToPanel, IOnGeometryChanged, IOnDetachFromPanel,
-        IOnMouseLeave, IOnMouseEnter
-#if UNITY_2020_3_OR_NEWER
-        , IOnClick
-#endif
+        IOnMouseLeave, IOnMouseEnter, IOnClick
     {
-        private readonly IEventLogService _eventLogService;
+        [Provide]
+        private IEventLogService _eventLogService;
 
+        [Query("log-clear-button")]
         private Button _clearButton;
-        
-        public EventInterfacesView()
-        {
-            _eventLogService = Provide<IEventLogService>();
-        }
 
         public override void OnInit()
         {
-            _clearButton = this.Q<Button>("log-clear-button");
             _clearButton.clicked += OnClearButtonClicked;
         }
         
@@ -55,14 +48,12 @@ namespace UIComponents.Samples.EventInterfaces
         {
             _eventLogService.Log(evt);
         }
-
-#if UNITY_2020_3_OR_NEWER
+        
         public void OnClick(ClickEvent evt)
         {
             _eventLogService.Log(evt);
         }
-#endif
-        
+
         private void OnClearButtonClicked()
         {
             _eventLogService.Clear();

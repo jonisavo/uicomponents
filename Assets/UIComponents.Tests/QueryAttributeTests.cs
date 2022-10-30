@@ -135,7 +135,7 @@ namespace UIComponents.Tests
         public IEnumerator Should_Log_Errors_If_Query_Yields_No_Results()
         {
             var component = _testBed.CreateComponent<ComponentWithMissingFields>();
-            
+
             yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.label, Is.Null);

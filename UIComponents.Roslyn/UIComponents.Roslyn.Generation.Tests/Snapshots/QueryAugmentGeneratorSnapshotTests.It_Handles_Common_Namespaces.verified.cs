@@ -21,7 +21,7 @@ public partial class MyComponent
         if (UIC_elementList.Count == 0)
             Logger.LogError("Query (element): No instances of Core.Elements.MyElement found", this);
         if (UIC_elementList.Count > 0)
-             element = UIC_elementList[0];
+            element = UIC_elementList[0];
     }
 }
 }

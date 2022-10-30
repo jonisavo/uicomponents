@@ -5,7 +5,7 @@ namespace UIComponents.Roslyn.Generation.Readers
     /// <summary>
     /// Attribute readers fetch attributes from syntax nodes.
     /// </summary>
-    internal abstract class AttributeReader<TSyntaxNode, TData> : IReader<TSyntaxNode, TData>
+    public abstract class AttributeReader<TSyntaxNode, TData> : IReader<TSyntaxNode, TData>
         where TSyntaxNode : SyntaxNode
     {
         protected readonly INamedTypeSymbol AttributeSymbol;

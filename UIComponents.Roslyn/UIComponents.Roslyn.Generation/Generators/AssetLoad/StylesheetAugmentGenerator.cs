@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UIComponents.Roslyn.Generation.Readers;
+using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 {
     [Generator]
-    internal class StylesheetAugmentGenerator : UIComponentAugmentGenerator
+    public sealed class StylesheetAugmentGenerator : UIComponentAugmentGenerator
     {
         private INamedTypeSymbol _stylesheetAttributeSymbol;
         private readonly List<StylesheetDescription> _stylesheetDescriptions
@@ -34,7 +35,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
         private void GetStylesheetDescriptions(AugmentGenerationContext context, IList<StylesheetDescription> stylesheets)
         {
-            var stylesheetPaths = GetPathAttributeValues(_stylesheetAttributeSymbol, context, ClassAttributeArgumentReaderMode.BaseFirst);
+            var stylesheetPaths = GetPathAttributeValues(_stylesheetAttributeSymbol, context, AttributeReadOrder.BaseFirst);
 
             foreach (var path in stylesheetPaths)
                 stylesheets.Add(GetStylesheetDescription(path));
@@ -59,7 +60,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("    ").AppendLine($@"{Constants.GeneratedCodeAttribute}
+            stringBuilder.AppendLineWithPadding($@"{Constants.GeneratedCodeAttribute}
     private async Task<StyleSheetLoadTuple> UIC_GetSingleStyleSheet(string assetPath)
     {{
         var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);

@@ -11,7 +11,7 @@ namespace UIComponents.Roslyn.Generation.Generators
     /// A generator for augmenting code.
     /// </summary>
     /// <typeparam name="TSyntaxReceiver">Used syntax receiver</typeparam>
-    internal abstract class AugmentGenerator<TSyntaxReceiver> : ISourceGenerator
+    public abstract class AugmentGenerator<TSyntaxReceiver> : ISourceGenerator
         where TSyntaxReceiver : ISyntaxReceiverWithClasses, new()
     {
         protected TSyntaxReceiver SyntaxReceiver { get; private set; }
@@ -108,8 +108,7 @@ namespace UIComponents.Roslyn.Generation.Generators
                         .ToString()
                         .ToLower();
 
-                    _stringBuilder.AppendLine($@"{accessibility} partial class {_currentContext.TypeName}
-{{");
+                    _stringBuilder.AppendLine($"{accessibility} partial class {_currentContext.TypeName}\n{{");
                     GenerateSource(_currentContext, _stringBuilder);
 
                     _stringBuilder.AppendLine("}");

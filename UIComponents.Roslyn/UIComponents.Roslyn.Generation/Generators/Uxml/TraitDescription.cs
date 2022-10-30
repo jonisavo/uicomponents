@@ -7,7 +7,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.Uxml
 {
-    internal readonly struct TraitDescription
+    public readonly struct TraitDescription
     {
         public readonly string ClassMemberName;
         public readonly string UxmlName;

@@ -6,7 +6,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators
 {
-    internal abstract class UIComponentAugmentGenerator : AugmentGenerator<ClassSyntaxReceiver>
+    public abstract class UIComponentAugmentGenerator : AugmentGenerator<ClassSyntaxReceiver>
     {
         protected INamedTypeSymbol UIComponentSymbol;
         protected INamedTypeSymbol AssetPrefixAttributeSymbol;
@@ -19,17 +19,17 @@ namespace UIComponents.Roslyn.Generation.Generators
             AssetPrefixAttributeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.AssetPrefixAttribute");
         }
 
-        protected List<string> GetPathAttributeValues(
+        internal List<string> GetPathAttributeValues(
             INamedTypeSymbol attributeSymbol,
             AugmentGenerationContext context,
-            ClassAttributeArgumentReaderMode readerMode = ClassAttributeArgumentReaderMode.CurrentFirst)
+            AttributeReadOrder readerMode = AttributeReadOrder.CurrentFirst)
         {
             var values = new List<string>();
 
             var arguments = new Dictionary<AttributeData, Dictionary<string, TypedConstant>>();
             var classAttributeArgumentReader = new ClassAttributeArgumentReader(attributeSymbol, context.ClassSemanticModel);
 
-            classAttributeArgumentReader.SetMode(readerMode);
+            classAttributeArgumentReader.SetReadOrder(readerMode);
             classAttributeArgumentReader.Read(context.ClassSyntax, arguments);
 
             foreach (var attributeArgs in arguments.Values)

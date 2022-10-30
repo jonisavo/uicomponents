@@ -7,7 +7,7 @@ using UIComponents.Roslyn.Generation.Utilities;
 namespace UIComponents.Roslyn.Generation.Generators.Effects
 {
     [Generator]
-    internal class EffectAugmentGenerator : UIComponentAugmentGenerator
+    public sealed class EffectAugmentGenerator : UIComponentAugmentGenerator
     {
         private INamedTypeSymbol _uiComponentEffectSymbol;
         private readonly List<EffectDescription> _effectDescriptions =
@@ -54,10 +54,9 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
         private void GenerateEffectArrayInitialization(StringBuilder stringBuilder)
         {
             stringBuilder
-                .Append("    ")
-                .Append(Constants.GeneratedCodeAttribute)
-                .AppendLine(@"
-    private static void UIC_InitializeEffectAttributes()
+                .AppendPadding()
+                .AppendCodeGeneratedAttribute()
+                .AppendLineWithPadding(@"private static void UIC_InitializeEffectAttributes()
     {
         UIC_EffectAttributes = new [] {");
 
@@ -66,7 +65,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
                 var effect = _effectDescriptions[i];
 
                 stringBuilder
-                    .Append("            new ")
+                    .AppendWithPadding("new ", 3)
                     .Append(effect.EffectTypeSymbol.ToDisplayString())
                     .Append(effect.CallString);
 
@@ -77,17 +76,17 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
             }
 
             stringBuilder
-                .AppendLine("        };")
-                .AppendLine("        Array.Sort(UIC_EffectAttributes);")
-                .AppendLine("    }");
+                .AppendLineWithPadding("};", 2)
+                .AppendLineWithPadding("Array.Sort(UIC_EffectAttributes);", 2)
+                .AppendLineWithPadding("}");
         }
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
             stringBuilder
-                .Append("    ")
-                .AppendLine(Constants.GeneratedCodeAttribute)
-                .Append("    ")
+                .AppendPadding()
+                .AppendCodeGeneratedAttribute()
+                .AppendPadding()
                 .AppendLine("private static UIComponentEffectAttribute[] UIC_EffectAttributes;")
                 .AppendLine();
 

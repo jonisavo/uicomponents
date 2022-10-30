@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests.Editor.Interfaces
 {
     [TestFixture]
-    public class UIComponentInterfaceTests
+    public partial class UIComponentInterfaceTests
     {
         private class BaseTestComponent : UIComponent
         {

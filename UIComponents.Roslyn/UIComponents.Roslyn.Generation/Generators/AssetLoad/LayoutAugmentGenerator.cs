@@ -1,10 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Text;
+using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 {
     [Generator]
-    internal class LayoutAugmentGenerator : UIComponentAugmentGenerator
+    public sealed class LayoutAugmentGenerator : UIComponentAugmentGenerator
     {
         private INamedTypeSymbol _layoutAttributeSymbol;
         private LayoutDescription _layoutDescription;
@@ -48,8 +49,10 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("    ").AppendLine($@"{Constants.GeneratedCodeAttribute}
-    protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
+            stringBuilder
+                .AppendPadding()
+                .AppendCodeGeneratedAttribute()
+                .AppendLineWithPadding($@"protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {{
         return AssetResolver.LoadAsset<VisualTreeAsset>(""{_layoutDescription.Path}"");
     }}");
