@@ -25,12 +25,12 @@
             "path": "Samples~/Counter"
         },
         {
-            "displayName": "Asset Loading from Resources",
+            "displayName": "Asset loading from Resources",
             "description": "Contains an example of asset loading from Resources.",
             "path": "Samples~/Resources"
         },
         {
-            "displayName": "Asset Loading from Addressables",
+            "displayName": "Asset loading from Addressables",
             "description": "Contains an example of asset loading from Addressables.",
             "path": "Samples~/Addressables"
         },
@@ -43,6 +43,11 @@
             "displayName": "Event interfaces",
             "description": "Contains an example of using event interfaces.",
             "path": "Samples~/EventInterfaces"
+        },
+        {
+            "displayName": "UXML code generation",
+            "description": "Contains an example of UxmlName and UxmlTrait usage.",
+            "path": "Samples~/UxmlTraits"
         }
     ],
     "license": "MIT",
