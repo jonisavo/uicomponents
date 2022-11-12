@@ -37,6 +37,7 @@ namespace UIComponents
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [BaseTypeRequired(typeof(VisualElement))]
+    [MeansImplicitUse]
     [ExcludeFromCoverage]
     public sealed class UxmlNameAttribute : Attribute
     {
