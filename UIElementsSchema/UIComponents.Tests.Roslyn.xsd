@@ -40,7 +40,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="description" type="xs:string" use="optional" />
         <xs:attribute default="0" name="age" type="xs:int" use="optional" />
-        <xs:attribute default="0" name="unix-timestamp" type="xs:long" use="optional" />
+        <xs:attribute default="0" name="timestamp" type="xs:long" use="optional" />
         <xs:attribute default="0" name="music-volume" type="xs:float" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
@@ -71,7 +71,7 @@
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="RGBA(0.000, 0.000, 0.000, 1.000)" name="text-color" type="xs:string" use="optional" />
-        <xs:attribute default="0" name="current-time" type="xs:double" use="optional" />
+        <xs:attribute default="0" name="time" type="xs:double" use="optional" />
         <xs:attribute default="Hello" name="greeting" xmlns:q3="UIComponents.Tests.Roslyn" type="q3:RoslynTestComponent_greeting_Type" use="optional" />
         <xs:attribute default="false" name="enabled" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
@@ -79,4 +79,26 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="RoslynTestComponent" substitutionGroup="engine:VisualElement" xmlns:q4="UIComponents.Tests.Roslyn" type="q4:RoslynTestComponentType" />
+  <xs:complexType name="NestedRoslynTestType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="engine:VisualElement" />
+        </xs:sequence>
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="" name="trait" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NestedRoslynTest" substitutionGroup="engine:VisualElement" xmlns:q5="UIComponents.Tests.Roslyn" type="q5:NestedRoslynTestType" />
 </xs:schema>
