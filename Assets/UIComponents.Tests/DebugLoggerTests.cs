@@ -5,9 +5,9 @@ using UnityEngine.TestTools;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class DebugLoggerTests
+    public partial class DebugLoggerTests
     {
-        private class TestComponent : UIComponent {}
+        private partial class TestComponent : UIComponent {}
 
         private TestComponent _testComponent;
 

@@ -21,7 +21,7 @@ namespace UIComponents.Testing
         /// <typeparam name="TDependency">Dependency type</typeparam>
         public TestBedBuilder WithSingleton<TDependency>(TDependency value) where TDependency : class
         {
-            _testBed.DiContainer.SetSingletonOverride(value);
+            _testBed.DiContext.SetSingleton(value);
 
             return this;
         }
@@ -36,9 +36,9 @@ namespace UIComponents.Testing
             where TConsumer : class
             where TDependency : class
         {
-            var injector = _testBed.DiContainer.GetInjector(typeof(TConsumer));
+            var injector = _testBed.DiContext.GetInjector(typeof(TConsumer));
             
-            injector.SetDependency(value, Scope.Transient);
+            injector.SetTransientInstance(value);
 
             return this;
         }

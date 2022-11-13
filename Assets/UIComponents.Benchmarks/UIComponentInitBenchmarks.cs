@@ -3,16 +3,16 @@ using Unity.PerformanceTesting;
 
 namespace UIComponents.Benchmarks
 {
-    public class UIComponentInitBenchmarks
+    public partial class UIComponentInitBenchmarks
     {
-        private class EmptyComponent : UIComponent {}
+        private partial class EmptyComponent : UIComponent {}
         
-        private interface IDependency {}
+        private interface IMockDependency {}
         
-        private class DependencyProvider : IDependency {}
+        private class DependencyProvider : IMockDependency {}
         
-        [Dependency(typeof(IDependency), provide: typeof(DependencyProvider))]
-        private class ComponentWithDependency : UIComponent {}
+        [Dependency(typeof(IMockDependency), provide: typeof(DependencyProvider))]
+        private partial class ComponentWithDependency : UIComponent {}
 
         [Test, Performance, Version(BenchmarkUtils.Version)]
         public void InitializeEmptyComponentWithWarmCache()

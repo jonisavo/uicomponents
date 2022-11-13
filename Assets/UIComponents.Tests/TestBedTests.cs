@@ -20,17 +20,17 @@ namespace UIComponents.Tests
         private Dependency _dependencyInstance;
         private TransientDependency _transientDependencyInstance;
 
-        private interface IDependency {}
+        private interface IMockDependency {}
 
-        private class Dependency : IDependency {}
+        private class Dependency : IMockDependency {}
         
         private interface ITransientDependency {}
         
         private class TransientDependency : ITransientDependency {}
 
-        [Dependency(typeof(IDependency), provide: typeof(Dependency))]
+        [Dependency(typeof(IMockDependency), provide: typeof(Dependency))]
         [Dependency(typeof(ITransientDependency), provide: typeof(TransientDependency), Scope.Transient)]
-        private class Component : UIComponent
+        private partial class Component : UIComponent
         {
             public readonly bool Value;
 
@@ -41,7 +41,7 @@ namespace UIComponents.Tests
             
             public Component() : this(false) {}
             
-            public IDependency GetDependency() => Provide<IDependency>();
+            public IMockDependency GetDependency() => Provide<IMockDependency>();
 
             public ITransientDependency GetTransientDependency() => Provide<ITransientDependency>();
         }
@@ -52,7 +52,7 @@ namespace UIComponents.Tests
             _dependencyInstance = new Dependency();
             _transientDependencyInstance = new TransientDependency();
             _testBed = TestBed.Create()
-                .WithSingleton<IDependency>(_dependencyInstance)
+                .WithSingleton<IMockDependency>(_dependencyInstance)
                 .WithTransient<Component, ITransientDependency>(_transientDependencyInstance)
                 .Build();
         }
@@ -85,7 +85,7 @@ namespace UIComponents.Tests
         [Test]
         public void Allows_Fetching_Dependencies()
         {
-            var dependency = _testBed.Provide<Component, IDependency>();
+            var dependency = _testBed.Provide<Component, IMockDependency>();
             Assert.That(dependency, Is.SameAs(_dependencyInstance));
         }
 
@@ -93,8 +93,8 @@ namespace UIComponents.Tests
         public void Allows_Changing_Singleton_Instance()
         {
             var newDependency = new Dependency();
-            _testBed.SetSingletonOverride<IDependency>(newDependency);
-            var dependency = _testBed.Provide<Component, IDependency>();
+            _testBed.SetSingletonOverride<IMockDependency>(newDependency);
+            var dependency = _testBed.Provide<Component, IMockDependency>();
             Assert.That(dependency, Is.Not.SameAs(_dependencyInstance));
             Assert.That(dependency, Is.SameAs(newDependency));
         }

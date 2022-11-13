@@ -83,6 +83,18 @@ public class Test
         }
 
         [Fact]
+        public Task Does_Not_Generate_UxmlFactory_If_Name_Is_Missing()
+        {
+            var source = @"
+using UIComponents;
+
+[UxmlName()]
+public class Test {}
+";
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
+        }
+
+        [Fact]
         public Task Works_On_Non_UIComponent_Type()
         {
             var source = @"

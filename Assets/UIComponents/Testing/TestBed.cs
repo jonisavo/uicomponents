@@ -19,7 +19,7 @@ namespace UIComponents.Testing
         /// </summary>
         public TimeSpan AsyncTimeout { get; set; } = TimeSpan.FromSeconds(8);
         
-        internal readonly DiContainer DiContainer = new DiContainer();
+        internal readonly DiContext DiContext = new DiContext();
         
         internal TestBed() {}
         
@@ -47,7 +47,7 @@ namespace UIComponents.Testing
             where TConsumer : class
             where TDependency : class
         {
-            var injector = DiContainer.GetInjector(typeof(TConsumer));
+            var injector = DiContext.GetInjector(typeof(TConsumer));
 
             return injector.Provide<TDependency>();
         }
@@ -62,9 +62,9 @@ namespace UIComponents.Testing
         public TComponent CreateComponent<TComponent>(Func<TComponent> factoryPredicate)
             where TComponent : UIComponent
         {
-            var previousContainer = DiContext.Current.Container;
+            var previousContext = DiContext.Current;
             
-            DiContext.Current.SwitchContainer(DiContainer);
+            DiContext.ChangeCurrent(DiContext);
 
             TComponent component;
             
@@ -74,7 +74,7 @@ namespace UIComponents.Testing
             }
             finally
             {
-                DiContext.Current.SwitchContainer(previousContainer);
+                DiContext.ChangeCurrent(previousContext);
             }
 
             return component;
@@ -138,7 +138,7 @@ namespace UIComponents.Testing
         /// <exception cref="ArgumentNullException">Thrown if value is null</exception>
         public void SetSingletonOverride<TDependency>([NotNull] TDependency value) where TDependency : class
         {
-            DiContainer.SetSingletonOverride(value);
+            DiContext.SetSingleton(value);
         }
     }
 }

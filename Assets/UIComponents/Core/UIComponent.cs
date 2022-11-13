@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -23,7 +23,7 @@ namespace UIComponents
     /// <seealso cref="DebugLogger"/>
     [Dependency(typeof(IAssetResolver), provide: typeof(ResourcesAssetResolver))]
     [Dependency(typeof(ILogger), provide: typeof(DebugLogger))]
-    public abstract class UIComponent : VisualElement
+    public abstract class UIComponent : VisualElement, IDependencyConsumer
     {
         /// <summary>
         /// The IAssetResolver used by this UIComponent.
@@ -62,6 +62,7 @@ namespace UIComponents
         {
             DependencySetupProfilerMarker.Begin();
 
+            DiContext.Current.RegisterConsumer(this);
             _dependencyInjector = DiContext.Current.GetInjector(GetType());
             AssetResolver = Provide<IAssetResolver>();
             Logger = Provide<ILogger>();
@@ -74,7 +75,7 @@ namespace UIComponents
 
         private async void Initialize()
         {
-            var layoutTask = GetLayout();
+            var layoutTask = UIC_StartLayoutLoad();
             var stylesTask = GetStyleSheets();
 
             await Task.WhenAll(layoutTask, stylesTask);
@@ -82,8 +83,11 @@ namespace UIComponents
             var layoutAsset = layoutTask.Result;
             var styles = stylesTask.Result;
 
-            LoadLayout(layoutAsset);
-            LoadStyles(styles);
+            if (layoutAsset != null)
+                layoutAsset.CloneTree(this);
+            
+            for (var i = 0; i < styles.Count; i++)
+                styleSheets.Add(styles[i]);
 
             var childInitializationTasks = new List<Task>();
 
@@ -133,16 +137,13 @@ namespace UIComponents
 #endif
         }
 
-        private void LoadLayout([CanBeNull] VisualTreeAsset layoutAsset)
-        {
-            if (layoutAsset != null)
-                layoutAsset.CloneTree(this);
-        }
+        private static readonly IDependency[] EmptyDependencyArray =
+            Array.Empty<IDependency>();
 
-        private void LoadStyles(IList<StyleSheet> styles)
+        public virtual IEnumerable<IDependency> GetDependencies()
         {
-            for (var i = 0; i < styles.Count; i++)
-                styleSheets.Add(styles[i]);
+            Debug.Log("UIComponents: GetDependencies for " + GetType().Name);
+            return EmptyDependencyArray;
         }
 
         /// <summary>
@@ -197,12 +198,7 @@ namespace UIComponents
         {
             return Task.FromResult<VisualTreeAsset>(null);
         }
-        
-        private Task<VisualTreeAsset> GetLayout()
-        {
-            return UIC_StartLayoutLoad();
-        }
-        
+
         protected readonly struct StyleSheetLoadTuple
         {
             public readonly string Path;

@@ -3,7 +3,7 @@
 namespace UIComponents.Samples.Counter
 {
     [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
-    public class CounterComponent : UIComponent
+    public partial class CounterComponent : UIComponent
     {
         private readonly ICounterService _counterService;
     

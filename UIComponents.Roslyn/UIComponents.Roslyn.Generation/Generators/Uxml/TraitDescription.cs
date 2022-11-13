@@ -92,14 +92,14 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             string defaultValue = null;
 
             if (traitArguments.ContainsKey(NameArgumentName))
-                uxmlName = traitArguments[NameArgumentName].Value?.ToString();
+                uxmlName = traitArguments[NameArgumentName].Value.ToString();
 
             if (string.IsNullOrEmpty(uxmlName))
                 uxmlName = StringToKebabCase(memberName);
 
             if (traitArguments.ContainsKey(DefaultValueArgumentName))
             {
-                var defaultValueString = traitArguments[DefaultValueArgumentName].Value?.ToString();
+                var defaultValueString = traitArguments[DefaultValueArgumentName].Value.ToString();
 
                 var defaultValueObject = traitArguments[DefaultValueArgumentName].Value;
 

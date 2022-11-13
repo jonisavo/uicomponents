@@ -6,10 +6,10 @@ namespace UIComponents
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true, Inherited = false)]
     public class QueryAttribute : Attribute
     {
-        public string Name { get; set; }
-        public string Class { get; set; }
+        public string? Name { get; set; }
+        public string? Class { get; set; }
 
-        public QueryAttribute(string uxmlName = null)
+        public QueryAttribute(string? uxmlName = null)
         {
             Name = uxmlName;
         }

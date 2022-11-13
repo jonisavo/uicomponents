@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
@@ -10,9 +9,9 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class UIComponentNoAttributesTests
+    public partial class UIComponentNoAttributesTests
     {
-        private class UIComponentNoAttributes : UIComponent {}
+        private partial class UIComponentNoAttributes : UIComponent {}
 
         private TestBed _testBed;
         private IAssetResolver _mockResolver;

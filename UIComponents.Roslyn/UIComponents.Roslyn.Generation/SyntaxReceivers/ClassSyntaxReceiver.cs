@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace UIComponents.Roslyn.Generation.SyntaxReceivers
 {
-    public sealed class ClassSyntaxReceiver : ISyntaxReceiverWithClasses
+    public sealed class ClassSyntaxReceiver : ISyntaxReceiverWithTypes
     {
         public readonly List<ClassDeclarationSyntax> Classes =
             new List<ClassDeclarationSyntax>();
@@ -15,6 +15,6 @@ namespace UIComponents.Roslyn.Generation.SyntaxReceivers
                 Classes.Add(classDeclarationSyntax);
         }
 
-        public IReadOnlyList<ClassDeclarationSyntax> GetClasses() => Classes;
+        public IReadOnlyList<TypeDeclarationSyntax> GetTypes() => Classes;
     }
 }

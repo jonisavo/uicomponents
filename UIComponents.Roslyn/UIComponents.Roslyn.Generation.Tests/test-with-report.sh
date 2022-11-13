@@ -1,0 +1,2 @@
+dotnet test --collect:"XPlat Code Coverage"
+dotnet ~/.nuget/packages/reportgenerator/5.1.11/tools/net6.0/ReportGenerator.dll "-reports:TestResults/**/coverage.cobertura.xml" "-targetdir:coveragereport" "-reporttypes:Html;Html_Dark"

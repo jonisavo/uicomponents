@@ -75,3 +75,5 @@ crashlytics-build.properties
 /artifacts/
 *.coverage
 /dist
+coveragereport/
+TestResults/
