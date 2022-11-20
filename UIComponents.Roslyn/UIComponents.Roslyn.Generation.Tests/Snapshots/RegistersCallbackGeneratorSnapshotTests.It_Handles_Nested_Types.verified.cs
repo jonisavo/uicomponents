@@ -11,13 +11,13 @@ public partial class BaseClass
 {
 private partial class ClickHandler
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     protected override void UIC_RegisterCallbacks()
     {
         RegisterCallback<OnClickEvent>(OnClick);
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     protected override void UIC_UnregisterCallbacks()
     {
         UnregisterCallback<OnClickEvent>(OnClick);

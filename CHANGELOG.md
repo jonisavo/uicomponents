@@ -1,5 +1,13 @@
 
 
+# [1.0.0-alpha.4](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2022-11-20)
+
+
+### Bug Fixes
+
+* remove ConditionalAttribute from various attributes ([6437399](https://github.com/jonisavo/uicomponents/commit/64373997168d466617fbc966b5dcdb33af251718))
+* shorten type names in generated code ([03917ef](https://github.com/jonisavo/uicomponents/commit/03917efe1e12385d9137532552836b4469a9c8e4))
+
 # [1.0.0-alpha.3](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2022-11-20)
 
 

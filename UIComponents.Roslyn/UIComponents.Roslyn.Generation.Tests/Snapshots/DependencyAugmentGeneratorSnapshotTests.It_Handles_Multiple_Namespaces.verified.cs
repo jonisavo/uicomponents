@@ -13,14 +13,14 @@ namespace MyLibrary.GUI.Components
 {
 public partial class MyGUIComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.IAssetResolver, UIComponents.ResourcesAssetResolver>(),
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.ILogger, UIComponents.DebugLogger>(),
         UIComponents.DependencyInjection.Dependency.SingletonFor<Core.Services.IService, Core.Services.Service>()
     };
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     public override IEnumerable<IDependency> GetDependencies()
     {
         return UIC_Dependencies;

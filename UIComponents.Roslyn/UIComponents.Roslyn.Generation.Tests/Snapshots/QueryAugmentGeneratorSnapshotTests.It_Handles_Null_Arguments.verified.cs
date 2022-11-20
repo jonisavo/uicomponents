@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 public partial class NullQueryComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     protected override void UIC_PopulateQueryFields()
     {
         // elements

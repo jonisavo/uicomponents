@@ -9,16 +9,16 @@ using UnityEngine.UIElements;
 
 public partial class MyEnumComponentWithUsing
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     public new partial class UxmlFactory : UxmlFactory<MyEnumComponentWithUsing, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlEnumAttributeDescription<MyEnum> m_FieldTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "field-trait" };
         UxmlEnumAttributeDescription<MyEnum> m_PropertyTrait = new UxmlEnumAttributeDescription<MyEnum> { name = "property-trait" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
