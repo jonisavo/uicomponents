@@ -13,9 +13,9 @@ public partial class ConsumerComponent
 {
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
-        new Dependency<UIComponents.IAssetResolver>((UIComponents.Scope) 0, () => new UIComponents.ResourcesAssetResolver()),
-        new Dependency<UIComponents.ILogger>((UIComponents.Scope) 0, () => new UIComponents.DebugLogger()),
-        new Dependency<IMyDependency>((UIComponents.Scope) 0, () => new MyDependency())
+        UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.IAssetResolver, UIComponents.ResourcesAssetResolver>(),
+        UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.ILogger, UIComponents.DebugLogger>(),
+        UIComponents.DependencyInjection.Dependency.SingletonFor<IMyDependency, MyDependency>()
     };
 
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]

@@ -13,8 +13,8 @@ public partial struct ConsumerStruct
 {
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
-        new Dependency<IMyDependency>((UIComponents.Scope) 0, () => new MyDependency()),
-        new Dependency<ISecondDependency>((UIComponents.Scope) 1, () => new SecondDependency())
+        UIComponents.DependencyInjection.Dependency.SingletonFor<IMyDependency, MyDependency>(),
+        UIComponents.DependencyInjection.Dependency.TransientFor<ISecondDependency, SecondDependency>()
     };
 
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
