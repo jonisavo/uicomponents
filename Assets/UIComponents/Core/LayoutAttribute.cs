@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using JetBrains.Annotations;
 using UnityEngine.TestTools;
 
@@ -11,7 +10,6 @@ namespace UIComponents
     /// <seealso cref="AssetPrefixAttribute"/>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     [BaseTypeRequired(typeof(UIComponent))]
-    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [ExcludeFromCoverage]
     public sealed class LayoutAttribute : Attribute
     {

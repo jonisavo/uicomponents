@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using UnityEngine.TestTools;
 
 namespace UIComponents
@@ -27,7 +26,6 @@ namespace UIComponents
     /// </example>
     /// <seealso cref="DependencyAttribute"/>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
-    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [ExcludeFromCoverage]
     public sealed class ProvideAttribute : Attribute
     {

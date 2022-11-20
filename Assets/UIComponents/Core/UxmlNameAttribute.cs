@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using JetBrains.Annotations;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -35,7 +34,6 @@ namespace UIComponents
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [BaseTypeRequired(typeof(VisualElement))]
     [MeansImplicitUse]
     [ExcludeFromCoverage]
