@@ -109,7 +109,7 @@ via source generation. Those virtual methods are called in the inherited constru
 ## Testing
 
 The UIComponents package has been designed with testability in mind. The `UIComponents.Testing`
-assembly contains the `TestBed` helper class.
+assembly contains the `TestBed<T>` helper class.
 
 ```c#
 using UIComponents;
@@ -120,7 +120,7 @@ using UnityEngine.TestTools;
 [TestFixture]
 public class CounterComponentTests
 {
-    private TestBed _testBed;
+    private TestBed<CounterComponent> _testBed;
     private ICounterService _counterService;
     
     [SetUp]
@@ -129,9 +129,8 @@ public class CounterComponentTests
         // A mocking framework like NSubstitute is recommended.
         // Here we don't use a mock at all.
         _counterService = new CounterService();
-        _testBed = TestBed.Create()
-            .WithSingleton<ICounterService>(_counterService)
-            .Build();
+        _testBed = new TestBed<CounterComponent>()
+            .WithSingleton<ICounterService>(_counterService);
     }
     
     [UnityTest]
@@ -139,7 +138,7 @@ public class CounterComponentTests
     {
         _counterService.Count = 42;
 
-        var component = _testBed.CreateComponent<CounterComponent>();
+        var component = _testBed.CreateComponent();
         // Wait until the component has loaded.
         yield return component.WaitForInitializationEnumerator();
         Assert.That(component.CountLabel.text, Is.EqualTo("42"));
