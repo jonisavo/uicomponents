@@ -29,7 +29,7 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
                 if (!(member is IFieldSymbol fieldSymbol))
                     continue;
 
-                var memberType = RoslynUtilities.GetMemberType(member) as INamedTypeSymbol;
+                var memberType = fieldSymbol.Type;
 
                 var memberTypeIsClassOrInterface =
                     memberType.TypeKind == TypeKind.Class || memberType.TypeKind == TypeKind.Interface;
@@ -69,9 +69,13 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
         protected override bool ShouldGenerateSource(AugmentGenerationContext context)
         {
             _provideDescriptions.Clear();
+
+            if (_provideAttributeSymbol == null)
+                return false;
+
             GetProvideDescriptions(context, _provideDescriptions);
 
-            return _provideAttributeSymbol != null && _provideDescriptions.Count > 0;
+            return _provideDescriptions.Count > 0;
         }
 
         protected override void BuildUsingStatements(StringBuilder stringBuilder)
