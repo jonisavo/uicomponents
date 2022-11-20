@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 public partial class InvalidUsageQueryComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
     protected override void UIC_PopulateQueryFields()
     {
         // element

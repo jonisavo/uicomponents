@@ -9,15 +9,15 @@ using UnityEngine.UIElements;
 
 public partial class LongTraitNameComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
     public new partial class UxmlFactory : UxmlFactory<LongTraitNameComponent, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlIntAttributeDescription m_HereIsALongMemberNameWithALotOfComplexity123Test_Hello___WorldA = new UxmlIntAttributeDescription { name = "here-is-a-long-member-name-with-a-lot-of-complexity123-test-hello-world-a" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

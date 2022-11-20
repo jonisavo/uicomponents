@@ -13,13 +13,13 @@ public partial class Tests
 {
 private partial class OnCallbackComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
     protected override void UIC_RegisterCallbacks()
     {
         RegisterCallback<UnityEngine.UIElements.CallbackEvent>(OnCallback);
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
     protected override void UIC_UnregisterCallbacks()
     {
         UnregisterCallback<UnityEngine.UIElements.CallbackEvent>(OnCallback);

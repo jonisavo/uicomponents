@@ -1,5 +1,24 @@
 
 
+# [1.0.0-alpha.3](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2022-11-20)
+
+
+### Bug Fixes
+
+* **ProvideAttribute:** fix NullReferenceException during codegen ([2b03eb7](https://github.com/jonisavo/uicomponents/commit/2b03eb7f44382d86cfea628086e064526cdeeb12))
+
+
+### Features
+
+* rework dependency injection to use source generation ([fe70a79](https://github.com/jonisavo/uicomponents/commit/fe70a7963589b479e5ae9862ec8a8e93aee78fdd))
+* **samples:** add UXML code generation sample ([86ecd43](https://github.com/jonisavo/uicomponents/commit/86ecd43c48f4f8aaf375faede721e60083e7ba91))
+* **UxmlNameAttribute:** use MeansImplicitUseAttribute ([ddb58b6](https://github.com/jonisavo/uicomponents/commit/ddb58b6aea148fb02458b27dc48f2a30b5f05a25))
+
+
+### BREAKING CHANGES
+
+* All UIComponent subclasses must now be declared partial. TestBed has been reworked to focus on testing one component at a time. `new TestBed<TComponent>` is used instantiate one now.
+
 # [1.0.0-alpha.2](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2022-10-30)
 
 
