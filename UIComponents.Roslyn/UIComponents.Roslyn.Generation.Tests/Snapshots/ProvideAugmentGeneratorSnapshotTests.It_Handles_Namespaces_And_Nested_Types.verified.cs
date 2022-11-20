@@ -36,8 +36,8 @@ private partial class NestedProvideComponent
     protected override void UIC_PopulateProvideFields()
     {
         UIC_SetProvideField<Dependencies.IDependency, Dependencies.IDependency>(ref Dependency, "Dependency");
-        UIC_SetProvideField<Dependencies.Dependency, IDependency>(ref ConcreteDependency, "ConcreteDependency");
-        UIC_SetProvideField<Components.ParentClass.IOtherDependency, Components.ParentClass.IOtherDependency>(ref OtherDependency, "OtherDependency");
+        UIC_SetProvideField<Dependencies.Dependency, Dependencies.IDependency>(ref ConcreteDependency, "ConcreteDependency");
+        UIC_SetProvideField<IOtherDependency, IOtherDependency>(ref OtherDependency, "OtherDependency");
     }
 }
 }

@@ -165,6 +165,29 @@ public partial class UIComponentWithNoOwnDependencies : UIComponent {}
         }
 
         [Fact]
+        public Task It_Handles_Multiple_Namespaces()
+        {
+            var firstSource = @"
+namespace MyLibrary.Core.Services
+{
+    public interface IService {}
+    public class Service : IService {}
+}
+";
+            var secondSource = @"
+using UIComponents;
+using MyLibrary.Core.Services;
+
+namespace MyLibrary.GUI.Components
+{
+    [Dependency(typeof(IService), provide: typeof(Service)]
+    public class MyGUIComponent : UIComponent {}
+}
+";
+            return GeneratorTester.Verify<DependencyAugmentGenerator>(firstSource, secondSource);
+        }
+
+        [Fact]
         public Task It_Does_Not_Generate_When_Not_Inheriting_Consumer_Interface()
         {
             var source = @"

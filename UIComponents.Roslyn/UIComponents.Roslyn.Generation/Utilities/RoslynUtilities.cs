@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace UIComponents.Roslyn.Generation.Utilities
 {
@@ -42,23 +44,47 @@ namespace UIComponents.Roslyn.Generation.Utilities
             return potentialNamespaceParent as NamespaceDeclarationSyntax;
         }
 
-        public static string GetTypeNameWithoutRootNamespace(ITypeSymbol type, string nameSpace)
+        public static string GetTypeNameForNamespace(ITypeSymbol type, string nameSpace)
         {
             var displayString = type.ToDisplayString();
 
+            var displayStringParts = displayString.Split('.');
             var namespaceParts = nameSpace.Split('.');
 
-            if (namespaceParts.Length < 2)
+            // TODO: UGLY HACK. We don't want to shorten UIComponents types because doing so
+            // may lead to compile errors, since the shortened type names may no longer
+            // be valid. There should be some mechanism for generating using statements...
+            if (nameSpace.StartsWith("UIComponents."))
                 return displayString;
 
-            var rootNamespace = namespaceParts[0];
-
-            if (!displayString.StartsWith(rootNamespace))
+            if (displayStringParts.Length <= 1)
                 return displayString;
 
-            var firstDotIndex = displayString.IndexOf('.') + 1;
+            var startIndex = 0;
 
-            return displayString.Substring(firstDotIndex);
+            for (var i = 0; i < namespaceParts.Length; i++)
+            {
+                if (i >= displayStringParts.Length)
+                    break;
+
+                if (namespaceParts[i] != displayStringParts[i])
+                    break;
+
+                startIndex++;
+            }
+
+            var stringBuilder = new StringBuilder();
+
+            for (var i = startIndex; i < displayStringParts.Length; i++)
+            {
+                stringBuilder.Append(displayStringParts[i]);
+
+                if (i != displayStringParts.Length - 1)
+                    stringBuilder.Append(".");
+            }
+                
+
+            return stringBuilder.ToString();
         } 
 
         public static BaseTypeDeclarationSyntax GetBaseTypeSyntax(SyntaxNode syntaxNode)

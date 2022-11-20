@@ -51,7 +51,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
             base.BuildUsingStatements(stringBuilder);
         }
 
-        private void GenerateEffectArrayInitialization(StringBuilder stringBuilder)
+        private void GenerateEffectArrayInitialization(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
             stringBuilder
                 .AppendPadding()
@@ -66,7 +66,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
 
                 stringBuilder
                     .AppendWithPadding("new ", 3)
-                    .Append(effect.EffectTypeSymbol.ToDisplayString())
+                    .Append(context.GetTypeName(effect.EffectTypeSymbol))
                     .Append(effect.CallString);
 
                 if (i != _effectDescriptions.Count - 1)
@@ -90,7 +90,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
                 .AppendLine("private static UIComponentEffectAttribute[] UIC_EffectAttributes;")
                 .AppendLine();
 
-            GenerateEffectArrayInitialization(stringBuilder);
+            GenerateEffectArrayInitialization(context, stringBuilder);
 
             stringBuilder.AppendLine($@"
     {Constants.GeneratedCodeAttribute}

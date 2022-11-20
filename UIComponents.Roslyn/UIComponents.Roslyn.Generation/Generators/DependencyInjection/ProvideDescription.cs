@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using System;
 using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
@@ -15,12 +14,12 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
             CastFromType = castFromType;
         }
 
-        public string GetCastFromTypeName(string nameSpace)
+        public string GetCastFromTypeName(AugmentGenerationContext context)
         {
             if (CastFromType != null)
-                return RoslynUtilities.GetTypeNameWithoutRootNamespace(CastFromType, nameSpace);
+                return context.GetTypeName(CastFromType);
 
-            return RoslynUtilities.GetTypeNameWithoutRootNamespace(Field.Type, nameSpace);
+            return context.GetTypeName(Field.Type);
         }
     }
 }

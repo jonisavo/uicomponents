@@ -23,7 +23,7 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 			ScopeAsInt = scopeAsInt;
 		}
 
-		public string ToConstructorCallString()
+		public string ToConstructorCallString(AugmentGenerationContext context)
 		{
 			var stringBuilder = new StringBuilder();
 			stringBuilder.Append("UIComponents.DependencyInjection.Dependency.");
@@ -34,9 +34,9 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 				stringBuilder.Append("TransientFor<");
 
 			stringBuilder
-				.Append(DependencyType.ToDisplayString())
+				.Append(context.GetTypeName(DependencyType))
 				.Append(", ")
-				.Append(ImplementationType.ToDisplayString())
+				.Append(context.GetTypeName(ImplementationType))
 				.Append(">()");
 
 			return stringBuilder.ToString();

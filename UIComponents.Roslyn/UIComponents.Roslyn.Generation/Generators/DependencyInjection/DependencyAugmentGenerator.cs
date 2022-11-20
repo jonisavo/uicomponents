@@ -107,7 +107,7 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
             for (var i = 0; i < _dependencyDescriptions.Count; i++)
             {
                 var dependency = _dependencyDescriptions[i];
-                stringBuilder.AppendWithPadding(dependency.ToConstructorCallString(), 2);
+                stringBuilder.AppendWithPadding(dependency.ToConstructorCallString(context), 2);
                 if (i != _dependencyDescriptions.Count - 1)
                     stringBuilder.Append(",");
                 stringBuilder.AppendLine();
@@ -123,7 +123,11 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 
             stringBuilder.AppendWithPadding("public ");
 
-            if (RoslynUtilities.HasBaseType(context.CurrentTypeSymbol, _uiComponentSymbol))
+            var currentTypeHasInterface = context.CurrentTypeSymbol.Interfaces
+                .Where((interfaceType) => interfaceType.Equals(_dependencyConsumerInterfaceSymbol, SymbolEqualityComparer.Default))
+                .Any();
+
+            if (!currentTypeHasInterface)
                 stringBuilder.Append("override ");
 
             stringBuilder.AppendLine(@"IEnumerable<IDependency> GetDependencies()

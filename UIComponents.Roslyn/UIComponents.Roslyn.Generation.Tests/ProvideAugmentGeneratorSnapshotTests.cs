@@ -111,7 +111,7 @@ namespace Components
             [Provide]
             public Dependencies.IDependency Dependency;
 
-            [Provide(CastFrom = typeof(IDependency))]
+            [Provide(CastFrom = typeof(Dependencies.IDependency))]
             public Dependencies.Dependency ConcreteDependency;
 
             [Provide]
