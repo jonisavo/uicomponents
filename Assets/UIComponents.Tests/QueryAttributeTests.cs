@@ -149,7 +149,7 @@ namespace UIComponents.Tests
             Assert.That(component.buttons.Count, Is.EqualTo(0));
             
             _mockLogger.Received().LogError("Query (label): No instances of UnityEngine.UIElements.Label found", component);
-            _mockLogger.Received().LogError("Query (components): No instances of Tests.QueryAttributeTests.ComponentWithQueryAttribute found", component);
+            _mockLogger.Received().LogError("Query (components): No instances of UIComponents.Tests.QueryAttributeTests.ComponentWithQueryAttribute found", component);
             _mockLogger.Received().LogError("Query (buttons): No instances of UnityEngine.UIElements.Button found", component);
         }
     }

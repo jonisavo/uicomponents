@@ -153,5 +153,81 @@ using System.Runtime.CompilerServices;
                 Assert.Null(memberType);
             }
         }
+
+        public class GetTypeNameForNamespace
+        {
+            [Fact]
+            public void Returns_The_Type_Name_With_Shared_Portions_Removed()
+            {
+                var twoPartTypeSymbol = Substitute.For<ITypeSymbol>();
+                twoPartTypeSymbol
+                    .ToDisplayString()
+                    .Returns("MyLibrary.Service");
+
+                var fivePartTypeSymbol = Substitute.For<ITypeSymbol>();
+                fivePartTypeSymbol
+                    .ToDisplayString()
+                    .Returns("MyLibrary.Services.Area.Internal.Helper");
+
+                var twoPartName =
+                    RoslynUtilities.GetTypeNameForNamespace(twoPartTypeSymbol, "MyLibrary");
+
+                Assert.Equal("Service", twoPartName);
+
+                var fivePartName =
+                    RoslynUtilities.GetTypeNameForNamespace(fivePartTypeSymbol, "MyLibrary.Services.Area");
+
+                Assert.Equal("Internal.Helper", fivePartName);
+            }
+
+            [Fact]
+            public void Returns_Type_Name_If_It_Has_One_Part()
+            {
+                var onePartTypeSymbol = Substitute.For<ITypeSymbol>();
+                onePartTypeSymbol
+                    .ToDisplayString()
+                    .Returns("MyService");
+
+                var onePartName =
+                    RoslynUtilities.GetTypeNameForNamespace(onePartTypeSymbol, "MyService");
+
+                Assert.Equal("MyService", onePartName);
+            }
+
+            [Fact]
+            public void Returns_Type_Name_If_There_Is_No_Match()
+            {
+                var typeSymbol = Substitute.For<ITypeSymbol>();
+                typeSymbol
+                    .ToDisplayString()
+                    .Returns("MyLibrary.Services.MyService");
+                var typeSymbolWithoutGlobal = Substitute.For<ITypeSymbol>();
+                typeSymbolWithoutGlobal
+                    .ToDisplayString()
+                    .Returns("MyLibrary.Services.MyService");
+
+                var newTypeName =
+                    RoslynUtilities.GetTypeNameForNamespace(typeSymbol, "OtherLibrary.Services");
+                var newTypeNameWithoutGlobal =
+                    RoslynUtilities.GetTypeNameForNamespace(typeSymbolWithoutGlobal, "OtherLibrary.Services");
+
+                Assert.Equal("MyLibrary.Services.MyService", newTypeName);
+                Assert.Equal("MyLibrary.Services.MyService", newTypeNameWithoutGlobal);
+            }
+
+            [Fact]
+            public void Returns_Type_Name_If_It_Belongs_In_UIComponents()
+            {
+                var typeSymbol = Substitute.For<ITypeSymbol>();
+                typeSymbol
+                    .ToDisplayString()
+                    .Returns("UIComponents.Addressables.AddressableAssetResolver");
+
+                var newTypeName =
+                    RoslynUtilities.GetTypeNameForNamespace(typeSymbol, "UIComponents.Samples.Addressables.Stuff");
+
+                Assert.Equal("UIComponents.Addressables.AddressableAssetResolver", newTypeName);
+            }
+        }
     }
 }

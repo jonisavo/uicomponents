@@ -66,20 +66,25 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             if (!base.ShouldGenerateSource(context))
                 return false;
 
+            if (_queryAttributeSymbol == null)
+                return false;
+
             _queryDescriptions.Clear();
             GetQueryDescriptions(context, _queryDescriptions);
 
-            return _queryAttributeSymbol != null && _queryDescriptions.Count > 0;
+            return _queryDescriptions.Count > 0;
         }
 
-        private void GenerateQueryAssignment(QueryDescription queryDescription, StringBuilder stringBuilder)
+        private void GenerateQueryAssignment(
+            QueryDescription queryDescription, 
+            AugmentGenerationContext context, 
+            StringBuilder stringBuilder)
         {
             var memberSymbol = queryDescription.MemberSymbol;
             var memberType = RoslynUtilities.GetMemberType(memberSymbol);
 
-            var namespaceString = memberSymbol.ContainingNamespace.ToDisplayString();
             var concreteMemberType = RoslynUtilities.GetConcreteType(memberType);
-            var concreteMemberTypeName = RoslynUtilities.GetTypeNameWithoutRootNamespace(concreteMemberType, namespaceString);
+            var concreteMemberTypeName = context.GetTypeName(concreteMemberType);
 
             stringBuilder.AppendLineWithPadding($"// {memberSymbol.Name}", 2);
             
@@ -139,7 +144,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
             for (var i = 0; i < _queryDescriptions.Count; i++)
             {
-                GenerateQueryAssignment(_queryDescriptions[i], stringBuilder);
+                GenerateQueryAssignment(_queryDescriptions[i], context, stringBuilder);
 
                 if (i != _queryDescriptions.Count - 1)
                     stringBuilder.AppendLine();

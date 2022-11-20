@@ -15,7 +15,8 @@ namespace UIComponents.Roslyn.Generation.Generators
 
         public string GetTypeName(ITypeSymbol type)
         {
-            return RoslynUtilities.GetTypeNameWithoutRootNamespace(type, CurrentTypeNamespace);
+            var typeName = CurrentTypeSymbol.ToDisplayString();
+            return RoslynUtilities.GetTypeNameForNamespace(type, typeName);
         }
     }
 }

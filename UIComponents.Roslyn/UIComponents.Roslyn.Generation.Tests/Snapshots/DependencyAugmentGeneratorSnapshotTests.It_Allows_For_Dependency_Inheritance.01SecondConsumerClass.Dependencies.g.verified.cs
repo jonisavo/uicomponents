@@ -19,7 +19,7 @@ public partial class SecondConsumerClass
     };
 
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.3")]
-    public IEnumerable<IDependency> GetDependencies()
+    public override IEnumerable<IDependency> GetDependencies()
     {
         return UIC_Dependencies;
     }
