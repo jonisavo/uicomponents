@@ -10,26 +10,32 @@ namespace UIComponents.Tests
         
         private class ClassThatImplementsInterface : IInterface {}
         
-        // private class ClassThatDoesNotImplementInterface {}
-        
         [Test]
         public void Constructor_Throws_On_Null_Factory()
         {
-            Assert.That(() => new Dependency<IInterface>(Scope.Singleton, null), Throws.ArgumentNullException);
+            Assert.That(() => new Dependency<IInterface, ClassThatImplementsInterface>(Scope.Singleton, null), Throws.ArgumentNullException);
         }
 
         [Test]
         public void Allows_Fetching_Dependency_Type()
         {
-            var dependency = new Dependency<IInterface>(Scope.Singleton, () => new ClassThatImplementsInterface());
+            var dependency = new Dependency<IInterface, ClassThatImplementsInterface>(Scope.Singleton, () => new ClassThatImplementsInterface());
             
             Assert.That(dependency.GetDependencyType(), Is.EqualTo(typeof(IInterface)));
         }
 
         [Test]
+        public void Allows_Fetching_Implementation_Type()
+        {
+            var dependency = new Dependency<IInterface, ClassThatImplementsInterface>(Scope.Singleton, () => new ClassThatImplementsInterface());
+
+            Assert.That(dependency.GetImplementationType(), Is.EqualTo(typeof(ClassThatImplementsInterface)));
+        }
+
+        [Test]
         public void Allows_Fetching_Scope()
         {
-            var dependency = new Dependency<IInterface>(Scope.Singleton, () => new ClassThatImplementsInterface());
+            var dependency = new Dependency<IInterface, ClassThatImplementsInterface>(Scope.Singleton, () => new ClassThatImplementsInterface());
             
             Assert.That(dependency.GetScope(), Is.EqualTo(Scope.Singleton));
         }
@@ -37,29 +43,11 @@ namespace UIComponents.Tests
         [Test]
         public void Allows_Creating_An_Instance()
         {
-            var dependency = new Dependency<IInterface>(Scope.Singleton, () => new ClassThatImplementsInterface());
+            var dependency = new Dependency<IInterface, ClassThatImplementsInterface>(Scope.Singleton, () => new ClassThatImplementsInterface());
 
             var instance = dependency.CreateInstance();
             
             Assert.That(instance, Is.InstanceOf<ClassThatImplementsInterface>());
         }
-
-        // [Test]
-        // public void ChangeInstance_Throws_On_Invalid_Instance()
-        // {
-        //     var dependency = new Dependency(typeof(IInterface), typeof(ClassThatImplementsInterface), Scope.Singleton);
-        //     
-        //     Assert.That(() => dependency.ChangeInstance(null), Throws.ArgumentNullException);
-        //     Assert.That(() => dependency.ChangeInstance(new ClassThatDoesNotImplementInterface()), Throws.ArgumentException);
-        // }
-        //
-        // [Test]
-        // public void Clear_Sets_Instance_To_Null()
-        // {
-        //     var dependency = new Dependency(typeof(IInterface), typeof(ClassThatImplementsInterface), Scope.Singleton);
-        //     Assert.That(dependency.Instance, Is.Not.Null);
-        //     dependency.Clear();
-        //     Assert.That(dependency.Instance, Is.Null);
-        // }
     }
 }

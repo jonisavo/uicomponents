@@ -23,7 +23,6 @@ namespace UIComponents.Tests
         [Layout("Assets/MissingAsset.uxml")]
         private partial class UIComponentWithNullLayout : UIComponent {}
 
-        private TestBed _testBed;
         private IAssetResolver _mockResolver;
 
         [SetUp]
@@ -32,10 +31,6 @@ namespace UIComponents.Tests
             _mockResolver = MockUtilities.CreateMockResolver();
             _mockResolver.LoadAsset<VisualTreeAsset>("Assets/MissingAsset.uxml")
                 .ReturnsNull();
-
-            _testBed = TestBed.Create()
-                .WithSingleton(_mockResolver)
-                .Build();
         }
 
         [TearDown]
@@ -47,7 +42,8 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Given_Layout_Is_Loaded()
         {
-            var component = _testBed.CreateComponent<UIComponentWithLayout>();
+            var testBed = new TestBed<UIComponentWithLayout>().WithSingleton(_mockResolver);
+            var component = testBed.CreateComponent();
             yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
@@ -55,7 +51,8 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Superclass_Layout_Is_Loaded_If_It_Is_Not_Overridden()
         {
-            var component = _testBed.CreateComponent<InheritedComponentWithoutAttribute>();
+            var testBed = new TestBed<InheritedComponentWithoutAttribute>().WithSingleton(_mockResolver);
+            var component = testBed.CreateComponent();
             yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
@@ -63,7 +60,8 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Superclass_Layout_Is_Not_Loaded_If_Overridden()
         {
-            var component = _testBed.CreateComponent<InheritedComponentWithAttribute>();
+            var testBed = new TestBed<InheritedComponentWithAttribute>().WithSingleton(_mockResolver);
+            var component = testBed.CreateComponent();
             yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml");
             _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
@@ -72,7 +70,8 @@ namespace UIComponents.Tests
         [Test]
         public void Null_Layout_Is_Handled()
         {
-            Assert.DoesNotThrow(() => _testBed.CreateComponent<UIComponentWithNullLayout>());
+            var testBed = new TestBed<UIComponentWithNullLayout>().WithSingleton(_mockResolver);
+            Assert.DoesNotThrow(() => testBed.CreateComponent());
         }
     }
 }

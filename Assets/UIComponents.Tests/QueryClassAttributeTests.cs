@@ -47,6 +47,11 @@ namespace UIComponents.Tests
             
             [Query(Class = "no-such-class")]
             public Label EmptyLabel;
+
+            [Query("class1-first")]
+            [Query(Class = "class2")]
+            [Query(Class = "class3")]
+            public Label[] Labels;
         }
 
         private void AssertAllElementsAreOfType<T>(IEnumerable<T> elements) where T : VisualElement
@@ -55,7 +60,6 @@ namespace UIComponents.Tests
                 Assert.That(element, Is.InstanceOf<T>());
         }
 
-        private TestBed _testBed;
         private ILogger _mockLogger;
         private QueryClassTestComponent _queryClassTestComponent;
         
@@ -63,8 +67,9 @@ namespace UIComponents.Tests
         public IEnumerator UnitySetUp()
         {
             _mockLogger = Substitute.For<ILogger>();
-            _testBed = TestBed.Create().WithSingleton(_mockLogger).Build();
-            _queryClassTestComponent = _testBed.CreateComponent<QueryClassTestComponent>();
+            var testBed = new TestBed<QueryClassTestComponent>()
+                .WithSingleton(_mockLogger);
+            _queryClassTestComponent = testBed.CreateComponent();
             yield return _queryClassTestComponent.WaitForInitializationEnumerator();
         }
 
@@ -130,24 +135,12 @@ namespace UIComponents.Tests
         {
             Assert.That(_queryClassTestComponent.EmptyLabel, Is.Null);
         }
-
-        [Layout("UIComponentTests/QueryClassAttributeTest")]
-        private partial class UIComponentWithNameAndClassQuery : UIComponent
-        {
-            [Query("class1-first")]
-            [Query(Class = "class2")]
-            [Query(Class = "class3")]
-            public Label[] Labels;
-        }
         
-        [UnityTest]
-        public IEnumerator Works_With_Both_Name_And_Class_Query()
+        [Test]
+        public void Works_With_Both_Name_And_Class_Query()
         {
-            var component = _testBed.CreateComponent<UIComponentWithNameAndClassQuery>();
-            yield return component.WaitForInitializationEnumerator();
-            
-            Assert.That(component.Labels, Is.Not.Null);
-            Assert.That(component.Labels.Length, Is.EqualTo(3));
+            Assert.That(_queryClassTestComponent.Labels, Is.Not.Null);
+            Assert.That(_queryClassTestComponent.Labels.Length, Is.EqualTo(3));
         }
     }
 }

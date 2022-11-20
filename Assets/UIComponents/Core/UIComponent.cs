@@ -6,6 +6,7 @@ using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
 using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents
@@ -140,9 +141,9 @@ namespace UIComponents
         private static readonly IDependency[] EmptyDependencyArray =
             Array.Empty<IDependency>();
 
+        [ExcludeFromCoverage]
         public virtual IEnumerable<IDependency> GetDependencies()
         {
-            Debug.Log("UIComponents: GetDependencies for " + GetType().Name);
             return EmptyDependencyArray;
         }
 

@@ -11,6 +11,8 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 		public readonly INamedTypeSymbol ImplementationType;
 		public readonly int ScopeAsInt;
 
+		private const int SingletonScope = 0;
+
 		public DependencyDescription(
 			INamedTypeSymbol dependencyType,
 			INamedTypeSymbol implementationType,
@@ -24,15 +26,18 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 		public string ToConstructorCallString()
 		{
 			var stringBuilder = new StringBuilder();
+			stringBuilder.Append("UIComponents.DependencyInjection.Dependency.");
+
+			if (ScopeAsInt == SingletonScope)
+				stringBuilder.Append("SingletonFor<");
+			else
+				stringBuilder.Append("TransientFor<");
 
 			stringBuilder
-				.Append("new Dependency<")
 				.Append(DependencyType.ToDisplayString())
-				.Append(">((UIComponents.Scope) ")
-				.Append(ScopeAsInt)
-				.Append(", () => new ")
+				.Append(", ")
 				.Append(ImplementationType.ToDisplayString())
-				.Append("())");
+				.Append(">()");
 
 			return stringBuilder.ToString();
 		}

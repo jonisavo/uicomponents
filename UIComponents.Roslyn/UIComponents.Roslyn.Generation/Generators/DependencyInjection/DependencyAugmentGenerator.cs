@@ -50,7 +50,7 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
             var reader = new ClassAttributeArgumentReader(_dependencyAttributeSymbol, context.ClassSemanticModel);
             reader.SetReadOrder(AttributeReadOrder.BaseFirst);
 
-            reader.Read(context.ClassSyntax, attributeDatas);
+            reader.ReadWithSymbol(context.CurrentTypeSymbol, attributeDatas);
 
             foreach (var attributeData in attributeDatas)
             {

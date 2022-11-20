@@ -158,6 +158,8 @@ public class MyDependency : IMyDependency {}
 
 [Dependency(typeof(IMyDependency), provide: typeof(MyDependency))]
 public partial class ConsumerComponent : UIComponent {}
+
+public partial class UIComponentWithNoOwnDependencies : UIComponent {}
 ";
             return GeneratorTester.Verify<DependencyAugmentGenerator>(source);
         }

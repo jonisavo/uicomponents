@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace UIComponents.DependencyInjection
 {
+    /// <summary>
+    /// Represents a dependency injection context, which contains
+    /// each consumer's dependency injectors and all singleton instances.
+    /// </summary>
     public sealed class DiContext
     {
         /// <summary>
@@ -14,6 +18,12 @@ namespace UIComponents.DependencyInjection
         /// The current dependency injection context.
         /// </summary>
         public static DiContext Current { get; private set; } = Static;
+
+        /// <summary>
+        /// Changes the current dependency injection context.
+        /// </summary>
+        /// <param name="newContext">New context</param>
+        /// <exception cref="ArgumentNullException">Thrown if the context is null</exception>
 
         public static void ChangeCurrent(DiContext newContext)
         {
@@ -28,17 +38,30 @@ namespace UIComponents.DependencyInjection
         internal readonly Dictionary<Type, object> SingletonInstanceDictionary
             = new Dictionary<Type, object>();
 
+        /// <summary>
+        /// Returns a readonly dictionary of singleton instances, where the key
+        /// is the type of the instance and the value is the instance itself.
+        /// </summary>
         public IReadOnlyDictionary<Type, object> GetSingletonInstances()
         {
             return SingletonInstanceDictionary;
         }
 
+        /// <summary>
+        /// Clears the dependency injection context completely.
+        /// </summary>
         public void Clear()
         {
             InjectorDictionary.Clear();
             SingletonInstanceDictionary.Clear();
         }
 
+        /// <summary>
+        /// Returns the dependency injector of the given consumer type.
+        /// </summary>
+        /// <param name="consumerType">Consumer type</param>
+        /// <returns>Consumer's dependency injector</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the consumer type is null</exception>
         public DependencyInjector GetInjector(Type consumerType)
         {
             if (consumerType == null)
@@ -54,17 +77,28 @@ namespace UIComponents.DependencyInjection
             return injector;
         }
 
-        private bool IsConsumerRegistered<T>() where T : IDependencyConsumer
+        /// <summary>
+        /// Returns whether an injector exists for the given consumer type.
+        /// </summary>
+        /// <param name="consumerType">Consumer type</param>
+        public bool HasInjector(Type consumerType)
         {
-            if (!InjectorDictionary.TryGetValue(typeof(T), out var injector))
+            if (!InjectorDictionary.TryGetValue(consumerType, out var injector))
                 return false;
 
             return injector.HasConsumer;
         }
 
-        public void RegisterConsumer<T>(T consumer) where T : IDependencyConsumer
+        /// <summary>
+        /// Adds a consumer to the dependency injection context. Its dependencies
+        /// are added to the context if needed.
+        /// </summary>
+        /// <param name="consumer">Dependency consumer</param>
+        public void RegisterConsumer(IDependencyConsumer consumer)
         {
-            if (IsConsumerRegistered<T>())
+            var consumerType = consumer.GetType();
+
+            if (HasInjector(consumerType))
                 return;
 
             var dependencies = consumer.GetDependencies();
@@ -74,24 +108,17 @@ namespace UIComponents.DependencyInjection
                 if (dependency.GetScope() == Scope.Transient)
                     continue;
 
-                var dependencyType = dependency.GetDependencyType();
+                var implementationType = dependency.GetImplementationType();
 
-                if (SingletonInstanceDictionary.ContainsKey(dependencyType))
+                if (SingletonInstanceDictionary.ContainsKey(implementationType))
                     continue;
 
-                SingletonInstanceDictionary[dependencyType] = dependency.CreateInstance();
+                SingletonInstanceDictionary[implementationType] = dependency.CreateInstance();
             }
-            
-            var consumerType = typeof(T);
 
             var injector = GetInjector(consumerType);
             
             injector.SetConsumer(consumer);
-        }
-
-        public void SetSingleton<TDependency>(TDependency instance) where TDependency : class
-        {
-            SingletonInstanceDictionary[typeof(TDependency)] = instance;
         }
     }
 }

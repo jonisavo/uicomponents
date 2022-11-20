@@ -1,16 +1,18 @@
-﻿using System;
-using System.Diagnostics;
+﻿using JetBrains.Annotations;
+using System;
+using UIComponents.DependencyInjection;
 using UnityEngine.TestTools;
 
 namespace UIComponents
 {
     /// <summary>
-    /// Used to define a dependency for UIComponents.
+    /// Used to define a dependency for UIComponents and other dependency consumers.
     /// </summary>
     /// <seealso cref="UIComponent"/>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Assembly, AllowMultiple = true)]
+    /// <seealso cref="IDependencyConsumer"/>
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Assembly, AllowMultiple = true, Inherited = true)]
     [ExcludeFromCoverage]
-    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
+    [BaseTypeRequired(typeof(IDependencyConsumer))]
     public sealed class DependencyAttribute : Attribute
     {
         public readonly Type DependencyType;

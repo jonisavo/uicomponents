@@ -32,15 +32,7 @@ namespace UIComponents.Tests
         }
 
         [Dependency(typeof(IStringDependency), provide: typeof(EmptyStringProvider))]
-        private partial class UIComponentSubclassWithDependencyOverride : UIComponent
-        {
-            public readonly IStringDependency StringDependency;
-
-            public UIComponentSubclassWithDependencyOverride()
-            {
-                StringDependency = Provide<IStringDependency>();
-            }
-        }
+        private partial class UIComponentSubclassWithDependencyOverride : UIComponentWithStringDependency {}
 
         [Test]
         public void The_Correct_Class_Is_Provided_To_Component()

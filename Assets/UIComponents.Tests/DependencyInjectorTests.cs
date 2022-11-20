@@ -21,7 +21,7 @@ namespace UIComponents.Tests
         {
             _mockConsumer = MockUtilities.CreateDependencyConsumer(new IDependency[]
             {
-                new Dependency<IMockDependency>(Scope.Singleton, () => new DependencyOne())
+                Dependency.SingletonFor<IMockDependency, DependencyOne>()
             });
 
             _diContext = new DiContext();
@@ -57,12 +57,12 @@ namespace UIComponents.Tests
                 _diContext = new DiContext();
                 _mockConsumer = MockUtilities.CreateDependencyConsumer(new IDependency[]
                 {
-                    new Dependency<IMockDependency>(Scope.Singleton, () => new DependencyOne())
+                    Dependency.SingletonFor<IMockDependency, DependencyOne>()
                 });
                 _mockConsumerWithTransientOverride = MockUtilities.CreateDependencyConsumer(new IDependency[]
                 {
-                    new Dependency<IMockDependency>(Scope.Transient, () => new DependencyOne()),
-                    new Dependency<IMockDependency>(Scope.Singleton, () => new DependencyTwo())
+                    Dependency.TransientFor<IMockDependency, DependencyOne>(),
+                    Dependency.SingletonFor<IMockDependency, DependencyTwo>()
                 });
                 _diContext.RegisterConsumer(_mockConsumer);
                 _diContext.RegisterConsumer(_mockConsumerWithTransientOverride);
@@ -82,14 +82,6 @@ namespace UIComponents.Tests
                 Assert.That(injector.Provide<IMockDependency>(), Is.InstanceOf<DependencyOne>()); 
             }
 
-            // [Test]
-            // public void Returns_Desired_Dependency_With_Non_Generic_Method()
-            // {
-            //     var injector = new DependencyInjector(DiContext.Current.Container);
-            //     injector.SetDependency<IDependency>(new DependencyOne());
-            //     Assert.That(injector.Provide(typeof(IDependency)), Is.InstanceOf<DependencyOne>());
-            // }
-
             private interface IMissingDependency {}
             
             [Test]
@@ -103,18 +95,6 @@ namespace UIComponents.Tests
                 
                 Assert.That(exception.Message, Is.EqualTo("No provider found for IMissingDependency"));
             }
-            
-            // [Test]
-            // public void Throws_If_No_Provider_Exists_With_Non_Generic_Method()
-            // {
-            //     var injector = new DependencyInjector(DiContext.Current.Container);
-            //
-            //     var exception = Assert.Throws<MissingProviderException>(
-            //         () => injector.Provide(typeof(IDependency))
-            //     );
-            //     
-            //     Assert.That(exception.Message, Is.EqualTo("No provider found for IDependency"));
-            // }
         }
 
         [TestFixture]
@@ -129,7 +109,7 @@ namespace UIComponents.Tests
                 _diContext = new DiContext();
                 _mockConsumer = MockUtilities.CreateDependencyConsumer(new IDependency[]
                 {
-                    new Dependency<IMockDependency>(Scope.Singleton, () => new DependencyOne())
+                    Dependency.SingletonFor<IMockDependency, DependencyOne>()
                 });
                 _diContext.RegisterConsumer(_mockConsumer);
             }
@@ -176,12 +156,12 @@ namespace UIComponents.Tests
                 _diContext = new DiContext();
                 _firstConsumer = MockUtilities.CreateDependencyConsumer(new IDependency[]
                 {
-                    new Dependency<IMockDependency>(Scope.Transient, () => new DependencyOne())
+                    Dependency.TransientFor<IMockDependency, DependencyOne>()
                 });
                 _secondConsumer = MockUtilities.CreateDependencyConsumer(new IDependency[]
                 {
-                    new Dependency<IMockDependency>(Scope.Transient, () => new DependencyTwo()),
-                    new Dependency<ISingletonDependency>(Scope.Singleton, () => new SingletonDependency())
+                    Dependency.TransientFor<IMockDependency, DependencyTwo>(),
+                    Dependency.SingletonFor<ISingletonDependency, SingletonDependency>()
                 });
                 _diContext.RegisterConsumer(_firstConsumer);
                 _diContext.RegisterConsumer(_secondConsumer);
@@ -210,7 +190,7 @@ namespace UIComponents.Tests
                 _diContext = new DiContext();
                 _mockConsumer = MockUtilities.CreateDependencyConsumer(new IDependency[]
                 {
-                    new Dependency<IMockDependency>(Scope.Transient, () => new DependencyOne())
+                    Dependency.TransientFor<IMockDependency, DependencyOne>()
                 });
                 _diContext.RegisterConsumer(_mockConsumer);
             }
@@ -225,110 +205,5 @@ namespace UIComponents.Tests
                 Assert.That(injector.Provide<IMockDependency>(), Is.InstanceOf<DependencyTwo>());
             }
         }
-        
-        // [TestFixture]
-        // public class SetDependency
-        // {
-        //     [Test]
-        //     public void Switches_The_Dependency()
-        //     {
-        //         var injector = new DependencyInjector(DiContext.Current.Container);
-        //         
-        //         injector.SetDependency<IDependency>(new DependencyOne());
-        //         injector.SetDependency<IDependency>(new DependencyTwo());
-        //         
-        //         Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyTwo>());
-        //     }
-        //
-        //     [Test]
-        //     public void Throws_Exception_If_Null_Is_Given_As_Parameter()
-        //     {
-        //         var injector = new DependencyInjector(DiContext.Current.Container);
-        //
-        //         Assert.Throws<ArgumentNullException>(
-        //             () => injector.SetDependency<IDependency>(null)
-        //         );
-        //     }
-        // }
-
-        // [TestFixture]
-        // public class ClearDependency
-        // {
-        //     [Test]
-        //     public void Removes_Dependency_Instance()
-        //     {
-        //         var injector = new DependencyInjector(DiContext.Current.Container);
-        //         
-        //         injector.SetDependency<IDependency>(new DependencyOne());
-        //         
-        //         injector.ClearDependency<IDependency>();
-        //
-        //         Assert.Throws<MissingProviderException>(() => injector.Provide<IDependency>());
-        //     }
-        //
-        //     [Test]
-        //     public void Does_Not_Throw_If_Dependency_Does_Not_Exist()
-        //     {
-        //         var injector = new DependencyInjector(DiContext.Current.Container);
-        //         
-        //         Assert.DoesNotThrow(() => injector.ClearDependency<IDependency>());
-        //     }
-        // }
-
-        // [TestFixture]
-        // public class ResetProvidedInstance
-        // {
-        //     [SetUp]
-        //     public void SetUp()
-        //     {
-        //         DiContext.Current.Container.Clear();
-        //     }
-        //
-        //     [Test]
-        //     public void Throws_If_No_Default_Dependency_Exists()
-        //     {
-        //         var injector = new DependencyInjector(DiContext.Current.Container);
-        //         
-        //         Assert.Throws<InvalidOperationException>(
-        //             () => injector.ResetProvidedInstance<IDependency>()
-        //         );
-        //         
-        //         var initialDependency = new DependencyOne();
-        //         
-        //         injector.SetDependency<IDependency>(initialDependency);
-        //         
-        //         Assert.DoesNotThrow(
-        //             () => injector.ResetProvidedInstance<IDependency>()
-        //         );
-        //     }
-        //
-        //     [Test]
-        //     public void Restores_Singleton_Instance()
-        //     {
-        //         var injector = new DependencyInjector(DiContext.Current.Container);
-        //
-        //         var singletonInstance = new DependencyOne();
-        //         
-        //         injector.SetDependency<IDependency>(singletonInstance);
-        //         injector.SetDependency<IDependency>(new DependencyTwo());
-        //         injector.ResetProvidedInstance<IDependency>();
-        //
-        //         Assert.That(injector.Provide<IDependency>(), Is.SameAs(singletonInstance));
-        //     }
-        //
-        //     [Test]
-        //     public void Creates_New_Transient_Instance()
-        //     {
-        //         var injector = new DependencyInjector(DiContext.Current.Container);
-        //         var transientInstance = new DependencyOne();
-        //         
-        //         injector.SetDependency<IDependency>(transientInstance, Scope.Transient);
-        //         injector.SetDependency<IDependency>(new DependencyTwo());
-        //         injector.ResetProvidedInstance<IDependency>();
-        //         
-        //         Assert.That(injector.Provide<IDependency>(), Is.InstanceOf<DependencyOne>());
-        //         Assert.That(injector.Provide<IDependency>(), Is.Not.SameAs(transientInstance));
-        //     }
-        // }
     }
 }
