@@ -3,7 +3,7 @@
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class UIComponentDependencyTests
+    public partial class UIComponentDependencyTests
     {
         private interface IStringDependency
         {
@@ -21,7 +21,7 @@ namespace UIComponents.Tests
         }
 
         [Dependency(typeof(IStringDependency), provide: typeof(StringProvider))]
-        private class UIComponentWithStringDependency : UIComponent
+        private partial class UIComponentWithStringDependency : UIComponent
         {
             public readonly IStringDependency StringDependency;
 
@@ -32,15 +32,7 @@ namespace UIComponents.Tests
         }
 
         [Dependency(typeof(IStringDependency), provide: typeof(EmptyStringProvider))]
-        private class UIComponentSubclassWithDependencyOverride : UIComponent
-        {
-            public readonly IStringDependency StringDependency;
-
-            public UIComponentSubclassWithDependencyOverride()
-            {
-                StringDependency = Provide<IStringDependency>();
-            }
-        }
+        private partial class UIComponentSubclassWithDependencyOverride : UIComponentWithStringDependency {}
 
         [Test]
         public void The_Correct_Class_Is_Provided_To_Component()
@@ -56,7 +48,7 @@ namespace UIComponents.Tests
             Assert.That(component.StringDependency, Is.InstanceOf<EmptyStringProvider>());
         }
 
-        private class UIComponentSubclassWithTryProvide : UIComponent
+        private partial class UIComponentSubclassWithTryProvide : UIComponent
         {
             public readonly bool DependencyWasProvided;
             public readonly IStringDependency StringDependency;
@@ -82,7 +74,7 @@ namespace UIComponents.Tests
         }
         
         [Dependency(typeof(IStringDependency), provide: typeof(StringProvider), Scope.Transient)]
-        private class UIComponentWithTransientDependencyA : UIComponent
+        private partial class UIComponentWithTransientDependencyA : UIComponent
         {
             public readonly IStringDependency StringDependency;
             
@@ -93,7 +85,7 @@ namespace UIComponents.Tests
         }
         
         [Dependency(typeof(IStringDependency), provide: typeof(StringProvider), Scope.Transient)]
-        private class UIComponentWithTransientDependencyB : UIComponent
+        private partial class UIComponentWithTransientDependencyB : UIComponent
         {
             public readonly IStringDependency StringDependency;
             

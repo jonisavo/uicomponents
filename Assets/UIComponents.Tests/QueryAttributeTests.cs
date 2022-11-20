@@ -37,20 +37,20 @@ namespace UIComponents.Tests
             public List<Label> AllLabelsExplicit;
         }
 
-        private TestBed _testBed;
         private ILogger _mockLogger;
         
         [SetUp]
         public void SetUp()
         {
             _mockLogger = Substitute.For<ILogger>();
-            _testBed = TestBed.Create().WithSingleton(_mockLogger).Build();
         }
 
         [UnityTest]
         public IEnumerator Should_Populate_Fields()
         {
-            var component = _testBed.CreateComponent<ComponentWithQueryAttribute>();
+            var testBed = new TestBed<ComponentWithQueryAttribute>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
 
             yield return component.WaitForInitializationEnumerator();
             
@@ -84,7 +84,9 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Should_Populate_Inherited_Fields()
         {
-            var component = _testBed.CreateComponent<ChildComponentWithQueryAttribute>();
+            var testBed = new TestBed<ChildComponentWithQueryAttribute>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
 
             yield return component.WaitForInitializationEnumerator();
             
@@ -110,7 +112,9 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Should_Not_Populate_Invalid_Fields()
         {
-            var component = _testBed.CreateComponent<ComponentWithInvalidQueryAttribute>();
+            var testBed = new TestBed<ComponentWithInvalidQueryAttribute>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
             
             yield return component.WaitForInitializationEnumerator();
 
@@ -134,7 +138,9 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Should_Log_Errors_If_Query_Yields_No_Results()
         {
-            var component = _testBed.CreateComponent<ComponentWithMissingFields>();
+            var testBed = new TestBed<ComponentWithMissingFields>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
 
             yield return component.WaitForInitializationEnumerator();
             

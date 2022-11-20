@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
@@ -10,11 +9,10 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class UIComponentNoAttributesTests
+    public partial class UIComponentNoAttributesTests
     {
-        private class UIComponentNoAttributes : UIComponent {}
+        private partial class UIComponentNoAttributes : UIComponent {}
 
-        private TestBed _testBed;
         private IAssetResolver _mockResolver;
         private UIComponentNoAttributes _component;
 
@@ -26,10 +24,9 @@ namespace UIComponents.Tests
                 .Returns(Task.FromResult<VisualTreeAsset>(null));
             _mockResolver.LoadAsset<StyleSheet>(Arg.Any<string>())
                 .Returns(Task.FromResult<StyleSheet>(null));
-            _testBed = TestBed.Create()
-                .WithSingleton(_mockResolver)
-                .Build();
-            _component = _testBed.CreateComponent<UIComponentNoAttributes>();
+            var testBed = new TestBed<UIComponentNoAttributes>()
+                .WithSingleton(_mockResolver);
+            _component = testBed.CreateComponent();
             yield return _component.WaitForInitializationEnumerator();
         }
 

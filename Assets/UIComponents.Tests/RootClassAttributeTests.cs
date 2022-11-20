@@ -10,19 +10,11 @@ namespace UIComponents.Tests
     {
         [RootClass("test-class")]
         private partial class ComponentWithRootClass : UIComponent {}
-
-        private TestBed _testBed;
-        
-        [SetUp]
-        public void SetUp()
-        {
-            _testBed = TestBed.Create().Build();
-        }
         
         [UnityTest]
         public IEnumerator Adds_Class_To_Component()
         {
-            var component = _testBed.CreateComponent<ComponentWithRootClass>();
+            var component = new ComponentWithRootClass();
             yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.ClassListContains("test-class"), Is.True);
@@ -35,7 +27,7 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Adds_Class_To_Component_And_Child_Component()
         {
-            var component = _testBed.CreateComponent<ChildComponentWithRootClass>();
+            var component = new ChildComponentWithRootClass();
             yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.ClassListContains("test-class"), Is.True);

@@ -24,7 +24,7 @@ namespace UIComponents.Benchmarks
                 })
                 .SetUp(() =>
                 {
-                    DiContext.Current.Container.Clear();
+                    DiContext.Current.Clear();
                 })
                 .SampleGroup(new SampleGroup("Cold Cache Time"))
                 .ProfilerMarkers(GetProfilerMarkers())

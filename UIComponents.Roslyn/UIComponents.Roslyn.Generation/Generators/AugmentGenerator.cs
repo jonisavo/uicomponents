@@ -12,7 +12,7 @@ namespace UIComponents.Roslyn.Generation.Generators
     /// </summary>
     /// <typeparam name="TSyntaxReceiver">Used syntax receiver</typeparam>
     public abstract class AugmentGenerator<TSyntaxReceiver> : ISourceGenerator
-        where TSyntaxReceiver : ISyntaxReceiverWithClasses, new()
+        where TSyntaxReceiver : ISyntaxReceiverWithTypes, new()
     {
         protected TSyntaxReceiver SyntaxReceiver { get; private set; }
 
@@ -77,7 +77,7 @@ namespace UIComponents.Roslyn.Generation.Generators
                 .AppendLine();
         }
 
-        private void ExecuteForClass(ClassDeclarationSyntax node, GeneratorExecutionContext context)
+        private void ExecuteForType(TypeDeclarationSyntax node, GeneratorExecutionContext context)
         {
             _stringBuilder.Clear();
             _currentContext.ClassSyntax = node;
@@ -108,7 +108,9 @@ namespace UIComponents.Roslyn.Generation.Generators
                         .ToString()
                         .ToLower();
 
-                    _stringBuilder.AppendLine($"{accessibility} partial class {_currentContext.TypeName}\n{{");
+                    var keyword = _currentContext.ClassSyntax.Keyword;
+
+                    _stringBuilder.AppendLine($"{accessibility} partial {keyword} {_currentContext.TypeName}\n{{");
                     GenerateSource(_currentContext, _stringBuilder);
 
                     _stringBuilder.AppendLine("}");
@@ -126,8 +128,8 @@ namespace UIComponents.Roslyn.Generation.Generators
 
             _currentContext.GeneratorExecutionContext = context;
 
-            foreach (var node in SyntaxReceiver.GetClasses())
-                ExecuteForClass(node, context);
+            foreach (var node in SyntaxReceiver.GetTypes())
+                ExecuteForType(node, context);
         }
     }
 }

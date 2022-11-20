@@ -39,22 +39,20 @@ namespace UIComponents.Tests
             public FloatClass FloatClassInstance;
         }
 
-        private TestBed _testBed;
         private ILogger _mockLogger;
 
         [SetUp]
         public void SetUp()
         {
             _mockLogger = Substitute.For<ILogger>();
-            _testBed = TestBed.Create()
-                .WithSingleton(_mockLogger)
-                .Build();
         }
         
         [Test]
         public void Provides_Dependencies_Automatically()
         {
-            var component = _testBed.CreateComponent<ComponentWithDependencies>();
+            var testBed = new TestBed<ComponentWithDependencies>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
             Assert.That(component.StringProperty, Is.InstanceOf<StringClass>());
             Assert.That(component.FloatProperty, Is.InstanceOf<FloatClass>());
         }
@@ -62,7 +60,9 @@ namespace UIComponents.Tests
         [Test]
         public void Allows_Providing_Dependencies_With_A_Cast()
         {
-            var component = _testBed.CreateComponent<ComponentWithDependencies>();
+            var testBed = new TestBed<ComponentWithDependencies>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
             Assert.That(component.FloatClassInstance, Is.InstanceOf<FloatClass>());
         }
         
@@ -79,7 +79,9 @@ namespace UIComponents.Tests
         [Test]
         public void Logs_Error_When_Provider_Is_Missing()
         {
-            var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
+            var testBed = new TestBed<ComponentWithInvalidDependency>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
             Assert.That(component.StringProperty, Is.Null);
             _mockLogger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
         }
@@ -87,7 +89,9 @@ namespace UIComponents.Tests
         [Test]
         public void Logs_Error_On_Invalid_Cast()
         {
-            var component = _testBed.CreateComponent<ComponentWithInvalidDependency>();
+            var testBed = new TestBed<ComponentWithInvalidDependency>()
+                .WithSingleton(_mockLogger);
+            var component = testBed.CreateComponent();
             Assert.That(component.StringClassInstance, Is.Null);
             _mockLogger.Received().LogError("Could not cast IFloatProperty to StringClass", component);
         }

@@ -49,22 +49,21 @@ namespace UIComponents.Tests
             [Stylesheet("Stylesheet2")]
             private partial class TestComponent : UIComponent {}
 
-            private TestBed _testBed;
+            private TestBed<TestComponent> _testComponentTestBed;
             private MockAssetResolver _mockAssetResolver;
 
             [SetUp]
             public void SetUp()
             {
                 _mockAssetResolver = new MockAssetResolver();
-                _testBed = TestBed.Create()
-                    .WithSingleton<IAssetResolver>(_mockAssetResolver)
-                    .Build();
+                _testComponentTestBed = new TestBed<TestComponent>()
+                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
             }
 
             [Test]
             public void Sets_The_Initialized_Value()
             {
-                var component = _testBed.CreateComponent<TestComponent>();
+                var component = _testComponentTestBed.CreateComponent();
                 Assert.That(component.Initialized, Is.False);
 
                 _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
@@ -77,7 +76,7 @@ namespace UIComponents.Tests
             [Test]
             public void Completes_Initialization_Task()
             {
-                var component = _testBed.CreateComponent<TestComponent>();
+                var component = _testComponentTestBed.CreateComponent();
                 
                 Assert.That(component.InitializationTask.IsCompleted, Is.False);
                 
@@ -92,7 +91,7 @@ namespace UIComponents.Tests
             [UnityTest]
             public IEnumerator Allows_Waiting_For_Initialization()
             {
-                var component = _testBed.CreateComponent<TestComponent>();
+                var component = _testComponentTestBed.CreateComponent();
                 
                 Assert.That(component.Initialized, Is.False);
 
@@ -108,7 +107,7 @@ namespace UIComponents.Tests
             [UnityTest]
             public IEnumerator Allows_Waiting_For_Initialization_With_Obsolete_Method()
             {
-                var component = _testBed.CreateComponent<TestComponent>();
+                var component = _testComponentTestBed.CreateComponent();
                 
                 Assert.That(component.Initialized, Is.False);
                 
@@ -131,10 +130,13 @@ namespace UIComponents.Tests
             [Test]
             public void Does_Not_Initialize_If_Children_Are_Uninitialized()
             {
-                var component = _testBed.CreateComponent<TestComponent>();
+                var component = _testComponentTestBed.CreateComponent();
 
-                var firstChild = _testBed.CreateComponent<ChildComponent>();
-                var secondChild = _testBed.CreateComponent<ChildComponent>();
+                var childTestBed = new TestBed<ChildComponent>()
+                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+
+                var firstChild = childTestBed.CreateComponent();
+                var secondChild = childTestBed.CreateComponent();
 
                 component.Add(firstChild);
                 component.Add(secondChild);
@@ -149,12 +151,18 @@ namespace UIComponents.Tests
             [Test]
             public void Initializes_When_Children_Are_Initialized()
             {
-                var component = _testBed.CreateComponent<TestComponent>();
+                var component = _testComponentTestBed.CreateComponent();
 
-                var firstChild = _testBed.CreateComponent<ChildComponent>();
-                var secondChild = _testBed.CreateComponent<ChildComponent>();
+                var childTestBed = new TestBed<ChildComponent>()
+                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
-                var nestedChild = _testBed.CreateComponent<NestedChildComponent>();
+                var firstChild = childTestBed.CreateComponent();
+                var secondChild = childTestBed.CreateComponent();
+
+                var nestedChildTestBed = new TestBed<NestedChildComponent>()
+                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+
+                var nestedChild = nestedChildTestBed.CreateComponent();
                 
                 firstChild.Add(nestedChild);
 

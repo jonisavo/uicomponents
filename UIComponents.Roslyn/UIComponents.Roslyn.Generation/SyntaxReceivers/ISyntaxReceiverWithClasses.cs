@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace UIComponents.Roslyn.Generation.SyntaxReceivers
 {
-    public interface ISyntaxReceiverWithClasses : ISyntaxReceiver
+    public interface ISyntaxReceiverWithTypes : ISyntaxReceiver
     {
-        IReadOnlyList<ClassDeclarationSyntax> GetClasses();
+        IReadOnlyList<TypeDeclarationSyntax> GetTypes();
     }
 }

@@ -1,141 +1,124 @@
-﻿using System;
-using JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
 
 namespace UIComponents.DependencyInjection
 {
     /// <summary>
-    /// Dependency injection context for consumers.
+    /// Represents a dependency injection context, which contains
+    /// each consumer's dependency injectors and all singleton instances.
     /// </summary>
     public sealed class DiContext
     {
         /// <summary>
-        /// The current dependency injection context.
+        /// The static dependency injection context.
         /// </summary>
-        [NotNull]
-        public static DiContext Current { get; private set; } = new DiContext();
+        public static readonly DiContext Static = new DiContext();
 
         /// <summary>
-        /// The previous dependency injection context. Null if there is none.
+        /// The current dependency injection context.
         /// </summary>
-        [CanBeNull]
-        public static DiContext Previous { get; private set; } = null;
-        
+        public static DiContext Current { get; private set; } = Static;
+
         /// <summary>
         /// Changes the current dependency injection context.
         /// </summary>
-        /// <param name="context">New context</param>
-        /// <exception cref="ArgumentNullException">Thrown if context is null</exception>
-        public static void SetCurrent([NotNull] DiContext context)
+        /// <param name="newContext">New context</param>
+        /// <exception cref="ArgumentNullException">Thrown if the context is null</exception>
+
+        public static void ChangeCurrent(DiContext newContext)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-            
-            if (context != Current)
-                Previous = Current;
-            
-            Current = context;
+            if (newContext == null)
+                throw new ArgumentNullException(nameof(newContext));
+
+            Current = newContext;
         }
-        
-        public DiContainer Container { get; private set; }
-        
-        public DiContext()
+
+        internal readonly Dictionary<Type, DependencyInjector> InjectorDictionary
+            = new Dictionary<Type, DependencyInjector>();
+        internal readonly Dictionary<Type, object> SingletonInstanceDictionary
+            = new Dictionary<Type, object>();
+
+        /// <summary>
+        /// Returns a readonly dictionary of singleton instances, where the key
+        /// is the type of the instance and the value is the instance itself.
+        /// </summary>
+        public IReadOnlyDictionary<Type, object> GetSingletonInstances()
         {
-            Container = new DiContainer();
+            return SingletonInstanceDictionary;
         }
 
         /// <summary>
-        /// Change the DiContainer used in this context.
+        /// Clears the dependency injection context completely.
         /// </summary>
-        /// <param name="container">New DiContainer</param>
-        /// <exception cref="ArgumentNullException">Thrown if container is null</exception>
-        public void SwitchContainer([NotNull] DiContainer container)
+        public void Clear()
         {
-            if (container == null)
-                throw new ArgumentNullException(nameof(container));
-            
-            Container = container;
-        }
-        
-        /// <summary>
-        /// Switches the dependency of a consumer.
-        /// </summary>
-        /// <remarks>
-        /// Can be used in unit tests to switch to
-        /// a mocked dependency.
-        /// </remarks>
-        /// <param name="provider">
-        /// The new instance used for the dependency
-        /// </param>
-        /// <typeparam name="TConsumer">Consumer type</typeparam>
-        /// <typeparam name="TDependency">Dependency type</typeparam>
-        public void SetDependency<TConsumer, TDependency>(TDependency provider)
-            where TConsumer : class
-            where TDependency : class
-        {
-            var injector = GetInjector(typeof(TConsumer));
-            
-            injector.SetDependency(provider);
+            InjectorDictionary.Clear();
+            SingletonInstanceDictionary.Clear();
         }
 
         /// <summary>
-        /// Clears the dependency of a consumer.
-        /// </summary>
-        /// <remarks>
-        /// Can be used in unit tests to clear
-        /// a dependency between tests.
-        /// </remarks>
-        /// <typeparam name="TConsumer">Consumer type</typeparam>
-        /// <typeparam name="TDependency">Dependency type</typeparam>
-        public void ClearDependency<TConsumer, TDependency>()
-            where TConsumer : class
-            where TDependency : class
-        {
-            var injector = GetInjector(typeof(TConsumer));
-            
-            injector.ClearDependency<TDependency>();
-        }
-        
-        /// <summary>
-        /// Resets the provided instance of a dependency.
-        /// If a singleton instance exists, it is restored.
-        /// Otherwise, a new instance of the dependency is created.
-        /// </summary>
-        /// <remarks>
-        /// Can be used in unit tests to clear
-        /// restore dependency between or after tests.
-        /// </remarks>
-        /// <typeparam name="TConsumer">Consumer type</typeparam>
-        /// <typeparam name="TDependency">Dependency type</typeparam>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown if no configured dependency exists
-        /// </exception>
-        public void ResetProvidedInstance<TConsumer, TDependency>()
-            where TConsumer : class
-            where TDependency : class
-        {
-            var injector = GetInjector(typeof(TConsumer));
-            
-            injector.ResetProvidedInstance<TDependency>();
-        }
-
-        /// <summary>
-        /// Returns the injector of the given consumer type.
+        /// Returns the dependency injector of the given consumer type.
         /// </summary>
         /// <param name="consumerType">Consumer type</param>
-        /// <returns>Injector of the consumer type</returns>
+        /// <returns>Consumer's dependency injector</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the consumer type is null</exception>
         public DependencyInjector GetInjector(Type consumerType)
         {
-            return Container.GetInjector(consumerType);
+            if (consumerType == null)
+                throw new ArgumentNullException(nameof(consumerType));
+            
+            if (InjectorDictionary.ContainsKey(consumerType))
+                return InjectorDictionary[consumerType];
+
+            var injector = new DependencyInjector(this);
+
+            InjectorDictionary[consumerType] = injector;
+
+            return injector;
         }
-        
+
         /// <summary>
-        /// Removes the injector of the given consumer type.
-        /// Used primarily for testing.
+        /// Returns whether an injector exists for the given consumer type.
         /// </summary>
         /// <param name="consumerType">Consumer type</param>
-        public void RemoveInjector(Type consumerType)
+        public bool HasInjector(Type consumerType)
         {
-            Container.RemoveInjector(consumerType);
+            if (!InjectorDictionary.TryGetValue(consumerType, out var injector))
+                return false;
+
+            return injector.HasConsumer;
+        }
+
+        /// <summary>
+        /// Adds a consumer to the dependency injection context. Its dependencies
+        /// are added to the context if needed.
+        /// </summary>
+        /// <param name="consumer">Dependency consumer</param>
+        public void RegisterConsumer(IDependencyConsumer consumer)
+        {
+            var consumerType = consumer.GetType();
+
+            if (HasInjector(consumerType))
+                return;
+
+            var dependencies = consumer.GetDependencies();
+
+            foreach (var dependency in dependencies)
+            {
+                if (dependency.GetScope() == Scope.Transient)
+                    continue;
+
+                var implementationType = dependency.GetImplementationType();
+
+                if (SingletonInstanceDictionary.ContainsKey(implementationType))
+                    continue;
+
+                SingletonInstanceDictionary[implementationType] = dependency.CreateInstance();
+            }
+
+            var injector = GetInjector(consumerType);
+            
+            injector.SetConsumer(consumer);
         }
     }
 }

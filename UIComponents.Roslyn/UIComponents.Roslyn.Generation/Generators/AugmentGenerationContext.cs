@@ -7,7 +7,7 @@ namespace UIComponents.Roslyn.Generation.Generators
     public struct AugmentGenerationContext
     {
         public GeneratorExecutionContext GeneratorExecutionContext;
-        public ClassDeclarationSyntax ClassSyntax;
+        public TypeDeclarationSyntax ClassSyntax;
         public SemanticModel ClassSemanticModel;
         public string TypeName;
         public string CurrentTypeNamespace;

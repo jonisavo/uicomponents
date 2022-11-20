@@ -6,8 +6,8 @@ namespace UIComponents
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public sealed class UxmlTraitAttribute : Attribute
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         
-        public object DefaultValue { get; set; }
+        public object? DefaultValue { get; set; }
     }
 }

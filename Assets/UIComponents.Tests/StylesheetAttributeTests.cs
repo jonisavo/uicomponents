@@ -20,7 +20,6 @@ namespace UIComponents.Tests
         [Stylesheet("Assets/StylesheetThree.uss")]
         private partial class InheritedComponent : UIComponentWithTwoStylesheets {}
 
-        private TestBed _testBed;
         private IAssetResolver _mockResolver;
         private ILogger _mockLogger;
 
@@ -35,16 +34,15 @@ namespace UIComponents.Tests
                 .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
             _mockResolver.LoadAsset<StyleSheet>("Assets/StylesheetThree.uss")
                 .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
-            _testBed = TestBed.Create()
-                .WithSingleton(_mockLogger)
-                .WithSingleton(_mockResolver)
-                .Build();
         }
 
         [UnityTest]
         public IEnumerator Given_Stylesheets_Are_Loaded()
         {
-            var component = _testBed.CreateComponent<UIComponentWithTwoStylesheets>();
+            var testBed = new TestBed<UIComponentWithTwoStylesheets>()
+                .WithSingleton(_mockLogger)
+                .WithTransient(_mockResolver);
+            var component = testBed.CreateComponent();
             
             yield return component.WaitForInitializationEnumerator();
             
@@ -56,7 +54,10 @@ namespace UIComponents.Tests
         [UnityTest]
         public IEnumerator Inherited_Stylesheets_Are_Loaded()
         {
-            var component = _testBed.CreateComponent<InheritedComponent>();
+            var testBed = new TestBed<InheritedComponent>()
+                .WithSingleton(_mockLogger)
+                .WithTransient(_mockResolver);
+            var component = testBed.CreateComponent();
             
             yield return component.WaitForInitializationEnumerator();
 
@@ -72,7 +73,11 @@ namespace UIComponents.Tests
             _mockResolver.LoadAsset<StyleSheet>("Assets/StylesheetOne.uss")
                 .Returns(Task.FromResult<StyleSheet>(null));
 
-            var component = _testBed.CreateComponent<UIComponentWithTwoStylesheets>();
+            var testBed = new TestBed<UIComponentWithTwoStylesheets>()
+                .WithSingleton(_mockLogger)
+                .WithTransient(_mockResolver);
+
+            var component = testBed.CreateComponent();
 
             yield return component.WaitForInitializationEnumerator();
 

@@ -31,9 +31,6 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 
                 var memberType = fieldSymbol.Type;
 
-                if (memberType == null)
-                    continue;
-
                 var memberTypeIsClassOrInterface =
                     memberType.TypeKind == TypeKind.Class || memberType.TypeKind == TypeKind.Interface;
 

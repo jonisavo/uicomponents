@@ -37,9 +37,6 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 var memberType = RoslynUtilities.GetMemberType(member);
                 var concreteType = RoslynUtilities.GetConcreteType(memberType) as INamedTypeSymbol;
 
-                if (concreteType == null)
-                    continue;
-
                 if (!RoslynUtilities.HasBaseType(concreteType, _visualElementSymbol))
                     continue;
 
