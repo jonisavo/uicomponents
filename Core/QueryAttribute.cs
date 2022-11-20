@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine.TestTools;
-using UnityEngine.UIElements;
 
 namespace UIComponents
 {
@@ -35,7 +32,6 @@ namespace UIComponents
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = false)]
-    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [ExcludeFromCoverage]
     public sealed class QueryAttribute : Attribute
     {

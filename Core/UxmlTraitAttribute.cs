@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using UnityEngine.TestTools;
 
 namespace UIComponents
@@ -47,7 +46,6 @@ namespace UIComponents
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    [Conditional("UICOMPONENTS_INCLUDE_ATTRIBUTES")]
     [ExcludeFromCoverage]
     public sealed class UxmlTraitAttribute : Attribute
     {
