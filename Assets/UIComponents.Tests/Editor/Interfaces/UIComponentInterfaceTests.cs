@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using NUnit.Framework;
+using UIComponents.InterfaceModifiers;
 using UnityEditor;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -9,6 +10,14 @@ namespace UIComponents.Tests.Editor.Interfaces
     [TestFixture]
     public partial class UIComponentInterfaceTests
     {
+        private sealed class MyCustomEvent : EventBase<MyCustomEvent> {}
+    
+        [RegistersEventCallback(typeof(MyCustomEvent))]
+        private interface IOnMyCustomEvent
+        {
+            void OnMyCustomEvent(MyCustomEvent evt);
+        }
+        
         private partial class BaseTestComponent : UIComponent
         {
             public bool Fired { get; protected set; }
@@ -110,6 +119,17 @@ namespace UIComponents.Tests.Editor.Interfaces
         public IEnumerator IOnClick_Registers_ClickEvent_Callback()
         {
             yield return Assert_Registers_Event_Callback<UIComponentWithOnClick, ClickEvent>();
+        }
+
+        private partial class UIComponentWithOnMyCustomEvent : BaseTestComponent, IOnMyCustomEvent
+        {
+            public void OnMyCustomEvent(MyCustomEvent evt) => Fired = true;
+        }
+        
+        [UnityTest]
+        public IEnumerator IOnMyCustomEvent_Registers_MyCustomEvent_Callback()
+        {
+            yield return Assert_Registers_Event_Callback<UIComponentWithOnMyCustomEvent, MyCustomEvent>();
         }
 
 #if UNITY_2021_3_OR_NEWER
