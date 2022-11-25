@@ -104,39 +104,22 @@ namespace UIComponents
 
             UIC_ApplyEffects();
             UIC_PopulateQueryFields();
-            RegisterEventInterfaceCallbacks();
+            UIC_RegisterEventCallbacks();
 
             OnInit();
 
             Initialized = true;
             _initCompletionSource.SetResult(this);
         }
-        
-        private void RegisterEventInterfaceCallbacks()
+
+        ~UIComponent()
         {
-            if (this is IOnAttachToPanel onAttachToPanel)
-                RegisterCallback<AttachToPanelEvent>(onAttachToPanel.OnAttachToPanel);
-
-            if (this is IOnDetachFromPanel onDetachFromPanel)
-                RegisterCallback<DetachFromPanelEvent>(onDetachFromPanel.OnDetachFromPanel);
-
-            if (this is IOnGeometryChanged onGeometryChanged)
-                RegisterCallback<GeometryChangedEvent>(onGeometryChanged.OnGeometryChanged);
-
-            if (this is IOnMouseEnter onMouseEnter)
-                RegisterCallback<MouseEnterEvent>(onMouseEnter.OnMouseEnter);
-
-            if (this is IOnMouseLeave onMouseLeave)
-                RegisterCallback<MouseLeaveEvent>(onMouseLeave.OnMouseLeave);
-            
-            if (this is IOnClick onClick)
-                RegisterCallback<ClickEvent>(onClick.OnClick);
-            
-#if UNITY_2021_3_OR_NEWER
-            if (this is IOnNavigationMove onNavigationMove)
-                RegisterCallback<NavigationMoveEvent>(onNavigationMove.OnNavigationMove);
-#endif
+            UIC_UnregisterEventCallbacks();
         }
+        
+        protected virtual void UIC_RegisterEventCallbacks() {}
+
+        protected virtual void UIC_UnregisterEventCallbacks() {}
 
         private static readonly IDependency[] EmptyDependencyArray =
             Array.Empty<IDependency>();
