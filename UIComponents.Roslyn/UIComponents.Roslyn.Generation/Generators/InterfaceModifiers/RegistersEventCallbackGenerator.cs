@@ -5,21 +5,12 @@ using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
 {
-    public sealed class RegistersCallbackGenerator : InterfaceModifierGenerator<RegistersCallbackDescription>
+    [Generator]
+    public sealed class RegistersEventCallbackGenerator : InterfaceModifierGenerator<RegistersEventCallbackDescription>
     {
         protected override string GetAttributeName()
         {
-            return "UIComponents.InterfaceModifiers.RegistersCallbackAttribute";
-        }
-
-        protected override void GetModifierDescriptions(InterfaceAttributeInfo attributeInfo, List<RegistersCallbackDescription> output)
-        {
-            foreach (var attributeArgs in attributeInfo.Attributes.Values)
-            {
-                if (attributeArgs.TryGetValue("constructor_0", out var typeArg))
-                    if (typeArg.Value is INamedTypeSymbol callbackType)
-                        output.Add(new RegistersCallbackDescription(callbackType, attributeInfo.InterfaceType));
-            }
+            return "UIComponents.InterfaceModifiers.RegistersEventCallbackAttribute";
         }
 
         private string GetCallbackNameForType(INamedTypeSymbol typeSymbol)
@@ -32,12 +23,35 @@ namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
             return typeName;
         }
 
+        protected override void GetModifierDescriptions(InterfaceAttributeInfo attributeInfo, List<RegistersEventCallbackDescription> output)
+        {
+            foreach (var attributeArgs in attributeInfo.Attributes.Values)
+            {
+                INamedTypeSymbol eventType = null;
+
+                if (attributeArgs.TryGetValue("constructor_0", out var typeArg))
+                    if (typeArg.Value is INamedTypeSymbol callbackType)
+                        eventType = callbackType;
+
+                if (eventType == null)
+                    continue;
+
+                string methodName = GetCallbackNameForType(attributeInfo.InterfaceType);
+
+                if (attributeArgs.TryGetValue("constructor_1", out var methodNameArg))
+                    if (methodNameArg.Value is string methodNameString)
+                        methodName = methodNameString;
+
+                output.Add(new RegistersEventCallbackDescription(eventType, attributeInfo.InterfaceType, methodName));
+            }
+        }
+
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)
         {
             stringBuilder
                 .AppendPadding()
                 .AppendCodeGeneratedAttribute()
-                .AppendLineWithPadding("protected override void UIC_RegisterCallbacks()")
+                .AppendLineWithPadding("protected override void UIC_RegisterEventCallbacks()")
                 .AppendLineWithPadding("{");
 
             foreach (var description in ModifierDescriptions)
@@ -45,7 +59,7 @@ namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
                     .AppendWithPadding("RegisterCallback<", 2)
                     .Append(context.GetTypeName(description.EventType))
                     .Append(">(")
-                    .Append(GetCallbackNameForType(description.InterfaceType))
+                    .Append(description.MethodName)
                     .AppendLine(");");
 
             stringBuilder.AppendLineWithPadding("}").AppendLine();
@@ -53,7 +67,7 @@ namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
             stringBuilder
                 .AppendPadding()
                 .AppendCodeGeneratedAttribute()
-                .AppendLineWithPadding("protected override void UIC_UnregisterCallbacks()")
+                .AppendLineWithPadding("protected override void UIC_UnregisterEventCallbacks()")
                 .AppendLineWithPadding("{");
 
             foreach (var description in ModifierDescriptions)
@@ -61,7 +75,7 @@ namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
                     .AppendWithPadding("UnregisterCallback<", 2)
                     .Append(context.GetTypeName(description.EventType))
                     .Append(">(")
-                    .Append(GetCallbackNameForType(description.InterfaceType))
+                    .Append(description.MethodName)
                     .AppendLine(");");
 
             stringBuilder.AppendLineWithPadding("}");

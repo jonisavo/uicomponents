@@ -4,7 +4,7 @@ using UIComponents.Roslyn.Generation.Generators.InterfaceModifiers;
 namespace UIComponents.Roslyn.Generation.Tests
 {
     [UsesVerify]
-    public class RegistersCallbackGeneratorSnapshotTests
+    public class RegistersEventCallbackGeneratorSnapshotTests
     {
         [Fact]
         public Task It_Generates_Functions_For_Callbacks()
@@ -14,19 +14,42 @@ using UIComponents.InterfaceModifiers;
 
 public class MyEvent {}
 
-[RegistersCallback(typeof(MyEvent))]
+[RegistersEventCallback(typeof(MyEvent))]
 public interface IOnMyEvent {}
 
 public partial class CallbackHandler : IOnMyEvent {}
 
 public class MyOtherEvent
 
-[RegistersCallback(typeof(MyOtherEvent))]
+[RegistersEventCallback(typeof(MyOtherEvent))]
 public interface IOnMyOtherEvent {}
 
 public partial class OtherCallbackHandler : CallbackHandler, IOnMyOtherEvent {}
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(source);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Allows_Specifying_Method_Name()
+        {
+            var source = @"
+using UIComponents.InterfaceModifiers;
+
+public class MyEvent {}
+
+[RegistersEventCallback(typeof(MyEvent), ""MyEventHappened"")]
+public interface IOnMyEvent {}
+
+public partial class CallbackHandler : IOnMyEvent {}
+
+public class MyOtherEvent
+
+[RegistersEventCallback(typeof(MyOtherEvent), ""Callback"")]
+public interface IOnMyOtherEvent {}
+
+public partial class OtherCallbackHandler : CallbackHandler, IOnMyOtherEvent {}
+";
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(source);
         }
 
         [Fact]
@@ -37,19 +60,19 @@ using UIComponents.InterfaceModifiers;
 
 public class MyEvent {}
 
-[RegistersCallback(typeof(MyEvent))]
+[RegistersEventCallback(typeof(MyEvent))]
 public interface IOnMyEvent {}
 
 public abstract class BaseCallbackHandler : IOnMyEvent {}
 
 public class MyOtherEvent
 
-[RegistersCallback(typeof(MyOtherEvent))]
+[RegistersEventCallback(typeof(MyOtherEvent))]
 public interface IOnMyOtherEvent {}
 
 public partial class CallbackHandler : BaseCallbackHandler, IOnMyOtherEvent {}
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(source);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(source);
         }
 
         [Fact]
@@ -65,7 +88,7 @@ namespace MyLibrary.Events
 
 namespace MyLibrary.Generation.EventInterfaces
 {
-    [RegistersCallback(typeof(MyLibrary.Events.MyEvent))]
+    [RegistersEventCallback(typeof(MyLibrary.Events.MyEvent))]
     public interface IOnEvent
     {
         void OnEvent(MyEvent evt);
@@ -80,7 +103,7 @@ namespace MyLibrary.Components
     public partial class MyComponent : UIComponent, IOnEvent {}
 }
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(firstSource, secondSource);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(firstSource, secondSource);
         }
 
         [Fact]
@@ -91,13 +114,13 @@ using UIComponents.InterfaceModifiers;
 
 public partial class BaseClass
 {
-    [RegistersCallback(typeof(OnClickEvent))]
+    [RegistersEventCallback(typeof(OnClickEvent))]
     public interface IOnClick {}
 
     private partial class ClickHandler : IOnClick {}
 }
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(source);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(source);
         }
 
         [Fact]
@@ -115,10 +138,10 @@ namespace UnityEngine.UIElements
 
 namespace UIComponents
 {
-    [RegistersCallback(typeof(UnityEngine.UIElements.CallbackEvent))]
+    [RegistersEventCallback(typeof(UnityEngine.UIElements.CallbackEvent))]
     public interface IOnCallback {}
 
-    [RegistersCallback(typeof(UnityEngine.UIElements.Event))]
+    [RegistersEventCallback(typeof(UnityEngine.UIElements.Event))]
     public interface IOnEvent {}
 }
 ";
@@ -137,7 +160,7 @@ namespace UIComponents.Tests.Editor.Interfaces
     }    
 }
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(eventSource, source);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(eventSource, source);
         }
 
         [Fact]
@@ -150,17 +173,17 @@ public class MyEvent {}
 
 public class OtherEvent {}
 
-[RegistersCallback(typeof(MyEvent))]
+[RegistersEventCallback(typeof(MyEvent))]
 public interface IOnMyEvent {}
 
-[RegistersCallback(typeof(OtherEvent))]
+[RegistersEventCallback(typeof(OtherEvent))]
 public interface IOnOtherEvent {}
 
 public interface IEventHandler : IOnMyEvent, IOnOtherEvent {}
 
 public class EventHandler : IEventHandler {}
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(source);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(source);
         }
 
         [Fact]
@@ -175,7 +198,7 @@ public interface IOnMyEvent {}
 
 public class CallbackHandler : IOnMyEvent {}
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(source);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(source);
         }
 
         [Fact]
@@ -186,14 +209,14 @@ using UIComponents.InterfaceModifiers;
 
 public class MyEvent {}
 
-[RegistersCallback(typeof(MyEvent))]
+[RegistersEventCallback(typeof(MyEvent))]
 public interface IOnMyEvent {}
 
 public struct CallbackHandler : IOnMyEvent {}
 
 public interface ICallbackHandler : IOnMyEvent {}
 ";
-            return GeneratorTester.Verify<RegistersCallbackGenerator>(source);
+            return GeneratorTester.Verify<RegistersEventCallbackGenerator>(source);
         }
 
         [Fact]
@@ -204,12 +227,12 @@ using UIComponents.InterfaceModifiers;
 
 public class MyEvent {}
 
-[RegistersCallback(typeof(MyEvent))]
+[RegistersEventCallback(typeof(MyEvent))]
 public interface IOnMyEvent {}
 
 public partial class CallbackHandler : IOnMyEvent {}
 ";
-            return GeneratorTester.VerifyWithoutReferences<RegistersCallbackGenerator>(source);
+            return GeneratorTester.VerifyWithoutReferences<RegistersEventCallbackGenerator>(source);
         }
     }
 }
