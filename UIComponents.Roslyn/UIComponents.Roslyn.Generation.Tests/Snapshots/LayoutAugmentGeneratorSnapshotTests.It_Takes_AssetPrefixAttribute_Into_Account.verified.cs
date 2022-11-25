@@ -4,9 +4,10 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
-using System.Threading.Tasks;
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
+using System.Threading.Tasks;
 
 public partial class LayoutTestComponent
 {

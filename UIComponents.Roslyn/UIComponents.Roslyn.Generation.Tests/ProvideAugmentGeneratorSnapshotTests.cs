@@ -194,7 +194,7 @@ namespace UIComponents
 {
     public class UIComponent {}
 
-    public class AssetPathAttribute {}
+    public class AssetPrefixAttribute {}
 }
 
 public interface IDependency {}

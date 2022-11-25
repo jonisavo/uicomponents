@@ -1,3 +1,4 @@
 ﻿<UXML xmlns:test="UIComponents.Tests.Roslyn">
-    <test:RoslynTestVisualElement age="20" music-volume="0.5" timestamp="1234567890" />
+    <test:RoslynTestVisualElement name="values-set" age="20" music-volume="0.5" timestamp="1234567890" />
+    <test:RoslynTestVisualElement name="values-not-set" />
 </UXML>

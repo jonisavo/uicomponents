@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -21,7 +22,10 @@ public partial class ThirdTraitClass
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            ((ThirdTraitClass)ve).Name = m_Name.GetValueFromBag(bag, cc);
+
+            var element = (ThirdTraitClass) ve;
+
+            element.Name = m_Name.GetValueFromBag(bag, cc);
         }
     }
 }

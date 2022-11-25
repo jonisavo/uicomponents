@@ -4,8 +4,9 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
-using System.Collections.Generic;
+using UIComponents;
 using UIComponents.DependencyInjection;
+using System.Collections.Generic;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 

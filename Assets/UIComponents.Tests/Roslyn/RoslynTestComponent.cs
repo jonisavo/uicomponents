@@ -12,7 +12,7 @@ namespace UIComponents.Tests.Roslyn
         }
 
         [UxmlTrait]
-        public Color TextColor;
+        public Color TextColor = Color.cyan;
 
         [UxmlTrait(Name = "time")]
         public double CurrentTime;

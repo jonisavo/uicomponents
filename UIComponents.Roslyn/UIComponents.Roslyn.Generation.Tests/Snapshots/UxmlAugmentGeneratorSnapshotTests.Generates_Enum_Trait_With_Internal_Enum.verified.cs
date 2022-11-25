@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -22,8 +23,11 @@ public partial class OwnEnumComponent
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            ((OwnEnumComponent)ve).FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
-            ((OwnEnumComponent)ve).PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
+
+            var element = (OwnEnumComponent) ve;
+
+            element.FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
+            element.PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
         }
     }
 }

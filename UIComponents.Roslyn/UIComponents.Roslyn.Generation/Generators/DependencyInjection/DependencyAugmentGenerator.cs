@@ -89,11 +89,11 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
             return _dependencyDescriptions.Count > 0;
         }
 
-        protected override void BuildUsingStatements(StringBuilder stringBuilder)
+        protected override void AddAdditionalUsings(HashSet<string> usings)
         {
-            stringBuilder.AppendLine("using System.Collections.Generic;");
-            stringBuilder.AppendLine("using UIComponents.DependencyInjection;");
-            base.BuildUsingStatements(stringBuilder);
+            usings.Add("System.Collections.Generic");
+            usings.Add("UIComponents.DependencyInjection");
+            base.AddAdditionalUsings(usings);
         }
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)

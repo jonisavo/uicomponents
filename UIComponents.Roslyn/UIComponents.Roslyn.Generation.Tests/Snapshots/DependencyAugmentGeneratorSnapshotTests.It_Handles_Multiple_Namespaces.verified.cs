@@ -4,6 +4,8 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
+using MyLibrary.Core.Services;
 using System.Collections.Generic;
 using UIComponents.DependencyInjection;
 using System.CodeDom.Compiler;
@@ -17,7 +19,7 @@ public partial class MyGUIComponent
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.IAssetResolver, UIComponents.ResourcesAssetResolver>(),
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.ILogger, UIComponents.DebugLogger>(),
-        UIComponents.DependencyInjection.Dependency.SingletonFor<Core.Services.IService, Core.Services.Service>()
+        UIComponents.DependencyInjection.Dependency.SingletonFor<IService, Service>()
     };
 
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]

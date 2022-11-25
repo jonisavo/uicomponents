@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -23,12 +24,15 @@ public partial class ComponentWithDefaultValueTraits
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
+
+            var element = (ComponentWithDefaultValueTraits) ve;
+
             m_Description.defaultValue = "Description not set.";
             m_Lives.defaultValue = 3;
             m_MyValue.defaultValue = (Some.Place.Where.Enum.Is.TheEnum) 1;
-            ((ComponentWithDefaultValueTraits)ve).Description = m_Description.GetValueFromBag(bag, cc);
-            ((ComponentWithDefaultValueTraits)ve).Lives = m_Lives.GetValueFromBag(bag, cc);
-            ((ComponentWithDefaultValueTraits)ve).MyValue = m_MyValue.GetValueFromBag(bag, cc);
+            element.Description = m_Description.GetValueFromBag(bag, cc);
+            element.Lives = m_Lives.GetValueFromBag(bag, cc);
+            element.MyValue = m_MyValue.GetValueFromBag(bag, cc);
         }
     }
 }

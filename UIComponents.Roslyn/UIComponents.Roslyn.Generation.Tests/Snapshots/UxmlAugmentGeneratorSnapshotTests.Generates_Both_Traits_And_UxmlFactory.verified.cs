@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -34,8 +35,11 @@ public partial class ComponentWithUxmlNameAndTraits
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
+
+            var element = (ComponentWithUxmlNameAndTraits) ve;
+
             m_Value.defaultValue = true;
-            ((ComponentWithUxmlNameAndTraits)ve).Value = m_Value.GetValueFromBag(bag, cc);
+            element.Value = m_Value.GetValueFromBag(bag, cc);
         }
     }
 }

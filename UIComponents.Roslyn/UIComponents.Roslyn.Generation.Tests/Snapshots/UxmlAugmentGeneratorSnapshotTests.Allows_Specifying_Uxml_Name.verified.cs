@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -22,8 +23,11 @@ public partial class CustomNamespaceComponent
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            ((CustomNamespaceComponent)ve).FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
-            ((CustomNamespaceComponent)ve).PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
+
+            var element = (CustomNamespaceComponent) ve;
+
+            element.FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
+            element.PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
         }
     }
 }

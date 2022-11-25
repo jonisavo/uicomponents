@@ -86,7 +86,8 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
         private static (string, string) GetTraitUxmlNameAndDefaultValue(
             Dictionary<string, TypedConstant> traitArguments,
             ITypeSymbol typeSymbol,
-            string memberName)
+            string memberName,
+            string initializer = null)
         {
             string uxmlName = null;
             string defaultValue = null;
@@ -96,6 +97,9 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
             if (string.IsNullOrEmpty(uxmlName))
                 uxmlName = StringToKebabCase(memberName);
+
+            if (!string.IsNullOrEmpty(initializer))
+                return (uxmlName, initializer);
 
             if (traitArguments.ContainsKey(DefaultValueArgumentName))
             {
@@ -115,16 +119,16 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             return (uxmlName, defaultValue);
         }
 
-        public static TraitDescription CreateFromFieldSymbol(IFieldSymbol typeSymbol, Dictionary<string, TypedConstant> arguments)
+        public static TraitDescription CreateFromFieldSymbol(IFieldSymbol typeSymbol, Dictionary<string, TypedConstant> arguments, string initializer)
         {
-            var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, typeSymbol.Type, typeSymbol.Name);
+            var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, typeSymbol.Type, typeSymbol.Name, initializer);
 
             return new TraitDescription(typeSymbol.Name, uxmlName, (INamedTypeSymbol)typeSymbol.Type, defaultValue);
         }
 
-        public static TraitDescription CreateFromPropertySymbol(IPropertySymbol propertySymbol, Dictionary<string, TypedConstant> arguments)
+        public static TraitDescription CreateFromPropertySymbol(IPropertySymbol propertySymbol, Dictionary<string, TypedConstant> arguments, string initializer)
         {
-            var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, propertySymbol.Type, propertySymbol.Name);
+            var (uxmlName, defaultValue) = GetTraitUxmlNameAndDefaultValue(arguments, propertySymbol.Type, propertySymbol.Name, initializer);
 
             return new TraitDescription(propertySymbol.Name, uxmlName, (INamedTypeSymbol)propertySymbol.Type, defaultValue);
         }

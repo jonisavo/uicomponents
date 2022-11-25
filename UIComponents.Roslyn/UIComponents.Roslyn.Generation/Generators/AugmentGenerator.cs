@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UIComponents.Roslyn.Generation.SyntaxReceivers;
 using UIComponents.Roslyn.Generation.Utilities;
@@ -69,12 +71,10 @@ namespace UIComponents.Roslyn.Generation.Generators
             return hintBuilder.ToString();
         }
 
-        protected virtual void BuildUsingStatements(StringBuilder stringBuilder)
+        protected virtual void AddAdditionalUsings(HashSet<string> usings)
         {
-            stringBuilder
-                .AppendLine("using System.CodeDom.Compiler;")
-                .AppendLine("using UnityEngine.UIElements;")
-                .AppendLine();
+            usings.Add("System.CodeDom.Compiler");
+            usings.Add("UnityEngine.UIElements");
         }
 
         private void ExecuteForType(TypeDeclarationSyntax node, GeneratorExecutionContext context)
@@ -85,6 +85,22 @@ namespace UIComponents.Roslyn.Generation.Generators
             _currentContext.CurrentTypeNamespace = RoslynUtilities.GetTypeNamespace(node);
             _currentContext.TypeName = RoslynUtilities.GetTypeName(node);
             _currentParentClass = ParentClass.GetParentClasses(_currentContext.ClassSyntax);
+
+            var compilationUnitSyntax = RoslynUtilities.GetCompilationUnitSyntax(node);
+
+            if (compilationUnitSyntax == null)
+                return;
+
+            var usingsList = compilationUnitSyntax.Usings
+                .Select((declaration) => declaration.Name.ToString())
+                .ToList();
+
+            _currentContext.Usings = new HashSet<string>();
+
+            foreach (var usingName in usingsList)
+                _currentContext.Usings.Add(usingName);
+
+            AddAdditionalUsings(_currentContext.Usings);
 
             _currentContext.CurrentTypeSymbol =
                 _currentContext.ClassSemanticModel.GetDeclaredSymbol(node) as INamedTypeSymbol;
@@ -98,7 +114,14 @@ namespace UIComponents.Roslyn.Generation.Generators
 // </auto-generated>
 ");
 
-            BuildUsingStatements(_stringBuilder);
+            foreach (var usingNamespace in _currentContext.Usings)
+            {
+                _stringBuilder.Append("using ")
+                    .Append(usingNamespace)
+                    .AppendLine(";");
+            }
+
+            _stringBuilder.AppendLine();
 
             using (new WithinNamespaceScope(_currentContext.CurrentTypeNamespace, _stringBuilder))
             {

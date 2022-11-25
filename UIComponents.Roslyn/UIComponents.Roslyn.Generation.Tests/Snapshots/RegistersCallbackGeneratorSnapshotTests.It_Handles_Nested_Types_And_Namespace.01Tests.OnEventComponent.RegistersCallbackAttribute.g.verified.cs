@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -16,13 +17,13 @@ private partial class OnEventComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     protected override void UIC_RegisterCallbacks()
     {
-        RegisterCallback<UnityEngine.UIElements.Event>(OnEvent);
+        RegisterCallback<Event>(OnEvent);
     }
 
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     protected override void UIC_UnregisterCallbacks()
     {
-        UnregisterCallback<UnityEngine.UIElements.Event>(OnEvent);
+        UnregisterCallback<Event>(OnEvent);
     }
 }
 }

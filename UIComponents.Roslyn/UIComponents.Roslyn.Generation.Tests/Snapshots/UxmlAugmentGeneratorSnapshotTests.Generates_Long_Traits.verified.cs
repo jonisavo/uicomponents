@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -22,8 +23,11 @@ public partial class LongComponentWithUsing
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            ((LongComponentWithUsing)ve).FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
-            ((LongComponentWithUsing)ve).PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
+
+            var element = (LongComponentWithUsing) ve;
+
+            element.FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
+            element.PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
         }
     }
 }

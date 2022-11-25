@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -22,8 +23,11 @@ public partial class NonUIComponentClass
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            ((NonUIComponentClass)ve).FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
-            ((NonUIComponentClass)ve).PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
+
+            var element = (NonUIComponentClass) ve;
+
+            element.FieldTrait = m_FieldTrait.GetValueFromBag(bag, cc);
+            element.PropertyTrait = m_PropertyTrait.GetValueFromBag(bag, cc);
         }
     }
 }

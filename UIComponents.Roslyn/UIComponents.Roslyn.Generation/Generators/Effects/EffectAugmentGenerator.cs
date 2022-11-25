@@ -44,11 +44,11 @@ namespace UIComponents.Roslyn.Generation.Generators.Effects
             return _uiComponentEffectSymbol != null && _effectDescriptions.Count > 0;
         }
 
-        protected override void BuildUsingStatements(StringBuilder stringBuilder)
+        protected override void AddAdditionalUsings(HashSet<string> usings)
         {
-            stringBuilder.AppendLine("using System;");
-            stringBuilder.AppendLine("using UIComponents;");
-            base.BuildUsingStatements(stringBuilder);
+            usings.Add("System");
+            usings.Add("UIComponents");
+            base.AddAdditionalUsings(usings);
         }
 
         private void GenerateEffectArrayInitialization(AugmentGenerationContext context, StringBuilder stringBuilder)

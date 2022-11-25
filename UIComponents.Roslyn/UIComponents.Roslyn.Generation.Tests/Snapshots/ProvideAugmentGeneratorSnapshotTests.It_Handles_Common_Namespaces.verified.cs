@@ -4,8 +4,9 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
-using System;
 using UIComponents;
+using MyLibrary.Core.Services;
+using System;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -33,7 +34,7 @@ public partial class GuiComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
     protected override void UIC_PopulateProvideFields()
     {
-        UIC_SetProvideField<Core.Services.IService, Core.Services.IService>(ref service, "service");
+        UIC_SetProvideField<IService, IService>(ref service, "service");
     }
 }
 }

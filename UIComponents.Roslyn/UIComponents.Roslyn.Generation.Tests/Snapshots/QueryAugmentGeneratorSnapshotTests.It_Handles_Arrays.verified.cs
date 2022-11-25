@@ -4,9 +4,10 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UnityEngine.UIElements;
+using UIComponents;
 using System.Collections.Generic;
 using System.CodeDom.Compiler;
-using UnityEngine.UIElements;
 
 public partial class ArrayQueryComponent
 {
@@ -14,11 +15,11 @@ public partial class ArrayQueryComponent
     protected override void UIC_PopulateQueryFields()
     {
         // elements
-        var UIC_elementsList = new List<UnityEngine.UIElements.VisualElement>();
-        this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class-name").ToList(UIC_elementsList);
+        var UIC_elementsList = new List<VisualElement>();
+        this.Query<VisualElement>("uxml-name", "class-name").ToList(UIC_elementsList);
         if (UIC_elementsList.Count == 0)
-            Logger.LogError("Query (elements): No instances of UnityEngine.UIElements.VisualElement found", this);
-        elements = new UnityEngine.UIElements.VisualElement[UIC_elementsList.Count];
+            Logger.LogError("Query (elements): No instances of VisualElement found", this);
+        elements = new VisualElement[UIC_elementsList.Count];
         for (var i = 0; i < UIC_elementsList.Count; i++)
             elements[i] = UIC_elementsList[i];
     }

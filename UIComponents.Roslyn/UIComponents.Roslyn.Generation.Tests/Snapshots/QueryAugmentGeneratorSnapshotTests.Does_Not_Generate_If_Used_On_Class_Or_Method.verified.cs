@@ -4,9 +4,10 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UnityEngine.UIElements;
+using UIComponents;
 using System.Collections.Generic;
 using System.CodeDom.Compiler;
-using UnityEngine.UIElements;
 
 public partial class InvalidUsageQueryComponent
 {
@@ -14,10 +15,10 @@ public partial class InvalidUsageQueryComponent
     protected override void UIC_PopulateQueryFields()
     {
         // element
-        var UIC_elementList = new List<UnityEngine.UIElements.VisualElement>();
-        this.Query<UnityEngine.UIElements.VisualElement>("valid-usage", (string) null).ToList(UIC_elementList);
+        var UIC_elementList = new List<VisualElement>();
+        this.Query<VisualElement>("valid-usage", (string) null).ToList(UIC_elementList);
         if (UIC_elementList.Count == 0)
-            Logger.LogError("Query (element): No instances of UnityEngine.UIElements.VisualElement found", this);
+            Logger.LogError("Query (element): No instances of VisualElement found", this);
         if (UIC_elementList.Count > 0)
             element = UIC_elementList[0];
     }

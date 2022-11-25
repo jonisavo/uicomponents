@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using UIComponents.Roslyn.Generation.Readers;
@@ -67,6 +68,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
         {
             var traitFields = new List<IFieldSymbol>();
             var traitArguments = new Dictionary<IFieldSymbol, Dictionary<string, TypedConstant>>();
+            var initializers = new Dictionary<IFieldSymbol, string>();
             var fieldAttributeReader =
                 new FieldAttributeReader(_traitAttributeSymbol, context.ClassSemanticModel);
             var attributeArgumentReader =
@@ -85,17 +87,24 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
                 fieldAttributeReader.Read(fieldDeclaration, traitFields);
 
                 foreach (var variableDeclaration in fieldDeclaration.Declaration.Variables)
+                {
+                    var fieldSymbol = context.ClassSemanticModel.GetDeclaredSymbol(variableDeclaration) as IFieldSymbol;
+                    initializers[fieldSymbol] = null;
+                    if (variableDeclaration.Initializer != null)
+                        initializers[fieldSymbol] = variableDeclaration.Initializer.Value.ToString();
                     ReadAttributeArguments(variableDeclaration, attributeArgumentReader, context.ClassSemanticModel, traitArguments);
+                }
             }
 
             foreach (var traitField in traitFields)
-                traits.Add(TraitDescription.CreateFromFieldSymbol(traitField, traitArguments[traitField]));
+                traits.Add(TraitDescription.CreateFromFieldSymbol(traitField, traitArguments[traitField], initializers[traitField]));
         }
 
         private void GetTraitProperties(AugmentGenerationContext context, IList<TraitDescription> traits)
         {
             var traitProperties = new List<IPropertySymbol>();
             var traitArguments = new Dictionary<IPropertySymbol, Dictionary<string, TypedConstant>>();
+            var initializers = new Dictionary<IPropertySymbol, string>();
             var propertyAttributeReader = new PropertyAttributeReader(_traitAttributeSymbol, context.ClassSemanticModel);
             var attributeArgumentReader =
                 new AttributeArgumentReader(_traitAttributeSymbol, context.ClassSemanticModel);
@@ -112,11 +121,16 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
                 propertyAttributeReader.Read(propertyDeclaration, traitProperties);
 
+                var propertySymbol = context.ClassSemanticModel.GetDeclaredSymbol(propertyDeclaration) as IPropertySymbol;
+                initializers[propertySymbol] = null;
+                if (propertyDeclaration.Initializer != null)
+                    initializers[propertySymbol] = propertyDeclaration.Initializer.Value.ToString();
+
                 ReadAttributeArguments(propertyDeclaration, attributeArgumentReader, context.ClassSemanticModel, traitArguments);
             }
 
             foreach (var traitProperty in traitProperties)
-                traits.Add(TraitDescription.CreateFromPropertySymbol(traitProperty, traitArguments[traitProperty]));
+                traits.Add(TraitDescription.CreateFromPropertySymbol(traitProperty, traitArguments[traitProperty], initializers[traitProperty]));
         }
 
         private UxmlFactoryInfo GetUxmlFactoryInfo(AugmentGenerationContext context)
@@ -140,7 +154,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
         private void WriteUxmlFactory(UxmlFactoryInfo info, AugmentGenerationContext context, StringBuilder stringBuilder)
         {
             var compilation = context.GeneratorExecutionContext.Compilation;
-            var uxmlTraitsMetadataName = $"{context.CurrentTypeSymbol.MetadataName}.UxmlTraits";
+            var uxmlTraitsMetadataName = $"{context.CurrentTypeSymbol.ToDisplayString()}.UxmlTraits";
 
             var traitsDefined = _traitsToGenerate.Count > 0 ||
                 compilation.GetTypeByMetadataName(uxmlTraitsMetadataName) != null;
@@ -207,7 +221,7 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             {
                 stringBuilder
                     .AppendPadding(3)
-                    .AppendLine($"(({context.TypeName})ve).{trait.ClassMemberName} = {trait.TraitMemberName}.GetValueFromBag(bag, cc);");
+                    .AppendLine($"element.{trait.ClassMemberName} = {trait.TraitMemberName}.GetValueFromBag(bag, cc);");
             }
         }
 
@@ -226,7 +240,10 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
         {Constants.GeneratedCodeAttribute}
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {{
-            base.Init(ve, bag, cc);");
+            base.Init(ve, bag, cc);
+
+            var element = ({context.TypeName}) ve;
+");
 
             WriteTraitDescriptionDefaultValues(_traitsToGenerate, stringBuilder);
             WriteTraitDescriptionInitialization(_traitsToGenerate, context, stringBuilder);
