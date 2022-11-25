@@ -342,7 +342,7 @@ namespace UIComponents
 {
     public class UIComponent {}
 
-    public class AssetPathAttribute {}
+    public class AssetPrefixAttribute {}
 }
 
 public class MyComponent : UIComponents.UIComponent {}

@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -21,7 +22,10 @@ public partial class LongTraitNameComponent
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            ((LongTraitNameComponent)ve).HereIsALongMemberNameWithALotOfComplexity123Test_Hello___WorldA = m_HereIsALongMemberNameWithALotOfComplexity123Test_Hello___WorldA.GetValueFromBag(bag, cc);
+
+            var element = (LongTraitNameComponent) ve;
+
+            element.HereIsALongMemberNameWithALotOfComplexity123Test_Hello___WorldA = m_HereIsALongMemberNameWithALotOfComplexity123Test_Hello___WorldA.GetValueFromBag(bag, cc);
         }
     }
 }

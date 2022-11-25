@@ -5,8 +5,9 @@
 // </auto-generated>
 
 using System.Collections.Generic;
-using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
+using UIComponents;
+using System.CodeDom.Compiler;
 
 public partial class MultipleQueryComponent
 {
@@ -14,31 +15,31 @@ public partial class MultipleQueryComponent
     protected override void UIC_PopulateQueryFields()
     {
         // firstElement
-        var UIC_firstElementList = new List<UnityEngine.UIElements.VisualElement>();
-        this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_firstElementList);
-        this.Query<UnityEngine.UIElements.VisualElement>(null, "test").ToList(UIC_firstElementList);
+        var UIC_firstElementList = new List<VisualElement>();
+        this.Query<VisualElement>(null, (string) null).ToList(UIC_firstElementList);
+        this.Query<VisualElement>(null, "test").ToList(UIC_firstElementList);
         if (UIC_firstElementList.Count == 0)
-            Logger.LogError("Query (firstElement): No instances of UnityEngine.UIElements.VisualElement found", this);
+            Logger.LogError("Query (firstElement): No instances of VisualElement found", this);
         if (UIC_firstElementList.Count > 0)
             firstElement = UIC_firstElementList[0];
 
         // manyElementsArray
-        var UIC_manyElementsArrayList = new List<UnityEngine.UIElements.VisualElement>();
-        this.Query<UnityEngine.UIElements.VisualElement>("uxml-name", "class").ToList(UIC_manyElementsArrayList);
-        this.Query<UnityEngine.UIElements.VisualElement>(null, "class-name").ToList(UIC_manyElementsArrayList);
+        var UIC_manyElementsArrayList = new List<VisualElement>();
+        this.Query<VisualElement>("uxml-name", "class").ToList(UIC_manyElementsArrayList);
+        this.Query<VisualElement>(null, "class-name").ToList(UIC_manyElementsArrayList);
         if (UIC_manyElementsArrayList.Count == 0)
-            Logger.LogError("Query (manyElementsArray): No instances of UnityEngine.UIElements.VisualElement found", this);
-        manyElementsArray = new UnityEngine.UIElements.VisualElement[UIC_manyElementsArrayList.Count];
+            Logger.LogError("Query (manyElementsArray): No instances of VisualElement found", this);
+        manyElementsArray = new VisualElement[UIC_manyElementsArrayList.Count];
         for (var i = 0; i < UIC_manyElementsArrayList.Count; i++)
             manyElementsArray[i] = UIC_manyElementsArrayList[i];
 
         // manyElementsList
-        var UIC_manyElementsListList = new List<UnityEngine.UIElements.VisualElement>();
-        this.Query<UnityEngine.UIElements.VisualElement>("name", "class").ToList(UIC_manyElementsListList);
-        this.Query<UnityEngine.UIElements.VisualElement>("other-name", "other-class").ToList(UIC_manyElementsListList);
-        this.Query<UnityEngine.UIElements.VisualElement>("third-name", "third-class").ToList(UIC_manyElementsListList);
+        var UIC_manyElementsListList = new List<VisualElement>();
+        this.Query<VisualElement>("name", "class").ToList(UIC_manyElementsListList);
+        this.Query<VisualElement>("other-name", "other-class").ToList(UIC_manyElementsListList);
+        this.Query<VisualElement>("third-name", "third-class").ToList(UIC_manyElementsListList);
         if (UIC_manyElementsListList.Count == 0)
-            Logger.LogError("Query (manyElementsList): No instances of UnityEngine.UIElements.VisualElement found", this);
+            Logger.LogError("Query (manyElementsList): No instances of VisualElement found", this);
         manyElementsList = UIC_manyElementsListList;
     }
 }

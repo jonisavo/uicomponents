@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents.InterfaceModifiers;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 

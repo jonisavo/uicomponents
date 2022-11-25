@@ -52,10 +52,10 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
             return _stylesheetDescriptions.Count > 0;
         }
 
-        protected override void BuildUsingStatements(StringBuilder stringBuilder)
+        protected override void AddAdditionalUsings(HashSet<string> usings)
         {
-            stringBuilder.AppendLine("using System.Threading.Tasks;");
-            base.BuildUsingStatements(stringBuilder);
+            base.AddAdditionalUsings(usings);
+            usings.Add("System.Threading.Tasks");
         }
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)

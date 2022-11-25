@@ -57,6 +57,7 @@ namespace UIComponents
         /// <summary>
         /// Defines a default value for the trait.
         /// </summary>
+        [Obsolete("Assign a default value using field and property initializers.")]
         public object DefaultValue { get; set; }
     }
 }

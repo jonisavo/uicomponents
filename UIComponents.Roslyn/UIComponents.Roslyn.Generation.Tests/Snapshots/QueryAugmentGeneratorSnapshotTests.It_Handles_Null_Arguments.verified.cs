@@ -5,8 +5,9 @@
 // </auto-generated>
 
 using System.Collections.Generic;
-using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
+using UIComponents;
+using System.CodeDom.Compiler;
 
 public partial class NullQueryComponent
 {
@@ -14,10 +15,10 @@ public partial class NullQueryComponent
     protected override void UIC_PopulateQueryFields()
     {
         // elements
-        var UIC_elementsList = new List<UnityEngine.UIElements.VisualElement>();
-        this.Query<UnityEngine.UIElements.VisualElement>(null, (string) null).ToList(UIC_elementsList);
+        var UIC_elementsList = new List<VisualElement>();
+        this.Query<VisualElement>(null, (string) null).ToList(UIC_elementsList);
         if (UIC_elementsList.Count == 0)
-            Logger.LogError("Query (elements): No instances of UnityEngine.UIElements.VisualElement found", this);
+            Logger.LogError("Query (elements): No instances of VisualElement found", this);
         elements = UIC_elementsList;
     }
 }

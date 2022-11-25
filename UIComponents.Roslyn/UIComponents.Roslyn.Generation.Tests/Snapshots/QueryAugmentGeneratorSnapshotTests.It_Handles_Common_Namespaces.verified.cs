@@ -4,6 +4,8 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
+using MyLibrary.Core.Elements;
 using System.Collections.Generic;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
@@ -16,10 +18,10 @@ public partial class MyComponent
     protected override void UIC_PopulateQueryFields()
     {
         // element
-        var UIC_elementList = new List<Core.Elements.MyElement>();
-        this.Query<Core.Elements.MyElement>(null, (string) null).ToList(UIC_elementList);
+        var UIC_elementList = new List<MyElement>();
+        this.Query<MyElement>(null, (string) null).ToList(UIC_elementList);
         if (UIC_elementList.Count == 0)
-            Logger.LogError("Query (element): No instances of Core.Elements.MyElement found", this);
+            Logger.LogError("Query (element): No instances of MyElement found", this);
         if (UIC_elementList.Count > 0)
             element = UIC_elementList[0];
     }

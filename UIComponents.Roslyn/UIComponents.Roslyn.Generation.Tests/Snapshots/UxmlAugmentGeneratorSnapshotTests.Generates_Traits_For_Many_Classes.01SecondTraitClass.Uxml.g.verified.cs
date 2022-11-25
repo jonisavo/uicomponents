@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -22,9 +23,12 @@ public partial class SecondTraitClass
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
+
+            var element = (SecondTraitClass) ve;
+
             m_Enabled.defaultValue = true;
-            ((SecondTraitClass)ve).Enabled = m_Enabled.GetValueFromBag(bag, cc);
-            ((SecondTraitClass)ve).SomeValue = m_SomeValue.GetValueFromBag(bag, cc);
+            element.Enabled = m_Enabled.GetValueFromBag(bag, cc);
+            element.SomeValue = m_SomeValue.GetValueFromBag(bag, cc);
         }
     }
 }

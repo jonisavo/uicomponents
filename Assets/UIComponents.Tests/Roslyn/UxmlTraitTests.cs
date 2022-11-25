@@ -15,12 +15,14 @@ namespace UIComponents.Tests.Roslyn
             var container = new VisualElement();
             layout.CloneTree(container);
 
-            var testElement = container.Q<RoslynTestVisualElement>();
+            var valuesSetElement = container.Q<RoslynTestVisualElement>("values-set");
+            var valuesNotSetElement = container.Q<RoslynTestVisualElement>("values-not-set");
 
-            Assert.That(testElement.Description, Is.EqualTo("None set"));
-            Assert.That(testElement.Age, Is.EqualTo(20));
-            Assert.That(testElement.MusicVolume, Is.EqualTo(0.5f));
-            Assert.That(testElement.UnixTimestamp, Is.EqualTo(1234567890));
+            Assert.That(valuesSetElement.Description, Is.EqualTo("None set"));
+            Assert.That(valuesSetElement.Age, Is.EqualTo(20));
+            Assert.That(valuesSetElement.MusicVolume, Is.EqualTo(0.5f));
+            Assert.That(valuesNotSetElement.MusicVolume, Is.EqualTo(1.0f));
+            Assert.That(valuesSetElement.UnixTimestamp, Is.EqualTo(1234567890));
         }
 
         [Test]
@@ -30,12 +32,14 @@ namespace UIComponents.Tests.Roslyn
             var container = new VisualElement();
             layout.CloneTree(container);
 
-            var component = container.Q<RoslynTestComponent>();
+            var valuesSetComponent = container.Q<RoslynTestComponent>("values-set");
+            var valuesNotSetComponent = container.Q<RoslynTestComponent>("values-not-set");
             
-            Assert.That(component.TextColor, Is.EqualTo(Color.red));
-            Assert.That(component.Greeting, Is.EqualTo(RoslynTestComponent.Greetings.Morning));
-            Assert.That(component.CurrentTime, Is.EqualTo(123.456));
-            Assert.That(component.Enabled, Is.EqualTo(false));
+            Assert.That(valuesSetComponent.TextColor, Is.EqualTo(Color.red));
+            Assert.That(valuesNotSetComponent.TextColor, Is.EqualTo(Color.cyan));
+            Assert.That(valuesSetComponent.Greeting, Is.EqualTo(RoslynTestComponent.Greetings.Morning));
+            Assert.That(valuesSetComponent.CurrentTime, Is.EqualTo(123.456));
+            Assert.That(valuesSetComponent.Enabled, Is.EqualTo(false));
         }
 
         [Test]

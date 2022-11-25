@@ -4,6 +4,7 @@
 // Do not attempt to modify it. Any changes will be overridden during compilation.
 // </auto-generated>
 
+using UIComponents;
 using System.CodeDom.Compiler;
 using UnityEngine.UIElements;
 
@@ -21,7 +22,10 @@ public partial class MyComponentWithTraits
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            ((MyComponentWithTraits)ve).Trait = m_Trait.GetValueFromBag(bag, cc);
+
+            var element = (MyComponentWithTraits) ve;
+
+            element.Trait = m_Trait.GetValueFromBag(bag, cc);
         }
     }
 }

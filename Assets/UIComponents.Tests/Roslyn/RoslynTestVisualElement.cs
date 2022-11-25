@@ -12,8 +12,8 @@ namespace UIComponents.Tests.Roslyn
 
         [UxmlTrait(Name = "timestamp", DefaultValue = -1)]
         public long UnixTimestamp;
-        
-        [UxmlTrait(DefaultValue = 1.0f)]
-        public float MusicVolume { get; set; }
+
+        [UxmlTrait]
+        public float MusicVolume { get; set; } = 1.0f;
     }
 }

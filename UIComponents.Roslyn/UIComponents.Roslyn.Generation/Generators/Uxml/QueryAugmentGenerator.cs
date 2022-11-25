@@ -130,10 +130,10 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             }
         }
 
-        protected override void BuildUsingStatements(StringBuilder stringBuilder)
+        protected override void AddAdditionalUsings(HashSet<string> usings)
         {
-            stringBuilder.AppendLine("using System.Collections.Generic;");
-            base.BuildUsingStatements(stringBuilder);
+            usings.Add("System.Collections.Generic");
+            base.AddAdditionalUsings(usings);
         }
 
         protected override void GenerateSource(AugmentGenerationContext context, StringBuilder stringBuilder)

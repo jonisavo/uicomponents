@@ -44,6 +44,19 @@ namespace UIComponents.Roslyn.Generation.Utilities
             return potentialNamespaceParent as NamespaceDeclarationSyntax;
         }
 
+        public static CompilationUnitSyntax GetCompilationUnitSyntax(SyntaxNode syntaxNode)
+        {
+            if (syntaxNode == null)
+                return null;
+
+            var current = syntaxNode.Parent;
+
+            while (current != null && !(current is CompilationUnitSyntax))
+                current = current.Parent;
+
+            return current as CompilationUnitSyntax;
+        }
+
         public static string GetTypeNameForNamespace(ITypeSymbol type, string nameSpace)
         {
             var displayString = type.ToDisplayString();

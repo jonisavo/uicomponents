@@ -1,9 +1,14 @@
+using System.Diagnostics.CodeAnalysis;
 using UIComponents.Roslyn.Generation.Generators.Uxml;
 using UIComponents.Roslyn.Generation.Tests.Utilities;
 
 namespace UnityEngine
 {
-    public class Color {}
+    [ExcludeFromCodeCoverage]
+    public class Color
+    {
+        public static readonly Color red = new Color();
+    }
 
     namespace UIElements { }
 }
@@ -80,6 +85,28 @@ public class Test
 }
 ";
             return GeneratorTester.VerifyWithoutReferences<UxmlAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Uses_Initializer_As_Default_Trait_Value()
+        {
+            var source = @"
+using UIComponents;
+using UnityEngine;
+
+public class Test
+{
+    [UxmlTrait]
+    public int Number = 0;
+
+    [UxmlTrait]
+    public string MyMessage { get; set; } = ""Hello world!"";
+
+    [UxmlTrait]
+    public Color color = Color.red;
+}
+";
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
 
         [Fact]

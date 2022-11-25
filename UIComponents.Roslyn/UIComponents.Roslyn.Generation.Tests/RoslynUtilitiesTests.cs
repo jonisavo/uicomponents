@@ -8,12 +8,7 @@ namespace UIComponents.Roslyn.Generation.Tests
 {
     public class RoslynUtilitiesTests
     {
-        public class GetTypeNamespace
-        {
-            [Fact]
-            public void Returns_The_Namespace_String_Of_A_Syntax_Node()
-            {
-                var syntaxTree = CSharpSyntaxTree.ParseText(@"
+        public static string TestSource = @"
 namespace Hello
 {
     namespace World
@@ -24,7 +19,14 @@ namespace Hello
             public float OtherNumber;
         }
     }
-}");
+}";
+
+        public class GetTypeNamespace
+        {
+            [Fact]
+            public void Returns_The_Namespace_String_Of_A_Syntax_Node()
+            {
+                var syntaxTree = CSharpSyntaxTree.ParseText(TestSource);
                 var nodes = syntaxTree.GetRoot().DescendantNodes();
                 var classSyntax = nodes.OfType<ClassDeclarationSyntax>().First();
 
@@ -52,6 +54,30 @@ public class A_Thing
             public void Returns_Empty_String_If_Syntax_Node_Is_Null()
             {
                 Assert.Equal("", RoslynUtilities.GetTypeNamespace(null));
+            }
+        }
+
+        public class GetCompilationUnitSyntax
+        {
+            [Fact]
+            public void Returns_Compilation_Unit_Syntax()
+            {
+                var syntaxTree = CSharpSyntaxTree.ParseText(TestSource);
+                var root = syntaxTree.GetRoot();
+                var nodes = root.DescendantNodes();
+                var classSyntax = nodes.OfType<ClassDeclarationSyntax>().First();
+
+                var compilationUnitSyntax = RoslynUtilities.GetCompilationUnitSyntax(classSyntax);
+
+                Assert.Equal(root, compilationUnitSyntax);
+            }
+
+            [Fact]
+            public void Returns_Null_If_Null_Node_Is_Given()
+            {
+                var compilationUnitSyntax = RoslynUtilities.GetCompilationUnitSyntax(null);
+
+                Assert.Null(compilationUnitSyntax);
             }
         }
 
