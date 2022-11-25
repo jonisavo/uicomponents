@@ -55,8 +55,8 @@ public partial class CounterComponent : UIComponent, IOnAttachToPanel
     // hence the lack of file extensions.
     
     // An UxmlTraits implementation is generated automatically for this class.
-    [UxmlTrait(DefaultValue = "Increment")]
-    public string IncrementText;
+    [UxmlTrait]
+    public string IncrementText = "Increment";
     
     // Queries are made after all assets have loaded.
     // The query calls are generated automatically for you.
