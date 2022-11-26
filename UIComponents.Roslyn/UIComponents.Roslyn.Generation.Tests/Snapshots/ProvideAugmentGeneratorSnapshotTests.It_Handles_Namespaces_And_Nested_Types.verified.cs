@@ -15,7 +15,7 @@ public partial class ParentClass
 {
 private partial class NestedProvideComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.5")]
     private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
     {
         try
@@ -32,7 +32,7 @@ private partial class NestedProvideComponent
         }
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.5")]
     protected override void UIC_PopulateProvideFields()
     {
         UIC_SetProvideField<Dependencies.IDependency, Dependencies.IDependency>(ref Dependency, "Dependency");

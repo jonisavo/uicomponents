@@ -10,16 +10,16 @@ using UnityEngine.UIElements;
 
 public partial class MyUxmlNameAttributeComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.5")]
     public new partial class UxmlFactory : UxmlFactory<MyUxmlNameAttributeComponent>
     {
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.5")]
         public override string uxmlName
         {
             get { return "MyUxmlNameAttribute"; }
         }
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.4")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.5")]
         public override string uxmlQualifiedName
         {
             get { return uxmlNamespace + "." + uxmlName; }

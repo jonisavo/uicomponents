@@ -1,5 +1,19 @@
 
 
+# [1.0.0-alpha.5](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2022-11-26)
+
+
+### Bug Fixes
+
+* ignore using declarations with alias during codegen ([dc3331c](https://github.com/jonisavo/uicomponents/commit/dc3331c49c0709fb22c7b62e47a905caf5cfc9e4))
+
+
+### Features
+
+* move event interfaces to use source generation ([2221717](https://github.com/jonisavo/uicomponents/commit/22217176276a63eb4258b3395a4173bc2d9a0efc))
+* **UxmlTraitAttribute:** mark DefaultValue property as obsolete ([5ea20df](https://github.com/jonisavo/uicomponents/commit/5ea20dfa050ecc0c4ddb95727c2dede09e915e84))
+* **UxmlTraitAttribute:** use initializers as default value ([70925e2](https://github.com/jonisavo/uicomponents/commit/70925e2e193ae3e3a61846d62cdfbd3f94603d44))
+
 # [1.0.0-alpha.4](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2022-11-20)
 
 
