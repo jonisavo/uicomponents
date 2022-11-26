@@ -218,6 +218,45 @@ public partial class MultipleQueryComponent : UIComponent
         }
 
         [Fact]
+        public Task It_Handles_Using_Declaration_With_Alias()
+        {
+            var firstSource = @"
+namespace UnityEngine.UIElements
+{
+    public class Button : VisualElement {}
+}
+
+namespace MyLibrary
+{
+    public class Button : UnityEngine.UIElements.VisualElement {}
+}
+";
+            var secondSource = @"
+using System.Collections.Generic;
+using UnityEngine.UIElements;
+using Button = MyLibrary.Button;
+using UIComponents;
+
+public partial class UsingAliasComponent : UIComponent
+{
+    [Query]
+    [Query(Class = ""test"")]
+    public Button firstButton;
+
+    [Query(""uxml-name"", Class = ""class"")]
+    [Query(Class = ""class-name"")]
+    public Button[] buttonArray;
+
+    [Query(Name = ""name"" Class = ""class"")]
+    [Query(Name = ""other-name"" Class = ""other-class"")]
+    [Query(Name = ""third-name"" Class = ""third-class"")]
+    public List<Button> buttonList;
+}
+";
+            return GeneratorTester.Verify<QueryAugmentGenerator>(firstSource, secondSource);
+        }
+
+        [Fact]
         public Task It_Handles_Common_Namespaces()
         {
             var firstSource = @"

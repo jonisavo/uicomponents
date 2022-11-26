@@ -92,6 +92,7 @@ namespace UIComponents.Roslyn.Generation.Generators
                 return;
 
             var usingsList = compilationUnitSyntax.Usings
+                .Where((declaration) => declaration.Alias == null)
                 .Select((declaration) => declaration.Name.ToString())
                 .ToList();
 
