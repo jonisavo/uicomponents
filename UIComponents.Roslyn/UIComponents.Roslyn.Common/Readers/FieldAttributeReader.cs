@@ -3,9 +3,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UIComponents.Roslyn.Generation.Readers
+namespace UIComponents.Roslyn.Common.Readers
 {
-    internal class FieldAttributeReader : AttributeReader<FieldDeclarationSyntax, IList<IFieldSymbol>>
+    public sealed class FieldAttributeReader : AttributeReader<FieldDeclarationSyntax, IList<IFieldSymbol>>
     {
         public FieldAttributeReader(INamedTypeSymbol attributeSymbol, SemanticModel semanticModel) : base(attributeSymbol, semanticModel) {}
 

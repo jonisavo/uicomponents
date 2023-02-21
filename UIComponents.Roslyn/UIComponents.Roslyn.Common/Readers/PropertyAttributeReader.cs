@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UIComponents.Roslyn.Generation.Readers
+namespace UIComponents.Roslyn.Common.Readers
 {
     public sealed class PropertyAttributeReader : AttributeReader<PropertyDeclarationSyntax, IList<IPropertySymbol>>
     {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
-using UIComponents.Roslyn.Generation.Readers;
+using UIComponents.Roslyn.Common.Readers;
 using UIComponents.Roslyn.Generation.SyntaxReceivers;
 using UIComponents.Roslyn.Generation.Utilities;
 

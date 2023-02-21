@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UIComponents.Roslyn.Generation.Utilities;
+using UIComponents.Roslyn.Common.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.Uxml
 {

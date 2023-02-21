@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace UIComponents.Roslyn.Generation.Utilities
+namespace UIComponents.Roslyn.Common.Utilities
 {
     public static class RoslynUtilities
     {
@@ -47,14 +47,17 @@ namespace UIComponents.Roslyn.Generation.Utilities
         public static CompilationUnitSyntax GetCompilationUnitSyntax(SyntaxNode syntaxNode)
         {
             if (syntaxNode == null)
-                return null;
+                throw new ArgumentNullException(nameof(syntaxNode));
 
             var current = syntaxNode.Parent;
 
             while (current != null && !(current is CompilationUnitSyntax))
                 current = current.Parent;
 
-            return current as CompilationUnitSyntax;
+            if (current is CompilationUnitSyntax compilationUnitSyntax)
+                return compilationUnitSyntax;
+
+            throw new InvalidOperationException("No compilation unit syntax found");
         }
 
         public static string GetTypeNameForNamespace(ITypeSymbol type, string nameSpace)
