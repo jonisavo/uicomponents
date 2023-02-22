@@ -1,11 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace UIComponents.Roslyn.Generation.Readers
+namespace UIComponents.Roslyn.Common.Readers
 {
     /// <summary>
     /// Attribute readers fetch attributes from syntax nodes.
     /// </summary>
-    public abstract class AttributeReader<TSyntaxNode, TData> : IReader<TSyntaxNode, TData>
+    public abstract class AttributeReader<TSyntaxNode, TData>
         where TSyntaxNode : SyntaxNode
     {
         protected readonly INamedTypeSymbol AttributeSymbol;

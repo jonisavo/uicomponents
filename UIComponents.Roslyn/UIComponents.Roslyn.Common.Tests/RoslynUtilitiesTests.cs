@@ -2,9 +2,9 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NSubstitute;
-using UIComponents.Roslyn.Generation.Utilities;
+using UIComponents.Roslyn.Common.Utilities;
 
-namespace UIComponents.Roslyn.Generation.Tests
+namespace UIComponents.Roslyn.Common.Tests
 {
     public class RoslynUtilitiesTests
     {
@@ -73,11 +73,18 @@ public class A_Thing
             }
 
             [Fact]
-            public void Returns_Null_If_Null_Node_Is_Given()
+            public void Throws_Exception_If_No_Compilation_Unit_Syntax_Exists()
             {
-                var compilationUnitSyntax = RoslynUtilities.GetCompilationUnitSyntax(null);
+                var syntaxTree = CSharpSyntaxTree.ParseText("");
+                var root = syntaxTree.GetRoot();
 
-                Assert.Null(compilationUnitSyntax);
+                Assert.Throws<InvalidOperationException>(() => RoslynUtilities.GetCompilationUnitSyntax(root));
+            }
+
+            [Fact]
+            public void Throws_Exception_If_Null_Node_Is_Given()
+            {
+                Assert.Throws<ArgumentNullException>(() => RoslynUtilities.GetCompilationUnitSyntax(null));
             }
         }
 

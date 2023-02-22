@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 {

@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 namespace UIComponents.Roslyn.Generation.SyntaxReceivers
 {
-    public sealed class ClassMemberSyntaxReceiver : ISyntaxReceiverWithTypes
+    public sealed class ClassMemberSyntaxReceiver : ClassSyntaxReceiver
     {
-        public readonly List<ClassDeclarationSyntax> Classes =
-            new List<ClassDeclarationSyntax>();
         public readonly List<MemberDeclarationSyntax> FieldsAndProperties =
             new List<MemberDeclarationSyntax>();
 
@@ -16,10 +14,9 @@ namespace UIComponents.Roslyn.Generation.SyntaxReceivers
             return syntaxNode is FieldDeclarationSyntax || syntaxNode is PropertyDeclarationSyntax;
         }
 
-        public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
+        public override void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
-            if (syntaxNode is ClassDeclarationSyntax classDeclarationSyntax)
-                Classes.Add(classDeclarationSyntax);
+            base.OnVisitSyntaxNode(syntaxNode);
 
             if (!NodeIsFieldOrProperty(syntaxNode))
                 return;
@@ -29,7 +26,5 @@ namespace UIComponents.Roslyn.Generation.SyntaxReceivers
             if (memberDeclarationSyntax.AttributeLists.Count > 0)
                 FieldsAndProperties.Add(memberDeclarationSyntax);
         }
-
-        public IReadOnlyList<TypeDeclarationSyntax> GetTypes() => Classes;
     }
 }

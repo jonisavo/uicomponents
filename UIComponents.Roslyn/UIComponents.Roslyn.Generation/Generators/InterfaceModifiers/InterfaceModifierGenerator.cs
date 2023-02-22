@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using UIComponents.Roslyn.Generation.SyntaxReceivers;
-using UIComponents.Roslyn.Generation.Utilities;
-using UIComponents.Roslyn.Generation.Readers;
+using UIComponents.Roslyn.Common.Utilities;
+using UIComponents.Roslyn.Common.Readers;
 
 namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
 {

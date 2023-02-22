@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 
-namespace UIComponents.Roslyn.Generation.Readers
+namespace UIComponents.Roslyn.Common.Readers
 {
     public enum AttributeReadOrder
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UIComponents.Roslyn.Generation.Readers;
+using UIComponents.Roslyn.Common.Readers;
 using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.AssetLoad

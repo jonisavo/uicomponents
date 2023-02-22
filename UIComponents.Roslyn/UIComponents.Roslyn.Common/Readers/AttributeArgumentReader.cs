@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
-using UIComponents.Roslyn.Generation.Utilities;
+using UIComponents.Roslyn.Common.Utilities;
 
-namespace UIComponents.Roslyn.Generation.Readers
+namespace UIComponents.Roslyn.Common.Readers
 {
     public class AttributeArgumentReader : AttributeReader<SyntaxNode, Dictionary<AttributeData, Dictionary<string, TypedConstant>>>
     {
@@ -11,9 +11,9 @@ namespace UIComponents.Roslyn.Generation.Readers
 
         public override void Read(SyntaxNode syntaxNode, Dictionary<AttributeData, Dictionary<string, TypedConstant>> output)
         {
-            var propertySymbol = SemanticModel.GetDeclaredSymbol(syntaxNode);
+            var symbol = SemanticModel.GetDeclaredSymbol(syntaxNode);
 
-            GetArgumentsOfSymbol(propertySymbol, output);
+            GetArgumentsOfSymbol(symbol, output);
         }
 
         protected void GetArgumentsOfSymbol(ISymbol symbol, Dictionary<AttributeData, Dictionary<string, TypedConstant>> attributeArgs)

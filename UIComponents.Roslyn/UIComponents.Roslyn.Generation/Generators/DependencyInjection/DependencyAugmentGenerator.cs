@@ -5,7 +5,8 @@ using UIComponents.Roslyn.Generation.SyntaxReceivers;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using UIComponents.Roslyn.Generation.Utilities;
 using System.Linq;
-using UIComponents.Roslyn.Generation.Readers;
+using UIComponents.Roslyn.Common.Readers;
+using UIComponents.Roslyn.Common.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 {
