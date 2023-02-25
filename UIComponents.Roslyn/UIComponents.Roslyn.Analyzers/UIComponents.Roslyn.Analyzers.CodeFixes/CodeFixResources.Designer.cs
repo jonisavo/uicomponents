@@ -61,6 +61,15 @@ namespace UIComponents.Roslyn.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove attribute.
+        /// </summary>
+        internal static string InvalidAttributeFix_Title {
+            get {
+                return ResourceManager.GetString("InvalidAttributeFix_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Make class partial.
         /// </summary>
         internal static string PartialFix_Title {
