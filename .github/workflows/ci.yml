@@ -14,7 +14,7 @@ env:
 
 jobs:
   buildAndTestForLinux:
-    name: Build & Test for StandaloneLinux64 on ${{ matrix.unityVersion }}
+    name: Build & Test for ${{ matrix.targetPlatform }} on ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -23,6 +23,9 @@ jobs:
           - 2020.3.45f1
           - 2021.3.19f1
           - 2022.2.7f1
+        targetPlatform:
+          - StandaloneLinux64
+          - StandaloneWindows64
             
     steps:
       - uses: actions/checkout@v3
@@ -32,10 +35,10 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-StandaloneLinux64-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-StandaloneLinux64-${{ matrix.unityVersion }}-
-            Library-StandaloneLinux64-
+            Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-
+            Library-${{ matrix.targetPlatform }}-
             Library-
             
       - name: Set up .NET
@@ -87,49 +90,4 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: StandaloneLinux64
-
-  buildForWindows:
-    name: Build for 64-bit Windows on ${{ matrix.unityVersion }}
-    runs-on: windows-2019
-    strategy:
-      fail-fast: false
-      matrix:
-        unityVersion:
-          - 2020.3.45f1
-          - 2021.3.19f1
-          - 2022.2.7f1
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          
-      - uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-StandaloneWindows64-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-StandaloneWindows64-${{ matrix.unityVersion }}-
-            Library-StandaloneWindows64-
-            Library-
-            
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-            
-      - uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: StandaloneWindows64
-        
-      - name: Build Roslyn project
-        run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release
-
-      - name: Test Roslyn project
-        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal
+          targetPlatform: ${{ matrix.targetPlatform }}
