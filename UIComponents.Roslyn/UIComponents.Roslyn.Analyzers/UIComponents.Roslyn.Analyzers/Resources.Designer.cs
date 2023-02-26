@@ -113,5 +113,32 @@ namespace UIComponents.Roslyn.Analyzers {
                 return ResourceManager.GetString("UIC002_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The stylesheet has already been declared in the UIComponent..
+        /// </summary>
+        internal static string UIC101_Description {
+            get {
+                return ResourceManager.GetString("UIC101_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identical stylesheet &apos;{0}&apos; in {1}.
+        /// </summary>
+        internal static string UIC101_MessageFormat {
+            get {
+                return ResourceManager.GetString("UIC101_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identical stylesheet in UIComponent.
+        /// </summary>
+        internal static string UIC101_Title {
+            get {
+                return ResourceManager.GetString("UIC101_Title", resourceCulture);
+            }
+        }
     }
 }

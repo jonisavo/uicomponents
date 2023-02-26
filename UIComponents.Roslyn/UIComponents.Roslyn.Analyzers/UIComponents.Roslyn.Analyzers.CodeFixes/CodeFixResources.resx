@@ -117,8 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InvalidAttributeFix_Title" xml:space="preserve">
+    <value>Remove attribute</value>
+  </data>
   <data name="PartialFix_Title" xml:space="preserve">
     <value>Make class partial</value>
-    <comment>The title of the code fix.</comment>
   </data>
 </root>
