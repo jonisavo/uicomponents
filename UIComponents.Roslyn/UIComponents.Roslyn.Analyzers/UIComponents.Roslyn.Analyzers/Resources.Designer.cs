@@ -140,5 +140,59 @@ namespace UIComponents.Roslyn.Analyzers {
                 return ResourceManager.GetString("UIC101_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UxmlNameAttribute must be given a non-empty string..
+        /// </summary>
+        internal static string UIC102_Description {
+            get {
+                return ResourceManager.GetString("UIC102_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UxmlNameAttribute with empty string.
+        /// </summary>
+        internal static string UIC102_MessageFormat {
+            get {
+                return ResourceManager.GetString("UIC102_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UxmlNameAttribute with empty string.
+        /// </summary>
+        internal static string UIC102_Title {
+            get {
+                return ResourceManager.GetString("UIC102_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UxmlTraitAttribute&apos;s name must not be empty..
+        /// </summary>
+        internal static string UIC103_Description {
+            get {
+                return ResourceManager.GetString("UIC103_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UxmlTraitAttribute with empty name.
+        /// </summary>
+        internal static string UIC103_MessageFormat {
+            get {
+                return ResourceManager.GetString("UIC103_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UxmlTraitAttribute with empty name.
+        /// </summary>
+        internal static string UIC103_Title {
+            get {
+                return ResourceManager.GetString("UIC103_Title", resourceCulture);
+            }
+        }
     }
 }
