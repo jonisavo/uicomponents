@@ -1,5 +1,14 @@
 
 
+# [1.0.0-alpha.6](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2023-03-01)
+
+
+### Features
+
+* **analyzers:** add rule UIC101 and code fix ([321d154](https://github.com/jonisavo/uicomponents/commit/321d1549774d72c730a6cb5a72816063f257046f))
+* **analyzers:** add rules UIC102 and UIC103 ([f8d57d0](https://github.com/jonisavo/uicomponents/commit/f8d57d0b9e1f25c4156ce6711c920e7ef0711dd1))
+* **roslyn:** add Roslyn analyzer ([41533d7](https://github.com/jonisavo/uicomponents/commit/41533d70a3ec098ac6a27c7777babefc919a791c))
+
 # [1.0.0-alpha.5](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2022-11-26)
 
 
