@@ -2,8 +2,6 @@
 // generate_unitypackage.js
 //
 // This script creates .unitypackage files in the dist folder.
-// The first file includes UIComponents only and the second
-// has com.unity.roslyn included.
 //
 
 const path = require('path');
@@ -90,9 +88,10 @@ function executeCommand(command) {
 
 executeCommand(command);
 
-fs.mkdirSync(path.join(outputPluginsFolder, 'com.unity.roslyn'));
-fs.cpSync(roslynPackageFolder, path.join(outputPluginsFolder, 'com.unity.roslyn'), { recursive: true });
-
-const secondCommand = createUnityPackerCommand('UIComponents_' + version + '_with_roslyn');;
-
-executeCommand(secondCommand);
+// Uncomment this section to include com.unity.roslyn in the package, if it exists.
+// fs.mkdirSync(path.join(outputPluginsFolder, 'com.unity.roslyn'));
+// s.cpSync(roslynPackageFolder, path.join(outputPluginsFolder, 'com.unity.roslyn'), { recursive: true });
+// 
+// const secondCommand = createUnityPackerCommand('UIComponents_' + version + '_with_roslyn');;
+// 
+// executeCommand(secondCommand);

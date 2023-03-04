@@ -34,8 +34,9 @@ of code for you.
 
 ## Requirements
 
-UIComponents requires Unity 2020.3 or newer. Unity's `com.unity.roslyn` package is used to enable
-source generation in Unity 2020.
+UIComponents officially supports Unity 2021.3 or newer. Unity's `com.unity.roslyn` package
+can be used to enable source generation in Unity 2020. Refer to the Installation section
+below for more information.
 
 ## Example usage
 
@@ -191,9 +192,17 @@ Download the latest `.unitypackage` from the [releases](https://github.com/jonis
 
 To update, remove the existing files and extract the new `.unitypackage`.
 
-NOTE: [com.unity.roslyn](https://docs.unity3d.com/Packages/com.unity.roslyn@0.2/manual/index.html) is
-required in Unity 2020. There are two `.unitypackage` archives. The archive with the `_with_roslyn` suffix
-has `com.unity.roslyn` included.
+### For Unity 2020
+
+After installing UIComponents, install the `com.unity.roslyn` package. This enables source generation in Unity 2020.
+
+Add this under `dependencies` in your `Packages/manifest.json` file:
+
+```
+"com.unity.roslyn": "0.2.2-preview"
+```
+
+You may need to restart Unity.
 
 ## Documentation
 

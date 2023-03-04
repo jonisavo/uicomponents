@@ -10,7 +10,8 @@ on:
   workflow_dispatch: {}
 
 env:
-  PROJECT_UNITY_VERSION: 2020.3.45f1
+  PROJECT_UNITY_VERSION: 2021.3.19f1
+  UNITY_2020_VERSION: 2020.3.45f1
 
 jobs:
   buildAndTestForLinux:
@@ -22,7 +23,7 @@ jobs:
         unityVersion:
           - 2020.3.45f1
           - 2021.3.19f1
-          - 2022.2.7f1
+          - 2022.2.8f1
         targetPlatform:
           - StandaloneLinux64
           - StandaloneWindows64
@@ -45,6 +46,18 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
+          
+      - name: Set up Node.js
+        if: ${{ matrix.unityVersion == env.UNITY_2020_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          
+      - name: Set up Roslyn for Unity 2020
+        if: ${{ matrix.unityVersion == env.UNITY_2020_VERSION }}
+        run: |
+          npm install -g openupm-cli
+          openupm add com.unity.roslyn
             
       - uses: game-ci/unity-test-runner@v2
         id: testRunner
@@ -75,7 +88,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: CodeCoverage/**/*.xml,UIComponents.Roslyn/**/TestResults/**/coverage.cobertura.xml
           
-      - name: Commit upgrade changes
+      - name: Commit Unity project changes
         if: ${{ matrix.unityVersion != env.PROJECT_UNITY_VERSION }}
         run: |
           git config --global user.name 'github-bot'
