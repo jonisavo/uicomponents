@@ -3,10 +3,7 @@
     "displayName": "UIComponents",
     "version": "1.0.0-alpha.6",
     "description": "A small front-end framework for Unity's UIToolkit.",
-    "unity": "2020.3",
-    "dependencies": {
-        "com.unity.roslyn": "0.2.2-preview"
-    },
+    "unity": "2021.3",
     "author": {
         "name": "Joni Savolainen",
         "email": "joni@savolainen.io",
