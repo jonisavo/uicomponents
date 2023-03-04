@@ -15,6 +15,8 @@ namespace UIComponents.Roslyn.Analyzers.Test
         public class UxmlTraitAttribute : Attribute
         {
             public string Name { get; set; }
+
+            public UxmlTraitAttribute(string argument = """") {}
         }
         public class OtherAttribute : Attribute
         {
@@ -67,6 +69,25 @@ namespace UIComponents.Roslyn.Analyzers.Test
 
             [UIComponents.UxmlTrait(Name = ""Test2"")]
             public int OtherTrait {{ get; set; }}
+        }}
+    }}";
+            await VerifyCS.VerifyAnalyzerAsync(test);
+        }
+
+        [TestMethod]
+        public async Task It_Does_Not_Report_Empty_Constructor_Argument()
+        {
+            var test = $@"
+    using System;
+
+    {UIComponentsDefinition}
+
+    namespace Application
+    {{
+        public class TestComponent : UIComponents.UIComponent
+        {{
+            [UIComponents.UxmlTrait("""")]
+            public string trait;
         }}
     }}";
             await VerifyCS.VerifyAnalyzerAsync(test);
