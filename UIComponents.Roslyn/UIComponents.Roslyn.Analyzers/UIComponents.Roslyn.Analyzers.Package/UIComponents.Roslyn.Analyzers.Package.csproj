@@ -23,6 +23,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="3.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\UIComponents.Roslyn.Analyzers.CodeFixes\UIComponents.Roslyn.Analyzers.CodeFixes.csproj" />
     <ProjectReference Include="..\UIComponents.Roslyn.Analyzers\UIComponents.Roslyn.Analyzers.csproj" />
   </ItemGroup>
