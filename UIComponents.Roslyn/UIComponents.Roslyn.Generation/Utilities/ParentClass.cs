@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UIComponents.Roslyn.Generation.Utilities
 {
-    internal class ParentClass
+    public sealed class ParentClass
     {
         public ParentClass(string accessibility, string keyword, string name, string constraints, ParentClass child)
         {
@@ -28,6 +28,9 @@ namespace UIComponents.Roslyn.Generation.Utilities
         // https://andrewlock.net/creating-a-source-generator-part-5-finding-a-type-declarations-namespace-and-type-hierarchy/
         public static ParentClass GetParentClasses(BaseTypeDeclarationSyntax typeSyntax)
         {
+            if (typeSyntax == null)
+                return null;
+
             var parentSyntax = typeSyntax.Parent as TypeDeclarationSyntax;
             ParentClass parentClass = null;
 

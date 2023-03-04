@@ -75,6 +75,10 @@ namespace UIComponents.Roslyn.Analyzers
                     var argument = attribute.ArgumentList.Arguments.Where(
                         (arg) => arg.NameEquals?.Name.Identifier.Text == NameArgumentName
                     ).FirstOrDefault();
+
+                    if (argument == null)
+                        continue;
+
                     var fullArgumentString = argument.Expression.ToString();
                     
                     if (fullArgumentString == "\"\"" || fullArgumentString == "null")

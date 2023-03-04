@@ -59,7 +59,7 @@ jobs:
         run: dotnet build ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release
         
       - name: Test Roslyn project
-        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal
+        run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal --collect:"XPlat Code Coverage;ExcludeByFile=**/*.Designer.cs"
           
       - uses: actions/upload-artifact@v3
         if: always()
@@ -73,7 +73,7 @@ jobs:
           name: Tests
           flags: automated
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: CodeCoverage/**/*.xml
+          files: CodeCoverage/**/*.xml,UIComponents.Roslyn/**/TestResults/**/coverage.cobertura.xml
           
       - name: Commit upgrade changes
         if: ${{ matrix.unityVersion != env.PROJECT_UNITY_VERSION }}
