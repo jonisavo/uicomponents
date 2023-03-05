@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 public partial class BaseProvideComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.6")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.0")]
     private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
     {
         try
@@ -28,7 +28,7 @@ public partial class BaseProvideComponent
         }
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.6")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.0")]
     protected override void UIC_PopulateProvideFields()
     {
         UIC_SetProvideField<IDependency, IDependency>(ref Dependency, "Dependency");

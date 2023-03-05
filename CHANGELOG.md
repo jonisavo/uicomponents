@@ -1,5 +1,17 @@
 
 
+# [1.0.0-beta.0](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.6...v1.0.0-beta.0) (2023-03-05)
+
+
+### Features
+
+* remove com.unity.roslyn from dependencies ([c99dbfd](https://github.com/jonisavo/uicomponents/commit/c99dbfd2b73fd3656cd794ab6efdca995c37d902))
+
+
+### BREAKING CHANGES
+
+* com.unity.roslyn is no longer a dependency. This means that Unity 2020 is no longer officially supported out-of-the-box.
+
 # [1.0.0-alpha.6](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2023-03-01)
 
 

@@ -11,16 +11,16 @@ using UnityEngine.UIElements;
 
 public partial class ColorComponentWithUsing
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.6")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.0")]
     public new partial class UxmlFactory : UxmlFactory<ColorComponentWithUsing, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.6")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.0")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlColorAttributeDescription m_FieldTrait = new UxmlColorAttributeDescription { name = "field-trait" };
         UxmlColorAttributeDescription m_PropertyTrait = new UxmlColorAttributeDescription { name = "property-trait" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-alpha.6")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.0")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
