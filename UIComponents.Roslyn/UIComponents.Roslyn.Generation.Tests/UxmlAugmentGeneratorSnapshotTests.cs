@@ -348,5 +348,24 @@ public partial class LongTraitNameComponent : UIComponent
 ";
             return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
         }
+
+        [Fact]
+        public Task Removes_Leading_And_Trailing_Underscores()
+        {
+            var source = @"
+using UIComponents;
+
+public partial class LongTraitNameComponent : UIComponent
+{
+    [UxmlTrait]
+    private int _member;
+    [UxmlTrait]
+    private int memberTwo_;
+    [UxmlTrait]
+    private int _member_three_;
+}
+";
+            return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
+        }
     }
 }
