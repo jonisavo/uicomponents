@@ -17,10 +17,10 @@ namespace UIComponents.Tests.Roslyn
         [UxmlTrait(Name = "time")]
         public double CurrentTime;
 
-        [UxmlTrait(DefaultValue = Greetings.Morning)]
-        public Greetings Greeting;
+        [UxmlTrait]
+        public Greetings Greeting = Greetings.Morning;
 
-        [UxmlTrait(DefaultValue = true)]
-        public bool Enabled;
+        [UxmlTrait]
+        public bool Enabled = true;
     }
 }

@@ -103,23 +103,7 @@ namespace UIComponents.Tests
                 
                 Assert.That(component.Initialized, Is.True);
             }
-            
-            [UnityTest]
-            public IEnumerator Allows_Waiting_For_Initialization_With_Obsolete_Method()
-            {
-                var component = _testComponentTestBed.CreateComponent();
-                
-                Assert.That(component.Initialized, Is.False);
-                
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
 
-                yield return component.WaitForInitialization().AsEnumerator();
-                
-                Assert.That(component.Initialized, Is.True);
-            }
-            
             [Layout("Child")]
             [Stylesheet("ChildStylesheet")]
             private partial class ChildComponent : UIComponent {}

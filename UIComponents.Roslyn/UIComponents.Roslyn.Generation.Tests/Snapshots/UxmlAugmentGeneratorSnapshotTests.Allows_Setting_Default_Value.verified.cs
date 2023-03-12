@@ -29,7 +29,7 @@ public partial class ComponentWithDefaultValueTraits
 
             m_Description.defaultValue = "Description not set.";
             m_Lives.defaultValue = 3;
-            m_MyValue.defaultValue = (Some.Place.Where.Enum.Is.TheEnum) 1;
+            m_MyValue.defaultValue = Some.Place.Where.Enum.Is.TheEnum.VALUE_B;
             element.Description = m_Description.GetValueFromBag(bag, cc);
             element.Lives = m_Lives.GetValueFromBag(bag, cc);
             element.MyValue = m_MyValue.GetValueFromBag(bag, cc);

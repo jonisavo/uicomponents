@@ -257,14 +257,14 @@ namespace Some.Place.Where.Enum.Is
 
 public partial class ComponentWithDefaultValueTraits : UIComponent
 {
-    [UxmlTrait(Name = ""description"", DefaultValue = ""Description not set."")]
-    public string Description;
+    [UxmlTrait(Name = ""description"")]
+    public string Description = ""Description not set."";
 
-    [UxmlTrait(Name = ""lives"", DefaultValue = 3)]
-    public int Lives;
+    [UxmlTrait(Name = ""lives"")]
+    public int Lives = 3;
 
-    [UxmlTrait(Name = ""custom-value"", DefaultValue = Some.Place.Where.Enum.Is.TheEnum.VALUE_B)]
-    public Some.Place.Where.Enum.Is.TheEnum MyValue;
+    [UxmlTrait(Name = ""custom-value"")]
+    public Some.Place.Where.Enum.Is.TheEnum MyValue = Some.Place.Where.Enum.Is.TheEnum.VALUE_B;
 }";
 
             return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
@@ -287,8 +287,8 @@ public partial class FirstTraitClass
 
 public partial class SecondTraitClass
 {
-    [UxmlTrait(DefaultValue = true)]
-    public bool Enabled;
+    [UxmlTrait]
+    public bool Enabled = true;
 
     [UxmlTrait(Name = ""secret"")]
     public long SomeValue;
@@ -327,8 +327,8 @@ using UIComponents;
 [UxmlName(""AwesomeUxmlName"")]
 public partial class ComponentWithUxmlNameAndTraits : UIComponent
 {
-    [UxmlTrait(DefaultValue = true)]
-    public bool Value;
+    [UxmlTrait]
+    public bool Value = true;
 }
 ";
             return GeneratorTester.Verify<UxmlAugmentGenerator>(source);
