@@ -17,8 +17,8 @@ namespace UIComponents
     ///     [UxmlTrait(Name = "a-color")]
     ///     public Color Color;
     ///
-    ///     [UxmlTrait(DefaultValue = 3)]
-    ///     public int Lives;
+    ///     [UxmlTrait]
+    ///     public int Lives = 3;
     /// }
     ///
     /// // This generates:
@@ -53,11 +53,5 @@ namespace UIComponents
         /// Defines a custom UXML name for the trait.
         /// </summary>
         public string Name { get; set; }
-        
-        /// <summary>
-        /// Defines a default value for the trait.
-        /// </summary>
-        [Obsolete("Assign a default value using field and property initializers.")]
-        public object DefaultValue { get; set; }
     }
 }

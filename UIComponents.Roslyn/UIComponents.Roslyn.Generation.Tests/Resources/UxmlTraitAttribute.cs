@@ -7,7 +7,5 @@ namespace UIComponents
     public sealed class UxmlTraitAttribute : Attribute
     {
         public string? Name { get; set; }
-        
-        public object? DefaultValue { get; set; }
     }
 }

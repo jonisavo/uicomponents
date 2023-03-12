@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using UIComponents.Roslyn.Generation.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators.Uxml
 {
@@ -16,7 +15,6 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
         public readonly string DefaultValue;
 
         private const string NameArgumentName = "Name";
-        private const string DefaultValueArgumentName = "DefaultValue";
 
         public TraitDescription(string classMemberName, string uxmlName, INamedTypeSymbol typeSymbol, string defaultValue = null)
         {
@@ -100,21 +98,6 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
 
             if (!string.IsNullOrEmpty(initializer))
                 return (uxmlName, initializer);
-
-            if (traitArguments.ContainsKey(DefaultValueArgumentName))
-            {
-                var defaultValueString = traitArguments[DefaultValueArgumentName].Value.ToString();
-
-                var defaultValueObject = traitArguments[DefaultValueArgumentName].Value;
-
-                if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is string)
-                    defaultValueString = StringUtilities.AddQuotesToString(defaultValueString);
-                if (!string.IsNullOrEmpty(defaultValueString) && defaultValueObject is bool)
-                    defaultValueString = defaultValueString.ToLower();
-                if (!string.IsNullOrEmpty(defaultValueString) && typeSymbol.TypeKind == TypeKind.Enum)
-                    defaultValueString = $"({typeSymbol.ToDisplayString()}) {defaultValueString}";
-                defaultValue = defaultValueString;
-            }
 
             return (uxmlName, defaultValue);
         }
