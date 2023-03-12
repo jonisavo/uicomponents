@@ -77,7 +77,8 @@ namespace UIComponents.Roslyn.Generation.Generators.Uxml
             var compactString = compactStringBuilder.ToString();
             // https://gist.github.com/nblackburn/875e6ff75bc8ce171c758bf75f304707?permalink_comment_id=3677597#gistcomment-3677597
             var kebabCaseStringPartOne = Regex.Replace(compactString, @"\B([A-Z])(?=[a-z])", "-$1");
-            var finalKebabCaseString = Regex.Replace(kebabCaseStringPartOne, @"\B([a-z0-9])([A-Z])", "$1-$2");
+            var kebabCaseStringPartTwo = Regex.Replace(kebabCaseStringPartOne, @"\B([a-z0-9])([A-Z])", "$1-$2");
+            var finalKebabCaseString = kebabCaseStringPartTwo.Trim('-');
             return finalKebabCaseString.ToLower();
         }
 
