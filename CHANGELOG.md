@@ -1,5 +1,24 @@
 
 
+# [1.0.0-beta.1](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2023-03-12)
+
+
+### Bug Fixes
+
+* **UxmlTraitAttribute:** default trait name no longer has trailing or leading dashes ([74a73f7](https://github.com/jonisavo/uicomponents/commit/74a73f70f129c53dd2fa4870ae76b10a187f0d87))
+
+
+### Features
+
+* **UIComponent:** remove WaitForInitialization method ([d21e194](https://github.com/jonisavo/uicomponents/commit/d21e1941c3bb33dd1588d0e633a139bfeca7af68))
+* **UxmlTraitAttribute:** remove obsolete DefaultValue property ([adb4715](https://github.com/jonisavo/uicomponents/commit/adb47154e99375fe527fbc7a6acc0afde436136d))
+
+
+### BREAKING CHANGES
+
+* **UxmlTraitAttribute:** UxmlTraitAttribute's obsolete DefaultValue property has been removed. Use field and property initializers instead.
+* **UIComponent:** UIComponent's obsolete WaitForInitialization method has been removed. Use its InitializationTask instead.
+
 # [1.0.0-beta.0](https://github.com/jonisavo/uicomponents/compare/v1.0.0-alpha.6...v1.0.0-beta.0) (2023-03-05)
 
 
