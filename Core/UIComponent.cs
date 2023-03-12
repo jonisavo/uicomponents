@@ -139,13 +139,6 @@ namespace UIComponents
         /// </remarks>
         public virtual void OnInit() {}
 
-        /// <returns>A Task which resolves when the component has initialized</returns>
-        [Obsolete("Use InitializationTask instead.")]
-        public Task<UIComponent> WaitForInitialization()
-        {
-            return _initCompletionSource.Task;
-        }
-
         /// <returns>An enumerator which yields when the component has initialized</returns>
         public IEnumerator WaitForInitializationEnumerator()
         {
