@@ -1,7 +1,7 @@
 //
-// generate_unitypackage.js
+// generate_unitypackage.js [version]
 //
-// This script creates .unitypackage files in the dist folder.
+// This script creates .unitypackage files in the dist folder with the given version.
 //
 
 const path = require('path');
