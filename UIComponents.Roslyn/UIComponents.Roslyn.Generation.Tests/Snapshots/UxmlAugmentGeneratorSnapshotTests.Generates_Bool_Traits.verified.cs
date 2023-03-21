@@ -10,16 +10,16 @@ using UnityEngine.UIElements;
 
 public partial class BoolComponentWithUsing
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
     public new partial class UxmlFactory : UxmlFactory<BoolComponentWithUsing, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlBoolAttributeDescription m_FieldTrait = new UxmlBoolAttributeDescription { name = "field-trait" };
         UxmlBoolAttributeDescription m_PropertyTrait = new UxmlBoolAttributeDescription { name = "property-trait" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.1")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

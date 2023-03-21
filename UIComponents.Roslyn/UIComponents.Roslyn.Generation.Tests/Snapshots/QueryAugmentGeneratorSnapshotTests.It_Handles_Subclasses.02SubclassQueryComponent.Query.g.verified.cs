@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 
 public partial class SubclassQueryComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.1")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
     protected override void UIC_PopulateQueryFields()
     {
         // subclassElements

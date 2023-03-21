@@ -1,5 +1,12 @@
 
 
+# [1.0.0-beta.2](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2023-03-21)
+
+
+### Bug Fixes
+
+* include meta files in .unitypackage distribution ([856d398](https://github.com/jonisavo/uicomponents/commit/856d398961ed7883cae9a40d0cef62792cd4a24c))
+
 # [1.0.0-beta.1](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2023-03-12)
 
 
