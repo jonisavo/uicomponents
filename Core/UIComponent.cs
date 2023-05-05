@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
 using Unity.Profiling;
-using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
