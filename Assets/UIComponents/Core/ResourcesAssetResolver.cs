@@ -12,13 +12,13 @@ namespace UIComponents
     /// </summary>
     public class ResourcesAssetResolver : IAssetResolver
     {
-        public Task<T> LoadAsset<T>(string assetPath) where T : UnityEngine.Object
+        public Task<T> LoadAsset<T>(string assetPath) where T : Object
         {
             var request = Resources.LoadAsync<T>(assetPath);
 
             var taskCompletionSource = new TaskCompletionSource<T>();
 
-            request.completed += operation => taskCompletionSource.SetResult(request.asset as T);
+            request.completed += _ => taskCompletionSource.SetResult(request.asset as T);
             
             return taskCompletionSource.Task;
         }
@@ -29,7 +29,7 @@ namespace UIComponents
             
             var taskCompletionSource = new TaskCompletionSource<bool>();
             
-            request.completed += operation => taskCompletionSource.SetResult(request.asset != null);
+            request.completed += _ => taskCompletionSource.SetResult(request.asset != null);
             
             return taskCompletionSource.Task;
         }

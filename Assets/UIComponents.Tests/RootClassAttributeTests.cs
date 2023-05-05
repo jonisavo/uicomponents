@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using NUnit.Framework;
-using UIComponents.Testing;
 using UnityEngine.TestTools;
 
 namespace UIComponents.Tests

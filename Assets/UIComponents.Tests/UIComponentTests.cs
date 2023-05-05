@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using UIComponents.Internal;
 using UIComponents.Testing;
 using UnityEngine;
 using UnityEngine.TestTools;

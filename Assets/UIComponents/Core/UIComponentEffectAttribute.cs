@@ -14,7 +14,7 @@ namespace UIComponents
         /// <summary>
         /// The priority of the effect. Defaults to 0.
         /// </summary>
-        public virtual int Priority { get; set; } = 0;
+        public virtual int Priority { get; set; }
 
         public abstract void Apply(UIComponent component);
         
