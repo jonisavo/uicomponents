@@ -23,7 +23,7 @@ namespace UIComponents.Testing
         private readonly Type _componentType = typeof(TComponent);
 
         /// <summary>
-        /// Returns a dependency instance as requested by consumer type <typeparamref name="TConsumer"/>.
+        /// Returns a dependency instance as requested by dependency type <typeparamref name="TDependency"/>.
         /// </summary>
         /// <typeparam name="TDependency">Dependency type</typeparam>
         /// <returns>Dependency instance</returns>
