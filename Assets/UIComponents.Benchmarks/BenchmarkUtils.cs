@@ -5,7 +5,7 @@ namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.28.0.0";
+        public const string Version = "0.29.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
@@ -28,6 +28,7 @@ namespace UIComponents.Benchmarks
                 })
                 .SampleGroup(new SampleGroup("Cold Cache Time"))
                 .ProfilerMarkers(GetProfilerMarkers())
+                .WarmupCount(10)
                 .MeasurementCount(50)
                 .IterationsPerMeasurement(100)
                 .GC()
@@ -42,6 +43,7 @@ namespace UIComponents.Benchmarks
                     await component.InitializationTask;
                 })
                 .SampleGroup(new SampleGroup("Warm Cache Time"))
+                .WarmupCount(10)
                 .MeasurementCount(50)
                 .IterationsPerMeasurement(100)
                 .ProfilerMarkers(GetProfilerMarkers())
