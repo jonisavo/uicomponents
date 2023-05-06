@@ -89,12 +89,11 @@ jobs:
           files: CodeCoverage/**/*.xml,UIComponents.Roslyn/**/TestResults/**/coverage.cobertura.xml
           
       - name: Commit Unity project changes
-        if: ${{ matrix.unityVersion != env.PROJECT_UNITY_VERSION }}
         run: |
           git config --global user.name 'github-bot'
           git config --global user.email 'github-bot@users.noreply.github.com'
           git add -A
-          git commit -m "chore(ci): switch to different unity version"
+          git commit -m "chore(ci): switch to different unity version" || echo skipping commit
           
       - uses: game-ci/unity-builder@v2
         env:
