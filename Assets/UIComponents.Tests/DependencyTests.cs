@@ -49,5 +49,21 @@ namespace UIComponents.Tests
             
             Assert.That(instance, Is.InstanceOf<ClassThatImplementsInterface>());
         }
+        
+        [Test]
+        public void SingletonFor_Returns_Singleton_Scope()
+        {
+            var dependency = Dependency.SingletonFor<IInterface, ClassThatImplementsInterface>();
+            
+            Assert.That(dependency.GetScope(), Is.EqualTo(Scope.Singleton));
+        }
+        
+        [Test]
+        public void TransientFor_Returns_Transient_Scope()
+        {
+            var dependency = Dependency.TransientFor<IInterface, ClassThatImplementsInterface>();
+            
+            Assert.That(dependency.GetScope(), Is.EqualTo(Scope.Transient));
+        }
     }
 }
