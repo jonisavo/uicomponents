@@ -20,6 +20,7 @@ namespace UIComponents.Benchmarks
             Measure.Method(async () =>
                 {
                     var component = new TComponent();
+                    component.Initialize();
                     await component.InitializationTask;
                 })
                 .SetUp(() =>
@@ -40,6 +41,7 @@ namespace UIComponents.Benchmarks
             Measure.Method(async () => 
                 {
                     var component = new TComponent();
+                    component.Initialize();
                     await component.InitializationTask;
                 })
                 .SampleGroup(new SampleGroup("Warm Cache Time"))

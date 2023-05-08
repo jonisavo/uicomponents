@@ -99,13 +99,23 @@ namespace UIComponents
             await Task.WhenAll(layoutTask, stylesTask);
 
             var layoutAsset = layoutTask.Result;
-            var styles = stylesTask.Result;
+            var styleTuples = stylesTask.Result;
 
             if (layoutAsset != null)
                 layoutAsset.CloneTree(this);
             
-            for (var i = 0; i < styles.Count; i++)
-                styleSheets.Add(styles[i]);
+            for (var i = 0; i < styleTuples.Length; i++)
+            {
+                var tuple = styleTuples[i];
+
+                if (tuple.StyleSheet == null)
+                {
+                    Logger.LogError($"Could not find stylesheet {tuple.Path}", this);
+                    continue;
+                }
+                
+                styleSheets.Add(tuple.StyleSheet);
+            }
 
             var childInitializationTasks = new List<Task>();
 
@@ -209,29 +219,15 @@ namespace UIComponents
             return Array.Empty<Task<StyleSheetLoadTuple>>();
         }
 
-        private async Task<List<StyleSheet>> GetStyleSheets()
+        private Task<StyleSheetLoadTuple[]> GetStyleSheets()
         {
             var styleSheetLoadTasks =
                 UIC_StartStyleSheetLoad();
+            
+            if (styleSheetLoadTasks.Length == 0)
+                return Task.FromResult(Array.Empty<StyleSheetLoadTuple>());
 
-            await Task.WhenAll(styleSheetLoadTasks);
-
-            var loadedStyleSheets = new List<StyleSheet>(styleSheetLoadTasks.Length);
-
-            foreach (var loadTask in styleSheetLoadTasks)
-            {
-                var styleSheet = loadTask.Result.StyleSheet;
-
-                if (styleSheet == null)
-                {
-                    Logger.LogError($"Could not find stylesheet {loadTask.Result.Path}", this);
-                    continue;
-                }
-
-                loadedStyleSheets.Add(styleSheet);
-            }
-
-            return loadedStyleSheets;
+            return Task.WhenAll(styleSheetLoadTasks);
         }
 
         protected virtual void UIC_ApplyEffects() {}
