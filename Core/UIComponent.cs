@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
@@ -80,13 +81,24 @@ namespace UIComponents
             UIC_UnregisterEventCallbacks();
         }
 
+        [ExcludeFromCodeCoverage] // Pragmas are shown as uncovered lines
         private void OnFirstAttachToPanel(AttachToPanelEvent evt)
         {
+#pragma warning disable CS4014
             Initialize();
+#pragma warning restore CS4014
             UnregisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
         }
 
-        public async void Initialize()
+        /// <summary>
+        /// Starts the initialization of the UIComponent. Does nothing if the UIComponent has already been initialized
+        /// or if initialization is already ongoing.
+        /// </summary>
+        /// <remarks>
+        /// This method is called automatically when the UIComponent is first attached to a panel.
+        /// It can also be called manually to force initialization.
+        /// </remarks>
+        public async Task Initialize()
         {
             if (Initialized || _initializationOngoing)
                 return;

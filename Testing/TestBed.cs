@@ -71,9 +71,8 @@ namespace UIComponents.Testing
         public async Task<TComponent> CreateComponentAsync(Func<TComponent> factoryPredicate)
         {
             var component = CreateComponent(factoryPredicate);
-            component.Initialize();
 
-            var initTask = component.InitializationTask;
+            var initTask = component.Initialize();
             var timeoutTask = Task.Delay(AsyncTimeout);
 
             var task = await Task.WhenAny(initTask, timeoutTask);
@@ -81,9 +80,7 @@ namespace UIComponents.Testing
             if (task == timeoutTask)
                 throw new TestBedTimeoutException(component.GetType().Name, (int)AsyncTimeout.TotalMilliseconds);
 
-            var initializedComponent = await initTask;
-
-            return initializedComponent as TComponent;
+            return component;
         }
 
 
