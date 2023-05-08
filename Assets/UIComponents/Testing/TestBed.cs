@@ -71,6 +71,7 @@ namespace UIComponents.Testing
         public async Task<TComponent> CreateComponentAsync(Func<TComponent> factoryPredicate)
         {
             var component = CreateComponent(factoryPredicate);
+            component.Initialize();
 
             var initTask = component.InitializationTask;
             var timeoutTask = Task.Delay(AsyncTimeout);

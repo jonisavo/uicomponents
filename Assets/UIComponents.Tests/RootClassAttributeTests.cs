@@ -14,6 +14,7 @@ namespace UIComponents.Tests
         public IEnumerator Adds_Class_To_Component()
         {
             var component = new ComponentWithRootClass();
+            component.Initialize();
             yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.ClassListContains("test-class"), Is.True);
@@ -27,6 +28,7 @@ namespace UIComponents.Tests
         public IEnumerator Adds_Class_To_Component_And_Child_Component()
         {
             var component = new ChildComponentWithRootClass();
+            component.Initialize();
             yield return component.WaitForInitializationEnumerator();
             
             Assert.That(component.ClassListContains("test-class"), Is.True);

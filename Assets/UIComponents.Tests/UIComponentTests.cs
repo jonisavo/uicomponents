@@ -63,6 +63,7 @@ namespace UIComponents.Tests
             public void Sets_The_Initialized_Value()
             {
                 var component = _testComponentTestBed.CreateComponent();
+                component.Initialize();
                 Assert.That(component.Initialized, Is.False);
 
                 _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
@@ -76,6 +77,7 @@ namespace UIComponents.Tests
             public void Completes_Initialization_Task()
             {
                 var component = _testComponentTestBed.CreateComponent();
+                component.Initialize();
                 
                 Assert.That(component.InitializationTask.IsCompleted, Is.False);
                 
@@ -91,6 +93,7 @@ namespace UIComponents.Tests
             public IEnumerator Allows_Waiting_For_Initialization()
             {
                 var component = _testComponentTestBed.CreateComponent();
+                component.Initialize();
                 
                 Assert.That(component.Initialized, Is.False);
 
@@ -114,12 +117,15 @@ namespace UIComponents.Tests
             public void Does_Not_Initialize_If_Children_Are_Uninitialized()
             {
                 var component = _testComponentTestBed.CreateComponent();
+                component.Initialize();
 
                 var childTestBed = new TestBed<ChildComponent>()
                     .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
                 var firstChild = childTestBed.CreateComponent();
+                firstChild.Initialize();
                 var secondChild = childTestBed.CreateComponent();
+                secondChild.Initialize();
 
                 component.Add(firstChild);
                 component.Add(secondChild);
@@ -135,17 +141,21 @@ namespace UIComponents.Tests
             public void Initializes_When_Children_Are_Initialized()
             {
                 var component = _testComponentTestBed.CreateComponent();
+                component.Initialize();
 
                 var childTestBed = new TestBed<ChildComponent>()
                     .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
                 var firstChild = childTestBed.CreateComponent();
+                firstChild.Initialize();
                 var secondChild = childTestBed.CreateComponent();
+                secondChild.Initialize();
 
                 var nestedChildTestBed = new TestBed<NestedChildComponent>()
                     .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
                 var nestedChild = nestedChildTestBed.CreateComponent();
+                nestedChild.Initialize();
                 
                 firstChild.Add(nestedChild);
 
@@ -170,7 +180,54 @@ namespace UIComponents.Tests
             public void Bare_Component_Initializes_Synchronously()
             {
                 var component = new BareTestComponent();
+                
+                component.Initialize();
+                
                 Assert.That(component.Initialized, Is.True);
+            }
+
+            private partial class BareInitCounterComponent : UIComponent
+            {
+                public int InitCount { get; private set; }
+                
+                public override void OnInit()
+                {
+                    InitCount++;
+                }
+            }
+
+            [Test]
+            public void Synchronous_Initialization_Happens_Once()
+            {
+                var component = new BareInitCounterComponent();
+                
+                component.Initialize();
+                component.Initialize();
+                component.Initialize();
+                
+                Assert.That(component.InitCount, Is.EqualTo(1));
+            }
+            
+            [Layout("Layout")]
+            private partial class InitCounterComponent : BareInitCounterComponent {}
+            
+            [UnityTest]
+            public IEnumerator Asynchronous_Initialization_Happens_Once()
+            {
+                var testBed = new TestBed<InitCounterComponent>()
+                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+
+                var component = testBed.CreateComponent();
+                
+                component.Initialize();
+                component.Initialize();
+                component.Initialize();
+                
+                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
+                
+                yield return component.WaitForInitializationEnumerator();
+                
+                Assert.That(component.InitCount, Is.EqualTo(1));
             }
         }
     }

@@ -43,6 +43,7 @@ namespace UIComponents.Tests
                 .WithSingleton(_mockLogger)
                 .WithTransient(_mockResolver);
             var component = testBed.CreateComponent();
+            component.Initialize();
             
             yield return component.WaitForInitializationEnumerator();
             
@@ -58,6 +59,7 @@ namespace UIComponents.Tests
                 .WithSingleton(_mockLogger)
                 .WithTransient(_mockResolver);
             var component = testBed.CreateComponent();
+            component.Initialize();
             
             yield return component.WaitForInitializationEnumerator();
 
@@ -78,6 +80,7 @@ namespace UIComponents.Tests
                 .WithTransient(_mockResolver);
 
             var component = testBed.CreateComponent();
+            component.Initialize();
 
             yield return component.WaitForInitializationEnumerator();
 

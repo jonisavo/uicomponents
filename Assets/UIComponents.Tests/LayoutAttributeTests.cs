@@ -44,6 +44,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<UIComponentWithLayout>().WithSingleton(_mockResolver);
             var component = testBed.CreateComponent();
+            component.Initialize();
             yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
@@ -53,6 +54,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<InheritedComponentWithoutAttribute>().WithSingleton(_mockResolver);
             var component = testBed.CreateComponent();
+            component.Initialize();
             yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
@@ -62,6 +64,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<InheritedComponentWithAttribute>().WithSingleton(_mockResolver);
             var component = testBed.CreateComponent();
+            component.Initialize();
             yield return component.WaitForInitializationEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml");
             _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
@@ -71,7 +74,8 @@ namespace UIComponents.Tests
         public void Null_Layout_Is_Handled()
         {
             var testBed = new TestBed<UIComponentWithNullLayout>().WithSingleton(_mockResolver);
-            Assert.DoesNotThrow(() => testBed.CreateComponent());
+            var component = testBed.CreateComponent();
+            Assert.DoesNotThrow(() => component.Initialize());
         }
     }
 }

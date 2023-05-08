@@ -51,6 +51,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ComponentWithQueryAttribute>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
+            component.Initialize();
 
             yield return component.WaitForInitializationEnumerator();
             
@@ -87,6 +88,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ChildComponentWithQueryAttribute>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
+            component.Initialize();
 
             yield return component.WaitForInitializationEnumerator();
             
@@ -115,6 +117,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ComponentWithInvalidQueryAttribute>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
+            component.Initialize();
             
             yield return component.WaitForInitializationEnumerator();
 
@@ -141,6 +144,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ComponentWithMissingFields>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
+            component.Initialize();
 
             yield return component.WaitForInitializationEnumerator();
             

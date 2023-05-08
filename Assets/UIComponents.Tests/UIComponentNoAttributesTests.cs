@@ -27,6 +27,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<UIComponentNoAttributes>()
                 .WithSingleton(_mockResolver);
             _component = testBed.CreateComponent();
+            _component.Initialize();
             yield return _component.WaitForInitializationEnumerator();
         }
 
