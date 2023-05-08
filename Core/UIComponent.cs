@@ -35,6 +35,7 @@ namespace UIComponents
         /// Whether the UIComponent has been fully initialized.
         /// </summary>
         public bool Initialized { get; private set; }
+        private bool _initializationOngoing;
 
         /// <summary>
         /// A Task that completes when the UIComponent has been fully initialized.
@@ -70,11 +71,28 @@ namespace UIComponents
 
             DependencySetupProfilerMarker.End();
 
-            Initialize();
+            RegisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
+        }
+        
+        ~UIComponent()
+        {
+            UnregisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
+            UIC_UnregisterEventCallbacks();
         }
 
-        private async void Initialize()
+        private void OnFirstAttachToPanel(AttachToPanelEvent evt)
         {
+            Initialize();
+            UnregisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
+        }
+
+        public async void Initialize()
+        {
+            if (Initialized || _initializationOngoing)
+                return;
+            
+            _initializationOngoing = true;
+            
             var layoutTask = UIC_StartLayoutLoad();
             var stylesTask = GetStyleSheets();
 
@@ -108,14 +126,10 @@ namespace UIComponents
             OnInit();
 
             Initialized = true;
+            _initializationOngoing = false;
             _initCompletionSource.SetResult(this);
         }
 
-        ~UIComponent()
-        {
-            UIC_UnregisterEventCallbacks();
-        }
-        
         protected virtual void UIC_RegisterEventCallbacks() {}
 
         protected virtual void UIC_UnregisterEventCallbacks() {}

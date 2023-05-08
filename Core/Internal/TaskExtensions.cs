@@ -17,7 +17,7 @@ namespace UIComponents.Internal
 
             if (task.IsFaulted)
             {
-                ExceptionDispatchInfo.Capture(task.Exception).Throw();
+                ExceptionDispatchInfo.Capture(task.Exception!).Throw();
             }
 
             yield return null;
