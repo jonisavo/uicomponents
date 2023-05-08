@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UIComponents.Testing;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -70,7 +71,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<QueryClassTestComponent>()
                 .WithSingleton(_mockLogger);
             _queryClassTestComponent = testBed.CreateComponent();
-            yield return _queryClassTestComponent.WaitForInitializationEnumerator();
+            yield return _queryClassTestComponent.Initialize().AsEnumerator();
         }
 
         [Test]

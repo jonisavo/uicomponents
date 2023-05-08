@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using UIComponents.Internal;
+using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
 {
@@ -32,10 +35,11 @@ namespace UIComponents.Tests
             public readonly List<int> AppliedEffects = new List<int>();
         }
 
-        [Test]
-        public void Effects_Are_Sorted_By_Priority()
+        [UnityTest]
+        public IEnumerator Effects_Are_Sorted_By_Priority()
         {
             var component = new UIComponentWithEffects();
+            yield return component.Initialize().AsEnumerator();
 
             Assert.That(component.AppliedEffects.Count, Is.EqualTo(4));
             Assert.That(component.AppliedEffects[0], Is.EqualTo(999));

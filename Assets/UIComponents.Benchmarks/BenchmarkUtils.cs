@@ -5,7 +5,7 @@ namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.29.0.0";
+        public const string Version = "0.30.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
@@ -14,13 +14,13 @@ namespace UIComponents.Benchmarks
                 new SampleGroup("UIComponent.DependencySetup")
             };
         }
-        
+
         public static void MeasureComponentInitWithColdCache<TComponent>() where TComponent : UIComponent, new()
         {
             Measure.Method(async () =>
                 {
                     var component = new TComponent();
-                    await component.InitializationTask;
+                    await component.Initialize();
                 })
                 .SetUp(() =>
                 {
@@ -40,7 +40,7 @@ namespace UIComponents.Benchmarks
             Measure.Method(async () => 
                 {
                     var component = new TComponent();
-                    await component.InitializationTask;
+                    await component.Initialize();
                 })
                 .SampleGroup(new SampleGroup("Warm Cache Time"))
                 .WarmupCount(10)

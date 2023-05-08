@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using UIComponents.DependencyInjection;
 using UIComponents.Internal;
@@ -35,6 +36,7 @@ namespace UIComponents
         /// Whether the UIComponent has been fully initialized.
         /// </summary>
         public bool Initialized { get; private set; }
+        private bool _initializationOngoing;
 
         /// <summary>
         /// A Task that completes when the UIComponent has been fully initialized.
@@ -70,24 +72,62 @@ namespace UIComponents
 
             DependencySetupProfilerMarker.End();
 
-            Initialize();
+            RegisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
+        }
+        
+        ~UIComponent()
+        {
+            UnregisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
+            UIC_UnregisterEventCallbacks();
         }
 
-        private async void Initialize()
+        [ExcludeFromCodeCoverage] // Pragmas are shown as uncovered lines
+        private void OnFirstAttachToPanel(AttachToPanelEvent evt)
         {
+#pragma warning disable CS4014
+            Initialize();
+#pragma warning restore CS4014
+            UnregisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
+        }
+
+        /// <summary>
+        /// Starts the initialization of the UIComponent. Does nothing if the UIComponent has already been initialized
+        /// or if initialization is already ongoing.
+        /// </summary>
+        /// <remarks>
+        /// This method is called automatically when the UIComponent is first attached to a panel.
+        /// It can also be called manually to force initialization.
+        /// </remarks>
+        public async Task Initialize()
+        {
+            if (Initialized || _initializationOngoing)
+                return;
+            
+            _initializationOngoing = true;
+            
             var layoutTask = UIC_StartLayoutLoad();
             var stylesTask = GetStyleSheets();
 
             await Task.WhenAll(layoutTask, stylesTask);
 
             var layoutAsset = layoutTask.Result;
-            var styles = stylesTask.Result;
+            var styleTuples = stylesTask.Result;
 
             if (layoutAsset != null)
                 layoutAsset.CloneTree(this);
             
-            for (var i = 0; i < styles.Count; i++)
-                styleSheets.Add(styles[i]);
+            for (var i = 0; i < styleTuples.Length; i++)
+            {
+                var tuple = styleTuples[i];
+
+                if (tuple.StyleSheet == null)
+                {
+                    Logger.LogError($"Could not find stylesheet {tuple.Path}", this);
+                    continue;
+                }
+                
+                styleSheets.Add(tuple.StyleSheet);
+            }
 
             var childInitializationTasks = new List<Task>();
 
@@ -108,14 +148,10 @@ namespace UIComponents
             OnInit();
 
             Initialized = true;
+            _initializationOngoing = false;
             _initCompletionSource.SetResult(this);
         }
 
-        ~UIComponent()
-        {
-            UIC_UnregisterEventCallbacks();
-        }
-        
         protected virtual void UIC_RegisterEventCallbacks() {}
 
         protected virtual void UIC_UnregisterEventCallbacks() {}
@@ -170,9 +206,12 @@ namespace UIComponents
             return _dependencyInjector.TryProvide(out instance);
         }
         
+        private static readonly Task<VisualTreeAsset> NullLayoutTask =
+            Task.FromResult<VisualTreeAsset>(null);
+
         protected virtual Task<VisualTreeAsset> UIC_StartLayoutLoad()
         {
-            return Task.FromResult<VisualTreeAsset>(null);
+            return NullLayoutTask;
         }
 
         protected readonly struct StyleSheetLoadTuple
@@ -192,29 +231,15 @@ namespace UIComponents
             return Array.Empty<Task<StyleSheetLoadTuple>>();
         }
 
-        private async Task<List<StyleSheet>> GetStyleSheets()
+        private Task<StyleSheetLoadTuple[]> GetStyleSheets()
         {
             var styleSheetLoadTasks =
                 UIC_StartStyleSheetLoad();
+            
+            if (styleSheetLoadTasks.Length == 0)
+                return Task.FromResult(Array.Empty<StyleSheetLoadTuple>());
 
-            await Task.WhenAll(styleSheetLoadTasks);
-
-            var loadedStyleSheets = new List<StyleSheet>(styleSheetLoadTasks.Length);
-
-            foreach (var loadTask in styleSheetLoadTasks)
-            {
-                var styleSheet = loadTask.Result.StyleSheet;
-
-                if (styleSheet == null)
-                {
-                    Logger.LogError($"Could not find stylesheet {loadTask.Result.Path}", this);
-                    continue;
-                }
-
-                loadedStyleSheets.Add(styleSheet);
-            }
-
-            return loadedStyleSheets;
+            return Task.WhenAll(styleSheetLoadTasks);
         }
 
         protected virtual void UIC_ApplyEffects() {}
