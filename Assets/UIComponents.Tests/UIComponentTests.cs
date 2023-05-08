@@ -6,6 +6,7 @@ using UIComponents.Testing;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
+#pragma warning disable CS4014
 
 namespace UIComponents.Tests
 {

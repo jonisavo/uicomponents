@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UIComponents.Testing;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -51,10 +52,8 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ComponentWithQueryAttribute>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
-            component.Initialize();
+            yield return component.Initialize().AsEnumerator();
 
-            yield return component.WaitForInitializationEnumerator();
-            
             Assert.That(component.HelloWorldLabel, Is.InstanceOf<Label>());
             Assert.That(component.HelloWorldLabel.text, Is.EqualTo("Hello world!"));
 
@@ -88,10 +87,8 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ChildComponentWithQueryAttribute>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
-            component.Initialize();
+            yield return component.Initialize().AsEnumerator();
 
-            yield return component.WaitForInitializationEnumerator();
-            
             Assert.That(component.HelloWorldLabel, Is.InstanceOf<Label>());
             Assert.That(component.TestFoldout, Is.InstanceOf<Foldout>());
             Assert.That(component.FoldoutContent, Is.InstanceOf<Label>());
@@ -117,9 +114,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ComponentWithInvalidQueryAttribute>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
-            component.Initialize();
-            
-            yield return component.WaitForInitializationEnumerator();
+            yield return component.Initialize().AsEnumerator();
 
             Assert.That(component.InvalidField, Is.Null);
             Assert.That(component.InvalidArray, Is.Null);
@@ -144,10 +139,8 @@ namespace UIComponents.Tests
             var testBed = new TestBed<ComponentWithMissingFields>()
                 .WithSingleton(_mockLogger);
             var component = testBed.CreateComponent();
-            component.Initialize();
+            yield return component.Initialize().AsEnumerator();
 
-            yield return component.WaitForInitializationEnumerator();
-            
             Assert.That(component.label, Is.Null);
             Assert.That(component.components.Length, Is.EqualTo(0));
             Assert.That(component.buttons.Count, Is.EqualTo(0));

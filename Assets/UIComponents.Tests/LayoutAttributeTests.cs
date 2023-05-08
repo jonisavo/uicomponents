@@ -2,6 +2,7 @@
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 using UnityEngine.TestTools;
@@ -44,8 +45,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<UIComponentWithLayout>().WithSingleton(_mockResolver);
             var component = testBed.CreateComponent();
-            component.Initialize();
-            yield return component.WaitForInitializationEnumerator();
+            yield return component.Initialize().AsEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
@@ -54,8 +54,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<InheritedComponentWithoutAttribute>().WithSingleton(_mockResolver);
             var component = testBed.CreateComponent();
-            component.Initialize();
-            yield return component.WaitForInitializationEnumerator();
+            yield return component.Initialize().AsEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
@@ -64,18 +63,17 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<InheritedComponentWithAttribute>().WithSingleton(_mockResolver);
             var component = testBed.CreateComponent();
-            component.Initialize();
-            yield return component.WaitForInitializationEnumerator();
+            yield return component.Initialize().AsEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("Assets/MyOtherAsset.uxml");
             _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Assets/MyAsset.uxml");
         }
 
-        [Test]
-        public void Null_Layout_Is_Handled()
+        [UnityTest]
+        public IEnumerator Null_Layout_Is_Handled()
         {
             var testBed = new TestBed<UIComponentWithNullLayout>().WithSingleton(_mockResolver);
             var component = testBed.CreateComponent();
-            Assert.DoesNotThrow(() => component.Initialize());
+            yield return component.Initialize().AsEnumerator();
         }
     }
 }

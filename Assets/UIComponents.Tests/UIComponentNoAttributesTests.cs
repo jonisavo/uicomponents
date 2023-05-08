@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UIComponents.Testing;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -27,8 +28,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<UIComponentNoAttributes>()
                 .WithSingleton(_mockResolver);
             _component = testBed.CreateComponent();
-            _component.Initialize();
-            yield return _component.WaitForInitializationEnumerator();
+            yield return _component.Initialize().AsEnumerator();
         }
 
         [TearDown]

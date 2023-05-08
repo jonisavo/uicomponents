@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 using UnityEngine;
@@ -43,10 +44,8 @@ namespace UIComponents.Tests
                 .WithSingleton(_mockLogger)
                 .WithTransient(_mockResolver);
             var component = testBed.CreateComponent();
-            component.Initialize();
-            
-            yield return component.WaitForInitializationEnumerator();
-            
+            yield return component.Initialize().AsEnumerator();
+
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
             Assert.That(component.styleSheets.count, Is.EqualTo(2));
@@ -59,9 +58,7 @@ namespace UIComponents.Tests
                 .WithSingleton(_mockLogger)
                 .WithTransient(_mockResolver);
             var component = testBed.CreateComponent();
-            component.Initialize();
-            
-            yield return component.WaitForInitializationEnumerator();
+            yield return component.Initialize().AsEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetTwo.uss");
@@ -80,9 +77,7 @@ namespace UIComponents.Tests
                 .WithTransient(_mockResolver);
 
             var component = testBed.CreateComponent();
-            component.Initialize();
-
-            yield return component.WaitForInitializationEnumerator();
+            yield return component.Initialize().AsEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
             _mockLogger.Received().LogError("Could not find stylesheet Assets/StylesheetOne.uss", component);

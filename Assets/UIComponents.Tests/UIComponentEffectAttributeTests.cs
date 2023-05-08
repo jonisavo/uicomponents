@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using UIComponents.Internal;
 using UnityEngine.TestTools;
 
 namespace UIComponents.Tests
@@ -38,9 +39,7 @@ namespace UIComponents.Tests
         public IEnumerator Effects_Are_Sorted_By_Priority()
         {
             var component = new UIComponentWithEffects();
-            component.Initialize();
-
-            yield return component.WaitForInitializationEnumerator();
+            yield return component.Initialize().AsEnumerator();
 
             Assert.That(component.AppliedEffects.Count, Is.EqualTo(4));
             Assert.That(component.AppliedEffects[0], Is.EqualTo(999));
