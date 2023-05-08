@@ -184,9 +184,12 @@ namespace UIComponents
             return _dependencyInjector.TryProvide(out instance);
         }
         
+        private static readonly Task<VisualTreeAsset> NullLayoutTask =
+            Task.FromResult<VisualTreeAsset>(null);
+
         protected virtual Task<VisualTreeAsset> UIC_StartLayoutLoad()
         {
-            return Task.FromResult<VisualTreeAsset>(null);
+            return NullLayoutTask;
         }
 
         protected readonly struct StyleSheetLoadTuple
