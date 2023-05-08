@@ -15,6 +15,7 @@
         "nunit.framework.dll",
         "NSubstitute.dll",
         "Castle.Core.dll",
+        "System.Threading.Tasks.Extensions.dll",
         "System.Runtime.CompilerServices.Unsafe.dll"
     ],
     "autoReferenced": false,
