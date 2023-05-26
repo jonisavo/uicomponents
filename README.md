@@ -51,8 +51,8 @@ using UIComponents;
 [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
 public partial class CounterComponent : UIComponent, IOnAttachToPanel
 {
-    // The layout and stylesheets are loaded in the inherited
-    // constructor. They are retrieved from Resources by default,
+    // The layout and stylesheets are loaded automatically.
+    // They are retrieved from Resources by default,
     // hence the lack of file extensions.
     
     // An UxmlTraits implementation is generated automatically for this class.
@@ -105,7 +105,7 @@ Instantiation in UXML:
 ```
 
 UIComponents are VisualElements with protected virtual methods which are overridden
-via source generation. Those virtual methods are called in the inherited constructor.
+via source generation. Those virtual methods are called when the UIComponent is first attached to a panel.
 
 ## Testing
 
@@ -140,7 +140,10 @@ public class CounterComponentTests
         _counterService.Count = 42;
 
         var component = _testBed.CreateComponent();
-        // Wait until the component has loaded.
+        // UIComponents start their initialization when they are first attached to a panel.
+        // We can force the initialization by calling Initialize() manually.
+        component.Initialize();
+        // Wait until the component's assets have been loaded.
         yield return component.WaitForInitializationEnumerator();
         Assert.That(component.CountLabel.text, Is.EqualTo("42"));
     }
