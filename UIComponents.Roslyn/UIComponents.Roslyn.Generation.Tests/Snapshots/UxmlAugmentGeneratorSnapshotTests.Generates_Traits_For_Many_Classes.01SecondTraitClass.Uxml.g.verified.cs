@@ -10,16 +10,16 @@ using UnityEngine.UIElements;
 
 public partial class SecondTraitClass
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
     public new partial class UxmlFactory : UxmlFactory<SecondTraitClass, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlBoolAttributeDescription m_Enabled = new UxmlBoolAttributeDescription { name = "enabled" };
         UxmlLongAttributeDescription m_SomeValue = new UxmlLongAttributeDescription { name = "secret" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

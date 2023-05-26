@@ -1,5 +1,30 @@
 
 
+# [1.0.0-beta.3](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2023-05-26)
+
+
+### Bug Fixes
+
+* **docs:** fix erroneous documentation comment in TestBed ([24ead3e](https://github.com/jonisavo/uicomponents/commit/24ead3ef18a684a202bdf278fcfd59ee64489fe7))
+
+
+### Features
+
+* add AssetDatabaseAssetResolver ([57153a8](https://github.com/jonisavo/uicomponents/commit/57153a8c90d17344773ee86e45e5f89095dc66c8))
+* initialize UIComponents on first attach to panel ([e8a2c60](https://github.com/jonisavo/uicomponents/commit/e8a2c608420075a3c6a786dcef865b717543f034))
+* **UIComponent:** return Task from Initialize ([77a7cb7](https://github.com/jonisavo/uicomponents/commit/77a7cb7d3436d42bed7a76609aba2878d488b7b6))
+
+
+### Performance Improvements
+
+* **UIComponent:** reduce allocations while loading style sheets ([e163110](https://github.com/jonisavo/uicomponents/commit/e163110842d9000dc054ab9432c67e68e268fd7a))
+* **UIComponent:** use cached Task when no layouts are defined ([1d2edd4](https://github.com/jonisavo/uicomponents/commit/1d2edd403d1bc6901452e6b6b3577aed2366bdb5))
+
+
+### BREAKING CHANGES
+
+* UIComponents no longer start their initialization in the inherited constructor. Instead, it is started when they are first attached to a panel. Alternatively, the newly exposed Initialize method can be called to start initialization.
+
 # [1.0.0-beta.2](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2023-03-21)
 
 

@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 
 public partial class ListQueryComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
     protected override void UIC_PopulateQueryFields()
     {
         // elements

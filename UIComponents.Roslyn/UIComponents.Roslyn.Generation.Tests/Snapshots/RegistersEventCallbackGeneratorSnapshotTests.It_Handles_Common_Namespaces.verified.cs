@@ -13,13 +13,13 @@ namespace MyLibrary.Components
 {
 public partial class MyComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
     protected override void UIC_RegisterEventCallbacks()
     {
         RegisterCallback<Events.MyEvent>(OnEvent);
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.2")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
     protected override void UIC_UnregisterEventCallbacks()
     {
         UnregisterCallback<Events.MyEvent>(OnEvent);
