@@ -10,8 +10,8 @@ on:
   workflow_dispatch: {}
 
 env:
-  PROJECT_UNITY_VERSION: 2021.3.24f1
-  UNITY_2020_VERSION: 2020.3.47f1
+  PROJECT_UNITY_VERSION: 2021.3.26f1
+  UNITY_2020_VERSION: 2020.3.48f1
 
 jobs:
   buildAndTestForLinux:
@@ -21,9 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         unityVersion:
-          - 2020.3.47f1
-          - 2021.3.24f1
-          - 2022.2.17f1
+          - 2020.3.48f1
+          - 2021.3.26f1
+          - 2022.3.0f1
         targetPlatform:
           - StandaloneLinux64
           - StandaloneWindows64
