@@ -63,7 +63,7 @@ namespace UIComponents.Tests
             [Test]
             public void Sets_The_Initialized_Value()
             {
-                var component = _testComponentTestBed.CreateComponent();
+                var component = _testComponentTestBed.Instantiate();
                 component.Initialize();
                 Assert.That(component.Initialized, Is.False);
 
@@ -77,7 +77,7 @@ namespace UIComponents.Tests
             [Test]
             public void Completes_Initialization_Task()
             {
-                var component = _testComponentTestBed.CreateComponent();
+                var component = _testComponentTestBed.Instantiate();
                 component.Initialize();
                 
                 Assert.That(component.InitializationTask.IsCompleted, Is.False);
@@ -93,7 +93,7 @@ namespace UIComponents.Tests
             [UnityTest]
             public IEnumerator Allows_Waiting_For_Initialization()
             {
-                var component = _testComponentTestBed.CreateComponent();
+                var component = _testComponentTestBed.Instantiate();
                 component.Initialize();
                 
                 Assert.That(component.Initialized, Is.False);
@@ -117,15 +117,15 @@ namespace UIComponents.Tests
             [Test]
             public void Does_Not_Initialize_If_Children_Are_Uninitialized()
             {
-                var component = _testComponentTestBed.CreateComponent();
+                var component = _testComponentTestBed.Instantiate();
                 component.Initialize();
 
                 var childTestBed = new TestBed<ChildComponent>()
                     .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
-                var firstChild = childTestBed.CreateComponent();
+                var firstChild = childTestBed.Instantiate();
                 firstChild.Initialize();
-                var secondChild = childTestBed.CreateComponent();
+                var secondChild = childTestBed.Instantiate();
                 secondChild.Initialize();
 
                 component.Add(firstChild);
@@ -141,21 +141,21 @@ namespace UIComponents.Tests
             [Test]
             public void Initializes_When_Children_Are_Initialized()
             {
-                var component = _testComponentTestBed.CreateComponent();
+                var component = _testComponentTestBed.Instantiate();
                 component.Initialize();
 
                 var childTestBed = new TestBed<ChildComponent>()
                     .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
-                var firstChild = childTestBed.CreateComponent();
+                var firstChild = childTestBed.Instantiate();
                 firstChild.Initialize();
-                var secondChild = childTestBed.CreateComponent();
+                var secondChild = childTestBed.Instantiate();
                 secondChild.Initialize();
 
                 var nestedChildTestBed = new TestBed<NestedChildComponent>()
                     .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
-                var nestedChild = nestedChildTestBed.CreateComponent();
+                var nestedChild = nestedChildTestBed.Instantiate();
                 nestedChild.Initialize();
                 
                 firstChild.Add(nestedChild);
@@ -218,7 +218,7 @@ namespace UIComponents.Tests
                 var testBed = new TestBed<InitCounterComponent>()
                     .WithSingleton<IAssetResolver>(_mockAssetResolver);
 
-                var component = testBed.CreateComponent();
+                var component = testBed.Instantiate();
                 
                 component.Initialize();
                 component.Initialize();

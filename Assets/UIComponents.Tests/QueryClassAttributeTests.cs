@@ -70,7 +70,7 @@ namespace UIComponents.Tests
             _mockLogger = Substitute.For<ILogger>();
             var testBed = new TestBed<QueryClassTestComponent>()
                 .WithSingleton(_mockLogger);
-            _queryClassTestComponent = testBed.CreateComponent();
+            _queryClassTestComponent = testBed.Instantiate();
             yield return _queryClassTestComponent.Initialize().AsEnumerator();
         }
 

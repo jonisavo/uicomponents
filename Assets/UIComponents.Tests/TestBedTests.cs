@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
-using UIComponents.Internal;
+using UIComponents.DependencyInjection;
 using UIComponents.Testing;
 using UIComponents.Tests.Utilities;
 using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
 namespace UIComponents.Tests
@@ -64,27 +62,27 @@ namespace UIComponents.Tests
         [Test]
         public void Allows_Creating_Component_With_Singleton_Dependencies()
         {
-            var component = _testBed.CreateComponent();
+            var component = _testBed.Instantiate();
             Assert.That(component.GetDependency(), Is.SameAs(_dependencyInstance));
         }
 
         [Test]
         public void Allows_Creating_Component_With_Transient_Dependencies()
         {
-            var component = _testBed.CreateComponent();
+            var component = _testBed.Instantiate();
             Assert.That(component.GetTransientDependency(), Is.SameAs(_transientDependencyInstance));
 
-            var newComponent = _testBed.CreateComponent();
+            var newComponent = _testBed.Instantiate();
             Assert.That(newComponent.GetTransientDependency(), Is.SameAs(_transientDependencyInstance));
         }
-        
+
         [Test]
-        public void Allows_Creating_Component_With_Predicate()
+        public void Allows_Passing_Constructor_Arguments()
         {
-            var component = _testBed.CreateComponent(() => new Component(true));
-            Assert.That(component.Value, Is.True);
-            Assert.That(component.GetDependency(), Is.SameAs(_dependencyInstance));
+            var component = _testBed.Instantiate(true);
+            Assert.That(component.Value, Is.EqualTo(true));
         }
+        
 
         [Test]
         public void Allows_Fetching_Dependencies()
@@ -103,50 +101,50 @@ namespace UIComponents.Tests
             Assert.That(dependency, Is.SameAs(newDependency));
         }
 
-        [UnityTest]
-        public IEnumerator Allows_Fetching_Component_With_Task()
+        [Dependency(typeof(ILogger), provide: typeof(DebugLogger))]
+        private abstract class Service : IDependencyConsumer
         {
-            var componentTask = _testBed.CreateComponentAsync(() => new Component(true));
-            
-            yield return componentTask.AsEnumerator();
-            
-            var component = componentTask.Result;
-            
-            Assert.That(component.Value, Is.True);
-            Assert.That(component.GetDependency(), Is.SameAs(_dependencyInstance));
+            protected readonly ILogger Logger;
+            private readonly DependencyInjector _dependencyInjector;
 
-            var anotherComponentTask = _testBed.CreateComponentAsync();
+            protected Service()
+            {
+                DiContext.Current.RegisterConsumer(this);
+                _dependencyInjector = DiContext.Current.GetInjector(GetType());
+                Logger = Provide<ILogger>();
+                UIC_PopulateProvideFields();
+            }
 
-            yield return componentTask.AsEnumerator();
-            
-            var anotherComponent = anotherComponentTask.Result;
-            
-            Assert.That(anotherComponent.Value, Is.False);
-            Assert.That(anotherComponent.GetDependency(), Is.SameAs(_dependencyInstance));
+            protected T Provide<T>() where T : class
+            {
+                return _dependencyInjector.Provide<T>();
+            }
+
+            public abstract IEnumerable<IDependency> GetDependencies();
+
+            protected virtual void UIC_PopulateProvideFields() {}
         }
-       
+
+        [Dependency(typeof(IMockDependency), provide: typeof(Dependency))]
+        [Dependency(typeof(ITransientDependency), provide: typeof(TransientDependency), Scope.Transient)]
+        private partial class TestService : Service
+        {
+            [Provide]
+            public IMockDependency Dependency;
+
+            public ITransientDependency GetTransientDependency() => Provide<ITransientDependency>();
+        }
 
         [Test]
-        public void Allows_Setting_Timeout_For_Async_Operations()
+        public void Works_On_Non_UIComponent_Type()
         {
-            _mockResolver.LoadAsset<VisualTreeAsset>("Foo")
-                .Returns(Task.Delay(1000).ContinueWith(_ => ScriptableObject.CreateInstance<VisualTreeAsset>()));
-            _testBed.WithAsyncTimeout(TimeSpan.Zero);
+            var testBed = new TestBed<TestService>()
+                .WithSingleton<IMockDependency>(_dependencyInstance)
+                .WithTransient<ITransientDependency>(_transientDependencyInstance);
 
-            TestBedTimeoutException exception = null;
-
-            try
-            {
-                var task = _testBed.CreateComponentAsync();
-                task.GetAwaiter().GetResult();
-            }
-            catch (TestBedTimeoutException ex)
-            {
-                exception = ex;
-            }
-            
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.Message, Is.EqualTo("Creation of component Component timed out after 0ms."));
+            var service = testBed.Instantiate();
+            Assert.That(service.Dependency, Is.SameAs(_dependencyInstance));
+            Assert.That(service.GetTransientDependency(), Is.SameAs(_transientDependencyInstance));
         }
     }
 }

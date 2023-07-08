@@ -43,7 +43,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<UIComponentWithTwoStylesheets>()
                 .WithSingleton(_mockLogger)
                 .WithTransient(_mockResolver);
-            var component = testBed.CreateComponent();
+            var component = testBed.Instantiate();
             yield return component.Initialize().AsEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
@@ -57,7 +57,7 @@ namespace UIComponents.Tests
             var testBed = new TestBed<InheritedComponent>()
                 .WithSingleton(_mockLogger)
                 .WithTransient(_mockResolver);
-            var component = testBed.CreateComponent();
+            var component = testBed.Instantiate();
             yield return component.Initialize().AsEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
@@ -76,7 +76,7 @@ namespace UIComponents.Tests
                 .WithSingleton(_mockLogger)
                 .WithTransient(_mockResolver);
 
-            var component = testBed.CreateComponent();
+            var component = testBed.Instantiate();
             yield return component.Initialize().AsEnumerator();
 
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
