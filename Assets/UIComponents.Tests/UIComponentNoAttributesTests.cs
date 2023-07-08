@@ -27,7 +27,7 @@ namespace UIComponents.Tests
                 .Returns(Task.FromResult<StyleSheet>(null));
             var testBed = new TestBed<UIComponentNoAttributes>()
                 .WithSingleton(_mockResolver);
-            _component = testBed.CreateComponent();
+            _component = testBed.Instantiate();
             yield return _component.Initialize().AsEnumerator();
         }
 

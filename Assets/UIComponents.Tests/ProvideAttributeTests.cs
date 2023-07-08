@@ -52,7 +52,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<ComponentWithDependencies>()
                 .WithSingleton(_mockLogger);
-            var component = testBed.CreateComponent();
+            var component = testBed.Instantiate();
             Assert.That(component.StringProperty, Is.InstanceOf<StringClass>());
             Assert.That(component.FloatProperty, Is.InstanceOf<FloatClass>());
         }
@@ -62,7 +62,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<ComponentWithDependencies>()
                 .WithSingleton(_mockLogger);
-            var component = testBed.CreateComponent();
+            var component = testBed.Instantiate();
             Assert.That(component.FloatClassInstance, Is.InstanceOf<FloatClass>());
         }
         
@@ -81,7 +81,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<ComponentWithInvalidDependency>()
                 .WithSingleton(_mockLogger);
-            var component = testBed.CreateComponent();
+            var component = testBed.Instantiate();
             Assert.That(component.StringProperty, Is.Null);
             _mockLogger.Received().LogError("Could not provide IStringProperty to StringProperty", component);
         }
@@ -91,7 +91,7 @@ namespace UIComponents.Tests
         {
             var testBed = new TestBed<ComponentWithInvalidDependency>()
                 .WithSingleton(_mockLogger);
-            var component = testBed.CreateComponent();
+            var component = testBed.Instantiate();
             Assert.That(component.StringClassInstance, Is.Null);
             _mockLogger.Received().LogError("Could not cast IFloatProperty to StringClass", component);
         }

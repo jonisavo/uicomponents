@@ -139,7 +139,7 @@ public class CounterComponentTests
     {
         _counterService.Count = 42;
 
-        var component = _testBed.CreateComponent();
+        var component = _testBed.Instantiate();
         // UIComponents start their initialization when they are first attached to a panel.
         // We can force the initialization by calling Initialize() manually.
         component.Initialize();
