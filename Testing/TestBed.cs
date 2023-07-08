@@ -68,6 +68,18 @@ namespace UIComponents.Testing
         }
 
         /// <summary>
+        /// Creates an instance of <typeparamref name="TConsumer"/> using
+        /// a constructor that takes the given arguments.
+        /// </summary>
+        /// <param name="arguments">Constructor arguments</param>
+        public TConsumer Instantiate(params object[] arguments)
+        {
+            return InstantiateWithPredicate(
+                () => (TConsumer) Activator.CreateInstance(typeof(TConsumer), arguments)
+            );
+        }
+
+        /// <summary>
         /// Overrides a singleton dependency.
         /// </summary>
         /// <param name="value">New singleton value</param>
