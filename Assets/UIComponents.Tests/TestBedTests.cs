@@ -75,6 +75,13 @@ namespace UIComponents.Tests
             var newComponent = _testBed.Instantiate();
             Assert.That(newComponent.GetTransientDependency(), Is.SameAs(_transientDependencyInstance));
         }
+
+        [Test]
+        public void Allows_Passing_Constructor_Arguments()
+        {
+            var component = _testBed.Instantiate(true);
+            Assert.That(component.Value, Is.EqualTo(true));
+        }
         
 
         [Test]
