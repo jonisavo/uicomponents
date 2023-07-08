@@ -10,16 +10,16 @@ using UnityEngine.UIElements;
 
 public partial class FirstTraitClass
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
     public new partial class UxmlFactory : UxmlFactory<FirstTraitClass, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlIntAttributeDescription m_FieldTrait = new UxmlIntAttributeDescription { name = "custom-trait-name" };
         UxmlFloatAttributeDescription m_PropertyTrait = new UxmlFloatAttributeDescription { name = "my-property" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 public partial class OverriddenLayoutComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         return AssetResolver.LoadAsset<VisualTreeAsset>("Components/OverriddenLayoutComponent");

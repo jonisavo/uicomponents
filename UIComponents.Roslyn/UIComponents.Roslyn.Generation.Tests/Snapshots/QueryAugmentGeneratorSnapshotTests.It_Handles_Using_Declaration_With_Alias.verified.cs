@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 
 public partial class UsingAliasComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.3")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
     protected override void UIC_PopulateQueryFields()
     {
         // firstButton

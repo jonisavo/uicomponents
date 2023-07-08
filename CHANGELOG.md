@@ -1,5 +1,24 @@
 
 
+# [1.0.0-beta.4](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-07-08)
+
+
+### Bug Fixes
+
+* disable auto reference in predefined assemblies ([1d56d8e](https://github.com/jonisavo/uicomponents/commit/1d56d8ef4a14dcad27ea6c359e48e21a99113e10))
+
+
+### Features
+
+* **testing:** allow instantiating with constructor arguments in TestBed ([9744ed6](https://github.com/jonisavo/uicomponents/commit/9744ed6ecbb105b61ba785f876e9c378214f1761))
+* **testing:** rework TestBed to work with any class ([f7b4dd5](https://github.com/jonisavo/uicomponents/commit/f7b4dd5d1d689568e0268755b04dc40034e1ae56))
+
+
+### BREAKING CHANGES
+
+* **testing:** TestBed’s CreateComponent method has been renamed to Instantiate and it no longer takes a factory predicate. Its CreateComponentAsync method has been removed as well as it wasn’t useful in the synchronous Unity Test Framework.
+* UIComponents' assemblies are no longer referenced automatically in predefined assemblies.
+
 # [1.0.0-beta.3](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2023-05-26)
 
 
