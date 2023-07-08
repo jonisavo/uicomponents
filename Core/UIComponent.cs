@@ -91,8 +91,8 @@ namespace UIComponents
         }
 
         /// <summary>
-        /// Starts the initialization of the UIComponent. Does nothing if the UIComponent has already been initialized
-        /// or if initialization is already ongoing.
+        /// Starts the initialization of the UIComponent. Resolves immediately if the UIComponent
+        /// has already been initialized or if initialization is already ongoing.
         /// </summary>
         /// <remarks>
         /// This method is called automatically when the UIComponent is first attached to a panel.

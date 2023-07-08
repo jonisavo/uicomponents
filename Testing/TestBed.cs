@@ -1,53 +1,51 @@
 ﻿using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using UIComponents.DependencyInjection;
 
 namespace UIComponents.Testing
 {
     /// <summary>
-    /// <see cref="TestBed{TComponent}"/> is utility class for testing UIComponents with dependency injection.
+    /// <see cref="TestBed{TConsumer}"/> is utility class for working with
+    /// UIComponent's built-in dependency injection in unit tests.
     /// <para/>
-    /// It allows overriding singleton and transient dependencies.
+    /// It allows overriding singleton and transient dependencies
+    /// before constructing instances.
     /// <para/>
     /// </summary>
-    public sealed class TestBed<TComponent> where TComponent : UIComponent
+    public sealed class TestBed<TConsumer>
     {
+        internal readonly DiContext DiContext;
+        private readonly DependencyInjector _injector;
+
+        public TestBed()
+        {
+            DiContext = new DiContext();
+            _injector = DiContext.GetInjector(typeof(TConsumer));
+        }
+
         /// <summary>
-        /// Timeout for async operations. Defaults to eight seconds.
-        /// </summary>
-        public TimeSpan AsyncTimeout { get; private set; } = TimeSpan.FromSeconds(8);
-
-        internal readonly DiContext DiContext = new DiContext();
-
-        private readonly Type _componentType = typeof(TComponent);
-
-        /// <summary>
-        /// Returns a dependency instance as requested by dependency type <typeparamref name="TDependency"/>.
+        /// Returns a dependency instance of type <typeparamref name="TDependency"/>.
         /// </summary>
         /// <typeparam name="TDependency">Dependency type</typeparam>
         /// <returns>Dependency instance</returns>
         /// <exception cref="MissingProviderException">Thrown if no provider exists</exception>
         public TDependency Provide<TDependency>() where TDependency : class
         {
-            var injector = DiContext.GetInjector(_componentType);
-
-            return injector.Provide<TDependency>();
+            return _injector.Provide<TDependency>();
         }
 
         /// <summary>
-        /// Creates a component of type <typeparamref name="TComponent"/> using the given
+        /// Creates an instance of <typeparamref name="TConsumer"/> using the given
         /// predicate.
         /// </summary>
         /// <param name="factoryPredicate">Predicate for creating the component</param>
-        /// <returns>Component instance</returns>
-        public TComponent CreateComponent(Func<TComponent> factoryPredicate)
+        private TConsumer InstantiateWithPredicate(Func<TConsumer> factoryPredicate)
         {
             var previousContext = DiContext.Current;
 
             DiContext.ChangeCurrent(DiContext);
 
-            TComponent component;
+            TConsumer component;
 
             try
             {
@@ -62,47 +60,11 @@ namespace UIComponents.Testing
         }
 
         /// <summary>
-        /// Creates a component of type <typeparamref name="TComponent"/> using the given
-        /// predicate and waits for it to be initialized.
+        /// Creates an instance of <typeparamref name="TConsumer"/> with a default constructor.
         /// </summary>
-        /// <param name="factoryPredicate">Predicate for creating the component</param>
-        /// <returns>Task that resolves to component instance when initialized</returns>
-        /// <exception cref="TestBedTimeoutException">Thrown if component creation takes too long</exception>
-        public async Task<TComponent> CreateComponentAsync(Func<TComponent> factoryPredicate)
+        public TConsumer Instantiate()
         {
-            var component = CreateComponent(factoryPredicate);
-
-            var initTask = component.Initialize();
-            var timeoutTask = Task.Delay(AsyncTimeout);
-
-            var task = await Task.WhenAny(initTask, timeoutTask);
-
-            if (task == timeoutTask)
-                throw new TestBedTimeoutException(component.GetType().Name, (int)AsyncTimeout.TotalMilliseconds);
-
-            return component;
-        }
-
-
-        /// <summary>
-        /// Creates a component of type <typeparamref name="TComponent"/> with a default constructor.
-        /// </summary>
-        /// <returns>Component instance</returns>
-        /// <exception cref="TestBedTimeoutException">Thrown if component creation takes too long</exception>
-        public TComponent CreateComponent()
-        {
-            return CreateComponent(() => Activator.CreateInstance<TComponent>());
-        }
-
-        /// <summary>
-        /// Creates a component of type <typeparamref name="TComponent"/> with a default constructor.
-        /// and waits until for it to be initialized.
-        /// </summary>
-        /// <returns>Task that resolves to component instance when initialized</returns>
-        /// <exception cref="TestBedTimeoutException">Thrown if component creation takes too long</exception>
-        public async Task<TComponent> CreateComponentAsync()
-        {
-            return await CreateComponentAsync(() => Activator.CreateInstance<TComponent>());
+            return InstantiateWithPredicate(Activator.CreateInstance<TConsumer>);
         }
 
         /// <summary>
@@ -111,12 +73,10 @@ namespace UIComponents.Testing
         /// <param name="value">New singleton value</param>
         /// <typeparam name="TDependency">Dependency type</typeparam>
         /// <exception cref="ArgumentNullException">Thrown if value is null</exception>
-        public TestBed<TComponent> WithSingleton<TDependency>([NotNull] TDependency value)
+        public TestBed<TConsumer> WithSingleton<TDependency>([NotNull] TDependency value)
             where TDependency : class
         {
-            var injector = DiContext.GetInjector(_componentType);
-
-            injector.SetSingletonOverride(value);
+            _injector.SetSingletonOverride(value);
 
             return this;
         }
@@ -127,23 +87,10 @@ namespace UIComponents.Testing
         /// <typeparam name="TDependency">Dependency type</typeparam>
         /// <param name="value">New transient value</param>
         /// <exception cref="ArgumentNullException">Thrown if value is null</exception>
-        public TestBed<TComponent> WithTransient<TDependency>([NotNull] TDependency value)
+        public TestBed<TConsumer> WithTransient<TDependency>([NotNull] TDependency value)
             where TDependency : class
         {
-            var injector = DiContext.GetInjector(_componentType);
-
-            injector.SetTransientInstance(value);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Sets a new timeout for async operations.
-        /// </summary>
-        /// <param name="timeout">New async timeout</param>
-        public TestBed<TComponent> WithAsyncTimeout(TimeSpan timeout)
-        {
-            AsyncTimeout = timeout;
+            _injector.SetTransientInstance(value);
 
             return this;
         }
