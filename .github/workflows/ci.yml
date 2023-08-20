@@ -12,6 +12,7 @@ on:
 env:
   PROJECT_UNITY_VERSION: 2021.3.29f1
   UNITY_2020_VERSION: 2020.3.48f1
+  DISABLE_BUILD_PLATFORM: StandaloneWindows64
 
 jobs:
   buildAndTestForLinux:
@@ -90,7 +91,7 @@ jobs:
           files: CodeCoverage/**/*.xml,UIComponents.Roslyn/**/TestResults/**/coverage.cobertura.xml
           
       - name: Commit Unity project changes
-        if: ${{ matrix.targetPlatform == "StandaloneLinux64" }}
+        if: ${{ matrix.targetPlatform != env.DISABLE_BUILD_PLATFORM }}
         run: |
           git config --global user.name 'github-bot'
           git config --global user.email 'github-bot@users.noreply.github.com'
@@ -98,7 +99,7 @@ jobs:
           git commit -m "chore(ci): switch to different unity version" || echo skipping commit
           
       - uses: game-ci/unity-builder@v2
-        if: ${{ matrix.targetPlatform == "StandaloneLinux64" }}
+        if: ${{ matrix.targetPlatform != env.DISABLE_BUILD_PLATFORM }}
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
