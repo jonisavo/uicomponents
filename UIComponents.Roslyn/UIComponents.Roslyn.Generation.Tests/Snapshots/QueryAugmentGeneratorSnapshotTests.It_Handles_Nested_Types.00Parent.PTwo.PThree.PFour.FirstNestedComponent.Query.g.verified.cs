@@ -19,7 +19,7 @@ internal partial class PFour
 {
 public partial class FirstNestedComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.5")]
     protected override void UIC_PopulateQueryFields()
     {
         // field

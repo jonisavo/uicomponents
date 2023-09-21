@@ -1,5 +1,18 @@
 
 
+# [1.0.0-beta.5](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-09-21)
+
+
+### Features
+
+* add abstract DependencyConsumer base class for DI consumers ([#108](https://github.com/jonisavo/uicomponents/issues/108)) ([424143b](https://github.com/jonisavo/uicomponents/commit/424143be87d25f4b70b90c37e5049da338f3a4a7))
+* drop requirement of Logger field from dependency injection codegen ([9489002](https://github.com/jonisavo/uicomponents/commit/94890023a4b1243b2f0ccd88010d09b16e426770))
+
+
+### Performance Improvements
+
+* **codegen:** do not iterate through Object class's members ([b562ca7](https://github.com/jonisavo/uicomponents/commit/b562ca713d18f9f48ce19f9bdd7a69b239008c93))
+
 # [1.0.0-beta.4](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-07-08)
 
 

@@ -10,14 +10,14 @@ using UnityEngine.UIElements;
 
 public partial class CallbackHandler
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.5")]
     protected override void UIC_RegisterEventCallbacks()
     {
         RegisterCallback<MyEvent>(OnMyEvent);
         RegisterCallback<MyOtherEvent>(OnMyOtherEvent);
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.4")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.5")]
     protected override void UIC_UnregisterEventCallbacks()
     {
         UnregisterCallback<MyEvent>(OnMyEvent);

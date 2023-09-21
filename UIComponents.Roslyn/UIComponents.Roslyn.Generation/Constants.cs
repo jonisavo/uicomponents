@@ -3,7 +3,7 @@
     internal static class Constants
     {
         public const string ToolName = "UIComponents.Roslyn.Generation";
-        public const string Version = "1.0.0-beta.4";
+        public const string Version = "1.0.0-beta.5";
         public const string GeneratedCodeAttribute = "[GeneratedCode(\"" + ToolName + "\", \"" + Version + "\")]";
     }
 }
