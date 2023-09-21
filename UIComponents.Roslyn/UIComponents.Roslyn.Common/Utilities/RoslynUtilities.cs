@@ -130,7 +130,7 @@ namespace UIComponents.Roslyn.Common.Utilities
         {
             var current = type;
 
-            while (current != null)
+            while (current != null && current.SpecialType != SpecialType.System_Object)
             {
                 if (current.Equals(desiredBaseType, SymbolEqualityComparer.Default))
                     return true;
@@ -177,7 +177,7 @@ namespace UIComponents.Roslyn.Common.Utilities
         {
             var current = typeSymbol;
 
-            while (current != null)
+            while (current != null && current.SpecialType != SpecialType.System_Object)
             {
                 foreach (var member in current.GetMembers())
                     yield return member;
@@ -190,7 +190,7 @@ namespace UIComponents.Roslyn.Common.Utilities
         {
             var current = typeSymbol;
 
-            while (current != null)
+            while (current != null && current.SpecialType != SpecialType.System_Object)
             {
                 foreach (var attribute in current.GetAttributes())
                     yield return attribute;
