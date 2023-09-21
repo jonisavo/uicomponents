@@ -137,7 +137,7 @@ using MyLibrary.Core.Services;
 
 namespace MyLibrary.GUI
 {
-    public class GuiComponent
+    public class GuiComponent : UIComponent
     {
         [Provide]
         public IService service;
