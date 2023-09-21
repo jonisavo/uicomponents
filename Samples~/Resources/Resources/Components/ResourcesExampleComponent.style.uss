@@ -1,0 +1,14 @@
+﻿#resources-example-header {
+    font-size: 20px;
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.italic-label-container {
+    width: 100%;
+}
+
+.italic-label-container Label {
+    white-space: normal;
+    -unity-font-style: italic;
+}
