@@ -10,6 +10,7 @@ namespace UIComponents
     /// </summary>
     /// <seealso cref="UIComponent"/>
     /// <seealso cref="IDependencyConsumer"/>
+    /// <seealso cref="DependencyConsumer"/>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Assembly, AllowMultiple = true, Inherited = true)]
     [ExcludeFromCoverage]
     [BaseTypeRequired(typeof(IDependencyConsumer))]

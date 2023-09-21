@@ -68,6 +68,7 @@ namespace UIComponents
             _dependencyInjector = DiContext.Current.GetInjector(GetType());
             AssetResolver = Provide<IAssetResolver>();
             Logger = Provide<ILogger>();
+            // ReSharper disable once VirtualMemberCallInConstructor
             UIC_PopulateProvideFields();
 
             DependencySetupProfilerMarker.End();
