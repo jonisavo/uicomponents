@@ -1,5 +1,12 @@
 
 
+# [1.0.0-beta.6](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-09-22)
+
+
+### Bug Fixes
+
+* **core:** make DependencyConsumer's constructor protected ([7820b77](https://github.com/jonisavo/uicomponents/commit/7820b77c437f2394416e217c4a17335c34a61fa2))
+
 # [1.0.0-beta.5](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-09-21)
 
 

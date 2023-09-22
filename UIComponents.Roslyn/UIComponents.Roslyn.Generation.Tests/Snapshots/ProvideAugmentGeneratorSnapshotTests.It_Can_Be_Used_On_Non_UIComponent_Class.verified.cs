@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 
 public partial class MyClass
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.5")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.6")]
     private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
     {
         try
@@ -29,7 +29,7 @@ public partial class MyClass
         }
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.5")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.6")]
     protected void UIC_PopulateProvideFields()
     {
         UIC_SetProvideField<IDependency, IDependency>(ref Dependency, "Dependency");
