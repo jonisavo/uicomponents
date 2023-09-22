@@ -25,7 +25,7 @@ namespace UIComponents.DependencyInjection
 
         private readonly DependencyInjector _dependencyInjector;
 
-        internal DependencyConsumer()
+        protected DependencyConsumer()
         {
             DiContext.Current.RegisterConsumer(this);
             _dependencyInjector = DiContext.Current.GetInjector(GetType());
