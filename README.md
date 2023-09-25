@@ -38,7 +38,7 @@ UIComponents officially supports Unity 2021.3 or newer. Unity's `com.unity.rosly
 can be used to enable source generation in Unity 2020. Refer to the Installation section
 below for more information.
 
-## Example usage
+## Example
 
 ```c#
 using UnityEngine.UIElements;
