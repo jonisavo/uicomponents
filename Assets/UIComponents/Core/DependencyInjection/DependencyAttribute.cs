@@ -22,10 +22,10 @@ namespace UIComponents
         
         public readonly Scope Scope;
 
-        public DependencyAttribute(Type dependency, Type provide, Scope scope = Scope.Singleton)
+        public DependencyAttribute(Type dependency, Type provide = null, Scope scope = Scope.Singleton)
         {
             DependencyType = dependency;
-            ImplementationType = provide;
+            ImplementationType = provide ?? dependency;
             Scope = scope;
         }
     }

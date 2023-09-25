@@ -54,6 +54,9 @@ namespace UIComponents.Roslyn.Generation.Generators.DependencyInjection
 			if (attributeArguments.TryGetValue("constructor_1", out var implementationTypeArg))
 				implementationType = implementationTypeArg.Value as INamedTypeSymbol;
 
+			if (implementationType == null)
+				implementationType = dependencyType;
+
 			if (attributeArguments.TryGetValue("constructor_2", out var scopeArg))
 				scopeAsInt = (int) scopeArg.Value;
 
