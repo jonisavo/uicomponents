@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 public partial class LayoutTestComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.6")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.7")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         return AssetResolver.LoadAsset<VisualTreeAsset>("Components/LayoutTestComponent");

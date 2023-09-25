@@ -1,5 +1,12 @@
 
 
+# [1.0.0-beta.7](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-09-25)
+
+
+### Features
+
+* **core:** make DependencyAttribute's implementation argument optional ([#109](https://github.com/jonisavo/uicomponents/issues/109)) ([f797b4e](https://github.com/jonisavo/uicomponents/commit/f797b4e9d1330c5c39acfc060b9ae2de0951a14b))
+
 # [1.0.0-beta.6](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-09-22)
 
 

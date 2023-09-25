@@ -14,7 +14,7 @@ namespace MyLibrary.GUI
 {
 public partial class GuiComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.6")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.7")]
     private void UIC_SetProvideField<TField, TCastFrom>(ref TField value, string fieldName) where TField : class where TCastFrom : class
     {
         try
@@ -31,7 +31,7 @@ public partial class GuiComponent
         }
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.6")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.7")]
     protected override void UIC_PopulateProvideFields()
     {
         UIC_SetProvideField<IService, IService>(ref service, "service");
