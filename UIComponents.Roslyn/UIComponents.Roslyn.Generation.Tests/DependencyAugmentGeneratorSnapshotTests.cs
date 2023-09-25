@@ -147,6 +147,24 @@ public partial class SecondConsumerClass : ConsumerClass {}
         }
 
         [Fact]
+        public Task It_Handles_Concrete_Dependencies()
+        {
+            var source = @"
+using UIComponents;
+using UIComponents.DependencyInjection;
+
+public class MyDependency {}
+
+[Dependency(typeof(MyDependency))]
+public partial class ConsumerComponent : UIComponent {}
+
+[Dependency(typeof(MyDependency), null, Scope.Transient)]
+public partial class TransientConsumerComponent : UIComponent {}
+";
+            return GeneratorTester.Verify<DependencyAugmentGenerator>(source);
+        }
+
+        [Fact]
         public Task It_Adds_Override_Keyword_When_Used_On_UIComponent()
         {
             var source = @"

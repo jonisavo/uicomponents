@@ -94,5 +94,31 @@ namespace UIComponents.Tests
             
             Assert.That(consumer.StringDependency, Is.SameAs(stringProvider));
         }
+        
+        [Dependency(typeof(StringProvider))]
+        private partial class ConsumerWithConcreteDependency : DependencyConsumer
+        {
+            public readonly StringProvider StringProvider;
+            
+            [Provide]
+            public StringProvider ProvidedStringProvider;
+            
+            public ConsumerWithConcreteDependency()
+            {
+                StringProvider = Provide<StringProvider>();
+            }
+        }
+        
+        [Test]
+        public void Concrete_Dependencies_Are_Provided()
+        {
+            var consumer = new ConsumerWithConcreteDependency();
+            var consumer2 = new ConsumerWithConcreteDependency();
+            
+            Assert.That(consumer.StringProvider, Is.InstanceOf<StringProvider>());
+            Assert.That(consumer.ProvidedStringProvider, Is.InstanceOf<StringProvider>());
+            Assert.That(consumer.StringProvider, Is.SameAs(consumer2.StringProvider));
+            Assert.That(consumer.ProvidedStringProvider, Is.SameAs(consumer2.ProvidedStringProvider));
+        }
     }
 }
