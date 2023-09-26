@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <ReleaseVersion>1.0.0-beta.7</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>

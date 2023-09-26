@@ -6,6 +6,7 @@
 	  <IncludeBuildOutput>false</IncludeBuildOutput>
 	  <IsRoslynComponent>true</IsRoslynComponent>
     <RootNamespace>UIComponents.Roslyn.Analyzers</RootNamespace>
+    <ReleaseVersion>1.0.0-beta.7</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>

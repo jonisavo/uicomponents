@@ -44,7 +44,7 @@ namespace UIComponents.Roslyn.Analyzers
                 diagnostic);
         }
 
-        private async Task<Document> RemoveAttribute(Document document, AttributeSyntax attributeSyntax,  CancellationToken cancellationToken)
+        private async Task<Document> RemoveAttribute(Document document, AttributeSyntax attributeSyntax, CancellationToken cancellationToken)
         {
             var attributeList = attributeSyntax.Parent as AttributeListSyntax;
             var classDeclaration = attributeList.Parent;
