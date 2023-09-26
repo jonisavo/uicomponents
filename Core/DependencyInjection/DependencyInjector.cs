@@ -94,19 +94,17 @@ namespace UIComponents.DependencyInjection
 
             instance = null;
 
-            if (_singletonTypeDictionary.ContainsKey(dependencyType))
+            if (_singletonTypeDictionary.TryGetValue(dependencyType, out var implementationType))
             {
-                var implementationType = _singletonTypeDictionary[dependencyType];
-
-                if (_singletonInstanceDictionary.TryGetValue(implementationType, out object instanceObj))
+                if (_singletonInstanceDictionary.TryGetValue(implementationType, out var instanceObj))
                     instance = instanceObj as T;
             }
 
-            if (_singletonOverrideDictionary.ContainsKey(dependencyType))
-                instance = _singletonOverrideDictionary[dependencyType] as T;
+            if (_singletonOverrideDictionary.TryGetValue(dependencyType, out var singletonOverride))
+                instance = singletonOverride as T;
 
-            if (_transientInstanceDictionary.ContainsKey(dependencyType))
-                instance = _transientInstanceDictionary[dependencyType] as T;
+            if (_transientInstanceDictionary.TryGetValue(dependencyType, out var transientInstance))
+                instance = transientInstance as T;
 
             return instance != null;
         }

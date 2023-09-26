@@ -67,8 +67,8 @@ namespace UIComponents.DependencyInjection
             if (consumerType == null)
                 throw new ArgumentNullException(nameof(consumerType));
             
-            if (InjectorDictionary.ContainsKey(consumerType))
-                return InjectorDictionary[consumerType];
+            if (InjectorDictionary.TryGetValue(consumerType, out var existingInjector))
+                return existingInjector;
 
             var injector = new DependencyInjector(this);
 
