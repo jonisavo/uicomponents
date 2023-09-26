@@ -55,7 +55,12 @@ namespace UIComponents.Addressables
             
             var exists = locations.Count > 0;
             
+#if UNITY_2021_3_OR_NEWER
             AssetPathExistsCache.TryAdd(assetPath, exists);
+#else
+            if (!AssetPathExistsCache.ContainsKey(assetPath))
+                AssetPathExistsCache.Add(assetPath, exists);
+#endif
 
             return exists;
         }
