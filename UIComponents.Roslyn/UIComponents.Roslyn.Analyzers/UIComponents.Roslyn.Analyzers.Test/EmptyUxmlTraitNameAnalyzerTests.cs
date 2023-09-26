@@ -69,6 +69,9 @@ namespace UIComponents.Roslyn.Analyzers.Test
 
             [UIComponents.UxmlTrait(Name = ""Test2"")]
             public int OtherTrait {{ get; set; }}
+
+            [UIComponents.UxmlTrait(Name = ""Test3"")]
+            private float _privateTrait;
         }}
     }}";
             await VerifyCS.VerifyAnalyzerAsync(test);

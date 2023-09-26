@@ -67,13 +67,29 @@ namespace UIComponents.Roslyn.Analyzers
             {
                 foreach (var attribute in attributeList.Attributes)
                 {
-                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol.ContainingType;
+                    if (attribute.ArgumentList == null)
+                        continue;
 
-                    if (!SymbolEqualityComparer.Default.Equals(symbol, uxmlTraitAttributeSymbol))
+                    var symbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
+
+                    if (symbol == null)
+                        continue;
+
+                    var typeSymbol = symbol.ContainingType;
+
+                    if (typeSymbol == null)
+                        continue;
+
+                    if (!SymbolEqualityComparer.Default.Equals(typeSymbol, uxmlTraitAttributeSymbol))
                         continue;
 
                     var argument = attribute.ArgumentList.Arguments.Where(
-                        (arg) => arg.NameEquals?.Name.Identifier.Text == NameArgumentName
+                        (arg) => {
+                            if (arg.NameEquals == null)
+                                return false;
+
+                            return arg.NameEquals.Name.Identifier.Text == NameArgumentName;
+                        }
                     ).FirstOrDefault();
 
                     if (argument == null)
