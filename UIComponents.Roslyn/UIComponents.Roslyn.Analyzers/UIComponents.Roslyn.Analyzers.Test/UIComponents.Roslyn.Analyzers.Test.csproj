@@ -5,6 +5,7 @@
 
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <ReleaseVersion>1.0.0-beta.7</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
