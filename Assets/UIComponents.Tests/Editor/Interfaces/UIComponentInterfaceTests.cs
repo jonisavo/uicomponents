@@ -49,8 +49,11 @@ namespace UIComponents.Tests.Editor.Interfaces
 
             yield return component.WaitForInitializationEnumerator();
 
-            using (var evt = new TEvent() { target = component })
+            using (var evt = new TEvent())
+            {
+                evt.target = component;
                 component.SendEvent(evt);
+            }
 
             Assert.That(component.Fired, Is.True);
         }

@@ -37,8 +37,8 @@ namespace UIComponents.Addressables
 
         public async Task<bool> AssetExists(string assetPath)
         {
-            if (AssetPathExistsCache.ContainsKey(assetPath))
-                return AssetPathExistsCache[assetPath];
+            if (AssetPathExistsCache.TryGetValue(assetPath, out var assetExists))
+                return assetExists;
             
             var handle = UnityEngine.AddressableAssets.Addressables.LoadResourceLocationsAsync(assetPath);
 
@@ -55,8 +55,7 @@ namespace UIComponents.Addressables
             
             var exists = locations.Count > 0;
             
-            if (!AssetPathExistsCache.ContainsKey(assetPath))
-                AssetPathExistsCache.Add(assetPath, exists);
+            AssetPathExistsCache.TryAdd(assetPath, exists);
 
             return exists;
         }

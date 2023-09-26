@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 using NSubstitute;
 using NUnit.Framework;
 using UIComponents.DependencyInjection;
@@ -36,6 +36,7 @@ namespace UIComponents.Tests
                 Value = value;
             }
             
+            [PublicAPI]
             public Component() : this(false) {}
             
             public IMockDependency GetDependency() => Provide<IMockDependency>();
@@ -102,27 +103,15 @@ namespace UIComponents.Tests
         }
 
         [Dependency(typeof(ILogger), provide: typeof(DebugLogger))]
-        private abstract class Service : IDependencyConsumer
+        private abstract class Service : DependencyConsumer
         {
             protected readonly ILogger Logger;
             private readonly DependencyInjector _dependencyInjector;
 
             protected Service()
             {
-                DiContext.Current.RegisterConsumer(this);
-                _dependencyInjector = DiContext.Current.GetInjector(GetType());
                 Logger = Provide<ILogger>();
-                UIC_PopulateProvideFields();
             }
-
-            protected T Provide<T>() where T : class
-            {
-                return _dependencyInjector.Provide<T>();
-            }
-
-            public abstract IEnumerable<IDependency> GetDependencies();
-
-            protected virtual void UIC_PopulateProvideFields() {}
         }
 
         [Dependency(typeof(IMockDependency), provide: typeof(Dependency))]
@@ -130,7 +119,7 @@ namespace UIComponents.Tests
         private partial class TestService : Service
         {
             [Provide]
-            public IMockDependency Dependency;
+            public IMockDependency DependencyInstance;
 
             public ITransientDependency GetTransientDependency() => Provide<ITransientDependency>();
         }
@@ -143,7 +132,7 @@ namespace UIComponents.Tests
                 .WithTransient<ITransientDependency>(_transientDependencyInstance);
 
             var service = testBed.Instantiate();
-            Assert.That(service.Dependency, Is.SameAs(_dependencyInstance));
+            Assert.That(service.DependencyInstance, Is.SameAs(_dependencyInstance));
             Assert.That(service.GetTransientDependency(), Is.SameAs(_transientDependencyInstance));
         }
     }
