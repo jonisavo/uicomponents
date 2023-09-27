@@ -2,7 +2,7 @@
 // update_package_version.js
 //
 // This script updates the version in the package's package.json file,
-// as well as all occurrences of it in the README.md file and Roslyn projects.
+// as well as all occurrences of it in the README.md file.
 //
 
 const path = require('path');
@@ -50,32 +50,7 @@ function replaceVersionInFile(filePath) {
 }
 
 const readmePath = path.resolve(__dirname, '..', 'README.md');
-const roslynSolutionPath = path.resolve(__dirname, '..', 'UIComponents.Roslyn', 'UIComponents.Roslyn.sln');
-
-/**
- * @param {string} startDir
- * @returns {string[]}
- */
-function findCsprojFiles(currentDir) {
-    let csprojFiles = [];
-    const files = fs.readdirSync(currentDir);
-
-    for (const file of files) {
-        const filePath = path.join(currentDir, file);
-        const isDirectory = fs.statSync(filePath).isDirectory();
-
-        if (isDirectory) {
-            csprojFiles = csprojFiles.concat(findCsprojFiles(filePath));
-        } else if (file.endsWith('.csproj')) {
-            csprojFiles.push(filePath);
-        }
-    }
-
-    return csprojFiles;
-}
-
-const roslynProjectPaths = findCsprojFiles(path.resolve(__dirname, '..', 'UIComponents.Roslyn'));
-const pathsToReplace = [readmePath, roslynSolutionPath, ...roslynProjectPaths];
+const pathsToReplace = [readmePath];
 
 for (const path of pathsToReplace) {
     replaceVersionInFile(path);

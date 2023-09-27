@@ -1,7 +1,7 @@
 ﻿//
 // update_snapshot_versions.js
 //
-// This script updates the version in all UIComponents.Roslyn snapshot
+// This script updates the version in all UIComponents.Roslyn projects, snapshot
 // test files, as well as its Constants.cs file.
 //
 
@@ -52,7 +52,32 @@ function replaceVersionInFile(filePath) {
     fs.writeFileSync(filePath, newFileString);
 }
 
-const pathsToReplace = [roslynConstantsPath];
+/**
+ * @param {string} startDir
+ * @returns {string[]}
+ */
+function findCsprojFiles(currentDir) {
+    let csprojFiles = [];
+    const files = fs.readdirSync(currentDir);
+
+    for (const file of files) {
+        const filePath = path.join(currentDir, file);
+        const isDirectory = fs.statSync(filePath).isDirectory();
+
+        if (isDirectory) {
+            csprojFiles = csprojFiles.concat(findCsprojFiles(filePath));
+        } else if (file.endsWith('.csproj')) {
+            csprojFiles.push(filePath);
+        }
+    }
+
+    return csprojFiles;
+}
+
+const roslynSolutionPath = path.resolve(__dirname, '..', 'UIComponents.Roslyn', 'UIComponents.Roslyn.sln');
+const roslynProjectPaths = findCsprojFiles(path.resolve(__dirname, '..', 'UIComponents.Roslyn'));
+
+const pathsToReplace = [roslynConstantsPath, roslynSolutionPath, ...roslynProjectPaths];
 
 const verifiedSnapshotFiles = fs.readdirSync(roslynSnapshotsFolderPath);
 
@@ -74,18 +99,28 @@ const testOutput = execSync('dotnet test ../UIComponents.Roslyn/UIComponents.Ros
 
 console.log(testOutput.toString());
 
-const generatorName = 'UIComponents.Roslyn.Generation';
-
-const roslynBuildPath = path.join(
-    roslynProjectPath,
-    generatorName,
-    'bin', 'Release', 'netstandard2.0'
-);
-
-const dllName = generatorName + '.dll';
-const pdbName = generatorName + '.pdb';
-
 const roslynAssetPath = path.resolve(__dirname, '..', 'Assets', 'UIComponents', 'Roslyn');
 
-fs.copyFileSync(path.join(roslynBuildPath, dllName), path.join(roslynAssetPath, dllName));
-fs.copyFileSync(path.join(roslynBuildPath, pdbName), path.join(roslynAssetPath, pdbName));
+/** @param {string} projectName */
+function copyOverDll(projectName, additionalPath = '') {
+    const roslynBuildPath = path.join(
+        roslynProjectPath,
+        additionalPath,
+        projectName,
+        'bin', 'Release', 'netstandard2.0'
+    );
+
+    const dllName = projectName + '.dll';
+    const pdbName = projectName + '.pdb';
+
+    fs.copyFileSync(path.join(roslynBuildPath, dllName), path.join(roslynAssetPath, dllName));
+    fs.copyFileSync(path.join(roslynBuildPath, pdbName), path.join(roslynAssetPath, pdbName));
+}
+
+const generatorName = 'UIComponents.Roslyn.Generation';
+
+
+copyOverDll('UIComponents.Roslyn.Generation');
+copyOverDll('UIComponents.Roslyn.Common');
+copyOverDll('UIComponents.Roslyn.Analyzers', 'UIComponents.Roslyn.Analyzers');
+copyOverDll('UIComponents.Roslyn.Analyzers.CodeFixes', 'UIComponents.Roslyn.Analyzers');
