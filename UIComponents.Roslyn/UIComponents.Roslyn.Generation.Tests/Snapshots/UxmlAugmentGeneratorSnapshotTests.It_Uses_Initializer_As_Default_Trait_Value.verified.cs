@@ -11,17 +11,17 @@ using UnityEngine.UIElements;
 
 public partial class Test
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.7")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
     public new partial class UxmlFactory : UxmlFactory<Test, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.7")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlIntAttributeDescription m_Number = new UxmlIntAttributeDescription { name = "number" };
         UxmlColorAttributeDescription m_color = new UxmlColorAttributeDescription { name = "color" };
         UxmlStringAttributeDescription m_MyMessage = new UxmlStringAttributeDescription { name = "my-message" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.7")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

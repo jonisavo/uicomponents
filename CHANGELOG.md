@@ -1,5 +1,18 @@
 
 
+# [1.0.0-beta.8](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-09-27)
+
+
+### Bug Fixes
+
+* **analyzers:** fix NullReferenceExceptions in UIC103 ([#110](https://github.com/jonisavo/uicomponents/issues/110)) ([67f5406](https://github.com/jonisavo/uicomponents/commit/67f540617cfad1012e348063c7f4b6ee1678918e))
+* **core:** fix compile error inside AddressableAssetResolver in Unity 2020 ([7956148](https://github.com/jonisavo/uicomponents/commit/79561489ebb299709ef6c3a0f095fb8f46153b31))
+
+
+### Features
+
+* **analyzers:** add rule for disallowing readonly members with Provide or Query (UIC003) ([c04dce6](https://github.com/jonisavo/uicomponents/commit/c04dce684f1fe42af541d8e7c0a72bee908ecf23))
+
 # [1.0.0-beta.7](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-09-25)
 
 
