@@ -18,7 +18,7 @@ namespace UIComponents.Roslyn.Analyzers
             new LocalizableResourceString(nameof(Resources.UIC102_MessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString Description =
             new LocalizableResourceString(nameof(Resources.UIC102_Description), Resources.ResourceManager, typeof(Resources));
-        private static readonly string Category = "Layout";
+        private const string Category = "Layout";
 
         private static readonly DiagnosticDescriptor Rule =
             new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);

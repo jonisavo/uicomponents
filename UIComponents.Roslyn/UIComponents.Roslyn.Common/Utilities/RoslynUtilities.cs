@@ -67,9 +67,9 @@ namespace UIComponents.Roslyn.Common.Utilities
             var displayStringParts = displayString.Split('.');
             var namespaceParts = nameSpace.Split('.');
 
-            // TODO: UGLY HACK. We don't want to shorten UIComponents types because doing so
+            // NOTE(joni): We don't want to shorten UIComponents types because doing so
             // may lead to compile errors, since the shortened type names may no longer
-            // be valid. There should be some mechanism for generating using statements...
+            // be valid.
             if (nameSpace.StartsWith("UIComponents."))
                 return displayString;
 
@@ -156,7 +156,7 @@ namespace UIComponents.Roslyn.Common.Utilities
         {
             if (symbol is IFieldSymbol fieldSymbol)
                 return fieldSymbol.Type;
-            else if (symbol is IPropertySymbol propertySymbol)
+            if (symbol is IPropertySymbol propertySymbol)
                 return propertySymbol.Type;
 
             return null;
