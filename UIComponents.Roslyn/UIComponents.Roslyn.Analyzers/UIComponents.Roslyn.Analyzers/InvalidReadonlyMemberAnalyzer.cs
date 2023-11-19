@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace UIComponents.Roslyn.Analyzers
 {
@@ -18,7 +17,7 @@ namespace UIComponents.Roslyn.Analyzers
             new LocalizableResourceString(nameof(Resources.UIC003_MessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString Description =
             new LocalizableResourceString(nameof(Resources.UIC003_Description), Resources.ResourceManager, typeof(Resources));
-        private static readonly string Category = "Core";
+        private const string Category = "Core";
 
         private static readonly DiagnosticDescriptor Rule =
             new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);

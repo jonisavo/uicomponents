@@ -185,6 +185,30 @@ using System.Runtime.CompilerServices;
 
                 Assert.Null(memberType);
             }
+
+            [Fact]
+            public void Returns_FieldType_If_Member_Is_Field()
+            {
+                var fieldSymbol = Substitute.For<IFieldSymbol>();
+                var fieldType = Substitute.For<ITypeSymbol>();
+                fieldSymbol.Type.Returns(fieldType);
+
+                var memberType = RoslynUtilities.GetMemberType(fieldSymbol);
+
+                Assert.Equal(fieldType, memberType);
+            }
+            
+            [Fact]
+            public void Returns_PropertyType_If_Member_Is_Property()
+            {
+                var propertySymbol = Substitute.For<IPropertySymbol>();
+                var propertyType = Substitute.For<ITypeSymbol>();
+                propertySymbol.Type.Returns(propertyType);
+
+                var memberType = RoslynUtilities.GetMemberType(propertySymbol);
+
+                Assert.Equal(propertyType, memberType);
+            }
         }
 
         public class GetTypeNameForNamespace
