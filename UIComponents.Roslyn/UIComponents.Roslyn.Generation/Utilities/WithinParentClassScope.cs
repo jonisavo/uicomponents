@@ -15,7 +15,7 @@ namespace UIComponents.Roslyn.Generation.Utilities
 
             var current = parentClass;
 
-            // Loop through the full parent type hiearchy, starting with the outermost
+            // Loop through the full parent type hierarchy, starting with the outermost
             while (current != null)
             {
                 stringBuilder
@@ -27,14 +27,14 @@ namespace UIComponents.Roslyn.Generation.Utilities
                     .Append(' ')
                     .Append(current.Constraints) // e.g. where T: new()
                     .AppendLine("\n{");
-                _parentsCount++; // keep track of how many layers deep we are
-                current = current.Child; // repeat with the next child
+                _parentsCount++;
+                current = current.Child;
             }
         }
 
         public void Dispose()
         {
-            for (int i = 0; i < _parentsCount; i++)
+            for (var i = 0; i < _parentsCount; i++)
                 _stringBuilder.AppendLine(@"}");
         }
     }

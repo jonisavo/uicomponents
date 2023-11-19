@@ -14,17 +14,17 @@ namespace UIComponents.Roslyn.Analyzers
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PartialKeywordCodeFixProvider)), Shared]
     public sealed class PartialKeywordCodeFixProvider : CodeFixProvider
     {
-        public sealed override ImmutableArray<string> FixableDiagnosticIds
+        public override ImmutableArray<string> FixableDiagnosticIds
         {
             get { return ImmutableArray.Create(UIComponentPartialAnalyzer.DiagnosticId); }
         }
 
-        public sealed override FixAllProvider GetFixAllProvider()
+        public override FixAllProvider GetFixAllProvider()
         {
             return WellKnownFixAllProviders.BatchFixer;
         }
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
@@ -44,7 +44,7 @@ namespace UIComponents.Roslyn.Analyzers
                 diagnostic);
         }
 
-        private async Task<Document> MakePartial(Document document, ClassDeclarationSyntax classDecl, CancellationToken cancellationToken)
+        private static async Task<Document> MakePartial(Document document, ClassDeclarationSyntax classDecl, CancellationToken cancellationToken)
         {
             var editor = new SyntaxEditor(classDecl, document.Project.Solution.Workspace);
             editor.SetModifiers(classDecl, DeclarationModifiers.Partial);

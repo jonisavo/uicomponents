@@ -15,17 +15,17 @@ namespace UIComponents.Roslyn.Analyzers
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InvalidReadonlyCodeFixProvider)), Shared]
     public sealed class InvalidReadonlyCodeFixProvider : CodeFixProvider
     {
-        public sealed override ImmutableArray<string> FixableDiagnosticIds
+        public override ImmutableArray<string> FixableDiagnosticIds
         {
             get { return ImmutableArray.Create(InvalidReadonlyMemberAnalyzer.DiagnosticId); }
         }
 
-        public sealed override FixAllProvider GetFixAllProvider()
+        public override FixAllProvider GetFixAllProvider()
         {
             return WellKnownFixAllProviders.BatchFixer;
         }
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
@@ -45,7 +45,7 @@ namespace UIComponents.Roslyn.Analyzers
                 diagnostic);
         }
 
-        private async Task<Document> RemoveReadonly(Document document, FieldDeclarationSyntax fieldDeclaration, CancellationToken cancellationToken)
+        private static async Task<Document> RemoveReadonly(Document document, FieldDeclarationSyntax fieldDeclaration, CancellationToken cancellationToken)
         {
             var typeDeclaration = fieldDeclaration
                 .Ancestors()

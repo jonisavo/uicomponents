@@ -9,7 +9,7 @@ namespace UIComponents.InterfaceModifiers
         public readonly Type EventType;
         public readonly string? MethodName;
 
-        public RegistersEventCallbackAttribute(Type eventType, string methodName = null)
+        public RegistersEventCallbackAttribute(Type eventType, string? methodName = null)
         {
             EventType = eventType;
             MethodName = methodName;

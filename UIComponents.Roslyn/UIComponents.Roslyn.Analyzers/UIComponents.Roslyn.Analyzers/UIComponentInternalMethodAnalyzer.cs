@@ -31,8 +31,15 @@ namespace UIComponents.Roslyn.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
-            context.RegisterOperationAction(AnalyzeInvocation, OperationKind.Invocation);
+            
+            context.RegisterCompilationStartAction((startContext) =>
+            {
+                var uiComponentTypeSymbol =
+                    startContext.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
+                
+                if (uiComponentTypeSymbol != null)
+                    startContext.RegisterOperationAction(AnalyzeInvocation, OperationKind.Invocation);
+            });
         }
 
         private static void AnalyzeInvocation(OperationAnalysisContext context)
@@ -45,9 +52,6 @@ namespace UIComponents.Roslyn.Analyzers
                 return;
 
             var uiComponentTypeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
-
-            if (uiComponentTypeSymbol == null)
-                return;
 
             if (IsCallerUIComponent(operation, uiComponentTypeSymbol))
                 return;

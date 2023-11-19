@@ -19,7 +19,7 @@ namespace UIComponents.Roslyn.Generation.Generators
     {
         protected TSyntaxReceiver SyntaxReceiver { get; private set; }
 
-        private AugmentGenerationContext _currentContext
+        private readonly AugmentGenerationContext _currentContext
             = new AugmentGenerationContext();
         private ParentClass _currentParentClass;
 

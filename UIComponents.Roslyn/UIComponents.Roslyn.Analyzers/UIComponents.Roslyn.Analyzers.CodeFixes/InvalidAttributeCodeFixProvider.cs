@@ -14,17 +14,17 @@ namespace UIComponents.Roslyn.Analyzers
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InvalidAttributeCodeFixProvider)), Shared]
     public sealed class InvalidAttributeCodeFixProvider : CodeFixProvider
     {
-        public sealed override ImmutableArray<string> FixableDiagnosticIds
+        public override ImmutableArray<string> FixableDiagnosticIds
         {
             get { return ImmutableArray.Create(UIComponentIdenticalStylesheetAnalyzer.DiagnosticId); }
         }
 
-        public sealed override FixAllProvider GetFixAllProvider()
+        public override FixAllProvider GetFixAllProvider()
         {
             return WellKnownFixAllProviders.BatchFixer;
         }
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
@@ -44,7 +44,10 @@ namespace UIComponents.Roslyn.Analyzers
                 diagnostic);
         }
 
-        private async Task<Document> RemoveAttribute(Document document, AttributeSyntax attributeSyntax, CancellationToken cancellationToken)
+        private static async Task<Document> RemoveAttribute(
+            Document document,
+            AttributeSyntax attributeSyntax,
+            CancellationToken cancellationToken)
         {
             var attributeList = attributeSyntax.Parent as AttributeListSyntax;
             var classDeclaration = attributeList.Parent;
