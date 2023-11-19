@@ -18,25 +18,14 @@
     </a>
 </p>
 
-<p align="center">
-	<b>Note: UIComponents' API has not yet been fully stabilized. Expect breaking changes.</b>
-</p>
-
 ## About
 
-The goal of UIComponents is to ease the creation of reusable components when
-working with Unity's new UIToolkit system. It offers ways to load UXML and USS
-files automatically, and decouple your UI code from other systems via
-dependency injection.
-
-UIComponents makes heavy use of code generation. It reduces boilerplate by generating vast amounts
-of code for you.
-
-## Requirements
-
-UIComponents officially supports Unity 2021.3 or newer. Unity's `com.unity.roslyn` package
-can be used to enable source generation in Unity 2020. Refer to the Installation section
-below for more information.
+UIComponents is a collection of source generators, runtime components and
+Roslyn analyzers. Its goal is to ease the creation of reusable components
+when working with UI Toolkit. Its primary use case is complex editor extensions,
+but it can be used for runtime UI as well. It's able to load assets for you,
+set up listeners, queries and traits. There is a simple dependency injection
+system available for those that need one, too.
 
 ## Example
 
@@ -107,6 +96,9 @@ Instantiation in UXML:
 UIComponents are VisualElements with protected virtual methods which are overridden
 via source generation. Those virtual methods are called when the UIComponent is first attached to a panel.
 
+Those looking for a real-world example may feast their eyes on [this component](https://github.com/jonisavo/unitygit/blob/main/Packages/io.savolainen.unitygit/GUI/Components/RepositoryHeader.cs) from my UnityGit project.
+It is a header element used for Git repositories.
+
 ## Testing
 
 The UIComponents package has been designed with testability in mind. The `UIComponents.Testing`
@@ -149,6 +141,12 @@ public class CounterComponentTests
     }
 }
 ```
+
+## Requirements
+
+UIComponents officially supports Unity 2021.3 or newer. Unity's `com.unity.roslyn` package
+can be used to enable source generation in Unity 2020. Refer to the Installation section
+below for more information.
 
 ## Installation
 
