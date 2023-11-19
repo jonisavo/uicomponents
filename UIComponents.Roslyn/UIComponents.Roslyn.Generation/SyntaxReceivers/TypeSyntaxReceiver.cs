@@ -6,16 +6,16 @@ namespace UIComponents.Roslyn.Generation.SyntaxReceivers
 {
 	public class TypeSyntaxReceiver : ISyntaxReceiverWithTypes
 	{
-        public readonly List<TypeDeclarationSyntax> Types =
+        private readonly List<TypeDeclarationSyntax> _types =
             new List<TypeDeclarationSyntax>();
 
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
             if (syntaxNode is TypeDeclarationSyntax typeDeclarationSyntax)
-                Types.Add(typeDeclarationSyntax);
+                _types.Add(typeDeclarationSyntax);
         }
 
-        public IReadOnlyList<TypeDeclarationSyntax> GetTypes() => Types;
+        public IReadOnlyList<TypeDeclarationSyntax> GetTypes() => _types;
     }
 }
 

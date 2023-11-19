@@ -34,9 +34,20 @@ namespace UIComponents.Roslyn.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
+            
+            context.RegisterCompilationStartAction((startContext) =>
+            {
+                var uiComponentTypeSymbol =
+                    startContext.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
+                var uxmlTraitAttributeSymbol =
+                    startContext.Compilation.GetTypeByMetadataName("UIComponents.UxmlTraitAttribute");
 
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.FieldDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.PropertyDeclaration);
+                if (uiComponentTypeSymbol == null || uxmlTraitAttributeSymbol == null)
+                    return;
+                
+                startContext.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.FieldDeclaration);
+                startContext.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.PropertyDeclaration);
+            });
         }
 
         private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
@@ -54,9 +65,6 @@ namespace UIComponents.Roslyn.Analyzers
                 context.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
             var uxmlTraitAttributeSymbol =
                 context.Compilation.GetTypeByMetadataName("UIComponents.UxmlTraitAttribute");
-
-            if (uiComponentTypeSymbol == null || uxmlTraitAttributeSymbol == null)
-                return;
 
             if (!RoslynUtilities.HasBaseType(classTypeSymbol, uiComponentTypeSymbol))
                 return;

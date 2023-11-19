@@ -9,7 +9,7 @@ namespace UIComponents.Roslyn.Generation.SyntaxReceivers
         public readonly List<MemberDeclarationSyntax> FieldsAndProperties =
             new List<MemberDeclarationSyntax>();
 
-        private bool NodeIsFieldOrProperty(SyntaxNode syntaxNode)
+        private static bool NodeIsFieldOrProperty(SyntaxNode syntaxNode)
         {
             return syntaxNode is FieldDeclarationSyntax || syntaxNode is PropertyDeclarationSyntax;
         }

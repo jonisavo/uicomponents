@@ -6,7 +6,7 @@ using UIComponents.Roslyn.Common.Utilities;
 
 namespace UIComponents.Roslyn.Generation.Generators
 {
-    public struct AugmentGenerationContext
+    public class AugmentGenerationContext
     {
         public GeneratorExecutionContext GeneratorExecutionContext;
         public TypeDeclarationSyntax ClassSyntax;

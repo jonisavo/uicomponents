@@ -32,8 +32,15 @@ namespace UIComponents.Roslyn.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
-            context.RegisterSyntaxNodeAction(AnalyzeClassDeclaration, SyntaxKind.ClassDeclaration);
+            
+            context.RegisterCompilationStartAction((startContext) =>
+            {
+                var uiComponentTypeSymbol =
+                    startContext.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
+                
+                if (uiComponentTypeSymbol != null)
+                    startContext.RegisterSyntaxNodeAction(AnalyzeClassDeclaration, SyntaxKind.ClassDeclaration);
+            });
         }
 
         private static void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
@@ -46,9 +53,6 @@ namespace UIComponents.Roslyn.Analyzers
                 return;
 
             var uiComponentTypeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
-
-            if (uiComponentTypeSymbol == null)
-                return;
 
             if (!RoslynUtilities.HasBaseType(typeSymbol, uiComponentTypeSymbol))
                 return;

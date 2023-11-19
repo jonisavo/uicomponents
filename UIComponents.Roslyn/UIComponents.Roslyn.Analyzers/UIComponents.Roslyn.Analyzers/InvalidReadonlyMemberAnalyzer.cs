@@ -31,8 +31,17 @@ namespace UIComponents.Roslyn.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
-            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.FieldDeclaration);
+            
+            context.RegisterCompilationStartAction((startContext) =>
+            {
+                var provideAttributeSymbol =
+                    startContext.Compilation.GetTypeByMetadataName("UIComponents.ProvideAttribute");
+                var queryAttributeSymbol =
+                    startContext.Compilation.GetTypeByMetadataName("UIComponents.QueryAttribute");
+                
+                if (provideAttributeSymbol != null && queryAttributeSymbol != null)
+                    startContext.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.FieldDeclaration);
+            });
         }
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
