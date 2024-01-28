@@ -5,7 +5,7 @@ namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.31.0.0";
+        public const string Version = "0.32.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
