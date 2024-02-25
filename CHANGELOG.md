@@ -1,5 +1,12 @@
 
 
+# [1.0.0-beta.9](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2024-02-25)
+
+
+### Performance Improvements
+
+* **roslyn:** analyze syntax only when required types exist ([#115](https://github.com/jonisavo/uicomponents/issues/115)) ([756b382](https://github.com/jonisavo/uicomponents/commit/756b382e2295d5f895836bcdd72ce38a8de44fcd))
+
 # [1.0.0-beta.8](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-09-27)
 
 

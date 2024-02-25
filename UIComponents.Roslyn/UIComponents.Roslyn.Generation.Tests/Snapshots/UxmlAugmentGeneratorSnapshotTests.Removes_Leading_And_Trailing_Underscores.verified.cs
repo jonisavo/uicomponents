@@ -10,17 +10,17 @@ using UnityEngine.UIElements;
 
 public partial class LongTraitNameComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     public new partial class UxmlFactory : UxmlFactory<LongTraitNameComponent, UxmlTraits> {}
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     public new partial class UxmlTraits : VisualElement.UxmlTraits
     {
         UxmlIntAttributeDescription m__member = new UxmlIntAttributeDescription { name = "member" };
         UxmlIntAttributeDescription m_memberTwo_ = new UxmlIntAttributeDescription { name = "member-two" };
         UxmlIntAttributeDescription m__member_three_ = new UxmlIntAttributeDescription { name = "member-three" };
 
-        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
+        [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);

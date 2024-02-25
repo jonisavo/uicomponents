@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 
 public partial class ArrayQueryComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     protected override void UIC_PopulateQueryFields()
     {
         // elements

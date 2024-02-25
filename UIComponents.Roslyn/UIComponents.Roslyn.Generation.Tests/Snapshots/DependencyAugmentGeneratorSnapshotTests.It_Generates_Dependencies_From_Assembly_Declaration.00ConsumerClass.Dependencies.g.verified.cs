@@ -12,13 +12,13 @@ using UnityEngine.UIElements;
 
 public partial class ConsumerClass
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
         UIComponents.DependencyInjection.Dependency.SingletonFor<IMyDependency, MyDependency>(),
         UIComponents.DependencyInjection.Dependency.TransientFor<ISecondDependency, SecondDependency>()
     };
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.8")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     public IEnumerable<IDependency> GetDependencies()
     {
         return UIC_Dependencies;

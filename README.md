@@ -170,7 +170,7 @@ Alternatively, merge this snippet to your `Packages/manifest.json` file:
         }
     ],
     "dependencies": {
-        "io.savolainen.uicomponents": "1.0.0-beta.8"
+        "io.savolainen.uicomponents": "1.0.0-beta.9"
     }
 }
 ```
@@ -180,12 +180,12 @@ Alternatively, merge this snippet to your `Packages/manifest.json` file:
 Add this under `dependencies` in your `Packages/manifest.json` file:
 
 ```
-"io.savolainen.uicomponents": "https://github.com/jonisavo/uicomponents.git#upm/v1.0.0-beta.8"
+"io.savolainen.uicomponents": "https://github.com/jonisavo/uicomponents.git#upm/v1.0.0-beta.9"
 ```
 
-This will install version 1.0.0-beta.8.
+This will install version 1.0.0-beta.9.
 
-To update, change `upm/v1.0.0-beta.8` to point to the latest version.
+To update, change `upm/v1.0.0-beta.9` to point to the latest version.
 
 ### With .unitypackage
 
