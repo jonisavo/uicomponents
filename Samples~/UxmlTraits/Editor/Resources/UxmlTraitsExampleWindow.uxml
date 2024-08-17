@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML xmlns:ui="UnityEngine.UIElements" xmlns:sample="UIComponents.Samples.UxmlTraits">
+    <ui:VisualElement name="example-header">
+        <ui:Label text="The UxmlTrait and UxmlName attributes generate UxmlFactory and UxmlTraits implementations for you." />
+        <ui:Label text="Three components are instantiated in UXML below. They use UXML traits for customization." />
+    </ui:VisualElement>
+    <ui:VisualElement class="example-container">
+        <ui:Label text="Bare component" />
+        <sample:UxmlTraitsExample />
+    </ui:VisualElement>
+    <ui:VisualElement class="example-container">
+        <ui:Label text="Overridden description" />
+        <sample:UxmlTraitsExample description-text="This is my custom description." />
+    </ui:VisualElement>
+    <ui:VisualElement class="example-container">
+        <ui:Label text="Overridden button color" />
+        <sample:UxmlTraitsExample button-color="#49006F" />
+    </ui:VisualElement>
+</UXML>
