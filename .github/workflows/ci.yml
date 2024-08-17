@@ -10,7 +10,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  PROJECT_UNITY_VERSION: 2021.3.36f1
+  PROJECT_UNITY_VERSION: 2021.3.42f1
   UNITY_2020_VERSION: 2020.3.48f1
   DISABLE_BUILD_PLATFORM: StandaloneWindows64
 
@@ -23,9 +23,9 @@ jobs:
       matrix:
         unityVersion:
           - 2020.3.48f1
-          - 2021.3.36f1
-          - 2022.3.22f1
-          - 2023.2.13f1
+          - 2021.3.42f1
+          - 2022.3.42f1
+          - 6000.0.15f1
         targetPlatform:
           - StandaloneLinux64
           - StandaloneWindows64
