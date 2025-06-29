@@ -36,7 +36,7 @@ jobs:
         with:
           fetch-depth: 0
           
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -46,7 +46,7 @@ jobs:
             Library-
             
       - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.x
           
@@ -79,7 +79,7 @@ jobs:
       - name: Test Roslyn project
         run: dotnet test ./UIComponents.Roslyn/UIComponents.Roslyn.sln -c Release --no-build --verbosity normal --collect:"XPlat Code Coverage;ExcludeByFile=**/*.Designer.cs"
           
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Test results (all modes)
