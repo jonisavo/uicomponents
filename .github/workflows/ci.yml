@@ -84,6 +84,7 @@ jobs:
         with:
           name: Test results (all modes)
           path: ${{ steps.testRunner.outputs.artifactsPath }}
+          overwrite: true
           
       - name: Upload code coverage to Codecov
         uses: codecov/codecov-action@v3
