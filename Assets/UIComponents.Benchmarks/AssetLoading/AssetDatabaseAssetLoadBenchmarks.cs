@@ -14,13 +14,13 @@ namespace UIComponents.Benchmarks.AssetLoading
         [Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver), Scope.Transient)]
         private partial class ComponentWithAssets : UIComponent {}
 
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeComponentWithWarmCache()
         {
             BenchmarkUtils.MeasureComponentInitWithWarmCache<ComponentWithAssets>();
         }
         
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeComponentWithColdCache()
         {
             BenchmarkUtils.MeasureComponentInitWithColdCache<ComponentWithAssets>();

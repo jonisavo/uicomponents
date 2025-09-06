@@ -14,25 +14,25 @@ namespace UIComponents.Benchmarks
         [Dependency(typeof(IMockDependency), provide: typeof(DependencyProvider))]
         private partial class ComponentWithDependency : UIComponent {}
 
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeEmptyComponentWithWarmCache()
         {
             BenchmarkUtils.MeasureComponentInitWithWarmCache<EmptyComponent>();
         }
         
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeEmptyComponentWithColdCache()
         {
             BenchmarkUtils.MeasureComponentInitWithColdCache<EmptyComponent>();
         }
         
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeComponentWithDependencyWithWarmCache()
         {
             BenchmarkUtils.MeasureComponentInitWithWarmCache<ComponentWithDependency>();
         }
         
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeComponentWithDependencyWithColdCache()
         {
             BenchmarkUtils.MeasureComponentInitWithColdCache<ComponentWithDependency>();

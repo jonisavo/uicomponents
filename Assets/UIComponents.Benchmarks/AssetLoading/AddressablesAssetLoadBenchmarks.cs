@@ -23,7 +23,7 @@ namespace UIComponents.Benchmarks.AssetLoading
         //     BenchmarkUtils.MeasureComponentInitWithWarmCache<ComponentWithAssets>();
         // }
         
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeComponentWithColdCache()
         {
             BenchmarkUtils.MeasureComponentInitWithColdCache<ComponentWithAssets>();

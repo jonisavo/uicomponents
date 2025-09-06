@@ -5,7 +5,7 @@ namespace UIComponents.Benchmarks
 {
     public static class BenchmarkUtils
     {
-        public const string Version = "0.32.0.0";
+        public const string Version = "0.33.0.0";
         
         private static SampleGroup[] GetProfilerMarkers()
         {
@@ -27,10 +27,10 @@ namespace UIComponents.Benchmarks
                     DiContext.Current.Clear();
                 })
                 .SampleGroup(new SampleGroup("Cold Cache Time"))
-                .ProfilerMarkers(GetProfilerMarkers())
                 .WarmupCount(10)
-                .MeasurementCount(50)
-                .IterationsPerMeasurement(100)
+                .MeasurementCount(200)
+                .IterationsPerMeasurement(1)
+                .ProfilerMarkers(GetProfilerMarkers())
                 .GC()
                 .Run();
         }
@@ -44,8 +44,8 @@ namespace UIComponents.Benchmarks
                 })
                 .SampleGroup(new SampleGroup("Warm Cache Time"))
                 .WarmupCount(10)
-                .MeasurementCount(50)
-                .IterationsPerMeasurement(100)
+                .MeasurementCount(200)
+                .IterationsPerMeasurement(1)
                 .ProfilerMarkers(GetProfilerMarkers())
                 .GC()
                 .Run();
