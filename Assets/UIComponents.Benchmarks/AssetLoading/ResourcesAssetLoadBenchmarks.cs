@@ -9,14 +9,14 @@ namespace UIComponents.Benchmarks.AssetLoading
         [Stylesheet("Components/ResourcesExampleComponent.style")]
         [Stylesheet("Margins")]
         private partial class ComponentWithAssets : UIComponent {}
-
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeComponentWithWarmCache()
         {
             BenchmarkUtils.MeasureComponentInitWithWarmCache<ComponentWithAssets>();
         }
         
-        [Test, Performance, Version(BenchmarkUtils.Version)]
+        [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]
         public void InitializeComponentWithColdCache()
         {
             BenchmarkUtils.MeasureComponentInitWithColdCache<ComponentWithAssets>();
