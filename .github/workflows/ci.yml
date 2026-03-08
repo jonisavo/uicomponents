@@ -11,7 +11,6 @@ on:
 
 env:
   PROJECT_UNITY_VERSION: 2022.3.62f3
-  UNITY_2020_VERSION: 2020.3.48f1
   DISABLE_BUILD_PLATFORM: StandaloneWindows64
 
 jobs:
@@ -22,7 +21,6 @@ jobs:
       fail-fast: false
       matrix:
         unityVersion:
-          - 2020.3.48f1
           - 2021.3.45f1
           - 2022.3.62f3
           - 6000.0.67f1
@@ -49,18 +47,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.x
-          
-      - name: Set up Node.js
-        if: ${{ matrix.unityVersion == env.UNITY_2020_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.x
-          
-      - name: Set up Roslyn for Unity 2020
-        if: ${{ matrix.unityVersion == env.UNITY_2020_VERSION }}
-        run: |
-          npm install -g openupm-cli
-          openupm add com.unity.roslyn
             
       - uses: game-ci/unity-test-runner@v4
         id: testRunner
