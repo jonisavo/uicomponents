@@ -195,6 +195,8 @@ To update, remove the existing files and extract the new `.unitypackage`.
 
 ### For Unity 2020
 
+*NOTE: Unity 2020 is not officially supported or tested. You may encounter trouble.*
+
 After installing UIComponents, install the `com.unity.roslyn` package. This enables source generation in Unity 2020.
 
 Add this under `dependencies` in your `Packages/manifest.json` file:
