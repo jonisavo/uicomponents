@@ -149,5 +149,32 @@ namespace UIComponents.Roslyn.Analyzers.Test
 
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
+
+        [TestMethod]
+        public async Task It_Handles_Parameterless_Stylesheet()
+        {
+            var test = @"
+    using System;
+
+    namespace UIComponents
+    {
+        public abstract class UIComponent {}
+        [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+        public class StylesheetAttribute : Attribute
+        {
+            public StylesheetAttribute(string path) {}
+            public StylesheetAttribute() {}
+        }
+    }
+
+    namespace Application
+    {
+        [UIComponents.Stylesheet]
+        [UIComponents.Stylesheet(""Stylesheet1"")]
+        public class MyComponent : UIComponents.UIComponent {}
+    }";
+
+            await VerifyCS.VerifyAnalyzerAsync(test);
+        }
     }
 }

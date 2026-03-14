@@ -49,6 +49,14 @@ namespace UIComponents.Roslyn.Generation.Generators
             return values[0];
         }
 
+        protected string BuildPrefixedPath(string value)
+        {
+            if (string.IsNullOrEmpty(CurrentAssetPrefix))
+                return value;
+
+            return CurrentAssetPrefix + value;
+        }
+
         protected override bool ShouldGenerateSource(AugmentGenerationContext context)
         {
             if (UIComponentSymbol == null || AssetPrefixAttributeSymbol == null)

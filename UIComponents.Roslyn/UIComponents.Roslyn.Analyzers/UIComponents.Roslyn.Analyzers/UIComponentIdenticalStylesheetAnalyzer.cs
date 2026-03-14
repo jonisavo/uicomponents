@@ -79,8 +79,10 @@ namespace UIComponents.Roslyn.Analyzers
 
                 foreach (var attribute in stylesheetAttributes.Reverse())
                 {
-                    var arguments = attribute.ArgumentList.Arguments;
-                    var firstArgument = arguments.FirstOrDefault();
+                    if (attribute.ArgumentList == null || attribute.ArgumentList.Arguments.Count == 0)
+                        continue;
+
+                    var firstArgument = attribute.ArgumentList.Arguments.FirstOrDefault();
 
                     var fullArgumentString = firstArgument.Expression.ToString();
                     var argument = fullArgumentString.Substring(1, fullArgumentString.Length - 2);

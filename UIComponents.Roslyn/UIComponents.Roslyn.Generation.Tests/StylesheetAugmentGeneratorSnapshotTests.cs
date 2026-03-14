@@ -90,5 +90,87 @@ public partial class StylesheetTestComponent : UIComponent {}
 ";
             return GeneratorTester.VerifyWithoutReferences<StylesheetAugmentGenerator>(source);
         }
+
+        [Fact]
+        public Task It_Uses_Class_Name_As_Convention_Path()
+        {
+            var source = @"
+using UIComponents;
+
+[Stylesheet]
+public partial class InventoryPanel : UIComponent {}
+";
+            return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Handles_Mix_Of_Convention_And_Explicit_Stylesheets()
+        {
+            var source = @"
+using UIComponents;
+
+[Stylesheet]
+[Stylesheet(""Shared/Common"")]
+public partial class InventoryPanel : UIComponent {}
+";
+            return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Resolves_Inherited_Convention_Stylesheet_To_Declaring_Class_Name()
+        {
+            var source = @"
+using UIComponents;
+
+[Stylesheet]
+public partial class BaseComponent : UIComponent {}
+
+[Stylesheet]
+public partial class ChildComponent : BaseComponent {}
+";
+            return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Generates_SharedStylesheet_Loading()
+        {
+            var source = @"
+using UIComponents;
+
+[Stylesheet(""Components/MyStyle"")]
+[SharedStylesheet(""Shared/Common"")]
+public partial class MyComponent : UIComponent {}
+";
+            return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Inherits_SharedStylesheets_From_Base_Class()
+        {
+            var source = @"
+using UIComponents;
+
+[SharedStylesheet(""Shared/Base"")]
+public partial class BaseComponent : UIComponent {}
+
+[Stylesheet(""Components/ChildStyle"")]
+[SharedStylesheet(""Shared/Child"")]
+public partial class ChildComponent : BaseComponent {}
+";
+            return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Combines_Convention_Stylesheet_With_SharedStylesheet()
+        {
+            var source = @"
+using UIComponents;
+
+[Stylesheet]
+[SharedStylesheet(""Shared/Common"")]
+public partial class InventoryPanel : UIComponent {}
+";
+            return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
+        }
     }
 }
