@@ -24,6 +24,9 @@ namespace UIComponents.Tests
         [Layout("Assets/MissingAsset.uxml")]
         private partial class UIComponentWithNullLayout : UIComponent {}
 
+        [Layout]
+        private partial class UIComponentWithConventionLayout : UIComponent {}
+
         private IAssetResolver _mockResolver;
 
         [SetUp]
@@ -74,6 +77,15 @@ namespace UIComponents.Tests
             var testBed = new TestBed<UIComponentWithNullLayout>().WithSingleton(_mockResolver);
             var component = testBed.Instantiate();
             yield return component.Initialize().AsEnumerator();
+        }
+
+        [UnityTest]
+        public IEnumerator Convention_Layout_Uses_Class_Name()
+        {
+            var testBed = new TestBed<UIComponentWithConventionLayout>().WithSingleton(_mockResolver);
+            var component = testBed.Instantiate();
+            yield return component.Initialize().AsEnumerator();
+            _mockResolver.Received().LoadAsset<VisualTreeAsset>("UIComponentWithConventionLayout");
         }
     }
 }

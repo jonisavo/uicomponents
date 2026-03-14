@@ -11,6 +11,8 @@ namespace UIComponents
         public LayoutAttribute(string path)
         {
             Path = path;
-        }   
+        }
+
+        public LayoutAttribute() : this(null) {}
     }
 }

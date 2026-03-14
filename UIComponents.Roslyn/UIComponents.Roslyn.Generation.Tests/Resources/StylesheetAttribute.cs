@@ -12,5 +12,7 @@ namespace UIComponents
         {
             Path = path;
         }
+
+        public StylesheetAttribute() : this(null) {}
     }
 }

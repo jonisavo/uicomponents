@@ -21,6 +21,20 @@ namespace UIComponents.Tests
         [Stylesheet("Assets/StylesheetThree.uss")]
         private partial class InheritedComponent : UIComponentWithTwoStylesheets {}
 
+        [Stylesheet]
+        private partial class UIComponentWithConventionStylesheet : UIComponent {}
+
+        [Stylesheet("Assets/StylesheetOne.uss")]
+        [SharedStylesheet("Assets/SharedStyle.uss")]
+        private partial class UIComponentWithSharedStylesheet : UIComponent {}
+
+        [SharedStylesheet("Assets/BaseShared.uss")]
+        private partial class BaseWithSharedStylesheet : UIComponent {}
+
+        [Stylesheet("Assets/ChildStyle.uss")]
+        [SharedStylesheet("Assets/ChildShared.uss")]
+        private partial class ChildWithSharedStylesheet : BaseWithSharedStylesheet {}
+
         private IAssetResolver _mockResolver;
         private ILogger _mockLogger;
 
@@ -83,6 +97,61 @@ namespace UIComponents.Tests
             _mockLogger.Received().LogError("Could not find stylesheet Assets/StylesheetOne.uss", component);
 
             Assert.That(component.styleSheets.count, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator Convention_Stylesheet_Uses_Class_Name_With_Style_Suffix()
+        {
+            _mockResolver.LoadAsset<StyleSheet>("UIComponentWithConventionStylesheet.style")
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
+
+            var testBed = new TestBed<UIComponentWithConventionStylesheet>()
+                .WithSingleton(_mockLogger)
+                .WithTransient(_mockResolver);
+            var component = testBed.Instantiate();
+            yield return component.Initialize().AsEnumerator();
+
+            _mockResolver.Received().LoadAsset<StyleSheet>("UIComponentWithConventionStylesheet.style");
+            Assert.That(component.styleSheets.count, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator SharedStylesheet_Is_Loaded()
+        {
+            _mockResolver.LoadAsset<StyleSheet>("Assets/SharedStyle.uss")
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
+
+            var testBed = new TestBed<UIComponentWithSharedStylesheet>()
+                .WithSingleton(_mockLogger)
+                .WithTransient(_mockResolver);
+            var component = testBed.Instantiate();
+            yield return component.Initialize().AsEnumerator();
+
+            _mockResolver.Received().LoadAsset<StyleSheet>("Assets/StylesheetOne.uss");
+            _mockResolver.Received().LoadAsset<StyleSheet>("Assets/SharedStyle.uss");
+            Assert.That(component.styleSheets.count, Is.EqualTo(2));
+        }
+
+        [UnityTest]
+        public IEnumerator Inherited_SharedStylesheets_Are_Loaded()
+        {
+            _mockResolver.LoadAsset<StyleSheet>("Assets/BaseShared.uss")
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
+            _mockResolver.LoadAsset<StyleSheet>("Assets/ChildStyle.uss")
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
+            _mockResolver.LoadAsset<StyleSheet>("Assets/ChildShared.uss")
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
+
+            var testBed = new TestBed<ChildWithSharedStylesheet>()
+                .WithSingleton(_mockLogger)
+                .WithTransient(_mockResolver);
+            var component = testBed.Instantiate();
+            yield return component.Initialize().AsEnumerator();
+
+            _mockResolver.Received().LoadAsset<StyleSheet>("Assets/BaseShared.uss");
+            _mockResolver.Received().LoadAsset<StyleSheet>("Assets/ChildStyle.uss");
+            _mockResolver.Received().LoadAsset<StyleSheet>("Assets/ChildShared.uss");
+            Assert.That(component.styleSheets.count, Is.EqualTo(3));
         }
     }
 }

@@ -115,5 +115,74 @@ public partial class LayoutTestComponent : UIComponent {}
 
             return GeneratorTester.VerifyWithoutReferences<LayoutAugmentGenerator>(source);
         }
+
+        [Fact]
+        public Task It_Uses_Class_Name_As_Convention_Path()
+        {
+            var source = @"
+using UIComponents;
+
+[Layout]
+public partial class InventoryPanel : UIComponent {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Uses_Class_Name_With_AssetPrefix()
+        {
+            var source = @"
+using UIComponents;
+
+[AssetPrefix(""UI/Components/"")]
+[Layout]
+public partial class InventoryPanel : UIComponent {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task It_Uses_Declaring_Class_Name_When_Inheriting_Parameterless_Layout()
+        {
+            var source = @"
+using UIComponents;
+
+[Layout]
+public partial class BasePanel : UIComponent {}
+
+public partial class ChildPanel : BasePanel {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task Convention_Layout_Overrides_Explicit_Parent_Layout()
+        {
+            var source = @"
+using UIComponents;
+
+[Layout(""Components/BasePanel"")]
+public partial class BasePanel : UIComponent {}
+
+[Layout]
+public partial class ChildPanel : BasePanel {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task Explicit_Layout_Overrides_Convention_Parent_Layout()
+        {
+            var source = @"
+using UIComponents;
+
+[Layout]
+public partial class BasePanel : UIComponent {}
+
+[Layout(""Components/SpecificChild"")]
+public partial class ChildPanel : BasePanel {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
     }
 }
