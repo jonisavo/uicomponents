@@ -7,6 +7,7 @@
     "com.unity.test-framework": "1.1.33",
     "com.unity.test-framework.performance": "3.0.0-pre.2",
     "com.unity.testtools.codecoverage": "1.2.6",
+    "com.unity.toolchain.linux-x86_64": "2.0.11",
     "com.unity.ugui": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
