@@ -11,7 +11,7 @@ namespace UIComponents.Benchmarks.AssetLoading
         [Layout("AddressablesExampleComponent.uxml")]
         [Stylesheet("AddressablesExampleComponent.uss")]
         [Stylesheet("Box.uss")]
-        [Dependency(typeof(IAssetResolver), provide: typeof(AssetDatabaseAssetResolver), Scope.Transient)]
+        [Dependency(typeof(IAssetSource), provide: typeof(AssetDatabaseAssetSource), Scope.Transient)]
         private partial class ComponentWithAssets : UIComponent {}
 
         [Test, Performance, Version(BenchmarkUtils.Version), Timeout(5000)]

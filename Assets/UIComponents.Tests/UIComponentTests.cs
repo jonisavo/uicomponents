@@ -16,7 +16,7 @@ namespace UIComponents.Tests
         [TestFixture]
         public partial class Initialization
         {
-            private class MockAssetResolver : IAssetResolver
+            private class MockAssetSource : IAssetSource
             {
                 private readonly Dictionary<string, object> _taskCompletionSources =
                     new Dictionary<string, object>();
@@ -50,14 +50,14 @@ namespace UIComponents.Tests
             private partial class TestComponent : UIComponent {}
 
             private TestBed<TestComponent> _testComponentTestBed;
-            private MockAssetResolver _mockAssetResolver;
+            private MockAssetSource _mockAssetSource;
 
             [SetUp]
             public void SetUp()
             {
-                _mockAssetResolver = new MockAssetResolver();
+                _mockAssetSource = new MockAssetSource();
                 _testComponentTestBed = new TestBed<TestComponent>()
-                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+                    .WithSingleton<IAssetSource>(_mockAssetSource);
             }
 
             [Test]
@@ -67,9 +67,9 @@ namespace UIComponents.Tests
                 component.Initialize();
                 Assert.That(component.Initialized, Is.False);
 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet2");
                 
                 Assert.That(component.Initialized, Is.True);
             }
@@ -82,9 +82,9 @@ namespace UIComponents.Tests
                 
                 Assert.That(component.InitializationTask.IsCompleted, Is.False);
                 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet2");
                 
                 Assert.That(component.InitializationTask.IsCompleted, Is.True);
                 Assert.That(component.InitializationTask.Result, Is.SameAs(component));
@@ -98,9 +98,9 @@ namespace UIComponents.Tests
                 
                 Assert.That(component.Initialized, Is.False);
 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet2");
 
                 yield return component.WaitForInitializationEnumerator();
                 
@@ -121,7 +121,7 @@ namespace UIComponents.Tests
                 component.Initialize();
 
                 var childTestBed = new TestBed<ChildComponent>()
-                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+                    .WithSingleton<IAssetSource>(_mockAssetSource);
 
                 var firstChild = childTestBed.Instantiate();
                 firstChild.Initialize();
@@ -131,9 +131,9 @@ namespace UIComponents.Tests
                 component.Add(firstChild);
                 component.Add(secondChild);
                 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet2");
 
                 Assert.That(component.Initialized, Is.False);
             }
@@ -145,7 +145,7 @@ namespace UIComponents.Tests
                 component.Initialize();
 
                 var childTestBed = new TestBed<ChildComponent>()
-                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+                    .WithSingleton<IAssetSource>(_mockAssetSource);
 
                 var firstChild = childTestBed.Instantiate();
                 firstChild.Initialize();
@@ -153,7 +153,7 @@ namespace UIComponents.Tests
                 secondChild.Initialize();
 
                 var nestedChildTestBed = new TestBed<NestedChildComponent>()
-                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+                    .WithSingleton<IAssetSource>(_mockAssetSource);
 
                 var nestedChild = nestedChildTestBed.Instantiate();
                 nestedChild.Initialize();
@@ -163,14 +163,14 @@ namespace UIComponents.Tests
                 component.Add(firstChild);
                 component.Add(secondChild);
                 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet1");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("Stylesheet2");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet1");
+                _mockAssetSource.CompleteLoad<StyleSheet>("Stylesheet2");
 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Child");
-                _mockAssetResolver.CompleteLoad<StyleSheet>("ChildStylesheet");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("Child");
+                _mockAssetSource.CompleteLoad<StyleSheet>("ChildStylesheet");
                 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("NestedChild");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("NestedChild");
                 
                 Assert.That(component.Initialized, Is.True);
             }
@@ -216,7 +216,7 @@ namespace UIComponents.Tests
             public IEnumerator Asynchronous_Initialization_Happens_Once()
             {
                 var testBed = new TestBed<InitCounterComponent>()
-                    .WithSingleton<IAssetResolver>(_mockAssetResolver);
+                    .WithSingleton<IAssetSource>(_mockAssetSource);
 
                 var component = testBed.Instantiate();
                 
@@ -224,7 +224,7 @@ namespace UIComponents.Tests
                 component.Initialize();
                 component.Initialize();
                 
-                _mockAssetResolver.CompleteLoad<VisualTreeAsset>("Layout");
+                _mockAssetSource.CompleteLoad<VisualTreeAsset>("Layout");
                 
                 yield return component.WaitForInitializationEnumerator();
                 

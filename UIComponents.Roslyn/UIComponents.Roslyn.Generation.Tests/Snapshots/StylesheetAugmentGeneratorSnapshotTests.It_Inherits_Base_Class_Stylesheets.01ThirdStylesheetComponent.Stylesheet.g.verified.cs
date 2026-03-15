@@ -14,14 +14,14 @@ public partial class ThirdStylesheetComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     private async Task<StyleSheetLoadTuple> UIC_GetSingleStyleSheet(string assetPath)
     {
-        var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
+        var styleSheet = await AssetSource.LoadAsset<StyleSheet>(assetPath);
         return new StyleSheetLoadTuple(assetPath, styleSheet);
     }
 
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
-        var assetPaths = new string[] { AssetCatalog.ResolveStylesheetPath(typeof(global::BaseStylesheetComponent), "Components/BaseStylesheet"), AssetCatalog.ResolveStylesheetPath(typeof(global::ConcreteStylesheetComponent), "Components/StylesheetOne"), AssetCatalog.ResolveStylesheetPath(typeof(global::ConcreteStylesheetComponent), "Components/StylesheetTwo"), AssetCatalog.ResolveStylesheetPath(typeof(global::ThirdStylesheetComponent), "Components/StylesheetThree") };
+        var assetPaths = new string[] { "Components/BaseStylesheet", "Components/StylesheetOne", "Components/StylesheetTwo", "Components/StylesheetThree" };
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)

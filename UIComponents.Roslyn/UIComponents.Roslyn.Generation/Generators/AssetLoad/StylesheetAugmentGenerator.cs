@@ -124,7 +124,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
             stringBuilder.AppendLineWithPadding($@"{Constants.GeneratedCodeAttribute}
     private async Task<StyleSheetLoadTuple> UIC_GetSingleStyleSheet(string assetPath)
     {{
-        var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
+        var styleSheet = await AssetSource.LoadAsset<StyleSheet>(assetPath);
         return new StyleSheetLoadTuple(assetPath, styleSheet);
     }}
 
@@ -144,11 +144,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
         private string BuildStylesheetPathArrayElements()
         {
             return string.Join(", ", _stylesheetDescriptions.Select(desc =>
-            {
-                if (desc.IsShared)
-                    return $"AssetCatalog.ResolveSharedStylesheetPath(\"{desc.LogicalName}\", \"{desc.Path}\")";
-                return $"AssetCatalog.ResolveStylesheetPath(typeof({desc.DeclaringTypeFullName}), \"{desc.Path}\")";
-            }));
+                $"\"{desc.Path}\""));
         }
 
         protected override string GetHintPostfix()

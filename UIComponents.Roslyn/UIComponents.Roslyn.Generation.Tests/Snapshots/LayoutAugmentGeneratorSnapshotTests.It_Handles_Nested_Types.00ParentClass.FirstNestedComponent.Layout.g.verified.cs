@@ -16,8 +16,7 @@ public partial class FirstNestedComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
-        var path = AssetCatalog.ResolveLayoutPath(typeof(global::ParentClass.FirstNestedComponent), "Components/FirstNestedComponent");
-        return AssetResolver.LoadAsset<VisualTreeAsset>(path);
+        return AssetSource.LoadAsset<VisualTreeAsset>("Components/FirstNestedComponent");
     }
 }
 }

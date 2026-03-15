@@ -8,7 +8,7 @@ namespace UIComponents.Samples.Addressables
     [Layout("AddressablesExampleComponent.uxml")]
     [Stylesheet("AddressablesExampleComponent.uss")]
     [Stylesheet("Box.uss")]
-    [Dependency(typeof(IAssetResolver), provide: typeof(AddressableAssetResolver))]
+    [Dependency(typeof(IAssetSource), provide: typeof(AddressableAssetSource))]
     public partial class AddressablesExampleComponent : UIComponent
     {
         private readonly Label _loadingLabel;

@@ -19,7 +19,7 @@ namespace UIComponents.Tests
         private interface ITransientDependency { }
         private class TransientDependency : ITransientDependency { }
 
-        private IAssetResolver _mockResolver;
+        private IAssetSource _mockSource;
 
         private Dependency _dependencyInstance;
         private TransientDependency _transientDependencyInstance;
@@ -51,12 +51,12 @@ namespace UIComponents.Tests
         {
             _dependencyInstance = new Dependency();
             _transientDependencyInstance = new TransientDependency();
-            _mockResolver = MockUtilities.CreateMockResolver();
-            _mockResolver.LoadAsset<VisualTreeAsset>("Foo")
+            _mockSource = MockUtilities.CreateMockSource();
+            _mockSource.LoadAsset<VisualTreeAsset>("Foo")
                 .Returns(Task.FromResult(ScriptableObject.CreateInstance<VisualTreeAsset>()));
             _testBed = new TestBed<Component>()
                 .WithSingleton<IMockDependency>(_dependencyInstance)
-                .WithSingleton(_mockResolver)
+                .WithSingleton(_mockSource)
                 .WithTransient<ITransientDependency>(_transientDependencyInstance);
         }
 

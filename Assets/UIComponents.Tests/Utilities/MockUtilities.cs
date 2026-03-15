@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using NSubstitute;
 using UIComponents.DependencyInjection;
 using UnityEngine;
@@ -8,14 +8,14 @@ namespace UIComponents.Tests.Utilities
 {
     public static class MockUtilities
     {
-        public static IAssetResolver CreateMockResolver()
+        public static IAssetSource CreateMockSource()
         {
-            var resolver = Substitute.For<IAssetResolver>();
-            resolver.LoadAsset<VisualTreeAsset>(Arg.Any<string>())
+            var source = Substitute.For<IAssetSource>();
+            source.LoadAsset<VisualTreeAsset>(Arg.Any<string>())
                 .Returns(Task.FromResult(ScriptableObject.CreateInstance<VisualTreeAsset>()));
-            resolver.LoadAsset<StyleSheet>(Arg.Any<string>())
+            source.LoadAsset<StyleSheet>(Arg.Any<string>())
                 .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
-            return resolver;
+            return source;
         }
 
         public static IDependencyConsumer CreateDependencyConsumer(IDependency[] dependencies)

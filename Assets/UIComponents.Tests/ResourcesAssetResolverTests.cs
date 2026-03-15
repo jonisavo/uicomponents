@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace UIComponents.Tests
 {
     [TestFixture]
-    public class ResourcesAssetResolverTests : AssetResolverTestSuite<ResourcesAssetResolver>
+    public class ResourcesAssetSourceTests : AssetSourceTestSuite<ResourcesAssetSource>
     {
         [UnityTest]
         public IEnumerator Should_Be_Able_To_Load_Existing_Asset()
