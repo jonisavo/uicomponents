@@ -21,14 +21,21 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
             _sharedStylesheetAttributeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.SharedStylesheetAttribute");
         }
 
-        private StylesheetDescription GetStylesheetDescription(string stylesheetPath)
+        private StylesheetDescription GetStylesheetDescription(string stylesheetPath, string declaringTypeFullName)
         {
-            return new StylesheetDescription(BuildPrefixedPath(stylesheetPath));
+            return new StylesheetDescription(BuildPrefixedPath(stylesheetPath), declaringTypeFullName);
         }
 
-        private StylesheetDescription GetConventionStylesheetDescription(string className)
+        private StylesheetDescription GetConventionStylesheetDescription(string className, string declaringTypeFullName)
         {
-            return new StylesheetDescription(BuildPrefixedPath(className + Constants.ConventionStylesheetSuffix));
+            return new StylesheetDescription(
+                BuildPrefixedPath(className + Constants.ConventionStylesheetSuffix),
+                declaringTypeFullName);
+        }
+
+        private StylesheetDescription GetSharedStylesheetDescription(string name)
+        {
+            return new StylesheetDescription(BuildPrefixedPath(name), name, isShared: true);
         }
 
         /// <summary>
@@ -61,6 +68,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
             foreach (var type in typeHierarchy)
             {
                 var attributes = type.GetAttributes();
+                var typeFullName = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 
                 // Collect [Stylesheet] attributes for this type
                 if (_stylesheetAttributeSymbol != null)
@@ -72,9 +80,9 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
                         if (attribute.ConstructorArguments.Length > 0 &&
                             attribute.ConstructorArguments[0].Value is string path)
-                            stylesheets.Add(GetStylesheetDescription(path));
+                            stylesheets.Add(GetStylesheetDescription(path, typeFullName));
                         else
-                            stylesheets.Add(GetConventionStylesheetDescription(type.Name));
+                            stylesheets.Add(GetConventionStylesheetDescription(type.Name, typeFullName));
                     }
                 }
 
@@ -88,7 +96,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
                         if (attribute.ConstructorArguments.Length > 0 &&
                             attribute.ConstructorArguments[0].Value is string name)
-                            stylesheets.Add(GetStylesheetDescription(name));
+                            stylesheets.Add(GetSharedStylesheetDescription(name));
                     }
                 }
             }
@@ -123,7 +131,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
     {Constants.GeneratedCodeAttribute}
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {{
-        var assetPaths = new string[] {{ {string.Join(", ", _stylesheetDescriptions.Select(desc => $"\"{desc.Path}\""))} }};
+        var assetPaths = new string[] {{ {BuildStylesheetPathArrayElements()} }};
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)
@@ -131,6 +139,16 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
 
         return styleSheetLoadTasks;
     }}");
+        }
+
+        private string BuildStylesheetPathArrayElements()
+        {
+            return string.Join(", ", _stylesheetDescriptions.Select(desc =>
+            {
+                if (desc.IsShared)
+                    return $"AssetCatalog.ResolveSharedStylesheetPath(\"{desc.LogicalName}\", \"{desc.Path}\")";
+                return $"AssetCatalog.ResolveStylesheetPath(typeof({desc.DeclaringTypeFullName}), \"{desc.Path}\")";
+            }));
         }
 
         protected override string GetHintPostfix()

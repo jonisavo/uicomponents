@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
@@ -86,6 +87,26 @@ namespace UIComponents.Tests
             var component = testBed.Instantiate();
             yield return component.Initialize().AsEnumerator();
             _mockResolver.Received().LoadAsset<VisualTreeAsset>("UIComponentWithConventionLayout");
+        }
+
+        [Layout("Original/Path")]
+        private partial class UIComponentWithCatalogOverride : UIComponent {}
+
+        [UnityTest]
+        public IEnumerator Catalog_Override_Changes_Resolved_Layout_Path()
+        {
+            var mockCatalog = Substitute.For<IAssetCatalog>();
+            mockCatalog.ResolveLayoutPath(Arg.Any<Type>(), Arg.Any<string>())
+                .Returns("Overridden/Path");
+
+            var testBed = new TestBed<UIComponentWithCatalogOverride>()
+                .WithSingleton(_mockResolver)
+                .WithSingleton(mockCatalog);
+            var component = testBed.Instantiate();
+            yield return component.Initialize().AsEnumerator();
+
+            _mockResolver.Received().LoadAsset<VisualTreeAsset>("Overridden/Path");
+            _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>("Original/Path");
         }
     }
 }

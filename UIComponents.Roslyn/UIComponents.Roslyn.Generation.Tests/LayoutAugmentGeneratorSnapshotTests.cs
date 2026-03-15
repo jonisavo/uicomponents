@@ -184,5 +184,32 @@ public partial class ChildPanel : BasePanel {}
 ";
             return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
         }
+
+        [Fact]
+        public Task It_Uses_AssetRoot_Instead_Of_AssetPrefix()
+        {
+            var source = @"
+using UIComponents;
+
+[AssetRoot(""UI/Components/"")]
+[Layout]
+public partial class InventoryPanel : UIComponent {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
+
+        [Fact]
+        public Task AssetRoot_Takes_Priority_Over_AssetPrefix()
+        {
+            var source = @"
+using UIComponents;
+
+[AssetPrefix(""Old/"")]
+[AssetRoot(""New/"")]
+[Layout(""MyLayout"")]
+public partial class MyComponent : UIComponent {}
+";
+            return GeneratorTester.Verify<LayoutAugmentGenerator>(source);
+        }
     }
 }

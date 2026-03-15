@@ -18,6 +18,7 @@ public partial class MyGUIComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.IAssetResolver, UIComponents.ResourcesAssetResolver>(),
+        UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.IAssetCatalog, UIComponents.DefaultAssetCatalog>(),
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.ILogger, UIComponents.DebugLogger>(),
         UIComponents.DependencyInjection.Dependency.SingletonFor<IService, Service>()
     };

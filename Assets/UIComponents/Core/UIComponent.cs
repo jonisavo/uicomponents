@@ -23,6 +23,7 @@ namespace UIComponents
     /// <seealso cref="ResourcesAssetResolver"/>
     /// <seealso cref="DebugLogger"/>
     [Dependency(typeof(IAssetResolver), provide: typeof(ResourcesAssetResolver))]
+    [Dependency(typeof(IAssetCatalog), provide: typeof(DefaultAssetCatalog))]
     [Dependency(typeof(ILogger), provide: typeof(DebugLogger))]
     public abstract class UIComponent : VisualElement, IDependencyConsumer
     {
@@ -31,6 +32,12 @@ namespace UIComponents
         /// Defaults to <see cref="ResourcesAssetResolver"/>.
         /// </summary>
         public readonly IAssetResolver AssetResolver;
+
+        /// <summary>
+        /// The IAssetCatalog used by this UIComponent.
+        /// Defaults to <see cref="DefaultAssetCatalog"/>.
+        /// </summary>
+        public readonly IAssetCatalog AssetCatalog;
 
         /// <summary>
         /// Whether the UIComponent has been fully initialized.
@@ -67,6 +74,7 @@ namespace UIComponents
             DiContext.Current.RegisterConsumer(this);
             _dependencyInjector = DiContext.Current.GetInjector(GetType());
             AssetResolver = Provide<IAssetResolver>();
+            AssetCatalog = Provide<IAssetCatalog>();
             Logger = Provide<ILogger>();
             // ReSharper disable once VirtualMemberCallInConstructor
             UIC_PopulateProvideFields();

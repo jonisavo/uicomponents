@@ -17,6 +17,7 @@ namespace UIComponents
     /// public partial class MyComponent : UIComponent {}
     /// </code>
     /// </example>
+    [Obsolete("Use AssetRootAttribute instead. AssetPrefix will be removed in a future version.")]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     [BaseTypeRequired(typeof(UIComponent))]
     [ExcludeFromCoverage]

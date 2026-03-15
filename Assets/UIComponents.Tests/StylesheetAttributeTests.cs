@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
@@ -152,6 +153,30 @@ namespace UIComponents.Tests
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/ChildStyle.uss");
             _mockResolver.Received().LoadAsset<StyleSheet>("Assets/ChildShared.uss");
             Assert.That(component.styleSheets.count, Is.EqualTo(3));
+        }
+
+        [Stylesheet("Original/Style")]
+        private partial class UIComponentWithCatalogStyleOverride : UIComponent {}
+
+        [UnityTest]
+        public IEnumerator Catalog_Override_Changes_Resolved_Stylesheet_Path()
+        {
+            var mockCatalog = Substitute.For<IAssetCatalog>();
+            mockCatalog.ResolveStylesheetPath(Arg.Any<Type>(), Arg.Any<string>())
+                .Returns("Overridden/Style");
+
+            _mockResolver.LoadAsset<StyleSheet>("Overridden/Style")
+                .Returns(Task.FromResult(ScriptableObject.CreateInstance<StyleSheet>()));
+
+            var testBed = new TestBed<UIComponentWithCatalogStyleOverride>()
+                .WithSingleton(_mockLogger)
+                .WithTransient(_mockResolver)
+                .WithSingleton(mockCatalog);
+            var component = testBed.Instantiate();
+            yield return component.Initialize().AsEnumerator();
+
+            _mockResolver.Received().LoadAsset<StyleSheet>("Overridden/Style");
+            _mockResolver.DidNotReceive().LoadAsset<StyleSheet>("Original/Style");
         }
     }
 }

@@ -23,7 +23,7 @@ public partial class FirstNestedComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
-        var assetPaths = new string[] { "Components/FirstNestedStyle" };
+        var assetPaths = new string[] { AssetCatalog.ResolveStylesheetPath(typeof(global::ParentClass.FirstNestedComponent), "Components/FirstNestedStyle") };
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)

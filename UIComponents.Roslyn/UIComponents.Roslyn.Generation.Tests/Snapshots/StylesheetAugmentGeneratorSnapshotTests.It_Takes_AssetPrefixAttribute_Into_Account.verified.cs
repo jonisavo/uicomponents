@@ -21,7 +21,7 @@ public partial class StylesheetTestComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
-        var assetPaths = new string[] { "UI/Components/StylesheetTestComponentStyle" };
+        var assetPaths = new string[] { AssetCatalog.ResolveStylesheetPath(typeof(global::StylesheetTestComponent), "UI/Components/StylesheetTestComponentStyle") };
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)
