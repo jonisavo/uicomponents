@@ -17,11 +17,5 @@ private partial class ClickHandler
     {
         RegisterCallback<OnClickEvent>(OnClick);
     }
-
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
-    protected override void UIC_UnregisterEventCallbacks()
-    {
-        UnregisterCallback<OnClickEvent>(OnClick);
-    }
 }
 }

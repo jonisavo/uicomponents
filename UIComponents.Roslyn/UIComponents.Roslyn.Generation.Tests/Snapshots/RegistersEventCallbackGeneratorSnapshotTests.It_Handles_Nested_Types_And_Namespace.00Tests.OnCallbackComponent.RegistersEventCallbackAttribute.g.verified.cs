@@ -19,12 +19,6 @@ private partial class OnCallbackComponent
     {
         RegisterCallback<CallbackEvent>(OnCallback);
     }
-
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
-    protected override void UIC_UnregisterEventCallbacks()
-    {
-        UnregisterCallback<CallbackEvent>(OnCallback);
-    }
 }
 }
 }

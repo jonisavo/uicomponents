@@ -16,11 +16,4 @@ public partial class OtherCallbackHandler
         RegisterCallback<MyEvent>(MyEventHappened);
         RegisterCallback<MyOtherEvent>(Callback);
     }
-
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
-    protected override void UIC_UnregisterEventCallbacks()
-    {
-        UnregisterCallback<MyEvent>(MyEventHappened);
-        UnregisterCallback<MyOtherEvent>(Callback);
-    }
 }
