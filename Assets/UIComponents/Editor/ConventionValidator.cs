@@ -153,7 +153,7 @@ namespace UIComponents.Editor
             return accessors;
         }
 
-        [MenuItem("UIComponents/Validate Registry Asset Paths")]
+        [MenuItem("Window/UIComponents/Validate Registry Asset Paths")]
         private static void ValidateFromMenu()
         {
             var results = ValidateAll();
