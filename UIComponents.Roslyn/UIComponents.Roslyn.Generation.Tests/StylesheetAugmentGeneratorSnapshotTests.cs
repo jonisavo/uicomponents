@@ -172,5 +172,18 @@ public partial class InventoryPanel : UIComponent {}
 ";
             return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
         }
+
+        [Fact]
+        public Task It_Uses_AssetRoot_For_Stylesheets()
+        {
+            var source = @"
+using UIComponents;
+
+[AssetRoot(""UI/Components/"")]
+[Stylesheet]
+public partial class InventoryPanel : UIComponent {}
+";
+            return GeneratorTester.Verify<StylesheetAugmentGenerator>(source);
+        }
     }
 }

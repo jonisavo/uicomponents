@@ -21,7 +21,7 @@ public partial class MyComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
-        var assetPaths = new string[] { "Components/MyStyle", "Shared/Common" };
+        var assetPaths = new string[] { AssetCatalog.ResolveStylesheetPath(typeof(global::MyComponent), "Components/MyStyle"), AssetCatalog.ResolveSharedStylesheetPath("Shared/Common", "Shared/Common") };
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)

@@ -21,7 +21,7 @@ public partial class ChildComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
-        var assetPaths = new string[] { "Shared/Base", "Components/ChildStyle", "Shared/Child" };
+        var assetPaths = new string[] { AssetCatalog.ResolveSharedStylesheetPath("Shared/Base", "Shared/Base"), AssetCatalog.ResolveStylesheetPath(typeof(global::ChildComponent), "Components/ChildStyle"), AssetCatalog.ResolveSharedStylesheetPath("Shared/Child", "Shared/Child") };
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)

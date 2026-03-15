@@ -10,13 +10,15 @@ namespace UIComponents.Roslyn.Generation.Generators
     {
         protected INamedTypeSymbol UIComponentSymbol;
         protected INamedTypeSymbol AssetPrefixAttributeSymbol;
+        protected INamedTypeSymbol AssetRootAttributeSymbol;
 
-        protected string CurrentAssetPrefix;
+        protected string CurrentAssetRoot;
 
         protected override void OnBeforeExecute(GeneratorExecutionContext context)
         {
             UIComponentSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.UIComponent");
             AssetPrefixAttributeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.AssetPrefixAttribute");
+            AssetRootAttributeSymbol = context.Compilation.GetTypeByMetadataName("UIComponents.AssetRootAttribute");
         }
 
         internal List<string> GetPathAttributeValues(
@@ -51,21 +53,26 @@ namespace UIComponents.Roslyn.Generation.Generators
 
         protected string BuildPrefixedPath(string value)
         {
-            if (string.IsNullOrEmpty(CurrentAssetPrefix))
+            if (string.IsNullOrEmpty(CurrentAssetRoot))
                 return value;
 
-            return CurrentAssetPrefix + value;
+            return CurrentAssetRoot + value;
         }
 
         protected override bool ShouldGenerateSource(AugmentGenerationContext context)
         {
-            if (UIComponentSymbol == null || AssetPrefixAttributeSymbol == null)
+            if (UIComponentSymbol == null)
                 return false;
 
             if (context.CurrentTypeSymbol.IsAbstract)
                 return false;
 
-            CurrentAssetPrefix = GetPathAttributeValue(AssetPrefixAttributeSymbol, context);
+            // Prefer AssetRoot, fall back to AssetPrefix
+            CurrentAssetRoot = null;
+            if (AssetRootAttributeSymbol != null)
+                CurrentAssetRoot = GetPathAttributeValue(AssetRootAttributeSymbol, context);
+            if (CurrentAssetRoot == null && AssetPrefixAttributeSymbol != null)
+                CurrentAssetRoot = GetPathAttributeValue(AssetPrefixAttributeSymbol, context);
 
             return RoslynUtilities.HasBaseType(context.CurrentTypeSymbol, UIComponentSymbol);
         }

@@ -45,7 +45,10 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
                             ? path
                             : typeSymbol.Name;
 
-                    return new LayoutDescription(BuildPrefixedPath(assetPath));
+                    var declaringTypeName = typeSymbol.ToDisplayString(
+                        SymbolDisplayFormat.FullyQualifiedFormat);
+
+                    return new LayoutDescription(BuildPrefixedPath(assetPath), declaringTypeName);
                 }
 
                 typeSymbol = typeSymbol.BaseType;
@@ -81,7 +84,8 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
                 .AppendCodeGeneratedAttribute()
                 .AppendLineWithPadding($@"protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {{
-        return AssetResolver.LoadAsset<VisualTreeAsset>(""{_layoutDescription.Path}"");
+        var path = AssetCatalog.ResolveLayoutPath(typeof({_layoutDescription.DeclaringTypeFullName}), ""{_layoutDescription.Path}"");
+        return AssetResolver.LoadAsset<VisualTreeAsset>(path);
     }}");
         }
 
