@@ -78,3 +78,5 @@ crashlytics-build.properties
 coveragereport/
 TestResults/
 .DS_Store
+
+wiki
