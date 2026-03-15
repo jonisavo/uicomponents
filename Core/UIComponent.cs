@@ -20,24 +20,17 @@ namespace UIComponents
     /// <seealso cref="LayoutAttribute"/>
     /// <seealso cref="StylesheetAttribute"/>
     /// <seealso cref="DependencyAttribute"/>
-    /// <seealso cref="ResourcesAssetResolver"/>
+    /// <seealso cref="ResourcesAssetSource"/>
     /// <seealso cref="DebugLogger"/>
-    [Dependency(typeof(IAssetResolver), provide: typeof(ResourcesAssetResolver))]
-    [Dependency(typeof(IAssetCatalog), provide: typeof(DefaultAssetCatalog))]
+    [Dependency(typeof(IAssetSource), provide: typeof(ResourcesAssetSource))]
     [Dependency(typeof(ILogger), provide: typeof(DebugLogger))]
     public abstract class UIComponent : VisualElement, IDependencyConsumer
     {
         /// <summary>
-        /// The IAssetResolver used by this UIComponent.
-        /// Defaults to <see cref="ResourcesAssetResolver"/>.
+        /// The IAssetSource used by this UIComponent.
+        /// Defaults to <see cref="ResourcesAssetSource"/>.
         /// </summary>
-        public readonly IAssetResolver AssetResolver;
-
-        /// <summary>
-        /// The IAssetCatalog used by this UIComponent.
-        /// Defaults to <see cref="DefaultAssetCatalog"/>.
-        /// </summary>
-        public readonly IAssetCatalog AssetCatalog;
+        public readonly IAssetSource AssetSource;
 
         /// <summary>
         /// Whether the UIComponent has been fully initialized.
@@ -73,8 +66,11 @@ namespace UIComponents
 
             DiContext.Current.RegisterConsumer(this);
             _dependencyInjector = DiContext.Current.GetInjector(GetType());
-            AssetResolver = Provide<IAssetResolver>();
-            AssetCatalog = Provide<IAssetCatalog>();
+            #pragma warning disable CS0618
+            AssetSource = TryProvide(out IAssetResolver resolver)
+                ? resolver
+                : Provide<IAssetSource>();
+            #pragma warning restore CS0618
             Logger = Provide<ILogger>();
             // ReSharper disable once VirtualMemberCallInConstructor
             UIC_PopulateProvideFields();

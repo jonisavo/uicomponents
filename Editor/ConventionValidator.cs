@@ -11,8 +11,9 @@ namespace UIComponents.Editor
     /// resolve to files on disk. Queries all registries across assemblies.
     /// <para/>
     /// This checks the raw paths stored in the registry (as computed by source
-    /// generators). If a component uses a custom <see cref="IAssetCatalog"/>
-    /// that remaps paths at runtime, those remapped paths are not checked here.
+    /// generators). If a component uses a custom <see cref="IAssetSource"/>
+    /// that resolves convention paths at runtime (e.g. <see cref="AssetDatabaseAssetSource"/>),
+    /// those resolved paths are not checked here.
     /// </summary>
     public static class ConventionValidator
     {
@@ -173,7 +174,7 @@ namespace UIComponents.Editor
             else
                 Debug.LogWarning(
                     $"[UIComponents] {missingCount} unresolved registry path(s) out of {results.Count} total. " +
-                    "Components using a custom IAssetCatalog may resolve these paths at runtime.");
+                    "Components using a custom IAssetSource may resolve these paths at runtime.");
         }
     }
 }
