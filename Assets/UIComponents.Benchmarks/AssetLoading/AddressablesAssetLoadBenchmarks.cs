@@ -11,7 +11,7 @@ namespace UIComponents.Benchmarks.AssetLoading
         [Layout("AddressablesExampleComponent.uxml")]
         [Stylesheet("AddressablesExampleComponent.uss")]
         [Stylesheet("Box.uss")]
-        [Dependency(typeof(IAssetResolver), provide: typeof(AddressableAssetResolver), Scope.Transient)]
+        [Dependency(typeof(IAssetSource), provide: typeof(AddressableAssetSource), Scope.Transient)]
         private partial class ComponentWithAssets : UIComponent {}
 
         // NOTE(joni): This test fails on Unity 2023.2 in CI, but not locally.

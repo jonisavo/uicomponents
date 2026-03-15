@@ -84,8 +84,7 @@ namespace UIComponents.Roslyn.Generation.Generators.AssetLoad
                 .AppendCodeGeneratedAttribute()
                 .AppendLineWithPadding($@"protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {{
-        var path = AssetCatalog.ResolveLayoutPath(typeof({_layoutDescription.DeclaringTypeFullName}), ""{_layoutDescription.Path}"");
-        return AssetResolver.LoadAsset<VisualTreeAsset>(path);
+        return AssetSource.LoadAsset<VisualTreeAsset>(""{_layoutDescription.Path}"");
     }}");
         }
 

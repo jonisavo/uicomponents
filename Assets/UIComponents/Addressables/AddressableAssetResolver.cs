@@ -7,8 +7,7 @@ namespace UIComponents.Addressables
     /// <summary>
     /// An IAssetResolver which loads assets with Addressables.
     /// </summary>
-    /// <seealso cref="DependencyAttribute"/>
-    /// <seealso cref="UIComponent"/>
+    [System.Obsolete("Use AddressableAssetSource instead.")]
     public class AddressableAssetResolver : IAssetResolver
     {
         /// <summary>

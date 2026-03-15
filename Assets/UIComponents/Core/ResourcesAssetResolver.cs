@@ -4,12 +4,9 @@ using UnityEngine;
 namespace UIComponents
 {
     /// <summary>
-    /// An IAssetResolver which loads assets from Resources. Used
-    /// by default in UIComponents as a dependency, which can be
-    /// overridden.
-    /// <seealso cref="DependencyAttribute"/>
-    /// <seealso cref="UIComponent"/>
+    /// An IAssetResolver which loads assets from Resources.
     /// </summary>
+    [System.Obsolete("Use ResourcesAssetSource instead.")]
     public class ResourcesAssetResolver : IAssetResolver
     {
         public Task<T> LoadAsset<T>(string assetPath) where T : Object

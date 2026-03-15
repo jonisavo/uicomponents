@@ -7,8 +7,7 @@ namespace UIComponents.Editor
     /// <summary>
     /// An IAssetResolver which loads assets with AssetDatabase.
     /// </summary>
-    /// <seealso cref="DependencyAttribute"/>
-    /// <seealso cref="UIComponent"/>
+    [System.Obsolete("Use AssetDatabaseAssetSource instead.")]
     public class AssetDatabaseAssetResolver : IAssetResolver
     {
         public Task<T> LoadAsset<T>(string assetPath) where T : Object

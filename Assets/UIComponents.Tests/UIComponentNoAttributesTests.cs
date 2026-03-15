@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
@@ -14,19 +14,19 @@ namespace UIComponents.Tests
     {
         private partial class UIComponentNoAttributes : UIComponent {}
 
-        private IAssetResolver _mockResolver;
+        private IAssetSource _mockSource;
         private UIComponentNoAttributes _component;
 
         [UnitySetUp]
         public IEnumerator UnitySetUp()
         {
-            _mockResolver = Substitute.For<IAssetResolver>();
-            _mockResolver.LoadAsset<VisualTreeAsset>(Arg.Any<string>())
+            _mockSource = Substitute.For<IAssetSource>();
+            _mockSource.LoadAsset<VisualTreeAsset>(Arg.Any<string>())
                 .Returns(Task.FromResult<VisualTreeAsset>(null));
-            _mockResolver.LoadAsset<StyleSheet>(Arg.Any<string>())
+            _mockSource.LoadAsset<StyleSheet>(Arg.Any<string>())
                 .Returns(Task.FromResult<StyleSheet>(null));
             var testBed = new TestBed<UIComponentNoAttributes>()
-                .WithSingleton(_mockResolver);
+                .WithSingleton(_mockSource);
             _component = testBed.Instantiate();
             yield return _component.Initialize().AsEnumerator();
         }
@@ -34,21 +34,21 @@ namespace UIComponents.Tests
         [TearDown]
         public void TearDown()
         {
-            _mockResolver.ClearReceivedCalls();
+            _mockSource.ClearReceivedCalls();
         }
 
         [Test]
         public void No_Layout_Is_Loaded()
         {
             Assert.That(_component.childCount, Is.Zero);
-            _mockResolver.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
+            _mockSource.DidNotReceive().LoadAsset<VisualTreeAsset>(Arg.Any<string>());
         }
 
         [Test]
         public void No_Styles_Are_Loaded()
         {
             Assert.That(_component.styleSheets.count, Is.Zero);
-            _mockResolver.DidNotReceive().LoadAsset<StyleSheet>(Arg.Any<string>());
+            _mockSource.DidNotReceive().LoadAsset<StyleSheet>(Arg.Any<string>());
         }
     }
 }

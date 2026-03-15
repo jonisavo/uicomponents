@@ -14,14 +14,14 @@ public partial class ChildComponent
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     private async Task<StyleSheetLoadTuple> UIC_GetSingleStyleSheet(string assetPath)
     {
-        var styleSheet = await AssetResolver.LoadAsset<StyleSheet>(assetPath);
+        var styleSheet = await AssetSource.LoadAsset<StyleSheet>(assetPath);
         return new StyleSheetLoadTuple(assetPath, styleSheet);
     }
 
     [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
-        var assetPaths = new string[] { AssetCatalog.ResolveStylesheetPath(typeof(global::BaseComponent), "BaseComponent.style"), AssetCatalog.ResolveStylesheetPath(typeof(global::ChildComponent), "ChildComponent.style") };
+        var assetPaths = new string[] { "BaseComponent.style", "ChildComponent.style" };
         var styleSheetLoadTasks = new Task<StyleSheetLoadTuple>[assetPaths.Length];
 
         for (var i = 0; i < assetPaths.Length; i++)
