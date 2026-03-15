@@ -34,33 +34,35 @@ using UnityEngine.UIElements;
 using UIComponents;
 
 [UxmlName("Counter")] // A UxmlFactory implementation is generated.
-[Layout("CounterComponent/CounterComponent")]
-[Stylesheet("CounterComponent/CounterComponent.style")]
-[Stylesheet("Common")]
+[Layout] // Loads CounterComponent.uxml by convention.
+[Stylesheet] // Loads CounterComponent.style.uss by convention.
+[SharedStylesheet("Common")]
 [Dependency(typeof(ICounterService), provide: typeof(CounterService))]
 public partial class CounterComponent : UIComponent, IOnAttachToPanel
 {
     // The layout and stylesheets are loaded automatically.
-    // They are retrieved from Resources by default,
-    // hence the lack of file extensions.
-    
+    // Convention-based [Layout] and [Stylesheet] use the class name
+    // to find the matching asset files.
+    // Files are loaded from Resources by default, hence the lack
+    // of a file extension on the SharedStylesheet asset path.
+
     // An UxmlTraits implementation is generated automatically for this class.
     [UxmlTrait]
     public string IncrementText = "Increment";
-    
+
     // Queries are made after all assets have loaded.
     // The query calls are generated automatically for you.
     [Query("count-label")]
     public Label CountLabel;
-    
+
     [Query("increment-button")]
     public Button IncrementButton;
-    
+
     // An instance of CounterService is injected into this field
     // in the inherited constructor.
     [Provide]
     private ICounterService _counterService;
-    
+
     // The OnInit method is called after all assets have loaded.
     // Any operations related to the DOM and stylesheets should
     // be done here.
@@ -69,7 +71,7 @@ public partial class CounterComponent : UIComponent, IOnAttachToPanel
         CountLabel.text = _counterService.Count.ToString();
         IncrementButton.text = IncrementText;
     }
-    
+
     // Event handlers are registered after all assets have loaded.
     // To listen for events, all you need to do is implement
     // a supported interface.
@@ -217,7 +219,7 @@ your VisualElements.
 - [Layouts and stylesheets](https://github.com/jonisavo/uicomponents/wiki/3.-Layouts-and-stylesheets): see how UIComponents
 loads layouts and stylesheets automatically, and how you can use `[Query]` to query for elements.
 - [Asset loading](https://github.com/jonisavo/uicomponents/wiki/4.-Asset-loading): UIComponents loads assets from Resources
-by default. See how you can use different methods.
+by default. See how to use AssetDatabase, Addressables, or a custom backend.
 - [Dependency injection](https://github.com/jonisavo/uicomponents/wiki/5.-Dependency-injection): UIComponents comes
 with a simple dependency injection system. See how you can use it to decouple your UI code from other logic.
 - [Event interfaces](https://github.com/jonisavo/uicomponents/wiki/6.-Event-interfaces): a list of interfaces
