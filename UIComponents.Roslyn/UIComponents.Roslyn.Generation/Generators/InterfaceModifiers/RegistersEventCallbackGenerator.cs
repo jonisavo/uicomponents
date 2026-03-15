@@ -62,22 +62,6 @@ namespace UIComponents.Roslyn.Generation.Generators.InterfaceModifiers
                     .Append(description.MethodName)
                     .AppendLine(");");
 
-            stringBuilder.AppendLineWithPadding("}").AppendLine();
-
-            stringBuilder
-                .AppendPadding()
-                .AppendCodeGeneratedAttribute()
-                .AppendLineWithPadding("protected override void UIC_UnregisterEventCallbacks()")
-                .AppendLineWithPadding("{");
-
-            foreach (var description in ModifierDescriptions)
-                stringBuilder
-                    .AppendWithPadding("UnregisterCallback<", 2)
-                    .Append(context.GetTypeName(description.EventType))
-                    .Append(">(")
-                    .Append(description.MethodName)
-                    .AppendLine(");");
-
             stringBuilder.AppendLineWithPadding("}");
         }
     }

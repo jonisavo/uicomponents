@@ -71,7 +71,7 @@ Generated methods follow the `UIC_` prefix convention:
 - `UIC_PopulateQueryFields()` — query population
 - `UIC_PopulateProvideFields()` — DI field injection
 - `UIC_ApplyEffects()` — effect application
-- `UIC_RegisterEventCallbacks()` / `UIC_UnregisterEventCallbacks()` — events
+- `UIC_RegisterEventCallbacks()` — events
 
 ### Asset loading conventions
 

@@ -15,10 +15,4 @@ public partial class CallbackHandler
     {
         RegisterCallback<MyEvent>(OnMyEvent);
     }
-
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
-    protected override void UIC_UnregisterEventCallbacks()
-    {
-        UnregisterCallback<MyEvent>(OnMyEvent);
-    }
 }
