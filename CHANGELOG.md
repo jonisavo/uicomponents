@@ -1,4 +1,13 @@
+# Changelog
 
+# [1.0.0-beta.10](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2026-03-15)
+
+
+### Features
+
+* add convention-first asset resolution for Layout, Stylesheet, and SharedStylesheet ([355944c](https://github.com/jonisavo/uicomponents/commit/355944c3b0d2c0a06a24b4e0d453bd076ba9d10a))
+* add IAssetCatalog resolution layer, AssetRoot, and catalog-aware generators ([5a76c14](https://github.com/jonisavo/uicomponents/commit/5a76c1448826f508068e7637e72a6c6ecf883d43))
+* add source-generated asset registry and editor convention validation ([ba1d80e](https://github.com/jonisavo/uicomponents/commit/ba1d80edcedca2c95f32ba513e1df679264e4041))
 
 # [1.0.0-beta.9](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2024-02-25)
 

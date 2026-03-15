@@ -13,7 +13,7 @@ public partial class ParentClass
 {
 public partial class FirstNestedComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         var path = AssetCatalog.ResolveLayoutPath(typeof(global::ParentClass.FirstNestedComponent), "Components/FirstNestedComponent");

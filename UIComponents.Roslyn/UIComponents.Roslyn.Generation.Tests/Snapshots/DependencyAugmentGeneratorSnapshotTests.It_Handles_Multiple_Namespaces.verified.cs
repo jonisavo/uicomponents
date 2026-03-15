@@ -15,7 +15,7 @@ namespace MyLibrary.GUI.Components
 {
 public partial class MyGUIComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.IAssetResolver, UIComponents.ResourcesAssetResolver>(),
         UIComponents.DependencyInjection.Dependency.SingletonFor<UIComponents.IAssetCatalog, UIComponents.DefaultAssetCatalog>(),
@@ -23,7 +23,7 @@ public partial class MyGUIComponent
         UIComponents.DependencyInjection.Dependency.SingletonFor<IService, Service>()
     };
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     public override IEnumerable<IDependency> GetDependencies()
     {
         return UIC_Dependencies;

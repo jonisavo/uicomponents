@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 public partial class InventoryPanel
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         var path = AssetCatalog.ResolveLayoutPath(typeof(global::InventoryPanel), "InventoryPanel");

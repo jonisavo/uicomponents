@@ -12,13 +12,13 @@ using UnityEngine.UIElements;
 
 public partial struct ConsumerStruct
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     private static readonly IDependency[] UIC_Dependencies = new IDependency[] {
         UIComponents.DependencyInjection.Dependency.SingletonFor<IMyDependency, MyDependency>(),
         UIComponents.DependencyInjection.Dependency.TransientFor<ISecondDependency, SecondDependency>()
     };
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.9")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
     public IEnumerable<IDependency> GetDependencies()
     {
         return UIC_Dependencies;
