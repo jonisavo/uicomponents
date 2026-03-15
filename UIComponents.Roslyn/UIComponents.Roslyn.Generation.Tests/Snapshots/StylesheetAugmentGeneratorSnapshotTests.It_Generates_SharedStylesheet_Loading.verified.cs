@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 public partial class MyComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.12")]
     private async Task<StyleSheetLoadTuple> UIC_GetSingleStyleSheet(string assetPath)
     {
         var styleSheet = await AssetSource.LoadAsset<StyleSheet>(assetPath);
         return new StyleSheetLoadTuple(assetPath, styleSheet);
     }
 
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.12")]
     protected override Task<StyleSheetLoadTuple>[] UIC_StartStyleSheetLoad()
     {
         var assetPaths = new string[] { "Components/MyStyle", "Shared/Common" };

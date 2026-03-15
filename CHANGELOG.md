@@ -1,5 +1,22 @@
 # Changelog
 
+# [1.0.0-beta.12](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2026-03-15)
+
+
+* fix!: remove UIComponent finalizer to fix flaky benchmark NRE ([36e0db6](https://github.com/jonisavo/uicomponents/commit/36e0db61dc0e5448fcc9fb2528a9c239411772cc))
+
+
+### Bug Fixes
+
+* move the registry asset path validation menu item under Window/UIComponents ([21603f3](https://github.com/jonisavo/uicomponents/commit/21603f36629c1b3db10d2c9a8f66ddcb34f232ca))
+
+
+### BREAKING CHANGES
+
+* UIC_UnregisterEventCallbacks() virtual method and its
+generated overrides have been removed. Components that override this
+method will need to remove their overrides.
+
 # [1.0.0-beta.11](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2026-03-15)
 
 

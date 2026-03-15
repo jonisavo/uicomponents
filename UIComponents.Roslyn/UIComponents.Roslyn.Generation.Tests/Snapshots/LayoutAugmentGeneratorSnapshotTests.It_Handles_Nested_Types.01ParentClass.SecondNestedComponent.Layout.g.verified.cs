@@ -13,7 +13,7 @@ public partial class ParentClass
 {
 private partial class SecondNestedComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.12")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         return AssetSource.LoadAsset<VisualTreeAsset>("Components/SecondNestedComponent");

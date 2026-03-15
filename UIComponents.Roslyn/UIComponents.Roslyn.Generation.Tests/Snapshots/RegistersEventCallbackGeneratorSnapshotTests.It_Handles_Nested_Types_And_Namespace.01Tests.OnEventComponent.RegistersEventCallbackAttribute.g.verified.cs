@@ -14,7 +14,7 @@ public partial class Tests
 {
 private partial class OnEventComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.12")]
     protected override void UIC_RegisterEventCallbacks()
     {
         RegisterCallback<Event>(OnEvent);
