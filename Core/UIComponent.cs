@@ -80,12 +80,6 @@ namespace UIComponents
             RegisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
         }
         
-        ~UIComponent()
-        {
-            UnregisterCallback<AttachToPanelEvent>(OnFirstAttachToPanel);
-            UIC_UnregisterEventCallbacks();
-        }
-
         [ExcludeFromCodeCoverage] // Pragmas are shown as uncovered lines
         private void OnFirstAttachToPanel(AttachToPanelEvent evt)
         {
@@ -158,8 +152,6 @@ namespace UIComponents
         }
 
         protected virtual void UIC_RegisterEventCallbacks() {}
-
-        protected virtual void UIC_UnregisterEventCallbacks() {}
 
         private static readonly IDependency[] EmptyDependencyArray =
             Array.Empty<IDependency>();
