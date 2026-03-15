@@ -59,6 +59,10 @@ for (const file of samplesFiles)
 const files = fs.readdirSync(rootFolder);
 
 for (const file of files) {
+    if (file.includes('AGENTS.md') || file.includes('CLAUDE.md')) {
+        continue;
+    }
+    
     if (file.includes('.md')) {
         fs.cpSync(file, path.join(outputFolder, file));
     }
@@ -87,11 +91,3 @@ function executeCommand(command) {
 }
 
 executeCommand(command);
-
-// Uncomment this section to include com.unity.roslyn in the package, if it exists.
-// fs.mkdirSync(path.join(outputPluginsFolder, 'com.unity.roslyn'));
-// s.cpSync(roslynPackageFolder, path.join(outputPluginsFolder, 'com.unity.roslyn'), { recursive: true });
-// 
-// const secondCommand = createUnityPackerCommand('UIComponents_' + version + '_with_roslyn');;
-// 
-// executeCommand(secondCommand);
