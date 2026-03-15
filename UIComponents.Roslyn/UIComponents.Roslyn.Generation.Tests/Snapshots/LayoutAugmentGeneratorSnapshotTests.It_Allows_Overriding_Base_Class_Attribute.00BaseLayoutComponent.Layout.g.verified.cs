@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 public partial class BaseLayoutComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.10")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.11")]
     protected override Task<VisualTreeAsset> UIC_StartLayoutLoad()
     {
         return AssetSource.LoadAsset<VisualTreeAsset>("Components/BaseLayoutComponent");

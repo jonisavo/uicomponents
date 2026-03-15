@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.0.0-beta.11](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2026-03-15)
+
+
+### Features
+
+* replace IAssetResolver + IAssetCatalog with IAssetSource ([e30a556](https://github.com/jonisavo/uicomponents/commit/e30a5563f934b426032146ec5fd81a57e93763c0))
+
 # [1.0.0-beta.10](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2026-03-15)
 
 
