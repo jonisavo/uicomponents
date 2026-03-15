@@ -1,0 +1,19 @@
+{
+    "name": "UIComponents.Samples.EventInterfaces.Editor",
+    "rootNamespace": "UIComponents",
+    "references": [
+        "UIComponents",
+        "UIComponents.Samples.EventInterfaces"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

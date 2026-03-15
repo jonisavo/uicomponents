@@ -1,0 +1,19 @@
+{
+    "name": "UIComponents.Samples.Resources.Editor",
+    "rootNamespace": "UIComponents.Samples",
+    "references": [
+        "UIComponents",
+        "UIComponents.Samples.Resources"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
