@@ -171,4 +171,13 @@
   <data name="UIC103_Title" xml:space="preserve">
     <value>UxmlTraitAttribute with empty name</value>
   </data>
+  <data name="UIC104_Description" xml:space="preserve">
+    <value>Asset-related UIComponent attributes must be given a non-empty path or name when an explicit argument is provided.</value>
+  </data>
+  <data name="UIC104_MessageFormat" xml:space="preserve">
+    <value>{0} with empty path or name</value>
+  </data>
+  <data name="UIC104_Title" xml:space="preserve">
+    <value>Asset attribute with empty path or name</value>
+  </data>
 </root>

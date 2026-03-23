@@ -218,5 +218,32 @@ namespace UIComponents.Roslyn.Analyzers {
                 return ResourceManager.GetString("UIC103_Title", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Asset-related UIComponent attributes must be given a non-empty path or name when an explicit argument is provided..
+        /// </summary>
+        internal static string UIC104_Description {
+            get {
+                return ResourceManager.GetString("UIC104_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} with empty path or name.
+        /// </summary>
+        internal static string UIC104_MessageFormat {
+            get {
+                return ResourceManager.GetString("UIC104_MessageFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Asset attribute with empty path or name.
+        /// </summary>
+        internal static string UIC104_Title {
+            get {
+                return ResourceManager.GetString("UIC104_Title", resourceCulture);
+            }
+        }
     }
 }
