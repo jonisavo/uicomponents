@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Assets are loaded from Resources by default.
+    /// This is the zero-config asset loading option.
     /// </summary>
     [Layout("Components/ResourcesExampleComponent")]
     [Stylesheet("Components/ResourcesExampleComponent.style")]

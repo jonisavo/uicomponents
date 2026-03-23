@@ -218,8 +218,9 @@ how you can use the `[UxmlName]` and `[UxmlTrait]` attributes to generate `UxmlF
 your VisualElements.
 - [Layouts and stylesheets](https://github.com/jonisavo/uicomponents/wiki/3.-Layouts-and-stylesheets): see how UIComponents
 loads layouts and stylesheets automatically, and how you can use `[Query]` to query for elements.
-- [Asset loading](https://github.com/jonisavo/uicomponents/wiki/4.-Asset-loading): UIComponents loads assets from Resources
-by default. See how to use AssetDatabase, Addressables, or a custom backend.
+- [Asset loading](https://github.com/jonisavo/uicomponents/wiki/4.-Asset-loading): UIComponents uses `ResourcesAssetSource`
+by default because it is the zero-config option. Prefer `AssetDatabaseAssetSource` for editor
+extensions and `AddressableAssetSource` for runtime UI.
 - [Dependency injection](https://github.com/jonisavo/uicomponents/wiki/5.-Dependency-injection): UIComponents comes
 with a simple dependency injection system. See how you can use it to decouple your UI code from other logic.
 - [Event interfaces](https://github.com/jonisavo/uicomponents/wiki/6.-Event-interfaces): a list of interfaces
