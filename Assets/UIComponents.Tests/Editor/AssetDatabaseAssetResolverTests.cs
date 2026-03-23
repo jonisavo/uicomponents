@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 using UIComponents.Editor;
 using UnityEngine.TestTools;
@@ -6,6 +7,25 @@ using UnityEngine.UIElements;
 
 namespace UIComponents.Tests.Editor
 {
+    [Dependency(typeof(IAssetSource), provide: typeof(AssetDatabaseAssetSource))]
+    [AssetRoot("Assets/UIComponents.Tests/Editor/ConventionTestAssets/")]
+    [Layout]
+    [Stylesheet]
+    internal partial class ConventionTestComponent : UIComponent {}
+
+    [Dependency(typeof(IAssetSource), provide: typeof(AssetDatabaseAssetSource))]
+    [AssetRoot("Assets/UIComponents.Tests/Editor/ConventionTestAssets/")]
+    [Layout]
+    [Stylesheet]
+    [SharedStylesheet("SharedTestStyle")]
+    internal partial class FlatComponent : UIComponent {}
+
+    [Dependency(typeof(IAssetSource), provide: typeof(AssetDatabaseAssetSource))]
+    [AssetRoot("Assets/UIComponents.Tests/Editor/ConventionTestAssets/")]
+    [Layout]
+    [Stylesheet]
+    internal partial class MissingConventionComponent : UIComponent {}
+
     [TestFixture]
     public class AssetDatabaseAssetSourceTests : AssetSourceTestSuite<AssetDatabaseAssetSource>
     {
@@ -64,6 +84,63 @@ namespace UIComponents.Tests.Editor
             var source = new AssetDatabaseAssetSource();
             var task = source.LoadAsset<VisualTreeAsset>("Assets/NonExistent/SomeComponent");
             Assert.That(task.Result, Is.Null);
+        }
+
+        [Test]
+        public void ConventionValidator_Resolves_Nested_Convention_Paths()
+        {
+            var results = ConventionValidator.ValidateAll()
+                .Where(result => result.ComponentType == typeof(ConventionTestComponent))
+                .ToArray();
+
+            Assert.That(results, Has.Length.EqualTo(2));
+            Assert.That(results.All(result => result.Exists), Is.True);
+            Assert.That(results.All(result => !result.IsAmbiguous), Is.True);
+
+            var layoutResult = results.Single(result => result.AssetKind == "Layout");
+            Assert.That(layoutResult.ResolvedPath,
+                Is.EqualTo("Assets/UIComponents.Tests/Editor/ConventionTestAssets/ConventionTestComponent/ConventionTestComponent.uxml"));
+
+            var stylesheetResult = results.Single(result => result.AssetKind == "Stylesheet");
+            Assert.That(stylesheetResult.ResolvedPath,
+                Is.EqualTo("Assets/UIComponents.Tests/Editor/ConventionTestAssets/ConventionTestComponent/ConventionTestComponent.style.uss"));
+        }
+
+        [Test]
+        public void ConventionValidator_Resolves_Flat_Convention_And_Shared_Stylesheet_Paths()
+        {
+            var results = ConventionValidator.ValidateAll()
+                .Where(result => result.ComponentType == typeof(FlatComponent))
+                .ToArray();
+
+            Assert.That(results, Has.Length.EqualTo(3));
+            Assert.That(results.All(result => result.Exists), Is.True);
+            Assert.That(results.All(result => !result.IsAmbiguous), Is.True);
+
+            var resolvedPaths = results
+                .Select(result => result.ResolvedPath)
+                .OrderBy(path => path)
+                .ToArray();
+
+            Assert.That(resolvedPaths, Is.EqualTo(new[]
+            {
+                "Assets/UIComponents.Tests/Editor/ConventionTestAssets/FlatComponent.style.uss",
+                "Assets/UIComponents.Tests/Editor/ConventionTestAssets/FlatComponent.uxml",
+                "Assets/UIComponents.Tests/Editor/ConventionTestAssets/SharedTestStyle.uss"
+            }));
+        }
+
+        [Test]
+        public void ConventionValidator_Reports_Missing_Convention_Paths()
+        {
+            var results = ConventionValidator.ValidateAll()
+                .Where(result => result.ComponentType == typeof(MissingConventionComponent))
+                .ToArray();
+
+            Assert.That(results, Has.Length.EqualTo(2));
+            Assert.That(results.All(result => !result.Exists), Is.True);
+            Assert.That(results.All(result => !result.IsAmbiguous), Is.True);
+            Assert.That(results.All(result => result.ResolvedPath == null), Is.True);
         }
     }
 }
