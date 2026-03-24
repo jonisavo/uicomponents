@@ -6,3 +6,4 @@
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 UIC104  | Layout   | Error    | EmptyAssetPathAnalyzer
+UIC105  | Layout   | Warning  | AssetRootAndPrefixConflictAnalyzer
