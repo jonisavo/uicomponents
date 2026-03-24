@@ -180,4 +180,13 @@
   <data name="UIC104_Title" xml:space="preserve">
     <value>Asset attribute with empty path or name</value>
   </data>
+  <data name="UIC105_Description" xml:space="preserve">
+    <value>AssetRootAttribute overrides AssetPrefixAttribute when both are declared on the same UIComponent, so the obsolete AssetPrefixAttribute is ignored.</value>
+  </data>
+  <data name="UIC105_MessageFormat" xml:space="preserve">
+    <value>AssetRootAttribute overrides AssetPrefixAttribute in {0}</value>
+  </data>
+  <data name="UIC105_Title" xml:space="preserve">
+    <value>AssetRootAttribute overrides AssetPrefixAttribute</value>
+  </data>
 </root>

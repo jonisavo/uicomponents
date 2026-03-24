@@ -245,5 +245,32 @@ namespace UIComponents.Roslyn.Analyzers {
                 return ResourceManager.GetString("UIC104_Title", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to AssetRootAttribute overrides AssetPrefixAttribute when both are declared on the same UIComponent, so the obsolete AssetPrefixAttribute is ignored..
+        /// </summary>
+        internal static string UIC105_Description {
+            get {
+                return ResourceManager.GetString("UIC105_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to AssetRootAttribute overrides AssetPrefixAttribute in {0}.
+        /// </summary>
+        internal static string UIC105_MessageFormat {
+            get {
+                return ResourceManager.GetString("UIC105_MessageFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to AssetRootAttribute overrides AssetPrefixAttribute.
+        /// </summary>
+        internal static string UIC105_Title {
+            get {
+                return ResourceManager.GetString("UIC105_Title", resourceCulture);
+            }
+        }
     }
 }
