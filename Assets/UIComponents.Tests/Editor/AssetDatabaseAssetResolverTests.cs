@@ -286,6 +286,50 @@ namespace UIComponents.Tests.Editor
             }
         }
 
+        [Test]
+        public void ValidateBatchModeScope_Excludes_Test_Assemblies()
+        {
+            CreateAmbiguousConventionAssets();
+
+            try
+            {
+                var results = ConventionValidator.ValidateBatchModeScope();
+
+                Assert.That(results.Any(result => result.ComponentType == typeof(ConventionTestComponent)), Is.False);
+                Assert.That(results.Any(result => result.ComponentType == typeof(MissingConventionComponent)), Is.False);
+                Assert.That(results.Any(result => result.ComponentType == typeof(AmbiguousConventionComponent)), Is.False);
+                Assert.That(results.Any(result => result.ComponentType == typeof(AddressableValidatedComponent)), Is.False);
+                Assert.That(results.Any(result => result.ComponentType == typeof(NonAddressableProjectAssetComponent)), Is.False);
+                Assert.That(results.All(result =>
+                    !result.ComponentType.Assembly.GetName().Name.StartsWith("UIComponents.Tests", System.StringComparison.Ordinal)), Is.True);
+            }
+            finally
+            {
+                DeleteAmbiguousConventionAssets();
+            }
+        }
+
+        [Test]
+        public void ValidateBatchModeAndReport_Excludes_TestOnly_Failures()
+        {
+            CreateAmbiguousConventionAssets();
+
+            try
+            {
+                var allSummary = ConventionValidator.ValidateAndReport();
+                var summary = ConventionValidator.ValidateBatchModeAndReport();
+
+                Assert.That(allSummary.HasFailures, Is.True);
+                Assert.That(summary.HasFailures, Is.False);
+                Assert.That(summary.UnresolvedCount, Is.Zero);
+                Assert.That(summary.AmbiguousCount, Is.Zero);
+            }
+            finally
+            {
+                DeleteAmbiguousConventionAssets();
+            }
+        }
+
         private static void CreateAmbiguousConventionAssets()
         {
             DeleteAmbiguousConventionAssets();

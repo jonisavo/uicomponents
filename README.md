@@ -154,6 +154,8 @@ Unity -batchmode -projectPath . -quit -executeMethod UIComponents.Editor.Convent
 
 The batchmode command exits with code `1` only when the validator finds unresolved or ambiguous
 registry paths. Other Unity project warnings do not affect the exit code.
+When run in batchmode, validation excludes `UIComponents.Tests*` and `UIComponents.Benchmarks`
+assemblies so intentional negative-test assets do not fail CI.
 
 ## Requirements
 
