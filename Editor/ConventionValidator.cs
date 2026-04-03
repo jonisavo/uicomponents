@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -13,8 +12,8 @@ namespace UIComponents.Editor
     /// <para/>
     /// For built-in sources this applies source-aware validation:
     /// <see cref="ResourcesAssetSource"/> uses <see cref="Resources.Load(string)"/>,
-    /// and <see cref="AssetDatabaseAssetSource"/> also checks convention-based
-    /// resolution through <see cref="AssetDatabase.FindAssets(string,string[])"/>.
+    /// and <see cref="AssetDatabaseAssetSource"/> uses the same convention
+    /// resolution logic as runtime loading.
     /// <para/>
     /// Custom sources may still resolve paths at runtime that this validator
     /// cannot verify in the editor.
@@ -146,33 +145,20 @@ namespace UIComponents.Editor
 
         private static ValidationResult ValidateAssetDatabasePath(ValidationResult result)
         {
-            if (TryGetDirectAssetDatabasePath(result.AssetPath, out var resolvedPath))
-            {
-                result.Exists = true;
-                result.ResolvedPath = resolvedPath;
-                return result;
-            }
+            var resolution = AssetDatabasePathResolver.Resolve(
+                result.AssetPath,
+                GetAssetDatabaseAssetKind(result.AssetKind));
 
-            var candidatePaths = FindConventionMatches(result.AssetPath, result.AssetKind);
-            if (candidatePaths.Count == 1)
-            {
-                result.Exists = true;
-                result.ResolvedPath = candidatePaths[0];
-                return result;
-            }
-
-            if (candidatePaths.Count > 1)
-            {
-                result.IsAmbiguous = true;
-                result.CandidatePaths = candidatePaths.ToArray();
-            }
-
+            result.Exists = resolution.Exists;
+            result.IsAmbiguous = resolution.IsAmbiguous;
+            result.ResolvedPath = resolution.ResolvedPath;
+            result.CandidatePaths = resolution.CandidatePaths;
             return result;
         }
 
         private static ValidationResult ValidateFallbackPath(ValidationResult result)
         {
-            if (TryGetDirectAssetDatabasePath(result.AssetPath, out var resolvedPath))
+            if (AssetDatabasePathResolver.TryGetDirectAssetDatabasePath(result.AssetPath, out var resolvedPath))
             {
                 result.Exists = true;
                 result.ResolvedPath = resolvedPath;
@@ -196,73 +182,11 @@ namespace UIComponents.Editor
             return false;
         }
 
-        private static bool TryGetDirectAssetDatabasePath(string path, out string resolvedPath)
+        private static AssetDatabaseAssetKind GetAssetDatabaseAssetKind(string assetKind)
         {
-            resolvedPath = null;
-
-            var guid = AssetDatabase.AssetPathToGUID(path);
-            if (string.IsNullOrEmpty(guid) || guid == "00000000000000000000000000000000")
-                return false;
-
-            if (AssetDatabase.IsValidFolder(path))
-                return false;
-
-            resolvedPath = path;
-            return true;
-        }
-
-        private static List<string> FindConventionMatches(string path, string assetKind)
-        {
-            if (HasKnownAssetExtension(path))
-                return new List<string>();
-
-            var expectedExtension = assetKind == "Layout" ? ".uxml" : ".uss";
-            var assetName = ExtractAssetName(path);
-            var root = ExtractRoot(path, assetName);
-            var searchFolders = string.IsNullOrEmpty(root)
-                ? null
-                : new[] { root };
-
-            var candidatePaths = new List<string>();
-            var guids = AssetDatabase.FindAssets(assetName, searchFolders);
-
-            for (var i = 0; i < guids.Length; i++)
-            {
-                var assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
-                if (!Path.HasExtension(assetPath))
-                    continue;
-
-                if (!string.Equals(Path.GetExtension(assetPath), expectedExtension, StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                if (!string.Equals(Path.GetFileNameWithoutExtension(assetPath), assetName, StringComparison.Ordinal))
-                    continue;
-
-                candidatePaths.Add(assetPath);
-            }
-
-            candidatePaths.Sort(StringComparer.Ordinal);
-            return candidatePaths;
-        }
-
-        private static bool HasKnownAssetExtension(string path)
-        {
-            return path.EndsWith(".uxml", StringComparison.OrdinalIgnoreCase) ||
-                path.EndsWith(".uss", StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static string ExtractAssetName(string path)
-        {
-            var lastSlash = path.LastIndexOf('/');
-            return lastSlash >= 0 ? path.Substring(lastSlash + 1) : path;
-        }
-
-        private static string ExtractRoot(string path, string assetName)
-        {
-            if (path.Length == assetName.Length)
-                return null;
-
-            return path.Substring(0, path.Length - assetName.Length).TrimEnd('/');
+            return assetKind == "Layout"
+                ? AssetDatabaseAssetKind.Layout
+                : AssetDatabaseAssetKind.Stylesheet;
         }
 
         private static Type GetAssetSourceType(Type componentType)
