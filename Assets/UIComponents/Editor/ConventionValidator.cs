@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -43,7 +45,6 @@ namespace UIComponents.Editor
         private struct RegistryAccessor
         {
             public MethodInfo TryGetEntry;
-            public Type EntryType;
             public FieldInfo LayoutPathField;
             public FieldInfo StylesheetPathsField;
         }
@@ -51,6 +52,7 @@ namespace UIComponents.Editor
         public static List<ValidationResult> ValidateAll()
         {
             var results = new List<ValidationResult>();
+            AddressablesEditorPathResolver.Reset();
 
             var accessors = FindAllRegistryAccessors();
             if (accessors.Count == 0)
@@ -137,6 +139,8 @@ namespace UIComponents.Editor
                     return ValidateAssetDatabasePath(result);
 
                 case AssetSourceKind.Addressable:
+                    return ValidateAddressablePath(result);
+
                 case AssetSourceKind.Custom:
                 default:
                     return ValidateFallbackPath(result);
@@ -145,15 +149,20 @@ namespace UIComponents.Editor
 
         private static ValidationResult ValidateAssetDatabasePath(ValidationResult result)
         {
-            var resolution = AssetDatabasePathResolver.Resolve(
-                result.AssetPath,
-                GetAssetDatabaseAssetKind(result.AssetKind));
+            return ApplyResolution(
+                result,
+                AssetDatabasePathResolver.Resolve(
+                    result.AssetPath,
+                    GetAssetDatabaseAssetKind(result.AssetKind)));
+        }
 
-            result.Exists = resolution.Exists;
-            result.IsAmbiguous = resolution.IsAmbiguous;
-            result.ResolvedPath = resolution.ResolvedPath;
-            result.CandidatePaths = resolution.CandidatePaths;
-            return result;
+        private static ValidationResult ValidateAddressablePath(ValidationResult result)
+        {
+            return ApplyResolution(
+                result,
+                AddressablesEditorPathResolver.Resolve(
+                    result.AssetPath,
+                    GetAssetDatabaseAssetKind(result.AssetKind)));
         }
 
         private static ValidationResult ValidateFallbackPath(ValidationResult result)
@@ -180,6 +189,17 @@ namespace UIComponents.Editor
             }
 
             return false;
+        }
+
+        private static ValidationResult ApplyResolution(
+            ValidationResult result,
+            AssetDatabasePathResolutionResult resolution)
+        {
+            result.Exists = resolution.Exists;
+            result.IsAmbiguous = resolution.IsAmbiguous;
+            result.ResolvedPath = resolution.ResolvedPath;
+            result.CandidatePaths = resolution.CandidatePaths;
+            return result;
         }
 
         private static AssetDatabaseAssetKind GetAssetDatabaseAssetKind(string assetKind)
@@ -278,7 +298,6 @@ namespace UIComponents.Editor
                 accessors.Add(new RegistryAccessor
                 {
                     TryGetEntry = tryGetEntry,
-                    EntryType = entryType,
                     LayoutPathField = entryType.GetField("LayoutPath"),
                     StylesheetPathsField = entryType.GetField("StylesheetPaths")
                 });
@@ -325,6 +344,223 @@ namespace UIComponents.Editor
                     $"[UIComponents] {missingCount} unresolved and {ambiguousCount} ambiguous registry path(s) " +
                     $"out of {results.Count} total. Components using custom or runtime-specific IAssetSource " +
                     "implementations may still resolve these paths outside editor validation.");
+        }
+    }
+
+    internal static class AddressablesEditorPathResolver
+    {
+        private static bool _initialized;
+        private static bool _isAvailable;
+        private static PropertyInfo _settingsProperty;
+        private static MethodInfo _getAllAssetsMethod;
+        private static PropertyInfo _assetPathProperty;
+        private static MethodInfo _createKeyListMethod;
+        private static Type _entryListType;
+        private static object _indexedSettings;
+        private static Dictionary<string, string[]> _layoutKeyIndex;
+        private static Dictionary<string, string[]> _stylesheetKeyIndex;
+
+        public static void Reset()
+        {
+            _indexedSettings = null;
+            _layoutKeyIndex = null;
+            _stylesheetKeyIndex = null;
+        }
+
+        public static AssetDatabasePathResolutionResult Resolve(
+            string key,
+            AssetDatabaseAssetKind assetKind)
+        {
+            EnsureInitialized();
+            if (!_isAvailable)
+                return default(AssetDatabasePathResolutionResult);
+
+            var settings = _settingsProperty.GetValue(null, null);
+            if (settings == null)
+                return default(AssetDatabasePathResolutionResult);
+
+            EnsureKeyIndex(settings);
+            var keyIndex = GetKeyIndex(assetKind);
+            if (keyIndex == null || !keyIndex.TryGetValue(key, out var candidatePaths))
+                return default(AssetDatabasePathResolutionResult);
+
+            if (candidatePaths.Length == 1)
+            {
+                return new AssetDatabasePathResolutionResult
+                {
+                    Exists = true,
+                    ResolvedPath = candidatePaths[0]
+                };
+            }
+
+            if (candidatePaths.Length > 1)
+            {
+                return new AssetDatabasePathResolutionResult
+                {
+                    IsAmbiguous = true,
+                    CandidatePaths = candidatePaths
+                };
+            }
+
+            return default(AssetDatabasePathResolutionResult);
+        }
+
+        private static IEnumerable<string> GetStringKeys(object entry)
+        {
+            var keys = _createKeyListMethod.Invoke(entry, null) as IEnumerable;
+            if (keys == null)
+                yield break;
+
+            foreach (var candidate in keys)
+            {
+                if (candidate is string stringKey)
+                    yield return stringKey;
+            }
+        }
+
+        private static void EnsureInitialized()
+        {
+            if (_initialized)
+                return;
+
+            _initialized = true;
+
+            var addressablesEditorAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                .FirstOrDefault(assembly => assembly.GetName().Name == "Unity.Addressables.Editor");
+            if (addressablesEditorAssembly == null)
+            {
+                try
+                {
+                    addressablesEditorAssembly = Assembly.Load("Unity.Addressables.Editor");
+                }
+                catch
+                {
+                    return;
+                }
+            }
+
+            var defaultObjectType =
+                addressablesEditorAssembly.GetType("UnityEditor.AddressableAssets.AddressableAssetSettingsDefaultObject");
+            var settingsType =
+                addressablesEditorAssembly.GetType("UnityEditor.AddressableAssets.Settings.AddressableAssetSettings");
+            var entryType =
+                addressablesEditorAssembly.GetType("UnityEditor.AddressableAssets.Settings.AddressableAssetEntry");
+
+            if (defaultObjectType == null || settingsType == null || entryType == null)
+                return;
+
+            _settingsProperty = defaultObjectType.GetProperty(
+                "Settings",
+                BindingFlags.Public | BindingFlags.Static);
+            _getAllAssetsMethod = settingsType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .FirstOrDefault(method => method.Name == "GetAllAssets" &&
+                    method.GetParameters().Length == 4);
+            _assetPathProperty = entryType.GetProperty(
+                "AssetPath",
+                BindingFlags.Public | BindingFlags.Instance);
+            _createKeyListMethod = entryType.GetMethod(
+                "CreateKeyList",
+                BindingFlags.Public | BindingFlags.Instance,
+                null,
+                Type.EmptyTypes,
+                null);
+
+            if (_settingsProperty == null ||
+                _getAllAssetsMethod == null ||
+                _assetPathProperty == null ||
+                _createKeyListMethod == null)
+                return;
+
+            _entryListType = typeof(List<>).MakeGenericType(entryType);
+            _isAvailable = true;
+        }
+
+        private static void EnsureKeyIndex(object settings)
+        {
+            if (ReferenceEquals(settings, _indexedSettings) &&
+                _layoutKeyIndex != null &&
+                _stylesheetKeyIndex != null)
+                return;
+
+            var layoutIndex = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+            var stylesheetIndex = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+            var entries = (IEnumerable)Activator.CreateInstance(_entryListType);
+
+            _getAllAssetsMethod.Invoke(settings, new object[] { entries, false, null, null });
+
+            foreach (var entry in entries)
+            {
+                var assetPath = _assetPathProperty.GetValue(entry, null) as string;
+                if (string.IsNullOrEmpty(assetPath))
+                    continue;
+
+                var index = GetMutableKeyIndex(assetPath, layoutIndex, stylesheetIndex);
+                if (index == null)
+                    continue;
+
+                foreach (var key in GetStringKeys(entry))
+                    AddPath(index, key, assetPath);
+            }
+
+            _layoutKeyIndex = FinalizeIndex(layoutIndex);
+            _stylesheetKeyIndex = FinalizeIndex(stylesheetIndex);
+            _indexedSettings = settings;
+        }
+
+        private static Dictionary<string, string[]> GetKeyIndex(AssetDatabaseAssetKind assetKind)
+        {
+            switch (assetKind)
+            {
+                case AssetDatabaseAssetKind.Layout:
+                    return _layoutKeyIndex;
+                case AssetDatabaseAssetKind.Stylesheet:
+                    return _stylesheetKeyIndex;
+                default:
+                    return null;
+            }
+        }
+
+        private static Dictionary<string, HashSet<string>> GetMutableKeyIndex(
+            string assetPath,
+            Dictionary<string, HashSet<string>> layoutIndex,
+            Dictionary<string, HashSet<string>> stylesheetIndex)
+        {
+            if (AssetDatabasePathResolver.MatchesAssetKind(assetPath, AssetDatabaseAssetKind.Layout))
+                return layoutIndex;
+
+            if (AssetDatabasePathResolver.MatchesAssetKind(assetPath, AssetDatabaseAssetKind.Stylesheet))
+                return stylesheetIndex;
+
+            return null;
+        }
+
+        private static void AddPath(
+            Dictionary<string, HashSet<string>> index,
+            string key,
+            string assetPath)
+        {
+            if (!index.TryGetValue(key, out var paths))
+            {
+                paths = new HashSet<string>(StringComparer.Ordinal);
+                index[key] = paths;
+            }
+
+            paths.Add(assetPath);
+        }
+
+        private static Dictionary<string, string[]> FinalizeIndex(
+            Dictionary<string, HashSet<string>> index)
+        {
+            var finalized = new Dictionary<string, string[]>(index.Count, StringComparer.Ordinal);
+
+            foreach (var pair in index)
+            {
+                var paths = pair.Value.ToArray();
+                Array.Sort(paths, StringComparer.Ordinal);
+                finalized[pair.Key] = paths;
+            }
+
+            return finalized;
         }
     }
 }
