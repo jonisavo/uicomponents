@@ -144,6 +144,17 @@ public class CounterComponentTests
 }
 ```
 
+## Validation
+
+You can validate generated registry asset paths from the editor menu or in CI:
+
+```shell
+Unity -batchmode -projectPath . -quit -executeMethod UIComponents.Editor.ConventionValidator.ValidateForBatchMode
+```
+
+The batchmode command exits with code `1` only when the validator finds unresolved or ambiguous
+registry paths. Other Unity project warnings do not affect the exit code.
+
 ## Requirements
 
 UIComponents officially supports Unity 2021.3 or newer. Unity's `com.unity.roslyn` package

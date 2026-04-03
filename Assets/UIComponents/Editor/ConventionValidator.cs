@@ -42,6 +42,15 @@ namespace UIComponents.Editor
             public string[] CandidatePaths;
         }
 
+        public struct ValidationSummary
+        {
+            public int TotalCount;
+            public int UnresolvedCount;
+            public int AmbiguousCount;
+
+            public bool HasFailures => UnresolvedCount > 0 || AmbiguousCount > 0;
+        }
+
         private struct RegistryAccessor
         {
             public MethodInfo TryGetEntry;
@@ -79,6 +88,19 @@ namespace UIComponents.Editor
             }
 
             return results;
+        }
+
+        public static ValidationSummary ValidateAndReport()
+        {
+            return ReportResults(ValidateAll());
+        }
+
+        public static void ValidateForBatchMode()
+        {
+            var summary = ValidateAndReport();
+
+            if (Application.isBatchMode)
+                EditorApplication.Exit(summary.HasFailures ? 1 : 0);
         }
 
         private static void ValidateType(
@@ -309,9 +331,15 @@ namespace UIComponents.Editor
         [MenuItem("Window/UIComponents/Validate Registry Asset Paths")]
         private static void ValidateFromMenu()
         {
-            var results = ValidateAll();
-            var missingCount = 0;
-            var ambiguousCount = 0;
+            ValidateAndReport();
+        }
+
+        private static ValidationSummary ReportResults(IReadOnlyList<ValidationResult> results)
+        {
+            var summary = new ValidationSummary
+            {
+                TotalCount = results.Count
+            };
 
             foreach (var result in results)
             {
@@ -324,7 +352,7 @@ namespace UIComponents.Editor
                         $"[UIComponents] Ambiguous registry path ({result.AssetKind}) for {result.ComponentType.Name} " +
                         $"using {result.AssetSourceType?.Name ?? "unknown source"}: {result.AssetPath}. " +
                         $"Matches: {candidates}");
-                    ambiguousCount++;
+                    summary.AmbiguousCount++;
                     continue;
                 }
 
@@ -333,17 +361,19 @@ namespace UIComponents.Editor
                     Debug.LogWarning(
                         $"[UIComponents] Unresolved registry path ({result.AssetKind}) for {result.ComponentType.Name} " +
                         $"using {result.AssetSourceType?.Name ?? "unknown source"}: {result.AssetPath}");
-                    missingCount++;
+                    summary.UnresolvedCount++;
                 }
             }
 
-            if (missingCount == 0 && ambiguousCount == 0)
+            if (!summary.HasFailures)
                 Debug.Log($"[UIComponents] All {results.Count} registry asset paths resolved successfully.");
             else
                 Debug.LogWarning(
-                    $"[UIComponents] {missingCount} unresolved and {ambiguousCount} ambiguous registry path(s) " +
+                    $"[UIComponents] {summary.UnresolvedCount} unresolved and {summary.AmbiguousCount} ambiguous registry path(s) " +
                     $"out of {results.Count} total. Components using custom or runtime-specific IAssetSource " +
                     "implementations may still resolve these paths outside editor validation.");
+
+            return summary;
         }
     }
 
