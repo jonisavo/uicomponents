@@ -8,7 +8,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 
-[GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.12")]
+[GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.13")]
 internal static class UIComponentAssetRegistry
 {
     public struct AssetEntry

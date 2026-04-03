@@ -15,7 +15,7 @@ public partial class ParentClass
 {
 public partial class NestedComponent
 {
-    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.12")]
+    [GeneratedCode("UIComponents.Roslyn.Generation", "1.0.0-beta.13")]
     protected override void UIC_PopulateQueryFields()
     {
         // field

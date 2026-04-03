@@ -1,5 +1,22 @@
 # Changelog
 
+# [1.0.0-beta.13](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2026-04-03)
+
+
+### Bug Fixes
+
+* fail ambiguous AssetDatabase convention resolution ([09c627c](https://github.com/jonisavo/uicomponents/commit/09c627c3b8ea7c266871612c874657e36a4d473a))
+* make convention validator source-aware ([ac289ae](https://github.com/jonisavo/uicomponents/commit/ac289ae3795a7db10135b0827527051e141e8e81))
+
+
+### Features
+
+* **analyzers:** add asset conflict diagnostics (UIC105) ([0e43c83](https://github.com/jonisavo/uicomponents/commit/0e43c83758e3a286bf07ed01ddffe5a47d6d2f6a))
+* **analyzers:** add empty asset path rule ([708ebce](https://github.com/jonisavo/uicomponents/commit/708ebceb59c4b6c24e9622e1e6e4b7e7f4be3ef2))
+* **ci:** validate registry assets in batch mode ([00cbeb6](https://github.com/jonisavo/uicomponents/commit/00cbeb6ea071a76740bf62f994a5d346f81c2de0))
+* **editor:** add batch validation entry point ([4394778](https://github.com/jonisavo/uicomponents/commit/4394778368c0115550ba742480200523fb8355cc))
+* **editor:** validate Addressables in convention validator ([132ff27](https://github.com/jonisavo/uicomponents/commit/132ff27a4b4d528bedbcdc075bb5711fc5ed66a1))
+
 # [1.0.0-beta.12](https://github.com/jonisavo/uicomponents/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2026-03-15)
 
 
