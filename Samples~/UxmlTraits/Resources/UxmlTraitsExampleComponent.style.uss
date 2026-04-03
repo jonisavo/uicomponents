@@ -1,0 +1,12 @@
+#uxml-traits-container {
+    display: flex;
+    flex-direction: row;
+}
+
+#uxml-traits-container Label {
+    -unity-font-style: bold;
+}
+
+#uxml-traits-description-label {
+    -unity-font-style: italic;
+}

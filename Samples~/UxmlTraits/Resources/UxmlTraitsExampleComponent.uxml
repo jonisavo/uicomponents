@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="uxml-traits-container">
+        <ui:Label text="UxmlTraitsExampleComponent" />
+        <ui:Button name="uxml-traits-button" text="Button" />
+    </ui:VisualElement>
+    <ui:Label name="uxml-traits-description-label" text="No description set." />
+</UXML>

@@ -1,0 +1,5 @@
+﻿<UXML xmlns:ui="UnityEngine.UIElements" xmlns:ei="UIComponents.Samples.EventInterfaces">
+    <ui:Label text="This component listens for various events. You can see them appearing in the log below." />
+    <ui:Button name="log-clear-button" text="Clear" />
+    <ei:EventInterfaceLog />
+</UXML>

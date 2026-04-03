@@ -1,0 +1,16 @@
+{
+    "name": "UIComponents.Samples.Resources",
+    "rootNamespace": "UIComponents.Samples",
+    "references": [
+        "UIComponents"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

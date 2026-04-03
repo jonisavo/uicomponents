@@ -1,0 +1,8 @@
+﻿#addressables-example-header {
+    font-size: 20px;
+    -unity-font-style: bold;
+}
+
+Label {
+    white-space: normal;
+}

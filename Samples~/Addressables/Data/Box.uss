@@ -1,0 +1,6 @@
+﻿.white-box {
+    border-radius: 6px;
+    border-width: 2px;
+    border-color: white;
+    padding: 8px;
+}

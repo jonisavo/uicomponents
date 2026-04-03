@@ -1,0 +1,10 @@
+﻿#event-scroll-view {
+    margin: 16px;
+    padding: 6px;
+    background-color: darkslategrey;
+    border-radius: 8px;
+}
+
+#event-scroll-view Label {
+    color: orange;
+}
