@@ -1,6 +1,7 @@
 using System.Collections;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using UIComponents.Addressables;
 using UIComponents.Editor;
@@ -10,6 +11,19 @@ using UnityEngine.UIElements;
 
 namespace UIComponents.Tests.Editor
 {
+    internal sealed class CustomEditorTestAssetSource : IAssetSource
+    {
+        public Task<T> LoadAsset<T>(string assetPath) where T : UnityEngine.Object
+        {
+            return Task.FromResult<T>(null);
+        }
+
+        public Task<bool> AssetExists(string assetPath)
+        {
+            return Task.FromResult(false);
+        }
+    }
+
     [Dependency(typeof(IAssetSource), provide: typeof(AssetDatabaseAssetSource))]
     [AssetRoot("Assets/UIComponents.Tests/Editor/ConventionTestAssets/")]
     [Layout]
@@ -42,6 +56,15 @@ namespace UIComponents.Tests.Editor
     [Dependency(typeof(IAssetSource), provide: typeof(AddressableAssetSource))]
     [Layout("Assets/Samples/Resources/Resources/Components/ResourcesExampleComponent.uxml")]
     internal partial class NonAddressableProjectAssetComponent : UIComponent {}
+
+    [Dependency(typeof(IAssetSource), provide: typeof(CustomEditorTestAssetSource))]
+    [Layout("Assets/UIComponents.Tests/Addressables/Assets/Component.uxml")]
+    internal partial class CustomSourceExplicitAssetComponent : UIComponent {}
+
+    [Dependency(typeof(IAssetSource), provide: typeof(CustomEditorTestAssetSource))]
+    [Layout("Components/ResourcesExampleComponent")]
+    [Stylesheet("Components/MissingCustomSourceStyle")]
+    internal partial class CustomSourceResourceFallbackComponent : UIComponent {}
 
     [TestFixture]
     public class AssetDatabaseAssetSourceTests : AssetSourceTestSuite<AssetDatabaseAssetSource>
@@ -261,6 +284,40 @@ namespace UIComponents.Tests.Editor
             Assert.That(results[0].Exists, Is.False);
             Assert.That(results[0].IsAmbiguous, Is.False);
             Assert.That(results[0].ResolvedPath, Is.Null);
+        }
+
+        [Test]
+        public void ConventionValidator_Uses_Fallback_Direct_AssetDatabase_Path_For_Custom_Sources()
+        {
+            var results = ConventionValidator.ValidateAll()
+                .Where(result => result.ComponentType == typeof(CustomSourceExplicitAssetComponent))
+                .ToArray();
+
+            Assert.That(results, Has.Length.EqualTo(1));
+            Assert.That(results[0].Exists, Is.True);
+            Assert.That(results[0].IsAmbiguous, Is.False);
+            Assert.That(results[0].ResolvedPath,
+                Is.EqualTo("Assets/UIComponents.Tests/Addressables/Assets/Component.uxml"));
+        }
+
+        [Test]
+        public void ConventionValidator_Uses_Fallback_Resources_Paths_For_Custom_Sources()
+        {
+            var results = ConventionValidator.ValidateAll()
+                .Where(result => result.ComponentType == typeof(CustomSourceResourceFallbackComponent))
+                .ToArray();
+
+            Assert.That(results, Has.Length.EqualTo(2));
+
+            var layoutResult = results.Single(result => result.AssetKind == "Layout");
+            Assert.That(layoutResult.Exists, Is.True);
+            Assert.That(layoutResult.IsAmbiguous, Is.False);
+            Assert.That(layoutResult.ResolvedPath, Is.EqualTo("Components/ResourcesExampleComponent"));
+
+            var stylesheetResult = results.Single(result => result.AssetKind == "Stylesheet");
+            Assert.That(stylesheetResult.Exists, Is.False);
+            Assert.That(stylesheetResult.IsAmbiguous, Is.False);
+            Assert.That(stylesheetResult.ResolvedPath, Is.Null);
         }
 
         [Test]
