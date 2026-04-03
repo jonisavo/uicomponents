@@ -104,7 +104,7 @@ namespace UIComponents.Editor
             };
         }
 
-        private static bool MatchesAssetKind(string assetPath, AssetDatabaseAssetKind assetKind)
+        internal static bool MatchesAssetKind(string assetPath, AssetDatabaseAssetKind assetKind)
         {
             return assetKind switch
             {

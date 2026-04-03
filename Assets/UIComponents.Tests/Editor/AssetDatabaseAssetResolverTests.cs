@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using UIComponents.Addressables;
 using UIComponents.Editor;
 using UnityEditor;
 using UnityEngine.TestTools;
@@ -32,6 +33,15 @@ namespace UIComponents.Tests.Editor
     [AssetRoot("Assets/UIComponents.Tests/Editor/AmbiguousConventionTestAssets/")]
     [Layout]
     internal partial class AmbiguousConventionComponent : UIComponent {}
+
+    [Dependency(typeof(IAssetSource), provide: typeof(AddressableAssetSource))]
+    [Layout("Assets/UIComponents.Tests/Addressables/Assets/Component.uxml")]
+    [Stylesheet("Assets/UIComponents.Tests/Addressables/Assets/Component.uss")]
+    internal partial class AddressableValidatedComponent : UIComponent {}
+
+    [Dependency(typeof(IAssetSource), provide: typeof(AddressableAssetSource))]
+    [Layout("Assets/Samples/Resources/Resources/Components/ResourcesExampleComponent.uxml")]
+    internal partial class NonAddressableProjectAssetComponent : UIComponent {}
 
     [TestFixture]
     public class AssetDatabaseAssetSourceTests : AssetSourceTestSuite<AssetDatabaseAssetSource>
@@ -215,6 +225,42 @@ namespace UIComponents.Tests.Editor
             {
                 DeleteAmbiguousConventionAssets();
             }
+        }
+
+        [Test]
+        public void ConventionValidator_Resolves_Addressable_Keys()
+        {
+            var results = ConventionValidator.ValidateAll()
+                .Where(result => result.ComponentType == typeof(AddressableValidatedComponent))
+                .ToArray();
+
+            Assert.That(results, Has.Length.EqualTo(2));
+            Assert.That(results.All(result => result.Exists), Is.True);
+            Assert.That(results.All(result => !result.IsAmbiguous), Is.True);
+
+            var resolvedPaths = results
+                .Select(result => result.ResolvedPath)
+                .OrderBy(path => path)
+                .ToArray();
+
+            Assert.That(resolvedPaths, Is.EqualTo(new[]
+            {
+                "Assets/UIComponents.Tests/Addressables/Assets/Component.uss",
+                "Assets/UIComponents.Tests/Addressables/Assets/Component.uxml"
+            }));
+        }
+
+        [Test]
+        public void ConventionValidator_Does_Not_Treat_NonAddressable_Project_Assets_As_Valid()
+        {
+            var results = ConventionValidator.ValidateAll()
+                .Where(result => result.ComponentType == typeof(NonAddressableProjectAssetComponent))
+                .ToArray();
+
+            Assert.That(results, Has.Length.EqualTo(1));
+            Assert.That(results[0].Exists, Is.False);
+            Assert.That(results[0].IsAmbiguous, Is.False);
+            Assert.That(results[0].ResolvedPath, Is.Null);
         }
 
         private static void CreateAmbiguousConventionAssets()
