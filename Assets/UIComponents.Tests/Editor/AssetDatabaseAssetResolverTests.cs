@@ -263,6 +263,29 @@ namespace UIComponents.Tests.Editor
             Assert.That(results[0].ResolvedPath, Is.Null);
         }
 
+        [Test]
+        public void ValidateAndReport_Summarizes_Current_Validation_Findings()
+        {
+            CreateAmbiguousConventionAssets();
+
+            try
+            {
+                var results = ConventionValidator.ValidateAll();
+                var summary = ConventionValidator.ValidateAndReport();
+
+                Assert.That(summary.TotalCount, Is.EqualTo(results.Count));
+                Assert.That(summary.UnresolvedCount,
+                    Is.EqualTo(results.Count(result => !result.Exists && !result.IsAmbiguous)));
+                Assert.That(summary.AmbiguousCount,
+                    Is.EqualTo(results.Count(result => result.IsAmbiguous)));
+                Assert.That(summary.HasFailures, Is.True);
+            }
+            finally
+            {
+                DeleteAmbiguousConventionAssets();
+            }
+        }
+
         private static void CreateAmbiguousConventionAssets()
         {
             DeleteAmbiguousConventionAssets();
