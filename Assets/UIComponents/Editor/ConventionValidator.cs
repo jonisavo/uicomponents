@@ -60,6 +60,16 @@ namespace UIComponents.Editor
 
         public static List<ValidationResult> ValidateAll()
         {
+            return ValidateAll(_ => true);
+        }
+
+        public static List<ValidationResult> ValidateBatchModeScope()
+        {
+            return ValidateAll(ShouldValidateAssemblyInBatchMode);
+        }
+
+        private static List<ValidationResult> ValidateAll(Func<Assembly, bool> shouldValidateAssembly)
+        {
             var results = new List<ValidationResult>();
             AddressablesEditorPathResolver.Reset();
 
@@ -74,6 +84,9 @@ namespace UIComponents.Editor
             var uiComponentType = typeof(UIComponent);
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
+                if (!shouldValidateAssembly(assembly))
+                    continue;
+
                 Type[] types;
                 try { types = assembly.GetTypes(); }
                 catch (ReflectionTypeLoadException) { continue; }
@@ -95,9 +108,14 @@ namespace UIComponents.Editor
             return ReportResults(ValidateAll());
         }
 
+        public static ValidationSummary ValidateBatchModeAndReport()
+        {
+            return ReportResults(ValidateBatchModeScope());
+        }
+
         public static void ValidateForBatchMode()
         {
-            var summary = ValidateAndReport();
+            var summary = ValidateBatchModeAndReport();
 
             if (Application.isBatchMode)
                 EditorApplication.Exit(summary.HasFailures ? 1 : 0);
@@ -298,6 +316,22 @@ namespace UIComponents.Editor
                 return AssetSourceKind.Addressable;
 
             return AssetSourceKind.Custom;
+        }
+
+        private static bool ShouldValidateAssemblyInBatchMode(Assembly assembly)
+        {
+            var assemblyName = assembly.GetName().Name;
+            if (string.IsNullOrEmpty(assemblyName))
+                return false;
+
+            return !HasAssemblyPrefix(assemblyName, "UIComponents.Tests") &&
+                !HasAssemblyPrefix(assemblyName, "UIComponents.Benchmarks");
+        }
+
+        private static bool HasAssemblyPrefix(string assemblyName, string prefix)
+        {
+            return assemblyName.Equals(prefix, StringComparison.Ordinal) ||
+                assemblyName.StartsWith(prefix + ".", StringComparison.Ordinal);
         }
 
         private static List<RegistryAccessor> FindAllRegistryAccessors()
